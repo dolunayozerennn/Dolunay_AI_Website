@@ -3,7 +3,8 @@ import { useRef, useState } from 'react';
 import type { MouseEvent } from 'react';
 import {
   Instagram, Youtube, Facebook, Users, GraduationCap,
-  Mail, ArrowUpRight, Star, Eye, ExternalLink, Heart
+  Mail, ArrowUpRight, Star, Eye, ExternalLink, Heart,
+  TrendingUp, Globe, BarChart3, Activity, PieChart, Sparkles
 } from 'lucide-react';
 
 // ─── Custom Icons ──────────────────────────────────────────────────────────────
@@ -41,7 +42,7 @@ const scaleIn = {
 };
 
 // ─── Counter Animation ─────────────────────────────────────────────────────────
-function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: string }) {
+function AnimatedCounter({ target, suffix = '', decimals = 0 }: { target: number; suffix?: string, decimals?: number }) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
   const hasAnimated = useRef(false);
@@ -59,9 +60,13 @@ function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: str
         setCount(target);
         clearInterval(timer);
       } else {
-        setCount(Math.floor(current));
+        setCount(current);
       }
     }, duration / steps);
+  };
+
+  const formatNumber = (num: number) => {
+    return Number(num).toLocaleString('tr-TR', { maximumFractionDigits: decimals, minimumFractionDigits: decimals });
   };
 
   return (
@@ -70,7 +75,7 @@ function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: str
       onViewportEnter={startCounting}
       viewport={{ once: true }}
     >
-      {count.toLocaleString('tr-TR')}{suffix}
+      {formatNumber(count)}{suffix}
     </motion.span>
   );
 }
@@ -106,11 +111,9 @@ const platforms = [
     name: 'Instagram',
     handle: '@dolunayozeren',
     followers: '200K+',
-    followersNum: 200000,
     icon: <Instagram className="w-6 h-6" />,
     gradient: 'from-pink-500 to-purple-600',
     bgGlow: 'rgba(236, 72, 153, 0.15)',
-    borderColor: 'border-pink-500/20',
     textColor: 'text-pink-400',
     href: 'https://instagram.com/dolunayozeren',
     metric: 'Takipçi',
@@ -121,11 +124,9 @@ const platforms = [
     name: 'TikTok',
     handle: '@dolunayozeren',
     followers: '37K+',
-    followersNum: 37000,
     icon: <TikTokIcon className="w-6 h-6" />,
     gradient: 'from-cyan-400 to-blue-600',
     bgGlow: 'rgba(0, 212, 255, 0.15)',
-    borderColor: 'border-cyan-500/20',
     textColor: 'text-cyan-400',
     href: 'https://tiktok.com/@dolunayozeren',
     metric: 'Takipçi',
@@ -136,11 +137,9 @@ const platforms = [
     name: 'YouTube',
     handle: '@dolunayozeren',
     followers: '43K+',
-    followersNum: 43000,
     icon: <Youtube className="w-6 h-6" />,
     gradient: 'from-red-500 to-orange-600',
     bgGlow: 'rgba(239, 68, 68, 0.15)',
-    borderColor: 'border-red-500/20',
     textColor: 'text-red-400',
     href: 'https://youtube.com/@dolunayozeren',
     metric: 'Abone',
@@ -151,11 +150,9 @@ const platforms = [
     name: 'Facebook',
     handle: 'Dolunay Özeren',
     followers: '15K+',
-    followersNum: 15000,
     icon: <Facebook className="w-6 h-6" />,
     gradient: 'from-blue-500 to-blue-700',
     bgGlow: 'rgba(59, 130, 246, 0.15)',
-    borderColor: 'border-blue-500/20',
     textColor: 'text-blue-400',
     href: 'https://facebook.com/dolunayozeren',
     metric: 'Takipçi',
@@ -166,11 +163,9 @@ const platforms = [
     name: 'Udemy',
     handle: 'Dolunay Özeren',
     followers: '45K+',
-    followersNum: 45000,
     icon: <GraduationCap className="w-6 h-6" />,
     gradient: 'from-violet-500 to-purple-700',
     bgGlow: 'rgba(139, 92, 246, 0.15)',
-    borderColor: 'border-violet-500/20',
     textColor: 'text-violet-400',
     href: 'https://www.udemy.com/course/ai-yapay-zeka-uzmanligi-chatgpt-midjourney-dalle-ve-fazlasi/?referralCode=906FDE49207D6106DCBF',
     metric: 'Öğrenci',
@@ -181,11 +176,9 @@ const platforms = [
     name: 'Skool',
     handle: 'AI Factory',
     followers: '500+',
-    followersNum: 500,
     icon: <SkoolIcon className="w-6 h-6" />,
     gradient: 'from-emerald-400 to-teal-600',
     bgGlow: 'rgba(52, 211, 153, 0.15)',
-    borderColor: 'border-emerald-500/20',
     textColor: 'text-emerald-400',
     href: 'https://www.skool.com/yapay-zeka-factory/about?ref=044f39496d4f45fab11775bcefe4b7f4',
     metric: 'Üye',
@@ -196,11 +189,36 @@ const platforms = [
 
 // ─── Highlight Stats ────────────────────────────────────────────────────────────
 const highlightStats = [
-  { icon: <Users className="w-5 h-5" />, value: 300, suffix: 'K+', label: 'Toplam Takipçi', color: 'from-cyan-500 to-blue-600' },
-  { icon: <GraduationCap className="w-5 h-5" />, value: 50, suffix: 'K+', label: 'Öğrenci', color: 'from-violet-500 to-purple-600' },
-  { icon: <Eye className="w-5 h-5" />, value: 100, suffix: 'M+', label: 'Toplam İzlenme', color: 'from-pink-500 to-rose-600' },
-  { icon: <Star className="w-5 h-5" />, value: 4.7, suffix: '', label: 'Eğitmen Puanı', color: 'from-amber-400 to-orange-500' },
+  { icon: <Eye className="w-5 h-5" />, value: 10, suffix: 'M+', label: 'Aylık Ort. İzlenme', color: 'from-cyan-500 to-blue-600' },
+  { icon: <Heart className="w-5 h-5" />, value: 300, suffix: 'K+', label: 'Aylık Etkileşim', color: 'from-pink-500 to-rose-600' },
+  { icon: <Users className="w-5 h-5" />, value: 300, suffix: 'K+', label: 'Toplam Takipçi', color: 'from-violet-500 to-purple-600' },
+  { icon: <Activity className="w-5 h-5" />, value: 100, suffix: 'M+', label: 'Toplam İzlenme', color: 'from-amber-400 to-orange-500' },
 ];
+
+// ─── Demographics Data ─────────────────────────────────────────────────────────
+const ageData = [
+  { label: '18-24', value: 31.1, color: 'bg-blue-500' },
+  { label: '25-34', value: 41.2, color: 'bg-purple-500' },
+  { label: '35-44', value: 14.4, color: 'bg-pink-500' },
+  { label: '45-54', value: 5.5, color: 'bg-orange-500' },
+];
+
+const countryData = [
+  { label: 'Türkiye', value: 88.8, flag: '🇹🇷' },
+  { label: 'Azerbaycan', value: 3.0, flag: '🇦🇿' },
+  { label: 'Almanya', value: 1.6, flag: '🇩🇪' },
+  { label: 'Kıbrıs', value: 0.7, flag: '🇨🇾' },
+];
+
+const virals = [
+  { brand: 'Nim AI', views: '9.5M', type: 'Organik + Paid', href: 'https://l.shortlink.es/l/e1a2e306df8ad9ad21bb694561d43aca9508e09d' },
+  { brand: 'Emergent AI', views: '3.8M', type: 'Organik', href: 'https://l.shortlink.es/l/1fda7a18a6888304f9f3beaa2596076b0d5b97d2' },
+  { brand: 'Aithor', views: '2.0M', type: 'Organik', href: 'https://l.shortlink.es/l/b15d54150e7651adc55a818ed1f12cd7b70a0fa5' },
+  { brand: 'Creatify', views: '1.7M', type: 'Organik + Paid', href: 'https://l.shortlink.es/l/578cdae950f64909dfada73eb643a3d077a7f449' },
+  { brand: 'Creati', views: '1.4M', type: 'Organik + Paid', href: 'https://l.shortlink.es/l/6c8576a0d0db58bdc23e5a0fda4eb9490d9ebd78' },
+];
+
+const brands = ['CapCut', 'VidAU', 'Lexi', 'KickResume', 'TopView', 'Higgsfield'];
 
 // ═══════════════════════════════════════════════════════════════════════════════
 //  MAIN COMPONENT
@@ -284,7 +302,7 @@ export function CollaborationsPage() {
               transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
               className="text-gray-400 text-lg md:text-xl max-w-lg leading-relaxed mb-8"
             >
-              Yapay Zeka Eğitmeni & Builder. Türkiye'nin en büyük yapay zeka topluluğunu yöneten içerik üreticisi.
+              AI odaklı içerik üreticisi ve teknoloji eğitmeni. Viral potansiyeli yüksek inovatif içeriklerle markanızı milyonlara ulaştırın.
             </motion.p>
 
             {/* Quick Stats Row */}
@@ -298,16 +316,17 @@ export function CollaborationsPage() {
                   key={stat.label}
                   variants={scaleIn}
                   custom={i + 3}
-                  className="text-center p-3 rounded-2xl bg-white/[0.03] border border-white/[0.06] backdrop-blur-sm"
+                  className="text-center p-3 rounded-2xl bg-white/[0.03] border border-white/[0.06] backdrop-blur-sm relative overflow-hidden group"
                 >
-                  <div className={`inline-flex p-1.5 rounded-lg bg-gradient-to-r ${stat.color} mb-2`}>
+                  <div className={`absolute inset-0 bg-gradient-to-b ${stat.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
+                  <div className={`inline-flex p-1.5 rounded-lg bg-gradient-to-r ${stat.color} mb-2 relative z-10`}>
                     {stat.icon}
                   </div>
-                  <div className="text-xl sm:text-2xl font-bold text-white">
-                    {typeof stat.value === 'number' && stat.value < 10 ? stat.value : <AnimatedCounter target={stat.value} suffix={stat.suffix} />}
-                    {typeof stat.value === 'number' && stat.value < 10 && stat.suffix}
+                  <div className="text-xl sm:text-2xl font-bold text-white relative z-10">
+                    {typeof stat.value === 'number' && stat.value < 10 && !Number.isInteger(stat.value) ? stat.value : <AnimatedCounter target={stat.value} suffix={stat.suffix} decimals={!Number.isInteger(stat.value) ? 1 : 0} />}
+                    {typeof stat.value === 'number' && stat.value < 10 && !Number.isInteger(stat.value) && stat.suffix}
                   </div>
-                  <div className="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider">{stat.label}</div>
+                  <div className="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider relative z-10">{stat.label}</div>
                 </motion.div>
               ))}
             </motion.div>
@@ -323,14 +342,14 @@ export function CollaborationsPage() {
             {/* Glow behind photo */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="w-[400px] h-[400px] rounded-full blur-[120px]"
-                style={{ background: 'radial-gradient(circle, rgba(0,212,255,0.15) 0%, rgba(124,58,237,0.1) 50%, transparent 70%)' }}
+                style={{ background: 'radial-gradient(circle, rgba(236,72,153,0.15) 0%, rgba(124,58,237,0.1) 50%, transparent 70%)' }}
               />
             </div>
             
             {/* Orbit ring */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="w-[380px] h-[380px] rounded-full border border-white/[0.06]" style={{ animation: 'spin 30s linear infinite' }}>
-                <div className="absolute w-2 h-2 rounded-full bg-cyan-400" style={{ top: -4, left: '50%', marginLeft: -4, boxShadow: '0 0 12px rgba(0,212,255,0.6)' }} />
+                <div className="absolute w-2 h-2 rounded-full bg-pink-500" style={{ top: -4, left: '50%', marginLeft: -4, boxShadow: '0 0 12px rgba(236,72,153,0.6)' }} />
               </div>
             </div>
 
@@ -347,12 +366,206 @@ export function CollaborationsPage() {
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#050508] to-transparent pointer-events-none z-20" />
       </section>
 
+      {/* ══════════════════════════════════════════════════════════════════════ */}
+      {/*  AUDIENCE DEMOGRAPHICS                                               */}
+      {/* ══════════════════════════════════════════════════════════════════════ */}
+      <section className="py-12 relative z-10 -mt-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-6"
+          >
+            {/* Gender Dist */}
+            <BentoCard custom={1} className="!rounded-3xl !p-8 relative overflow-hidden backdrop-blur-xl bg-white/[0.02] border border-white/[0.05]">
+              <div className="absolute top-0 right-0 p-6 opacity-10">
+                <PieChart className="w-24 h-24" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                <Users className="w-5 h-5 text-pink-400" />
+                Cinsiyet Dağılımı
+              </h3>
+              
+              <div className="flex items-end gap-6 mb-4">
+                <div className="w-full">
+                  <div className="flex justify-between text-sm mb-2 font-medium">
+                    <span className="text-white">Erkek</span>
+                    <span className="text-accent-blue">83.7%</span>
+                  </div>
+                  <div className="h-3 bg-white/[0.05] rounded-full overflow-hidden">
+                    <motion.div 
+                      initial={{ width: 0 }}
+                      whileInView={{ width: '83.7%' }}
+                      transition={{ duration: 1, delay: 0.2 }}
+                      className="h-full bg-gradient-to-r from-blue-600 to-cyan-400 rounded-full"
+                    />
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex items-end gap-6">
+                <div className="w-full">
+                  <div className="flex justify-between text-sm mb-2 font-medium">
+                    <span className="text-white">Kadın</span>
+                    <span className="text-pink-400">16.3%</span>
+                  </div>
+                  <div className="h-3 bg-white/[0.05] rounded-full overflow-hidden">
+                    <motion.div 
+                      initial={{ width: 0 }}
+                      whileInView={{ width: '16.3%' }}
+                      transition={{ duration: 1, delay: 0.3 }}
+                      className="h-full bg-gradient-to-r from-pink-600 to-purple-400 rounded-full"
+                    />
+                  </div>
+                </div>
+              </div>
+            </BentoCard>
+
+            {/* Age Dist */}
+            <BentoCard custom={2} className="!rounded-3xl !p-8 relative overflow-hidden backdrop-blur-xl bg-white/[0.02] border border-white/[0.05]">
+              <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                <BarChart3 className="w-5 h-5 text-purple-400" />
+                Yaş Dağılımı
+              </h3>
+              
+              <div className="space-y-4">
+                {ageData.map((item, i) => (
+                  <div key={item.label}>
+                    <div className="flex justify-between text-sm mb-1.5">
+                      <span className="text-gray-300">{item.label}</span>
+                      <span className="text-white font-medium">%{item.value}</span>
+                    </div>
+                    <div className="h-2 bg-white/[0.05] rounded-full overflow-hidden">
+                      <motion.div 
+                        initial={{ width: 0 }}
+                        whileInView={{ width: `${item.value}%` }}
+                        transition={{ duration: 1, delay: 0.2 + (i * 0.1) }}
+                        className={`h-full ${item.color} rounded-full`}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </BentoCard>
+
+            {/* Geography */}
+            <BentoCard custom={3} className="!rounded-3xl !p-8 relative overflow-hidden backdrop-blur-xl bg-white/[0.02] border border-white/[0.05]">
+              <div className="absolute -bottom-10 -right-10 opacity-5">
+                <Globe className="w-64 h-64" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                <Globe className="w-5 h-5 text-green-400" />
+                Coğrafya
+              </h3>
+              
+              <div className="grid grid-cols-2 gap-4">
+                {countryData.map((country, i) => (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 + (i * 0.1) }}
+                    key={country.label} 
+                    className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.04] flex flex-col justify-between"
+                  >
+                    <div className="flex justify-between items-start mb-2">
+                      <span className="text-2xl">{country.flag}</span>
+                      <span className="text-white font-bold text-lg">%{country.value}</span>
+                    </div>
+                    <div className="text-xs text-gray-400 font-medium uppercase tracking-wider">{country.label}</div>
+                  </motion.div>
+                ))}
+              </div>
+            </BentoCard>
+
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════════════ */}
+      {/*  PREVIOUS COLLABORATIONS / VIRALS                                    */}
+      {/* ══════════════════════════════════════════════════════════════════════ */}
+      <section className="py-24 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            className="text-center max-w-3xl mx-auto mb-16"
+          >
+            <motion.span variants={fadeUp} custom={0} className="inline-block text-purple-500 text-sm font-semibold tracking-[0.2em] uppercase mb-4">
+              Öne Çıkan Çalışmalar
+            </motion.span>
+            <motion.h2 variants={fadeUp} custom={1} className="text-3xl md:text-5xl font-bold mb-5 tracking-tight">
+              Milyonlarca İzlenen <span className="text-gradient-accent">Viral İçerikler</span>
+            </motion.h2>
+            <motion.p variants={fadeUp} custom={2} className="text-gray-400 text-lg leading-relaxed">
+              Dünyanın önde gelen yapay zeka markalarıyla gerçekleştirdiğimiz ve milyonlarca izlenmeye ulaşan projelerimizden bazıları.
+            </motion.p>
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.1 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-16"
+          >
+            {virals.map((item, i) => (
+              <BentoCard key={i} custom={i} className="!rounded-3xl group relative overflow-hidden backdrop-blur-xl bg-white/[0.02] border border-white/[0.05] p-6 flex flex-col items-center text-center hover:bg-white/[0.04] transition-colors">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center mb-6">
+                  <TrendingUp className="w-8 h-8 text-pink-400 group-hover:scale-110 transition-transform duration-300" />
+                </div>
+                
+                <h3 className="text-xl font-bold text-white mb-2">{item.brand}</h3>
+                
+                <div className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400 mb-2">
+                  {item.views}
+                </div>
+                
+                <div className="text-xs text-gray-500 font-medium uppercase tracking-wider mb-6">
+                  {item.type} İzlenme
+                </div>
+                
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-sm text-gray-300 hover:text-white transition-colors border border-white/[0.05]"
+                >
+                  <Eye className="w-4 h-4" /> Videoyu İzle
+                </a>
+              </BentoCard>
+            ))}
+          </motion.div>
+
+          {/* Other Partners Bar */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+            className="flex flex-wrap justify-center items-center gap-4 sm:gap-8 opacity-70"
+          >
+            <span className="text-gray-500 text-sm font-semibold uppercase tracking-widest mr-4 hidden md:block">
+              Diğer İş Birlikleri:
+            </span>
+            {brands.map((brand) => (
+              <div key={brand} className="text-xl font-bold text-gray-400 hover:text-white transition-colors cursor-default">
+                {brand}
+              </div>
+            ))}
+          </motion.div>
+
+        </div>
+      </section>
 
       {/* ══════════════════════════════════════════════════════════════════════ */}
       {/*  SOCIAL MEDIA PLATFORMS — BENTO GRID                                 */}
       {/* ══════════════════════════════════════════════════════════════════════ */}
-      <section className="py-24 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-24 relative bg-[#050508]/50">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/5 to-transparent pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
           <motion.div
             initial="hidden"
@@ -360,7 +573,7 @@ export function CollaborationsPage() {
             viewport={{ once: true, amount: 0.3 }}
             className="text-center max-w-3xl mx-auto mb-16"
           >
-            <motion.span variants={fadeUp} custom={0} className="inline-block text-pink-400 text-sm font-semibold tracking-[0.2em] uppercase mb-4">
+            <motion.span variants={fadeUp} custom={0} className="inline-block text-cyan-400 text-sm font-semibold tracking-[0.2em] uppercase mb-4">
               Platform Erişimi
             </motion.span>
             <motion.h2 variants={fadeUp} custom={1} className="text-3xl md:text-5xl font-bold mb-5 tracking-tight">
@@ -380,7 +593,7 @@ export function CollaborationsPage() {
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
           >
             {platforms.map((platform, i) => (
-              <BentoCard key={platform.name} custom={i} className="!rounded-3xl group relative overflow-hidden">
+              <BentoCard key={platform.name} custom={i} className="!rounded-3xl group relative overflow-hidden backdrop-blur-xl bg-white/[0.02] border border-white/[0.05]">
                 {/* Top accent line */}
                 <div
                   className="absolute -top-px left-[15%] right-[15%] h-[1px] opacity-40 group-hover:opacity-100 transition-opacity duration-500"
@@ -434,10 +647,6 @@ export function CollaborationsPage() {
         </div>
       </section>
 
-
-
-
-
       {/* ══════════════════════════════════════════════════════════════════════ */}
       {/*  İLETİŞİM CTA                                                       */}
       {/* ══════════════════════════════════════════════════════════════════════ */}
@@ -460,16 +669,17 @@ export function CollaborationsPage() {
             
             <div className="relative z-10">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-6 border border-pink-500/20 bg-pink-500/5">
-                <Mail className="w-3.5 h-3.5 text-pink-400" />
-                <span className="text-pink-400 text-xs font-semibold tracking-wider uppercase">İletişim</span>
+                <Sparkles className="w-3.5 h-3.5 text-pink-400" />
+                <span className="text-pink-400 text-xs font-semibold tracking-wider uppercase">Sponsorluk & İş Birliği</span>
               </div>
 
               <h3 className="text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight">
-                Bizimle İletişime Geçin
+                Birlikte Büyüyelim
               </h3>
               <p className="text-gray-400 mb-10 max-w-xl mx-auto leading-relaxed">
-                Bu e-posta adresi <strong className="text-white">sadece marka iş birlikleri ve sponsorluklar</strong> için
-                geçerlidir. Diğer tüm konular için lütfen Discord topluluğumuza veya sosyal medya üzerinden bize ulaşın.
+                Yapay zeka ve teknoloji odağındaki içeriklerimizle markanızı doğru kitleye ulaştırmak için
+                <strong className="text-white"> marka iş birlikleri </strong>
+                sürecimizi inceleyebilirsiniz.
               </p>
 
               <a 

@@ -120,6 +120,15 @@ export function ProductsSection() {
       accentColor: '#a855f7',
       glowColor: 'rgba(168, 85, 247, 0.08)',
     },
+    {
+      title: 'Marka İş Birlikleri',
+      description: 'Markanızı milyonlarca kişiye ulaştıran içerik üretim çözümleri.',
+      cta: 'Media Kit',
+      href: '#/isbirlikleri',
+      external: false,
+      accentColor: '#ec4899', // pink-500
+      glowColor: 'rgba(236, 72, 153, 0.08)',
+    },
   ];
 
   return (
@@ -131,7 +140,7 @@ export function ProductsSection() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-5"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5"
         >
           {products.map((product, i) => (
             <ProductCard key={product.title} {...product} custom={i} />

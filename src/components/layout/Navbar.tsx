@@ -94,7 +94,7 @@ export function Navbar() {
                       <span className="text-xs text-gray-500 mt-0.5">Hazır AI çözüm paketleri</span>
                     </a>
                     <a
-                      href="#services"
+                      href="#/cozumler"
                       onClick={() => setIsDropdownOpen(false)}
                       className="flex flex-col px-5 py-3.5 hover:bg-white/[0.04] transition-all duration-300"
                     >
@@ -166,7 +166,7 @@ export function Navbar() {
                 Artifex Campus
               </a>
               <a 
-                href="#services"
+                href="#/cozumler"
                 className="text-gray-300 hover:text-white font-medium px-6 py-2.5 rounded-xl hover:bg-white/[0.04] transition-all"
                 onClick={() => setIsMobileMenuOpen(false)}
               >

@@ -4,6 +4,7 @@ import type { MouseEvent } from 'react';
 import {
   Users, GraduationCap, ArrowUpRight, Sparkles, TrendingUp, ExternalLink
 } from 'lucide-react';
+import { ServicesSection } from '../components/sections/ServicesSection';
 
 function SkoolIcon({ className }: { className?: string }) {
   return (
@@ -256,6 +257,9 @@ export function SolutionsPage() {
           </motion.div>
         </div>
       </section>
+
+      {/* HİZMETLER — Referanslar dahil */}
+      <ServicesSection />
     </div>
   );
 }
