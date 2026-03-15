@@ -23,6 +23,7 @@ const referenceVideos = [
     brand: "Yapay Zeka Eğitim",
     views: "1.2M",
     thumbnail: "/hero_bg/hero_Cyberpunk_Neon_356a4f52.jpg",
+    videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
     url: "https://www.instagram.com/dolunayozeren/"
   },
   {
@@ -31,6 +32,7 @@ const referenceVideos = [
     brand: "Otonom Sistemler",
     views: "850K",
     thumbnail: "/hero_bg/hero_Authentic_Warm_5ff602c3.jpg",
+    videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
     url: "https://www.instagram.com/dolunayozeren/"
   },
   {
@@ -39,6 +41,7 @@ const referenceVideos = [
     brand: "Gelecek Trendleri",
     views: "2.4M",
     thumbnail: "/hero_bg/hero_Trust_Scale_dd768729.jpg",
+    videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
     url: "https://www.instagram.com/dolunayozeren/"
   },
   {
@@ -47,6 +50,7 @@ const referenceVideos = [
     brand: "Tele-Satış CRM",
     views: "640K",
     thumbnail: "/creator-portrait-v2.png",
+    videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
     url: "https://www.instagram.com/dolunayozeren/"
   }
 ];
@@ -187,11 +191,25 @@ export function SocialMediaSection() {
                 key={video.id} 
                 className="relative w-[300px] sm:w-[340px] md:w-[380px] h-[540px] md:h-[640px] shrink-0 snap-center sm:snap-start rounded-[32px] sm:rounded-[40px] overflow-hidden group cursor-pointer border border-white/10"
               >
-                {/* Background Image */}
-                <div 
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                  style={{ backgroundImage: `url(${video.thumbnail})` }}
-                />
+                {/* Background Media */}
+                <div className="absolute inset-0 overflow-hidden">
+                  {video.videoUrl ? (
+                    <video
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      poster={video.thumbnail}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      src={video.videoUrl}
+                    />
+                  ) : (
+                    <div 
+                      className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                      style={{ backgroundImage: `url(${video.thumbnail})` }}
+                    />
+                  )}
+                </div>
                 
                 {/* Gradient Overlay for better contrast */}
                 <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/10 to-black/90" />
