@@ -19,7 +19,7 @@ export function HeroSectionAcosta({ bgImage }: { bgImage: string }) {
   return (
     <section
       className="relative min-h-screen flex flex-col justify-center bg-cover bg-center bg-no-repeat bg-[#050508]"
-      style={{ backgroundImage: `url('${bgImage}')` }}
+      style={{ backgroundImage: `url('${import.meta.env.BASE_URL}${bgImage}')` }}
       id="hero-acosta"
     >
       {/* Dark overlay for text readability on left side */}

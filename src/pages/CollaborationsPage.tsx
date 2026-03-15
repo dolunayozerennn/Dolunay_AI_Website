@@ -245,7 +245,7 @@ export function CollaborationsPage() {
           className="absolute inset-0"
         >
           <img 
-            src="mediakit-banner.png" 
+            src={`${import.meta.env.BASE_URL}mediakit-banner.png`} 
             alt="" 
             className="w-full h-[120%] object-cover opacity-30"
           />
@@ -354,7 +354,7 @@ export function CollaborationsPage() {
             </div>
 
             <img
-              src="portrait.png"
+              src={`${import.meta.env.BASE_URL}portrait.png`}
               alt="Dolunay Özeren"
               className="relative z-10 w-[340px] h-[340px] object-cover rounded-3xl border border-white/[0.08]"
               style={{ boxShadow: '0 40px 100px rgba(0,0,0,0.5), 0 0 60px rgba(124,58,237,0.1)' }}

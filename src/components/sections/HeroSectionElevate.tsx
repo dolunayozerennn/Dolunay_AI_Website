@@ -19,7 +19,7 @@ export function HeroSectionElevate({ bgImage }: { bgImage: string }) {
   return (
     <section
       className="relative min-h-screen flex flex-col justify-center bg-cover bg-center bg-[#1a1110]"
-      style={{ backgroundImage: `url('${bgImage}')` }}
+      style={{ backgroundImage: `url('${import.meta.env.BASE_URL}${bgImage}')` }}
       id="hero-elevate"
     >
       <div className="absolute inset-0 bg-gradient-to-r from-[#000000] via-[#000000]/60 to-transparent opacity-90" />

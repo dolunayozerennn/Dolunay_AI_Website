@@ -270,7 +270,7 @@ export function HeroSection() {
             <Reveal delay={0.3}>
               <div className="relative z-10 w-[280px] sm:w-[320px] md:w-[380px] lg:w-[420px] xl:w-[460px]">
                 <img
-                  src="dolunay-hero.png"
+                  src={`${import.meta.env.BASE_URL}dolunay-hero.png`}
                   alt="Dolunay Özeren"
                   className="w-full h-auto object-cover rounded-2xl"
                   style={{

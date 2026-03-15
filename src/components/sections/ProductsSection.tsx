@@ -92,7 +92,7 @@ function ProductCard({ title, description, tag, href, external, glowColor, image
         <div className={`absolute inset-0 z-10 bg-gradient-to-t ${isPrimary ? 'from-[#581c87]/90 via-[#581c87]/20' : 'from-[#0f0f12]/90 via-[#0f0f12]/20'} to-transparent opacity-80`} />
         {imageSrc ? (
           <img 
-            src={imageSrc} 
+            src={`${import.meta.env.BASE_URL}${imageSrc}`} 
             alt={title} 
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
           />
@@ -116,7 +116,7 @@ export function ProductsSection() {
       external: false,
       accentColor: '#7c3aed',
       glowColor: 'rgba(124, 58, 237, 0.15)',
-      imageSrc: '/images/products/artifex_campus.jpg',
+      imageSrc: 'images/products/artifex_campus.jpg',
       isPrimary: true,
     },
     {
@@ -127,7 +127,7 @@ export function ProductsSection() {
       external: true,
       accentColor: '#00d4ff',
       glowColor: 'rgba(0, 212, 255, 0.12)',
-      imageSrc: '/images/products/ai_factory.jpg',
+      imageSrc: 'images/products/ai_factory.jpg',
       isPrimary: false,
     },
     {
@@ -138,7 +138,7 @@ export function ProductsSection() {
       external: false,
       accentColor: '#a855f7',
       glowColor: 'rgba(168, 85, 247, 0.12)',
-      imageSrc: '/images/products/hizmetler.jpg',
+      imageSrc: 'images/products/hizmetler.jpg',
       isPrimary: false,
     },
     {
@@ -149,7 +149,7 @@ export function ProductsSection() {
       external: false,
       accentColor: '#ec4899',
       glowColor: 'rgba(236, 72, 153, 0.12)',
-      imageSrc: '/images/products/marka_is_birlikleri.jpg',
+      imageSrc: 'images/products/marka_is_birlikleri.jpg',
       isPrimary: false,
     },
   ];

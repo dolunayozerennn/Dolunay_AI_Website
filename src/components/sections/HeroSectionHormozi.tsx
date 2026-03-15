@@ -19,7 +19,7 @@ export function HeroSectionHormozi({ bgImage }: { bgImage: string }) {
   return (
     <section
       className="relative min-h-screen flex flex-col justify-end pb-24 lg:justify-center lg:pb-0 bg-cover bg-center bg-[#070b13]"
-      style={{ backgroundImage: `url('${bgImage}')` }}
+      style={{ backgroundImage: `url('${import.meta.env.BASE_URL}${bgImage}')` }}
       id="hero-hormozi"
     >
       <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
