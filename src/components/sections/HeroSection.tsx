@@ -173,13 +173,13 @@ export function HeroSection() {
 
             {/* Headline */}
             <Reveal delay={0.25}>
-              <h1 className="text-[clamp(2.5rem,6vw,6rem)] font-extrabold tracking-[-0.03em] leading-[1.05] text-white mb-1">
+              <h1 className="font-display text-[clamp(2.5rem,6vw,6rem)] font-bold tracking-[-0.03em] leading-[1.05] text-white mb-1">
                 Yapay zeka?
               </h1>
             </Reveal>
 
             <Reveal delay={0.4}>
-              <h1 className="text-[clamp(2.5rem,6vw,6rem)] font-extrabold tracking-[-0.03em] leading-[1.05] mb-5">
+              <h1 className="font-display text-[clamp(2.5rem,6vw,6rem)] font-bold tracking-[-0.03em] leading-[1.05] mb-5">
                 <span
                   style={{
                     background: 'linear-gradient(135deg, #00d4ff 0%, #7c3aed 50%, #a855f7 100%)',

@@ -124,6 +124,14 @@ export function Navbar() {
               İş Birlikleri
             </a>
 
+            {/* Showcase */}
+            <a 
+              href="#/showcase"
+              className="text-sm font-medium text-purple-400 hover:text-purple-300 px-4 py-2 rounded-lg hover:bg-white/[0.04] transition-all duration-300"
+            >
+              Showcase (Hero)
+            </a>
+
             {/* Hakkımızda */}
             <a 
               href="#about"

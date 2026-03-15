@@ -5,6 +5,7 @@ import { HomePage } from './pages/HomePage';
 import { SolutionsPage } from './pages/SolutionsPage';
 import { CollaborationsPage } from './pages/CollaborationsPage';
 import { AboutPage } from './pages/AboutPage';
+import { ShowcasePage } from './pages/ShowcasePage';
 import './index.css';
 
 function App() {
@@ -33,6 +34,8 @@ function App() {
     CurrentPage = CollaborationsPage;
   } else if (route === '/hakkimizda' || route.startsWith('/hakkimizda/')) {
     CurrentPage = AboutPage;
+  } else if (route === '/showcase' || route.startsWith('/showcase/')) {
+    CurrentPage = ShowcasePage;
   }
 
   return (

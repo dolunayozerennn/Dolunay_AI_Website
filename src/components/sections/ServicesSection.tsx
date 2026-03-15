@@ -196,7 +196,7 @@ export function ServicesSection() {
                   className="flex-shrink-0 px-10 md:px-14 flex items-center justify-center"
                 >
                   <span className="text-xl md:text-2xl font-bold text-white/30 hover:text-white/70 transition-all duration-500 whitespace-nowrap tracking-wide select-none"
-                    style={{ fontFamily: name === 'musixXen' ? "'Inter', monospace" : undefined }}
+                    style={{ fontFamily: name === 'musixXen' ? "'DM Sans', sans-serif" : undefined }}
                   >
                     {name}
                   </span>

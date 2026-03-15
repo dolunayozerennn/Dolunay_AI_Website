@@ -290,7 +290,7 @@ export function CollaborationsPage() {
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-[-0.03em] leading-[1.05] text-white mb-4"
+              className="font-display text-4xl sm:text-5xl md:text-7xl font-bold tracking-[-0.03em] leading-[1.05] text-white mb-4"
             >
               Dolunay
               <span className="text-gradient-accent block sm:inline"> Özeren</span>
