@@ -1,10 +1,10 @@
-import { HeroSectionAcosta } from '../components/sections/HeroSectionAcosta';
+import { HeroSectionElevate } from '../components/sections/HeroSectionElevate';
 import { ProductsSection } from '../components/sections/ProductsSection';
 
 export function HomePage() {
   return (
     <>
-      <HeroSectionAcosta bgImage="hero_bg/hero_Cyberpunk_Neon_356a4f52.jpg" />
+      <HeroSectionElevate bgImage="hero_bg/hero_Elevate_V1_aba39aa8.jpg" />
       <ProductsSection />
     </>
   );

@@ -41,52 +41,18 @@ export function HeroSectionElevate({ bgImage }: { bgImage: string }) {
           </Reveal>
 
           <Reveal delay={0.4}>
-            <div className="flex flex-col sm:flex-row items-center gap-6">
-              <button className="w-full sm:w-auto bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white font-medium px-8 py-4 sm:px-10 sm:py-4 rounded-full transition-all group flex items-center justify-center gap-3">
-                Ücretsiz Görüşme Talep Et
-                <span className="bg-white text-black p-1.5 rounded-full inline-block group-hover:translate-x-1 transition-transform">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                  </svg>
-                </span>
-              </button>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.6}>
-            <div className="flex flex-wrap items-center gap-12 pt-12 mt-12 border-t border-white/10">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center bg-white/5 backdrop-blur-sm">
-                  <svg className="w-5 h-5 text-[#ff9966]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
-                </div>
-                <div>
-                  <div className="text-xl font-bold text-white">200+</div>
-                  <div className="text-xs text-gray-400 uppercase tracking-widest mt-1">Başarılı Üye</div>
-                </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-12 border-t border-white/10 w-full mt-4">
+              <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-5 rounded-xl">
+                <p className="text-sm text-gray-300 italic mb-3">"[Müşteri Yorumu 1 - Buraya daha sonra ileteceğiniz metin gelecek.]"</p>
+                <div className="text-xs text-[#ff9966] font-medium tracking-wide">- [Müşteri Adı 1]</div>
               </div>
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center bg-white/5 backdrop-blur-sm">
-                  <svg className="w-5 h-5 text-[#ff9966]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <div>
-                  <div className="text-xl font-bold text-white">6M+</div>
-                  <div className="text-xs text-gray-400 uppercase tracking-widest mt-1">Erişim Ağı</div>
-                </div>
+              <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-5 rounded-xl">
+                <p className="text-sm text-gray-300 italic mb-3">"[Müşteri Yorumu 2 - Buraya daha sonra ileteceğiniz metin gelecek.]"</p>
+                <div className="text-xs text-[#ff9966] font-medium tracking-wide">- [Müşteri Adı 2]</div>
               </div>
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center bg-white/5 backdrop-blur-sm">
-                  <svg className="w-5 h-5 text-[#ff9966]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <div>
-                  <div className="text-xl font-bold text-white">3k+</div>
-                  <div className="text-xs text-gray-400 uppercase tracking-widest mt-1">Mutlu Müşteri</div>
-                </div>
+              <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-5 rounded-xl">
+                <p className="text-sm text-gray-300 italic mb-3">"[Müşteri Yorumu 3 - Buraya daha sonra ileteceğiniz metin gelecek.]"</p>
+                <div className="text-xs text-[#ff9966] font-medium tracking-wide">- [Müşteri Adı 3]</div>
               </div>
             </div>
           </Reveal>

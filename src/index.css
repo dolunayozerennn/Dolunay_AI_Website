@@ -10,8 +10,8 @@
   --color-accent-violet: #a855f7;
   --color-silver: #94a3b8;
   
-  --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --font-display: 'Space Grotesk', var(--font-sans);
+  --font-sans: 'Google Sans Flex', 'DM Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-display: 'Google Sans Flex', var(--font-sans);
 }
 
 @layer base {
