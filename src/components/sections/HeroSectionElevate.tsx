@@ -30,7 +30,7 @@ export function HeroSectionElevate({ bgImage }: { bgImage: string }) {
             <h1 className="font-display text-[clamp(2.5rem,5vw,5rem)] font-medium tracking-tight leading-[1.1] text-white mb-6">
               Sadece bir şirket değil.
               <br />
-              <span className="font-bold text-[#ff9966]">Yapay zekayla bir hareket.</span>
+              <span className="font-bold text-transparent bg-clip-text text-gradient-accent">Yapay zekayla bir hareket.</span>
             </h1>
           </Reveal>
 
@@ -44,15 +44,15 @@ export function HeroSectionElevate({ bgImage }: { bgImage: string }) {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-12 border-t border-white/10 w-full mt-4">
               <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-5 rounded-xl">
                 <p className="text-sm text-gray-300 italic mb-3">"[Müşteri Yorumu 1 - Buraya daha sonra ileteceğiniz metin gelecek.]"</p>
-                <div className="text-xs text-[#ff9966] font-medium tracking-wide">- [Müşteri Adı 1]</div>
+                <div className="text-xs text-[#00d4ff] font-medium tracking-wide">- [Müşteri Adı 1]</div>
               </div>
               <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-5 rounded-xl">
                 <p className="text-sm text-gray-300 italic mb-3">"[Müşteri Yorumu 2 - Buraya daha sonra ileteceğiniz metin gelecek.]"</p>
-                <div className="text-xs text-[#ff9966] font-medium tracking-wide">- [Müşteri Adı 2]</div>
+                <div className="text-xs text-[#00d4ff] font-medium tracking-wide">- [Müşteri Adı 2]</div>
               </div>
               <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-5 rounded-xl">
                 <p className="text-sm text-gray-300 italic mb-3">"[Müşteri Yorumu 3 - Buraya daha sonra ileteceğiniz metin gelecek.]"</p>
-                <div className="text-xs text-[#ff9966] font-medium tracking-wide">- [Müşteri Adı 3]</div>
+                <div className="text-xs text-[#00d4ff] font-medium tracking-wide">- [Müşteri Adı 3]</div>
               </div>
             </div>
           </Reveal>
