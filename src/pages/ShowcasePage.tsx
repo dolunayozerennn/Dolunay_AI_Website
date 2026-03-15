@@ -10,10 +10,10 @@ export function ShowcasePage() {
         <h2 className="text-xl font-bold">Hero Section Alternatifleri</h2>
         <p className="text-sm text-gray-400">Aşağıya kaydırarak farklı varyasyonları inceleyebilirsiniz.</p>
         <div className="flex justify-center gap-4 mt-4">
-          <a href="#hero-current" className="text-xs bg-white/10 px-3 py-1 rounded hover:bg-white/20 transition">Mevcut</a>
-          <a href="#hero-acosta" className="text-xs bg-white/10 px-3 py-1 rounded hover:bg-white/20 transition">Acosta (Neon)</a>
-          <a href="#hero-hormozi" className="text-xs bg-white/10 px-3 py-1 rounded hover:bg-white/20 transition">Hormozi (Trust)</a>
-          <a href="#hero-elevate" className="text-xs bg-white/10 px-3 py-1 rounded hover:bg-white/20 transition">Elevate (Warm)</a>
+          <button onClick={() => document.getElementById('hero-current')?.scrollIntoView({ behavior: 'smooth' })} className="text-xs bg-white/10 px-3 py-1 rounded hover:bg-white/20 transition cursor-pointer">Mevcut</button>
+          <button onClick={() => document.getElementById('hero-acosta')?.scrollIntoView({ behavior: 'smooth' })} className="text-xs bg-white/10 px-3 py-1 rounded hover:bg-white/20 transition cursor-pointer">Acosta (Neon)</button>
+          <button onClick={() => document.getElementById('hero-hormozi')?.scrollIntoView({ behavior: 'smooth' })} className="text-xs bg-white/10 px-3 py-1 rounded hover:bg-white/20 transition cursor-pointer">Hormozi (Trust)</button>
+          <button onClick={() => document.getElementById('hero-elevate')?.scrollIntoView({ behavior: 'smooth' })} className="text-xs bg-white/10 px-3 py-1 rounded hover:bg-white/20 transition cursor-pointer">Elevate (Warm)</button>
         </div>
       </div>
       
