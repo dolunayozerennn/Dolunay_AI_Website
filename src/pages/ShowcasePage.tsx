@@ -22,15 +22,15 @@ export function ShowcasePage() {
       </div>
 
       <div id="hero-acosta">
-        <HeroSectionAcosta bgImage="/hero_bg/hero_Cyberpunk_Neon_356a4f52.jpg" />
+        <HeroSectionAcosta bgImage="hero_bg/hero_Cyberpunk_Neon_356a4f52.jpg" />
       </div>
 
       <div id="hero-hormozi">
-        <HeroSectionHormozi bgImage="/hero_bg/hero_Trust_Scale_dd768729.jpg" />
+        <HeroSectionHormozi bgImage="hero_bg/hero_Trust_Scale_dd768729.jpg" />
       </div>
 
       <div id="hero-elevate">
-        <HeroSectionElevate bgImage="/hero_bg/hero_Authentic_Warm_5ff602c3.jpg" />
+        <HeroSectionElevate bgImage="hero_bg/hero_Authentic_Warm_5ff602c3.jpg" />
       </div>
     </div>
   );
