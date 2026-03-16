@@ -132,19 +132,8 @@ export function Navbar() {
           </div>
         </div>
 
-        {/* Right Side: CTA Button + Mobile Menu Button */}
+        {/* Right Side: Mobile Menu Button */}
         <div className="flex items-center gap-2">
-          {/* Neon CTA Button */}
-          <div className="hidden md:flex">
-            <a 
-              href="#/cozumler" 
-              className="flex items-center gap-2 bg-[#D4FF00] hover:bg-[#C2E600] text-black px-6 py-2.5 rounded-full font-bold text-[13px] uppercase tracking-wider transition-all duration-300 shadow-[0_0_20px_rgba(212,255,0,0.15)] hover:shadow-[0_0_30px_rgba(212,255,0,0.3)] hover:scale-105"
-            >
-              Danışmanlık Al
-              <svg fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
-            </a>
-          </div>
-
           {/* Mobile Menu Toggle */}
           <div className="md:hidden flex items-center pr-1">
             <button 
@@ -210,14 +199,7 @@ export function Navbar() {
                 Hakkımızda
               </a>
               
-              {/* Mobile CTA */}
-              <a 
-                href="#/cozumler"
-                className="mt-4 flex items-center justify-center gap-2 w-full bg-[#D4FF00] text-black px-4 py-3 rounded-xl font-bold text-sm uppercase tracking-wider transition-all"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Danışmanlık Al
-              </a>
+
             </div>
           </motion.div>
         )}

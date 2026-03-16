@@ -28,31 +28,31 @@ export function HeroSectionElevate({ bgImage }: { bgImage: string }) {
         <div className="max-w-[42rem]">
           <Reveal delay={0.1}>
             <h1 className="font-display text-[clamp(2.5rem,5vw,5rem)] font-medium tracking-tight leading-[1.1] text-white mb-6">
-              Sadece bir şirket değil.
+              Yapay zeka?
               <br />
-              <span className="font-bold text-transparent bg-clip-text text-gradient-accent">Yapay zekayla bir hareket.</span>
+              <span className="font-bold text-transparent bg-clip-text text-gradient-accent">Dolunay.</span>
             </h1>
           </Reveal>
 
           <Reveal delay={0.25}>
             <p className="text-gray-300 text-lg sm:text-slate-300 sm:text-xl font-light leading-relaxed mb-10 max-w-lg">
-              Gerçek otomasyonlar kurarak bağları fırsatlara dönüştürmene yardımcı olan premium eğitim ve danışmanlık.
+              Bireylerden işletmelere, yapay zekayı gerçek sonuçlara dönüştüren Türkiye'nin en büyük bağımsız AI ekosistemi.
             </p>
           </Reveal>
 
           <Reveal delay={0.4}>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-12 border-t border-white/10 w-full mt-4">
               <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-5 rounded-xl">
-                <p className="text-sm text-gray-300 italic mb-3">"[Müşteri Yorumu 1 - Buraya daha sonra ileteceğiniz metin gelecek.]"</p>
-                <div className="text-xs text-[#00d4ff] font-medium tracking-wide">- [Müşteri Adı 1]</div>
+                <p className="text-sm text-white font-semibold mb-3">250.000+ takipçi · 100M+ izlenme</p>
+                <div className="text-xs text-gray-400 leading-relaxed">Türkiye'nin en çok takip edilen bağımsız AI içerik üreticisi.</div>
               </div>
               <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-5 rounded-xl">
-                <p className="text-sm text-gray-300 italic mb-3">"[Müşteri Yorumu 2 - Buraya daha sonra ileteceğiniz metin gelecek.]"</p>
-                <div className="text-xs text-[#00d4ff] font-medium tracking-wide">- [Müşteri Adı 2]</div>
+                <p className="text-sm text-white font-semibold mb-3">1.000+ üye · 10+ başarı hikayesi</p>
+                <div className="text-xs text-gray-400 leading-relaxed">Yapay zekayla para kazanan girişimciler topluluğu.</div>
               </div>
               <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-5 rounded-xl">
-                <p className="text-sm text-gray-300 italic mb-3">"[Müşteri Yorumu 3 - Buraya daha sonra ileteceğiniz metin gelecek.]"</p>
-                <div className="text-xs text-[#00d4ff] font-medium tracking-wide">- [Müşteri Adı 3]</div>
+                <p className="text-sm text-white font-semibold mb-3">10+ kurumsal müşteri · 50+ marka iş birliği</p>
+                <div className="text-xs text-gray-400 leading-relaxed">Şirketlere özel AI otomasyon ve global marka partnerlikleri.</div>
               </div>
             </div>
           </Reveal>
