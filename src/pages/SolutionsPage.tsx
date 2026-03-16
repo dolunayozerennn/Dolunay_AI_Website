@@ -51,7 +51,7 @@ const readySolutions = [
     title: 'Artifex Campus',
     description: 'İşletmenizi AI ile dönüştürecek hazır çözüm paketleri. Personel tasarrufu sağlayan, operasyonel yükü sıfıra indiren sonuç odaklı B2B yapay zeka otomasyonları.',
     features: ['Hazır Kurulum', 'Anında Başlama', '7/24 Operasyon', 'Ölçeklenebilir'],
-    href: '#artifex',
+    href: '#/cozumler',
     accentColor: '#7c3aed',
     icon: <Sparkles className="w-6 h-6" />,
     external: false,

@@ -84,7 +84,7 @@ export function Navbar() {
                     className="absolute top-full left-0 mt-2 w-56 bg-[#0c0c14]/95 backdrop-blur-xl border border-white/[0.08] rounded-xl overflow-hidden shadow-2xl shadow-black/40"
                   >
                     <a
-                      href="#artifex"
+                      href="#/cozumler"
                       onClick={() => setIsDropdownOpen(false)}
                       className="flex flex-col px-5 py-3.5 hover:bg-white/[0.04] transition-all duration-300 border-b border-white/[0.04]"
                     >
@@ -116,7 +116,7 @@ export function Navbar() {
 
             {/* İş Birlikleri */}
             <a 
-              href="#collaborations"
+              href="#/isbirlikleri"
               className="text-sm font-medium text-gray-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/[0.04] transition-all duration-300"
             >
               İş Birlikleri
@@ -124,7 +124,7 @@ export function Navbar() {
 
             {/* Hakkımızda */}
             <a 
-              href="#about"
+              href="#/hakkimizda"
               className="text-sm font-medium text-gray-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/[0.04] transition-all duration-300"
             >
               Hakkımızda
@@ -170,7 +170,7 @@ export function Navbar() {
             <div className="flex flex-col space-y-1">
               <div className="px-3 py-2 text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]">Çözümler</div>
               <a 
-                href="#artifex"
+                href="#/cozumler"
                 className="text-gray-300 hover:text-white font-medium px-4 py-2.5 rounded-lg hover:bg-white/[0.04] transition-all"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -196,14 +196,14 @@ export function Navbar() {
                 AI Factory <span className="text-gray-500 text-xs">↗</span>
               </a>
               <a 
-                href="#collaborations"
+                href="#/isbirlikleri"
                 className="text-gray-300 hover:text-white font-medium px-4 py-2.5 rounded-lg hover:bg-white/[0.04] transition-all"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 İş Birlikleri
               </a>
               <a 
-                href="#about"
+                href="#/hakkimizda"
                 className="text-gray-300 hover:text-white font-medium px-4 py-2.5 rounded-lg hover:bg-white/[0.04] transition-all"
                 onClick={() => setIsMobileMenuOpen(false)}
               >

@@ -1,4 +1,4 @@
-import { Instagram, Youtube, Linkedin, Twitter } from 'lucide-react';
+import { Instagram, Youtube, Linkedin } from 'lucide-react';
 
 // TikTok icon (lucide-react doesn't have it)
 function TikTokIcon({ className }: { className?: string }) {
@@ -11,10 +11,9 @@ function TikTokIcon({ className }: { className?: string }) {
 
 export function Footer() {
   const socialLinks = [
-    { icon: <Instagram className="w-4 h-4" />, href: "https://instagram.com/dolunayozeren", label: "Instagram" },
+    { icon: <Instagram className="w-4 h-4" />, href: "https://www.instagram.com/dolunay_ozeren/", label: "Instagram" },
     { icon: <TikTokIcon className="w-4 h-4" />, href: "https://tiktok.com/@dolunayozeren", label: "TikTok" },
     { icon: <Youtube className="w-4 h-4" />, href: "https://youtube.com/@dolunayozeren", label: "YouTube" },
-    { icon: <Twitter className="w-4 h-4" />, href: "https://x.com/dolunayozeren", label: "X" },
     { icon: <Linkedin className="w-4 h-4" />, href: "https://linkedin.com/in/dolunayozeren", label: "LinkedIn" },
   ];
 

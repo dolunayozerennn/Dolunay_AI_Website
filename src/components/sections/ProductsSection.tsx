@@ -12,9 +12,10 @@ const fadeUp = {
 };
 
 interface ProductCardProps {
-  title: string;
+  headline: string;
   description: string;
   tag: string;
+  buttonLabel: string;
   href: string;
   external?: boolean;
   accentColor: string;
@@ -24,7 +25,7 @@ interface ProductCardProps {
   custom: number;
 }
 
-function ProductCard({ title, description, tag, href, external, glowColor, imageSrc, isPrimary, custom }: ProductCardProps) {
+function ProductCard({ headline, description, tag, buttonLabel, href, external, glowColor, imageSrc, isPrimary, custom }: ProductCardProps) {
   const cardRef = useRef<HTMLAnchorElement>(null);
 
   const handleMouse = (e: MouseEvent) => {
@@ -58,9 +59,9 @@ function ProductCard({ title, description, tag, href, external, glowColor, image
       />
       
       {/* Top Header Row (Tag & Arrow) */}
-      <div className="flex items-center justify-between w-full mb-6 z-10 relative">
+      <div className="flex items-center justify-between w-full mb-5 z-10 relative">
         <div 
-          className={`px-4 py-1 text-xs font-semibold rounded-full border transition-colors ${
+          className={`px-4 py-1.5 text-xs font-semibold rounded-full border transition-colors ${
             isPrimary 
               ? 'border-white/30 text-white bg-white/10' 
               : 'border-white/10 text-gray-300 bg-white/5 group-hover:bg-white/10 group-hover:text-white'
@@ -80,8 +81,8 @@ function ProductCard({ title, description, tag, href, external, glowColor, image
       </div>
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col mb-6">
-        <h3 className="text-2xl font-bold text-white mb-3 leading-tight tracking-tight font-display">{title}</h3>
+      <div className="relative z-10 flex flex-col mb-5">
+        <h3 className="text-2xl font-bold text-white mb-3 leading-tight tracking-tight font-display">{headline}</h3>
         <p className={`text-[15px] leading-relaxed line-clamp-3 ${isPrimary ? 'text-purple-100/90' : 'text-gray-400 group-hover:text-gray-300 transition-colors'}`}>
           {description}
         </p>
@@ -93,7 +94,7 @@ function ProductCard({ title, description, tag, href, external, glowColor, image
         {imageSrc ? (
           <img 
             src={`${import.meta.env.BASE_URL}${imageSrc}`} 
-            alt={title} 
+            alt={headline} 
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
           />
         ) : (
@@ -101,6 +102,18 @@ function ProductCard({ title, description, tag, href, external, glowColor, image
             <div className="w-8 h-8 rounded-full border-2 border-white/20 border-t-white/80 animate-spin" />
           </div>
         )}
+
+        {/* CTA Button overlay at bottom of image */}
+        <div className="absolute bottom-4 left-4 right-4 z-20">
+          <div className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 backdrop-blur-sm ${
+            isPrimary
+              ? 'bg-white/20 text-white border border-white/30 group-hover:bg-white/30'
+              : 'bg-white/10 text-white/80 border border-white/10 group-hover:bg-white/20 group-hover:text-white'
+          }`}>
+            {buttonLabel}
+            {external ? <ExternalLink className="w-3.5 h-3.5" /> : <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />}
+          </div>
+        </div>
       </div>
     </motion.a>
   );
@@ -109,47 +122,51 @@ function ProductCard({ title, description, tag, href, external, glowColor, image
 export function ProductsSection() {
   const products = [
     {
-      title: 'Artifex Campus',
-      description: 'İşletmeni AI ile dönüştürecek hazır çözüm paketleri ve eğitimler.',
-      tag: '1. Adım: Eğitim',
-      href: '#artifex',
+      headline: 'İşletmeni AI ile Dönüştür',
+      description: 'KOBİ\'ler ve işletme sahipleri için hazır AI çözüm paketleri, eğitimler ve otomasyon araçları.',
+      tag: 'İşletmeler & KOBİ\'ler',
+      buttonLabel: 'Artifex Campus\'e Git',
+      href: '#/cozumler',
       external: false,
       accentColor: '#7c3aed',
       glowColor: 'rgba(124, 58, 237, 0.15)',
-      imageSrc: 'images/products/artifex_campus.jpg',
+      imageSrc: 'images/products/isletme_kobi.png',
       isPrimary: true,
     },
     {
-      title: 'AI Factory',
-      description: 'Yapay zekayı iş modeline dönüştüren girişimci topluluğu.',
-      tag: '2. Adım: Topluluk',
+      headline: 'Kurumsal AI Altyapısı',
+      description: 'Holdinglere ve büyük ölçekli operasyonlara özel, terzi işi yapay zeka otomasyon ve danışmanlık hizmetleri.',
+      tag: 'Holdingler & Kurumsal',
+      buttonLabel: 'Hizmetleri Öğren',
+      href: '#/cozumler',
+      external: false,
+      accentColor: '#a855f7',
+      glowColor: 'rgba(168, 85, 247, 0.12)',
+      imageSrc: 'images/products/kurumsal_holding.png',
+      isPrimary: false,
+    },
+    {
+      headline: 'Fikrini İşe Dönüştür',
+      description: 'Yapay zekayı iş modeline dönüştürmek isteyen bireysel girişimciler için topluluk, mentorluk ve kaynaklar.',
+      tag: 'Bireysel Girişimciler',
+      buttonLabel: 'AI Factory\'ye Git',
       href: 'https://www.skool.com/yapay-zeka-factory/about?ref=044f39496d4f45fab11775bcefe4b7f4',
       external: true,
       accentColor: '#00d4ff',
       glowColor: 'rgba(0, 212, 255, 0.12)',
-      imageSrc: 'images/products/ai_factory.jpg',
+      imageSrc: 'images/products/girisimci.png',
       isPrimary: false,
     },
     {
-      title: 'Hizmetler',
-      description: 'Şirketine özel kurumsal AI otomasyon ve sistem kurulumu.',
-      tag: '3. Adım: Danışmanlık',
-      href: '#services',
-      external: false,
-      accentColor: '#a855f7',
-      glowColor: 'rgba(168, 85, 247, 0.12)',
-      imageSrc: 'images/products/hizmetler.jpg',
-      isPrimary: false,
-    },
-    {
-      title: 'Marka İş Birlikleri',
-      description: 'Markanızı milyonlarca kişiye ulaştıran profesyonel içerik üretim çözümleri.',
-      tag: '4. Adım: İş Birliği',
+      headline: 'Markanı Milyonlara Taşı',
+      description: 'Profesyonel içerik üretimi ve influencer işbirlikleri ile markanızı geniş kitlelere ulaştırın.',
+      tag: 'Markalar & Ajanslar',
+      buttonLabel: 'İşbirliği Yap',
       href: '#/isbirlikleri',
       external: false,
       accentColor: '#ec4899',
       glowColor: 'rgba(236, 72, 153, 0.12)',
-      imageSrc: 'images/products/marka_is_birlikleri.jpg',
+      imageSrc: 'images/products/marka_isbirligi.png',
       isPrimary: false,
     },
   ];
@@ -159,6 +176,26 @@ export function ProductsSection() {
       <div className="section-divider max-w-5xl mx-auto mb-24" />
       
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          className="text-center max-w-3xl mx-auto mb-16"
+        >
+          <motion.span variants={fadeUp} custom={0} className="inline-block text-electric-blue text-sm font-semibold tracking-[0.2em] uppercase mb-4">
+            Size Uygun Çözüm
+          </motion.span>
+          <motion.h2 variants={fadeUp} custom={1} className="text-4xl md:text-5xl font-bold mb-5 tracking-tight">
+            Hangi aşamada{' '}
+            <span className="text-gradient-accent">olursanız olun</span>
+          </motion.h2>
+          <motion.p variants={fadeUp} custom={2} className="text-gray-400 text-lg leading-relaxed">
+            Bireysel girişimciden kurumsal holdinglere, her ölçekte yapay zeka çözümleri sunuyoruz.
+          </motion.p>
+        </motion.div>
+
+        {/* Product Cards Grid */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -166,7 +203,7 @@ export function ProductsSection() {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
         >
           {products.map((product, i) => (
-            <ProductCard key={product.title} {...product} custom={i} />
+            <ProductCard key={product.headline} {...product} custom={i} />
           ))}
         </motion.div>
       </div>
