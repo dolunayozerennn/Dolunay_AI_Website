@@ -130,7 +130,7 @@ export function ProductsSection() {
       external: false,
       accentColor: '#7c3aed',
       glowColor: 'rgba(124, 58, 237, 0.15)',
-      imageSrc: 'images/products/isletme_kobi.png',
+      imageSrc: 'images/products/isletme_kobi.jpg',
       isPrimary: true,
     },
     {
@@ -142,7 +142,7 @@ export function ProductsSection() {
       external: false,
       accentColor: '#a855f7',
       glowColor: 'rgba(168, 85, 247, 0.12)',
-      imageSrc: 'images/products/kurumsal_holding.png',
+      imageSrc: 'images/products/kurumsal_holding.jpg',
       isPrimary: false,
     },
     {
@@ -154,7 +154,7 @@ export function ProductsSection() {
       external: true,
       accentColor: '#00d4ff',
       glowColor: 'rgba(0, 212, 255, 0.12)',
-      imageSrc: 'images/products/girisimci.png',
+      imageSrc: 'images/products/girisimci.jpg',
       isPrimary: false,
     },
     {
@@ -166,7 +166,7 @@ export function ProductsSection() {
       external: false,
       accentColor: '#ec4899',
       glowColor: 'rgba(236, 72, 153, 0.12)',
-      imageSrc: 'images/products/marka_isbirligi.png',
+      imageSrc: 'images/products/marka_isbirligi.jpg',
       isPrimary: false,
     },
   ];

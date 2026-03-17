@@ -115,7 +115,7 @@ const platforms = [
     gradient: 'from-pink-500 to-purple-600',
     bgGlow: 'rgba(236, 72, 153, 0.15)',
     textColor: 'text-pink-400',
-    href: 'https://instagram.com/dolunayozeren',
+    href: 'https://www.instagram.com/dolunay_ozeren/',
     metric: 'Takipçi',
     engagementLabel: 'Erişim / Post',
     engagementValue: '50K+'
@@ -154,7 +154,7 @@ const platforms = [
     gradient: 'from-blue-500 to-blue-700',
     bgGlow: 'rgba(59, 130, 246, 0.15)',
     textColor: 'text-blue-400',
-    href: 'https://facebook.com/dolunayozeren',
+    href: 'https://www.facebook.com/profile.php?id=61561973441859',
     metric: 'Takipçi',
     engagementLabel: 'Ort. Etkileşim',
     engagementValue: '5K+'
@@ -239,18 +239,19 @@ export function CollaborationsPage() {
       {/*  HERO — MEDIA KIT BANNER                                            */}
       {/* ══════════════════════════════════════════════════════════════════════ */}
       <section ref={heroRef} className="relative min-h-[85vh] flex items-center justify-center overflow-hidden" id="collaborations">
-        {/* Background Image with Parallax */}
+        {/* Background — Clean Premium Gradient */}
         <motion.div
           style={{ y: bgY }}
           className="absolute inset-0"
         >
-          <img 
-            src={`${import.meta.env.BASE_URL}mediakit-banner.png`} 
-            alt="" 
-            className="w-full h-[120%] object-cover opacity-30"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#050508]/60 via-[#050508]/40 to-[#050508]" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#050508]/80 via-transparent to-[#050508]/80" />
+          {/* Base gradient */}
+          <div className="absolute inset-0" style={{
+            background: 'radial-gradient(ellipse 80% 60% at 30% 40%, rgba(124, 58, 237, 0.08) 0%, transparent 60%), radial-gradient(ellipse 60% 50% at 70% 60%, rgba(236, 72, 153, 0.06) 0%, transparent 50%), linear-gradient(180deg, #050508 0%, #0a0a12 50%, #050508 100%)'
+          }} />
+          {/* Subtle floating orbs */}
+          <div className="absolute top-[20%] left-[15%] w-[300px] h-[300px] rounded-full blur-[120px] opacity-60 pointer-events-none" style={{ background: 'rgba(124, 58, 237, 0.06)' }} />
+          <div className="absolute bottom-[10%] right-[20%] w-[250px] h-[250px] rounded-full blur-[100px] opacity-50 pointer-events-none" style={{ background: 'rgba(236, 72, 153, 0.05)' }} />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#050508]/30 via-transparent to-[#050508]" />
         </motion.div>
 
         {/* Grid overlay */}
@@ -354,7 +355,7 @@ export function CollaborationsPage() {
             </div>
 
             <img
-              src={`${import.meta.env.BASE_URL}portrait.png`}
+              src={`${import.meta.env.BASE_URL}portrait.jpg`}
               alt="Dolunay Özeren"
               className="relative z-10 w-[340px] h-[340px] object-cover rounded-3xl border border-white/[0.08]"
               style={{ boxShadow: '0 40px 100px rgba(0,0,0,0.5), 0 0 60px rgba(124,58,237,0.1)' }}
