@@ -5,5 +5,5 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: '/Dolunay_AI_Website/',
+  base: process.env.RAILWAY_ENVIRONMENT ? '/' : '/Dolunay_AI_Website/',
 })
