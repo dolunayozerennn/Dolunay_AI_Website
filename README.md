@@ -6,15 +6,14 @@
 
 | Platform | URL |
 |---|---|
-| **Railway (Ana)** | Railway deploy — `dolunay-ai-website` projesi |
-| **GitHub Pages** | https://dolunayozerennn.github.io/Dolunay_AI_Website/ |
+| **Cloudflare Pages (Ana)** | https://dolunay.ai |
+| **Preview** | https://dolunay-ai-website.pages.dev |
 
 ## 🏗 Teknoloji Stack
 
 | Katman | Teknoloji | Versiyon |
 |---|---|---|
-| **Framework** | React + TypeScript | 19.x |
-| **Build Tool** | Vite | 5.4.x |
+| **Framework** | Next.js (App Router) + TypeScript | 15.x |
 | **Styling** | Tailwind CSS v4 | 4.0.x |
 | **Animasyon** | Framer Motion | 11.x |
 | **İkonlar** | Lucide React | 0.460.x |
@@ -202,27 +201,21 @@ npm install
 
 # Geliştirme sunucusu
 npm run dev
-# → http://localhost:5173/Dolunay_AI_Website/
+# → http://localhost:3000
 
-# Production build
+# Production build (Static Export test)
 npm run build
-
-# Preview (production build'i test et)
-npm run preview
 ```
 
-## 🚂 Deploy
+## 🚂 Deploy (Cloudflare Pages)
 
-### Railway
-- **Project ID:** `58765514-d122-4653-99c5-e9958330e5a4`
-- **Service ID:** `228b5ddb-680d-46d6-af71-761f046e51c7`
-- **Start Komutu:** `npm run build && npm run preview -- --host --port $PORT`
-- **GitHub Repo:** `dolunayozerennn/Dolunay_AI_Website`
+Proje **Cloudflare Pages** üzerinde statik HTML yayını yapacak şekilde kurgulanmıştır (Next.js Static Export). Node.js sunucusuna ihtiyaç yoktur.
 
-### GitHub Pages
+### Otonom GitHub Actions Mimarisi
 - **Workflow:** `.github/workflows/deploy.yml`
-- **Trigger:** Push to `main` branch
-- **Build:** `npm run build` → `./dist` → GitHub Pages artifact
+- **Trigger:** Push to `dev` branch
+- **Süreç:** GitHub üzerinde `npm run build` ile Next.js SSG derlemesi otomatik başlar. Çıkan saf `/out` dosyaları otonom olarak `main` dalına itilir.
+- **Yayın:** Cloudflare Pages yalnızca statik HTML barındıran `main` dalını okur ve edge network üzerinden dünya genelinde kesintisiz ve milisaniye hızında sunar. Herhangi bir "Cloudflare Build" dakikası harcamaz.
 
 ## 🖼 Görsel Yönetimi
 
