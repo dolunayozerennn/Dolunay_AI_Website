@@ -28,7 +28,7 @@ export function HeroSectionElevate({ bgImage }: { bgImage: string }) {
       id="hero-elevate"
     >
       <Image
-        src={`/${bgImage}`}
+        src={bgImage}
         alt="Hero background"
         fill
         className="object-cover"

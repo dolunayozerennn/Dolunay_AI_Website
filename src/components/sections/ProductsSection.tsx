@@ -90,7 +90,7 @@ function ProductCard({ headline, description, tag, buttonLabel, href, external, 
         <div className={`absolute inset-0 z-10 bg-gradient-to-t ${isPrimary ? 'from-[#581c87]/90 via-[#581c87]/20' : 'from-[#0f0f12]/90 via-[#0f0f12]/20'} to-transparent opacity-80`} />
         {imageSrc ? (
           <img 
-            src={`/${imageSrc}`} 
+            src={imageSrc} 
             alt={headline} 
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
           />
