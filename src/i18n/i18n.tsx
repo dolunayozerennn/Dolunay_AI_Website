@@ -102,7 +102,7 @@ export function useLanguage() {
  * Example: `t('nav.solutions')` → "Solutions"
  */
 export function useTranslation() {
-  const { language } = useContext(LanguageContext);
+  const { language, setLanguage } = useContext(LanguageContext);
   const translations = locales[language] || locales.en;
 
   const t = useCallback((key: string): string => {
@@ -127,5 +127,5 @@ export function useTranslation() {
     return typeof value === 'string' ? value : key;
   }, [language, translations]);
 
-  return { t, language };
+  return { t, language, setLanguage };
 }
