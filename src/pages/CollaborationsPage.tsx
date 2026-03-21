@@ -211,11 +211,11 @@ const countryData = [
 ];
 
 const virals = [
-  { brand: 'Nim AI', views: '9.5M', type: 'Organik + Paid', href: 'https://www.instagram.com/reel/DKtuJ3cK-Yr/', videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-artificial-intelligence-interface-with-code-data-40019-large.mp4', gradient: 'from-violet-600 via-purple-500 to-fuchsia-500', iconBg: 'bg-violet-500/30' },
-  { brand: 'Emergent AI', views: '3.8M', type: 'Organik', href: 'https://www.instagram.com/reel/DOnm-q0DHiq/', videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-a-network-of-connections-40058-large.mp4', gradient: 'from-cyan-500 via-blue-600 to-indigo-600', iconBg: 'bg-cyan-500/30' },
-  { brand: 'Aithor', views: '2.0M', type: 'Organik', href: 'https://www.instagram.com/reel/DKHLswaK4Tj/', videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-futuristic-city-with-flying-cars-and-neon-lights-40112-large.mp4', gradient: 'from-emerald-500 via-teal-500 to-cyan-500', iconBg: 'bg-emerald-500/30' },
-  { brand: 'Creatify', views: '1.7M', type: 'Organik + Paid', href: 'https://www.instagram.com/reel/DJoR2pJqpHt/', videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-woman-using-virtual-reality-headset-in-office-40455-large.mp4', gradient: 'from-orange-500 via-rose-500 to-pink-600', iconBg: 'bg-orange-500/30' },
-  { brand: 'Creati', views: '1.4M', type: 'Organik + Paid', href: 'https://www.instagram.com/reel/DNNcKWwq--T/', videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-data-stream-of-binary-code-and-hexadecimal-numbers-38290-large.mp4', gradient: 'from-pink-500 via-purple-600 to-blue-600', iconBg: 'bg-pink-500/30' },
+  { brand: 'Nim AI', views: '9.5M', type: 'Organik + Paid', href: 'https://www.instagram.com/reel/DKtuJ3cK-Yr/', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4', gradient: 'from-violet-600 via-purple-500 to-fuchsia-500', iconBg: 'bg-violet-500/30' },
+  { brand: 'Emergent AI', views: '3.8M', type: 'Organik', href: 'https://www.instagram.com/reel/DOnm-q0DHiq/', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4', gradient: 'from-cyan-500 via-blue-600 to-indigo-600', iconBg: 'bg-cyan-500/30' },
+  { brand: 'Aithor', views: '2.0M', type: 'Organik', href: 'https://www.instagram.com/reel/DKHLswaK4Tj/', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4', gradient: 'from-emerald-500 via-teal-500 to-cyan-500', iconBg: 'bg-emerald-500/30' },
+  { brand: 'Creatify', views: '1.7M', type: 'Organik + Paid', href: 'https://www.instagram.com/reel/DJoR2pJqpHt/', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4', gradient: 'from-orange-500 via-rose-500 to-pink-600', iconBg: 'bg-orange-500/30' },
+  { brand: 'Creati', views: '1.4M', type: 'Organik + Paid', href: 'https://www.instagram.com/reel/DNNcKWwq--T/', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4', gradient: 'from-pink-500 via-purple-600 to-blue-600', iconBg: 'bg-pink-500/30' },
 ];
 
 const brands = ['CapCut', 'VidAU', 'Lexi', 'KickResume', 'TopView', 'Higgsfield'];
