@@ -313,6 +313,12 @@ Bu sitede **herhangi bir metin değişikliği** yapıldığında:
 - **Kapak Görseli AI Pipeline** — `Blog_Yazici/fetch_and_resize_cover.py` eklendi. Bu adım; ImgBB + Kie AI (Nano Banana 2) kullanarak Google Drive'daki rastgele kapak resimlerini outpaint edip 16:9 formatlı muazzam webp dosyalarına çevirir.
 - **Navigasyon ve UI İyileştirmeleri** — Blog butonu Navbar'ın en sağına eklendi, Blog post içi geri dönüş aksiyonları ana sayfaya bağlandı.
 
+### 🛠️ Next.js Migrasyon Hataları ve Deployment Düzeltmeleri
+- **Deployment ("Beyaz Ekran" Hatası) Çözümü** — Vite altyapısından Next.js App Router yapısına geçerken oluşan sözdizimi ve routing hataları nedeniyle Cloudflare Pages üzerinde failed build olan "beyaz ekran" hatası tamamen giderildi (`npm run build` stabilitesi sağlandı).
+- **Sayfa Restorasyonları** — Yanlış migrate edilmiş olan `SolutionsPage` (Çözümler) ve `AboutPage` (Hakkımızda) sayfaları eski Vite versiyonundan (animasyonlar, orijinal arayüz, insan ekip üyeleri ve geçişler) manuel kurtarıldı ve tam uyumlu hale getirildi.
+- **Görsel Yolu (Path) Hataları** — `HeroSectionElevate.tsx`, `ProductsSection.tsx` ve diğer sayfalardaki görsel yollarında meydana gelen "çift slash" (`//`) veya eksik root slash hataları giderilerek resimlerin ve background dosyalarının Next.js componentlerinde sorunsuz yüklenmesi sağlandı.
+- **Creator Portresi ve Eksik Componentler** — Kullanıcı portresi ve "Eğitim & Danışmanlık Referansları" gibi spesifik alanlar eski build referanslarından alınarak kayıpsız yerine konuldu.
+
 ### Bekleyen İşler
 - [ ] Production deploy (GitHub push + Railway) — `/canli-yayina-al` ile
 
