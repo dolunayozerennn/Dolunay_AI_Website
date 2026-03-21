@@ -25,3 +25,4 @@ dist-ssr
 node_modules_bad
 .npm-cache
 .git_bad
+.next
