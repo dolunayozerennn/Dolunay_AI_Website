@@ -4,7 +4,7 @@ import type { MouseEvent } from 'react';
 import {
   Instagram, Youtube, Facebook, Users, GraduationCap,
   Mail, ArrowUpRight, Star, Eye, ExternalLink, Heart,
-  TrendingUp, Globe, BarChart3, Activity, PieChart, Sparkles
+  Globe, BarChart3, Activity, PieChart, Sparkles
 } from 'lucide-react';
 
 // ─── Custom Icons ──────────────────────────────────────────────────────────────
@@ -211,14 +211,44 @@ const countryData = [
 ];
 
 const virals = [
-  { brand: 'Nim AI', views: '9.5M', type: 'Organik + Paid', href: 'https://l.shortlink.es/l/e1a2e306df8ad9ad21bb694561d43aca9508e09d' },
-  { brand: 'Emergent AI', views: '3.8M', type: 'Organik', href: 'https://l.shortlink.es/l/1fda7a18a6888304f9f3beaa2596076b0d5b97d2' },
-  { brand: 'Aithor', views: '2.0M', type: 'Organik', href: 'https://l.shortlink.es/l/b15d54150e7651adc55a818ed1f12cd7b70a0fa5' },
-  { brand: 'Creatify', views: '1.7M', type: 'Organik + Paid', href: 'https://l.shortlink.es/l/578cdae950f64909dfada73eb643a3d077a7f449' },
-  { brand: 'Creati', views: '1.4M', type: 'Organik + Paid', href: 'https://l.shortlink.es/l/6c8576a0d0db58bdc23e5a0fda4eb9490d9ebd78' },
+  { brand: 'Nim AI', views: '9.5M', type: 'Organik + Paid', href: 'https://l.shortlink.es/l/e1a2e306df8ad9ad21bb694561d43aca9508e09d', reelId: 'DKtuJ3cK-Yr' },
+  { brand: 'Emergent AI', views: '3.8M', type: 'Organik', href: 'https://l.shortlink.es/l/1fda7a18a6888304f9f3beaa2596076b0d5b97d2', reelId: 'DOnm-q0DHiq' },
+  { brand: 'Aithor', views: '2.0M', type: 'Organik', href: 'https://l.shortlink.es/l/b15d54150e7651adc55a818ed1f12cd7b70a0fa5', reelId: 'DKHLswaK4Tj' },
+  { brand: 'Creatify', views: '1.7M', type: 'Organik + Paid', href: 'https://l.shortlink.es/l/578cdae950f64909dfada73eb643a3d077a7f449', reelId: 'DJoR2pJqpHt' },
+  { brand: 'Creati', views: '1.4M', type: 'Organik + Paid', href: 'https://l.shortlink.es/l/6c8576a0d0db58bdc23e5a0fda4eb9490d9ebd78', reelId: 'DNNcKWwq--T' },
 ];
 
 const brands = ['CapCut', 'VidAU', 'Lexi', 'KickResume', 'TopView', 'Higgsfield'];
+
+// ─── Instagram Reel Embed Component ─────────────────────────────────────────────
+function InstagramReelEmbed({ reelId, brand }: { reelId: string; brand: string }) {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  return (
+    <div className="relative w-full" style={{ aspectRatio: '9/16' }}>
+      {/* Loading skeleton */}
+      {!isLoaded && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/[0.02] rounded-2xl">
+          <div className="w-10 h-10 rounded-full border-2 border-pink-500/30 border-t-pink-500 animate-spin mb-3" />
+          <span className="text-xs text-gray-500">{brand} yükleniyor...</span>
+        </div>
+      )}
+      <iframe
+        src={`https://www.instagram.com/reel/${reelId}/embed/`}
+        className="w-full h-full rounded-2xl"
+        style={{ 
+          border: 'none',
+          opacity: isLoaded ? 1 : 0,
+          transition: 'opacity 0.5s ease'
+        }}
+        allowFullScreen
+        loading="lazy"
+        title={`${brand} Instagram Reel`}
+        onLoad={() => setIsLoaded(true)}
+      />
+    </div>
+  );
+}
 
 // ═══════════════════════════════════════════════════════════════════════════════
 //  MAIN COMPONENT
@@ -484,7 +514,7 @@ export function CollaborationsPage() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════════ */}
-      {/*  PREVIOUS COLLABORATIONS / VIRALS                                    */}
+      {/*  PREVIOUS COLLABORATIONS / VIRALS — VIDEO EMBEDS                     */}
       {/* ══════════════════════════════════════════════════════════════════════ */}
       <section className="py-24 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -506,37 +536,56 @@ export function CollaborationsPage() {
             </motion.p>
           </motion.div>
 
+          {/* Viral Reels Grid — video embeds */}
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.1 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-16"
+            viewport={{ once: true, amount: 0.05 }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 mb-16"
           >
             {virals.map((item, i) => (
-              <BentoCard key={i} custom={i} className="!rounded-3xl group relative overflow-hidden backdrop-blur-xl bg-white/[0.02] border border-white/[0.05] p-6 flex flex-col items-center text-center hover:bg-white/[0.04] transition-colors">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center mb-6">
-                  <TrendingUp className="w-8 h-8 text-pink-400 group-hover:scale-110 transition-transform duration-300" />
+              <motion.div
+                key={i}
+                variants={fadeUp}
+                custom={i}
+                className="group relative rounded-3xl overflow-hidden bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.12] transition-all duration-500"
+                style={{ boxShadow: '0 8px 40px rgba(0,0,0,0.3)' }}
+              >
+                {/* Instagram Reel Embed */}
+                <div className="relative">
+                  <InstagramReelEmbed reelId={item.reelId} brand={item.brand} />
                 </div>
-                
-                <h3 className="text-xl font-bold text-white mb-2">{item.brand}</h3>
-                
-                <div className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400 mb-2">
-                  {item.views}
+
+                {/* Bottom overlay with brand info */}
+                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 via-black/60 to-transparent pointer-events-none z-10">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-sm font-bold text-white">{item.brand}</h3>
+                      <div className="text-[10px] text-gray-400 font-medium uppercase tracking-wider">
+                        {item.type}
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-lg font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400">
+                        {item.views}
+                      </div>
+                      <div className="text-[10px] text-gray-400 flex items-center gap-1 justify-end">
+                        <Eye className="w-3 h-3" /> İzlenme
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                
-                <div className="text-xs text-gray-500 font-medium uppercase tracking-wider mb-6">
-                  {item.type} İzlenme
-                </div>
-                
+
+                {/* Top-right external link */}
                 <a
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-auto flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-sm text-gray-300 hover:text-white transition-colors border border-white/[0.05]"
+                  className="absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-black/70 transition-all duration-300 opacity-0 group-hover:opacity-100"
                 >
-                  <Eye className="w-4 h-4" /> Videoyu İzle
+                  <ExternalLink className="w-3.5 h-3.5" />
                 </a>
-              </BentoCard>
+              </motion.div>
             ))}
           </motion.div>
 
