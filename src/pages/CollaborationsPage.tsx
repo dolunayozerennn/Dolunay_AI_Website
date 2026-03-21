@@ -1,10 +1,10 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import type { MouseEvent } from 'react';
 import {
   Instagram, Youtube, Facebook, Users, GraduationCap,
-  Mail, ArrowUpRight, Star, Eye, ExternalLink, Heart,
-  TrendingUp, Globe, BarChart3, Activity, PieChart, Sparkles
+  Mail, ArrowUpRight, Eye, ExternalLink, Heart,
+  Globe, BarChart3, Activity, PieChart, Sparkles
 } from 'lucide-react';
 
 // ─── Custom Icons ──────────────────────────────────────────────────────────────
@@ -211,14 +211,99 @@ const countryData = [
 ];
 
 const virals = [
-  { brand: 'Nim AI', views: '9.5M', type: 'Organik + Paid', href: 'https://l.shortlink.es/l/e1a2e306df8ad9ad21bb694561d43aca9508e09d' },
-  { brand: 'Emergent AI', views: '3.8M', type: 'Organik', href: 'https://l.shortlink.es/l/1fda7a18a6888304f9f3beaa2596076b0d5b97d2' },
-  { brand: 'Aithor', views: '2.0M', type: 'Organik', href: 'https://l.shortlink.es/l/b15d54150e7651adc55a818ed1f12cd7b70a0fa5' },
-  { brand: 'Creatify', views: '1.7M', type: 'Organik + Paid', href: 'https://l.shortlink.es/l/578cdae950f64909dfada73eb643a3d077a7f449' },
-  { brand: 'Creati', views: '1.4M', type: 'Organik + Paid', href: 'https://l.shortlink.es/l/6c8576a0d0db58bdc23e5a0fda4eb9490d9ebd78' },
+  { brand: 'Nim AI', views: '9.5M', type: 'Organik + Paid', href: 'https://www.instagram.com/reel/DKtuJ3cK-Yr/', reelId: 'DKtuJ3cK-Yr', gradient: 'from-violet-600 via-purple-500 to-fuchsia-500', iconBg: 'bg-violet-500/30' },
+  { brand: 'Emergent AI', views: '3.8M', type: 'Organik', href: 'https://www.instagram.com/reel/DOnm-q0DHiq/', reelId: 'DOnm-q0DHiq', gradient: 'from-cyan-500 via-blue-600 to-indigo-600', iconBg: 'bg-cyan-500/30' },
+  { brand: 'Aithor', views: '2.0M', type: 'Organik', href: 'https://www.instagram.com/reel/DKHLswaK4Tj/', reelId: 'DKHLswaK4Tj', gradient: 'from-emerald-500 via-teal-500 to-cyan-500', iconBg: 'bg-emerald-500/30' },
+  { brand: 'Creatify', views: '1.7M', type: 'Organik + Paid', href: 'https://www.instagram.com/reel/DJoR2pJqpHt/', reelId: 'DJoR2pJqpHt', gradient: 'from-orange-500 via-rose-500 to-pink-600', iconBg: 'bg-orange-500/30' },
+  { brand: 'Creati', views: '1.4M', type: 'Organik + Paid', href: 'https://www.instagram.com/reel/DNNcKWwq--T/', reelId: 'DNNcKWwq--T', gradient: 'from-pink-500 via-purple-600 to-blue-600', iconBg: 'bg-pink-500/30' },
 ];
 
 const brands = ['CapCut', 'VidAU', 'Lexi', 'KickResume', 'TopView', 'Higgsfield'];
+
+// ─── Instagram Reel Embed Component ────────────────────────────────────────────
+function InstagramReelEmbed({ reelId, brand, views, type, gradient }: {
+  reelId: string;
+  brand: string;
+  views: string;
+  type: string;
+  gradient: string;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Load Instagram embed script if not already loaded
+    const existingScript = document.querySelector('script[src*="instagram.com/embed.js"]');
+    if (!existingScript) {
+      const script = document.createElement('script');
+      script.src = 'https://www.instagram.com/embed.js';
+      script.async = true;
+      script.defer = true;
+      document.body.appendChild(script);
+      script.onload = () => {
+        if ((window as any).instgrm) {
+          (window as any).instgrm.Embeds.process();
+        }
+      };
+    } else {
+      // Script already loaded, just re-process
+      setTimeout(() => {
+        if ((window as any).instgrm) {
+          (window as any).instgrm.Embeds.process();
+        }
+      }, 300);
+    }
+  }, [reelId]);
+
+  return (
+    <div className="group relative rounded-3xl overflow-hidden" style={{ aspectRatio: '9/16' }}>
+      {/* Gradient border glow */}
+      <div className={`absolute -inset-[1px] bg-gradient-to-br ${gradient} rounded-3xl opacity-30 group-hover:opacity-60 transition-opacity duration-500 blur-[1px]`} />
+      
+      {/* Dark container */}
+      <div className="relative h-full rounded-3xl overflow-hidden bg-[#0a0a0f] border border-white/[0.06]">
+        {/* Instagram embed wrapper — fills the card */}
+        <div
+          ref={containerRef}
+          className="absolute inset-0 flex items-center justify-center overflow-hidden"
+          style={{ 
+            /* Scale and position the embed to fill the 9:16 card */
+            transform: 'scale(1.02)',
+          }}
+        >
+          <blockquote
+            className="instagram-media"
+            data-instgrm-captioned={false}
+            data-instgrm-permalink={`https://www.instagram.com/reel/${reelId}/`}
+            data-instgrm-version="14"
+            style={{
+              background: 'transparent',
+              border: 0,
+              margin: 0,
+              padding: 0,
+              width: '100%',
+              maxWidth: '100%',
+              minWidth: '100%',
+            }}
+          />
+        </div>
+
+        {/* Top badge — view count */}
+        <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/10">
+          <Eye className="w-3 h-3 text-white/80" />
+          <span className="text-xs font-bold text-white">{views}</span>
+        </div>
+
+        {/* Bottom overlay with brand info */}
+        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 via-black/60 to-transparent z-20">
+          <h3 className="text-sm font-bold text-white mb-0.5">{brand}</h3>
+          <div className="text-[10px] text-white/60 font-medium uppercase tracking-wider">
+            {type}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 // ═══════════════════════════════════════════════════════════════════════════════
 //  MAIN COMPONENT
@@ -484,7 +569,7 @@ export function CollaborationsPage() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════════ */}
-      {/*  PREVIOUS COLLABORATIONS / VIRALS                                    */}
+      {/*  PREVIOUS COLLABORATIONS / VIRALS — VIDEO EMBEDS                     */}
       {/* ══════════════════════════════════════════════════════════════════════ */}
       <section className="py-24 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -506,37 +591,28 @@ export function CollaborationsPage() {
             </motion.p>
           </motion.div>
 
+          {/* Viral Reels Grid — Instagram Embeds */}
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.1 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-16"
+            viewport={{ once: true, amount: 0.05 }}
+            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-5 mb-16"
           >
             {virals.map((item, i) => (
-              <BentoCard key={i} custom={i} className="!rounded-3xl group relative overflow-hidden backdrop-blur-xl bg-white/[0.02] border border-white/[0.05] p-6 flex flex-col items-center text-center hover:bg-white/[0.04] transition-colors">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center mb-6">
-                  <TrendingUp className="w-8 h-8 text-pink-400 group-hover:scale-110 transition-transform duration-300" />
-                </div>
-                
-                <h3 className="text-xl font-bold text-white mb-2">{item.brand}</h3>
-                
-                <div className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400 mb-2">
-                  {item.views}
-                </div>
-                
-                <div className="text-xs text-gray-500 font-medium uppercase tracking-wider mb-6">
-                  {item.type} İzlenme
-                </div>
-                
-                <a
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-auto flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-sm text-gray-300 hover:text-white transition-colors border border-white/[0.05]"
-                >
-                  <Eye className="w-4 h-4" /> Videoyu İzle
-                </a>
-              </BentoCard>
+              <motion.div
+                key={i}
+                variants={fadeUp}
+                custom={i}
+                style={{ boxShadow: '0 8px 40px rgba(0,0,0,0.3)' }}
+              >
+                <InstagramReelEmbed
+                  reelId={item.reelId}
+                  brand={item.brand}
+                  views={item.views}
+                  type={item.type}
+                  gradient={item.gradient}
+                />
+              </motion.div>
             ))}
           </motion.div>
 
