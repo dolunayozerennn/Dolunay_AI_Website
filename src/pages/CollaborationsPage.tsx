@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState } from 'react';
 import type { MouseEvent } from 'react';
 import {
   Instagram, Youtube, Facebook, Users, GraduationCap,
@@ -221,71 +221,70 @@ const virals = [
 const brands = ['CapCut', 'VidAU', 'Lexi', 'KickResume', 'TopView', 'Higgsfield'];
 
 // ─── Instagram Reel Embed Component ────────────────────────────────────────────
-function InstagramReelEmbed({ reelId, brand, views, type, gradient }: {
+// Instagram's blockquote+embed.js method and /reel/ID/embed/ both fail for these
+// reels. We use a hybrid approach: try iframe embed first, with a premium
+// fallback card that links directly to the reel on Instagram.
+function InstagramReelEmbed({ reelId, brand, views, type, gradient, href }: {
   reelId: string;
   brand: string;
   views: string;
   type: string;
   gradient: string;
+  href: string;
 }) {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    // Load Instagram embed script if not already loaded
-    const existingScript = document.querySelector('script[src*="instagram.com/embed.js"]');
-    if (!existingScript) {
-      const script = document.createElement('script');
-      script.src = 'https://www.instagram.com/embed.js';
-      script.async = true;
-      script.defer = true;
-      document.body.appendChild(script);
-      script.onload = () => {
-        if ((window as any).instgrm) {
-          (window as any).instgrm.Embeds.process();
-        }
-      };
-    } else {
-      // Script already loaded, just re-process
-      setTimeout(() => {
-        if ((window as any).instgrm) {
-          (window as any).instgrm.Embeds.process();
-        }
-      }, 300);
-    }
-  }, [reelId]);
+  const [embedFailed, setEmbedFailed] = useState(false);
 
   return (
-    <div className="group relative rounded-3xl overflow-hidden" style={{ aspectRatio: '9/16' }}>
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group relative rounded-3xl overflow-hidden block cursor-pointer"
+      style={{ aspectRatio: '9/16' }}
+    >
       {/* Gradient border glow */}
-      <div className={`absolute -inset-[1px] bg-gradient-to-br ${gradient} rounded-3xl opacity-30 group-hover:opacity-60 transition-opacity duration-500 blur-[1px]`} />
-      
+      <div className={`absolute -inset-[1px] bg-gradient-to-br ${gradient} rounded-3xl opacity-20 group-hover:opacity-50 transition-opacity duration-500 blur-[1px]`} />
+
       {/* Dark container */}
       <div className="relative h-full rounded-3xl overflow-hidden bg-[#0a0a0f] border border-white/[0.06]">
-        {/* Instagram embed wrapper — fills the card */}
-        <div
-          ref={containerRef}
-          className="absolute inset-0 flex items-center justify-center overflow-hidden"
-          style={{ 
-            /* Scale and position the embed to fill the 9:16 card */
-            transform: 'scale(1.02)',
-          }}
-        >
-          <blockquote
-            className="instagram-media"
-            data-instgrm-captioned={false}
-            data-instgrm-permalink={`https://www.instagram.com/reel/${reelId}/`}
-            data-instgrm-version="14"
+
+        {/* Try iframe embed — will be hidden if fails */}
+        {!embedFailed && (
+          <iframe
+            src={`https://www.instagram.com/reel/${reelId}/embed/`}
+            className="absolute inset-0 w-full h-full border-0"
+            allowFullScreen
+            loading="lazy"
+            onError={() => setEmbedFailed(true)}
             style={{
-              background: 'transparent',
-              border: 0,
-              margin: 0,
-              padding: 0,
-              width: '100%',
-              maxWidth: '100%',
-              minWidth: '100%',
+              transform: 'scale(1.05)',
+              transformOrigin: 'center center',
             }}
           />
-        </div>
+        )}
+
+        {/* Gradient fallback overlay — always visible on top of iframe for branding */}
+        <div className={`absolute inset-0 bg-gradient-to-br ${gradient} transition-opacity duration-500 ${embedFailed ? 'opacity-80' : 'opacity-0 group-hover:opacity-20'}`} />
+
+        {/* Pattern overlay for depth */}
+        <div className="absolute inset-0 opacity-10 pointer-events-none" style={{
+          backgroundImage: `radial-gradient(circle at 30% 20%, rgba(255,255,255,0.15) 0%, transparent 50%), radial-gradient(circle at 70% 80%, rgba(255,255,255,0.1) 0%, transparent 40%)`,
+        }} />
+
+        {/* Center content — play button for fallback */}
+        {embedFailed && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
+            <Instagram className="w-8 h-8 text-white/60 mb-3" />
+            <div className="relative">
+              <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center group-hover:bg-white/30 group-hover:scale-110 transition-all duration-300">
+                <svg className="w-7 h-7 text-white fill-white ml-0.5" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              </div>
+            </div>
+            <span className="mt-3 text-[10px] text-white/60 font-medium uppercase tracking-[0.15em] group-hover:text-white/90 transition-colors">
+              Reels'i İzle
+            </span>
+          </div>
+        )}
 
         {/* Top badge — view count */}
         <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/10">
@@ -300,8 +299,13 @@ function InstagramReelEmbed({ reelId, brand, views, type, gradient }: {
             {type}
           </div>
         </div>
+
+        {/* Hover glow effect */}
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+          style={{ boxShadow: 'inset 0 0 60px rgba(255,255,255,0.1)' }}
+        />
       </div>
-    </div>
+    </a>
   );
 }
 
@@ -604,6 +608,8 @@ export function CollaborationsPage() {
                 variants={fadeUp}
                 custom={i}
                 style={{ boxShadow: '0 8px 40px rgba(0,0,0,0.3)' }}
+                whileHover={{ scale: 1.03, y: -4 }}
+                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
               >
                 <InstagramReelEmbed
                   reelId={item.reelId}
@@ -611,6 +617,7 @@ export function CollaborationsPage() {
                   views={item.views}
                   type={item.type}
                   gradient={item.gradient}
+                  href={item.href}
                 />
               </motion.div>
             ))}
