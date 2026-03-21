@@ -1,0 +1,318 @@
+# Dolunay AI — Kişisel Marka Web Sitesi
+
+> **Dolunay Özeren**'in kişisel marka web sitesi. Yapay zeka eğitimi, AI otomasyon ve içerik üretimi alanlarındaki uzmanlığı sergileyen premium, fütüristik multi-page landing site.
+
+## 🌐 Canlı Linkler
+
+| Platform | URL |
+|---|---|
+| **Railway (Ana)** | Railway deploy — `dolunay-ai-website` projesi |
+| **GitHub Pages** | https://dolunayozerennn.github.io/Dolunay_AI_Website/ |
+
+## 🏗 Teknoloji Stack
+
+| Katman | Teknoloji | Versiyon |
+|---|---|---|
+| **Framework** | React + TypeScript | 19.x |
+| **Build Tool** | Vite | 5.4.x |
+| **Styling** | Tailwind CSS v4 | 4.0.x |
+| **Animasyon** | Framer Motion | 11.x |
+| **İkonlar** | Lucide React | 0.460.x |
+| **Utility** | clsx + tailwind-merge | — |
+
+## 📁 Proje Yapısı (Güncel — Mart 2026)
+
+```
+Dolunay_AI_Website/
+├── public/
+│   ├── hero_bg/
+│   │   └── hero_Elevate_New_V1.jpg    # Ana hero arka plan fotoğrafı (Flux AI üretimi)
+│   ├── images/
+│   │   ├── products/                   # ProductsSection kart görselleri
+│   │   │   ├── isletme_kobi.png
+│   │   │   ├── kurumsal_holding.png
+│   │   │   ├── girisimci.png
+│   │   │   └── marka_isbirligi.png
+│   │   ├── logos/                      # Marka & kurum logoları
+│   │   │   ├── turkiye-finans-logo.png # Türkiye Finans (lokal dosya)
+│   │   │   ├── Udemy_logo.svg (1).png  # Udemy (lokal dosya)
+│   │   │   ├── images (8) copy 2.png   # GittiGidiyor (lokal dosya)
+│   │   │   └── ...diğerleri
+│   │   ├── team/                       # Ekip üyeleri profil fotoğrafları (LinkedIn'den)
+│   │   │   ├── ceren.jpeg
+│   │   │   ├── sarper.jpg
+│   │   │   ├── ece.jpeg
+│   │   │   ├── berke.jpeg
+│   │   │   ├── savas.jpeg
+│   │   │   └── okan.jpg
+│   │   └── egitimler/                  # Kurumsal eğitim fotoğrafları
+│   │       ├── egitim1.jpg
+│   │       ├── egitim2.jpg
+│   │       └── egitim3.jpg
+│   ├── team/                           # AI takım üyeleri avatarları
+│   │   ├── bobby_ai.png
+│   │   ├── daisy_ai.png
+│   │   ├── gipsy_ai.png
+│   │   └── joshua_ai.png
+│   ├── portrait.png                    # CollaborationsPage creator portresi
+│   ├── mediakit-banner.png             # CollaborationsPage hero arka plan
+│   ├── videos/                         # Arka plan reel videoları (CollaborationsPage Viral Kartlar)
+│   │   └── reel1.mp4 - reel5.mp4
+│   ├── favicon.svg                     # Site favicon
+│   └── icons.svg                       # SVG ikon sprite
+├── src/
+│   ├── App.tsx                         # Ana uygulama — hash-based routing
+│   ├── main.tsx                        # React entry point (LanguageProvider wrapper)
+│   ├── index.css                       # Global stiller + Tailwind v4 design system
+│   ├── i18n/                           # 🌐 Çoklu dil sistemi
+│   │   ├── i18n.tsx                    # LanguageProvider, useTranslation, useLanguage hooks
+│   │   └── locales/                    # Dil dosyaları (JSON)
+│   │       ├── tr.json                 # 🇹🇷 Türkçe (ana dil)
+│   │       ├── en.json                 # 🇬🇧 İngilizce
+│   │       ├── zh.json                 # 🇨🇳 Çince (Basitleştirilmiş)
+│   │       └── es.json                 # 🇪🇸 İspanyolca
+│   ├── pages/
+│   │   ├── HomePage.tsx                # Ana sayfa (HeroSectionElevate + ProductsSection)
+│   │   ├── SolutionsPage.tsx           # Çözümler sayfası (Artifex Campus + Hizmetler)
+│   │   ├── AIFactoryPage.tsx           # AI Factory eğitim platformu
+│   │   ├── CorporateTrainingsPage.tsx  # Kurumsal Eğitimler sayfası + logoları + CTA
+│   │   ├── CollaborationsPage.tsx      # İş Birlikleri sayfası (Media Kit + Viral içerikler)
+│   │   └── AboutPage.tsx              # Hakkımızda sayfası (İnsan + AI ekip — gerçek fotoğraflar)
+│   ├── components/
+│   │   ├── layout/
+│   │   │   ├── Navbar.tsx              # Üst navigasyon — dropdown menüler + LanguageSwitcher
+│   │   │   ├── Footer.tsx              # Site alt bilgi + sosyal medya ikonları
+│   │   │   └── LanguageSwitcher.tsx    # 🌐 Dil seçici dropdown (bayrak + isim)
+│   │   └── sections/
+│   │       ├── HeroSectionElevate.tsx  # ⭐ Full-screen hero (bg fotoğraf + sol overlay metin)
+│   │       ├── ProductsSection.tsx     # 4-kart ürün grid (kitle segmentasyonu)
+│   │       └── ServicesSection.tsx     # Hizmetler detay kartları
+│   └── assets/                         # Statik varlıklar (eski, çoğu kullanılmıyor)
+├── index.html                          # HTML giriş noktası
+├── vite.config.ts                      # Vite yapılandırması (base: '/Dolunay_AI_Website/')
+├── railway.json                        # Railway deploy yapılandırması
+├── tsconfig.json                       # TypeScript konfigürasyonu
+├── eslint.config.js                    # ESLint kuralları
+└── package.json                        # Bağımlılıklar ve script'ler
+```
+
+## 🗺 Sayfa Yapısı & Routing
+
+Site **hash-based routing** kullanır (`window.location.hash`):
+
+```
+#/                              → HomePage
+#/cozumler                      → SolutionsPage (Artifex Campus + Hizmetler)
+#/egitimler/ai-factory          → AIFactoryPage
+#/egitimler/kurumsal-egitimler  → CorporateTrainingsPage
+#/isbirlikleri                  → CollaborationsPage
+#/hakkimizda                    → AboutPage
+```
+
+### Navigasyon Yapısı (Navbar)
+
+```
+Navbar (pill-shaped, glassmorphism, sticky)
+│
+├── Çözümler (dropdown)
+│   ├── Artifex Campus → #/cozumler (Tak-çıkar AI çözümleri — "Çok Yakında")
+│   └── Hizmetler      → #/cozumler (alt bölüm — danışmanlık, otomasyon kartları)
+│
+├── Eğitimler (dropdown)
+│   ├── AI Factory          → #/egitimler/ai-factory (AI otomasyon satış eğitimi)
+│   └── Kurumsal Eğitimler  → #/egitimler/kurumsal-egitimler (kurumsal workshop/danışmanlık)
+│
+├── İş Birlikleri → #/isbirlikleri
+│
+├── Hakkımızda → #/hakkimizda
+│
+└── 🌐 Dil Seçici (sağ üst) → EN / TR / ZH / ES
+```
+
+### Sayfa Akış Detayları
+
+```
+├── #/ — HomePage
+│   ├── HeroSectionElevate  ← Full-screen bg fotoğraf + "Yapay zeka? Dolunay." overlay
+│   └── ProductsSection     ← 4 kart: İşletmeler, Kurumsal, Girişimciler, Markalar
+│
+├── #/cozumler — SolutionsPage
+│   ├── Artifex Campus     ← "Tak-çıkar AI çözümleri" + "Çok Yakında" durumu
+│   └── ServicesSection    ← Detaylı hizmet kartları (Eğitim referansları KALDIRILDI)
+│
+├── #/egitimler/ai-factory — AIFactoryPage
+│   └── AI Factory         ← İndigo/mor renk şeması, AI otomasyon satış eğitimi
+│
+├── #/egitimler/kurumsal-egitimler — CorporateTrainingsPage
+│   ├── Kurum Kartları     ← 6 kurum: Türkiye Finans, Misyon, Başkent Üni, Udemy, GittiGidiyor, Trendyol
+│   ├── Logo Sistemi       ← Lokal dosya > Google Favicon API fallback
+│   └── İletişim CTA       ← dolunay@dolunay.ai
+│
+├── #/isbirlikleri — CollaborationsPage
+│   ├── Media Kit Hero     ← Paralaks banner + istatistik kartları
+│   ├── Kitle Demografisi  ← Cinsiyet, yaş, coğrafya dağılım (arka plan ikonları kaldırıldı)
+│   ├── Viral İçerikler    ← Reel kartları (lokal .mp4 background videoları + Premium UI)
+│   ├── Platform Erişimi   ← Instagram, TikTok, YouTube, Facebook, Udemy, Skool kartları
+│   └── İletişim CTA       ← ceren@dolunay.ai sponsorluk butonu
+│
+├── #/hakkimizda — AboutPage
+│   └── Ekip Bölümü        ← 6 insan (gerçek LinkedIn fotoğrafları) + 4 AI takım üyesi kartları
+│
+Footer (tüm sayfalarda — sosyal medya ikonları + copyright)
+```
+
+## ⭐ Hero Section — Mevcut Tasarım (HeroSectionElevate)
+
+- **Yaklaşım:** Full-screen background image + sol tarafta metin overlay
+- **Arka Plan:** `/public/hero_bg/hero_Elevate_New_V1.jpg` — Flux AI ile üretilmiş
+- **Overlay:** Siyah→şeffaf gradyan (soldan sağa) — opacity 90%
+- **İçerik:**
+  1. **Başlık:** "Yapay zeka? Dolunay." (gradient accent)
+  2. **Alt başlık:** "Bireylerden işletmelere, yapay zekayı gerçek sonuçlara dönüştüren..."
+  3. **3 Metrik Kart:** 250K+ takipçi, 1.000+ üye, 10+ kurumsal müşteri
+- **Animasyon:** Framer Motion fade-up reveal (sıralı delay)
+- **Responsive:** Desktop'ta sol overlay, mobilde tam genişlik
+
+## 🎨 Design System (index.css)
+
+### Tailwind v4 Custom Değişkenler
+| Token | Değer | Kullanım |
+|---|---|---|
+| `--color-electric-blue` | `#00d4ff` | Vurgu mavi |
+| `--color-accent-purple` | `#7c3aed` | Vurgu mor |
+| `--color-accent-violet` | `#a855f7` | Vurgu açık mor |
+
+### Utility Sınıflar
+- `.glass-panel` — Glassmorphism panel efekti
+- `.glass-button` — Hover'da gradient gösteren buton
+- `.bento-card` — Mouse-tracking glow kartları
+- `.text-gradient` / `.text-gradient-accent` / `.text-gradient-warm` — Metin gradyanları
+- `.glow-blue` / `.glow-purple` — Box-shadow glow efektleri
+- `.section-divider` — Bölümler arası gradient çizgi
+
+### Fontlar
+- **Display:** Space Grotesk (başlıklar)
+- **Body:** DM Sans (metin)
+
+## 🚀 Çalıştırma
+
+```bash
+# Bağımlılıkları kur
+npm install
+
+# Geliştirme sunucusu
+npm run dev
+# → http://localhost:5173/Dolunay_AI_Website/
+
+# Production build
+npm run build
+
+# Preview (production build'i test et)
+npm run preview
+```
+
+## 🚂 Deploy
+
+### Railway
+- **Project ID:** `58765514-d122-4653-99c5-e9958330e5a4`
+- **Service ID:** `228b5ddb-680d-46d6-af71-761f046e51c7`
+- **Start Komutu:** `npm run build && npm run preview -- --host --port $PORT`
+- **GitHub Repo:** `dolunayozerennn/Dolunay_AI_Website`
+
+### GitHub Pages
+- **Workflow:** `.github/workflows/deploy.yml`
+- **Trigger:** Push to `main` branch
+- **Build:** `npm run build` → `./dist` → GitHub Pages artifact
+
+## 🖼 Görsel Yönetimi
+
+| Görsel | Konum | Kullanıldığı Yer |
+|---|---|---|
+| Hero arka plan | `public/hero_bg/hero_Elevate_New_V1.jpg` | HeroSectionElevate |
+| Ürün kartları | `public/images/products/*.png` | ProductsSection |
+| Marka logoları | `public/images/logos/` | CorporateTrainingsPage (lokal dosya öncelikli) |
+| Ekip fotoğrafları (insan) | `public/images/team/*.jpg/.jpeg` | AboutPage (LinkedIn profil fotoğrafları) |
+| AI ekip avatarları | `public/team/*.png` | AboutPage |
+| Eğitim fotoğrafları | `public/images/egitimler/` | CorporateTrainingsPage ("Eğitimlerimizden kareler" galerisi) |
+| Creator portre | `public/portrait.png` | CollaborationsPage |
+| Media kit banner | `public/mediakit-banner.png` | CollaborationsPage |
+| Viral arka plan videoları | `public/videos/reel*.mp4` | CollaborationsPage (ViralReelCard bileşeni) |
+
+## 🌐 i18n — Çoklu Dil Sistemi
+
+> **⚠️ KRİTİK KURAL:** Bu sitede metin değişikliği yapıldığında 4 dil dosyasının tümü güncellenmelidir. Detay: aşağıdaki "i18n Değişiklik Kuralları" bölümü.
+
+### Desteklenen Diller
+| Kod | Dil | Dosya | Bayrak |
+|---|---|---|---|
+| `tr` | Türkçe (varsayılan) | `src/i18n/locales/tr.json` | 🇹🇷 |
+| `en` | İngilizce | `src/i18n/locales/en.json` | 🇬🇧 |
+| `zh` | Çince (Basitleştirilmiş) | `src/i18n/locales/zh.json` | 🇨🇳 |
+| `es` | İspanyolca | `src/i18n/locales/es.json` | 🇪🇸 |
+
+### Teknik Altyapı
+- **React Context + JSON** — Harici kütüphane yok, custom lightweight çözüm
+- **Otomatik dil algılama:** `navigator.language` → prefix match (ör. `zh-CN` → `zh`)
+- **Tercih saklama:** `localStorage` key: `dolunay-ai-lang`
+- **Fallback sırası:** localStorage → navigator.language → English (`en`)
+- **Çeviri erişimi:** `const { t } = useTranslation()` → `t('hero.title')`
+- **Dot-notation key resolution:** Nested JSON'a `t('collaborations.heroSubtitle')` ile erişim
+- **Fallback mekanizma:** Key bulunamazsa → İngilizce locale → key string döner
+
+### i18n Değişiklik Kuralları (ZORUNLU)
+
+Bu sitede **herhangi bir metin değişikliği** yapıldığında:
+
+1. **Önce Türkçe** (`tr.json`) güncellenir
+2. **Sonra diğer 3 dil** (`en.json`, `zh.json`, `es.json`) eşlenecek şekilde güncellenir
+3. **Tarayıcıda 4 dil test edilir** — her birinde doğru metin göründüğü doğrulanır
+4. **Yeni bir component/sayfa eklendiğinde:** Tüm text `t()` ile sarmalanır, 4 locale dosyasına key eklenir
+
+### i18n Dosya Haritası (Tüm Component → Locale Key Eşleşmeleri)
+
+| Component | JSON Key Prefix |
+|---|---|
+| `Navbar.tsx` | `nav.*` |
+| `Footer.tsx` | `footer.*` |
+| `HeroSectionElevate.tsx` | `hero.*` |
+| `ProductsSection.tsx` | `products.*` |
+| `ServicesSection.tsx` | `services.*` |
+| `SolutionsPage.tsx` | `solutions.*` |
+| `AboutPage.tsx` | `about.*` |
+| `AIFactoryPage.tsx` | `aiFactory.*` |
+| `CollaborationsPage.tsx` | `collaborations.*` |
+| `CorporateTrainingsPage.tsx` | `corporateTrainings.*` |
+
+## 📝 Son Değişiklikler (21 Mart 2026)
+
+### 🌐 i18n — 4 Dil Desteği (YENİ)
+- **Custom i18n sistemi** — React Context + JSON locale dosyaları
+- **LanguageSwitcher** — Navbar'da glassmorphism dropdown (bayrak ikonları ile)
+- **Otomatik browser dili algılama** + localStorage ile tercih saklama
+- **11 component güncellendi** — Tüm hardcoded Türkçe text `t()` fonksiyonu ile sarmalandı
+- **160+ çeviri anahtarı** — Her dil dosyasında tam kapsam
+
+### Navigasyon Değişiklikleri
+- **Yeni menü yapısı:** Çözümler (dropdown), Eğitimler (dropdown), İş Birlikleri, Hakkımızda
+- **Çözümler dropdown:** Artifex Campus + Hizmetler → ayrı bölüm olarak SolutionsPage'de
+- **Eğitimler dropdown:** AI Factory + Kurumsal Eğitimler → ayrı sayfalar olarak
+
+### Yeni Sayfalar
+- **AIFactoryPage.tsx** — AI Factory eğitim platformu (İndigo/mor renk şeması)
+- **CorporateTrainingsPage.tsx** — Kurumsal eğitim referansları + `dolunay@dolunay.ai` iletişim CTA
+  - Logo sistemi: Lokal dosya varsa kullan (`object-contain`), yoksa Google Favicon API fallback
+  - Türkiye Finans ve GittiGidiyor logoları lokal dosya olarak eklendi
+  - "Eğitimlerimizden kareler" fotoğraf galerisi eklendi (3 fotoğraf grid)
+
+### İçerik Değişiklikleri
+- **ServicesSection** — Eğitim referansları kaldırıldı (CorporateTrainingsPage'e taşındı)
+- **SolutionsPage** — Artifex Campus başlığı "Tak-çıkar AI çözümleri" olarak değiştirildi, "Çok Yakında" butonu
+- **CollaborationsPage** — PieChart ve Globe arka plan ikonları kaldırıldı
+- **AboutPage** — Tüm 6 insan ekip üyesine LinkedIn profil fotoğrafları eklendi (Ceren, Sarper, Ece, Berke, Savaş, Okan)
+
+### Bekleyen İşler
+- [ ] Production deploy (GitHub push + Railway) — `/canli-yayina-al` ile
+
+---
+
+**Dolunay AI** © 2026 — Dolunay Özeren

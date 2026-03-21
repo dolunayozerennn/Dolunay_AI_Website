@@ -97,15 +97,17 @@ Dolunay_AI_Website/
 
 ## 🗺 Sayfa Yapısı & Routing
 
-Site **hash-based routing** kullanır (`window.location.hash`):
+Site **Next.js App Router** kullanır (`app/` dizini):
 
 ```
-#/                              → HomePage
-#/cozumler                      → SolutionsPage (Artifex Campus + Hizmetler)
-#/egitimler/ai-factory          → AIFactoryPage
-#/egitimler/kurumsal-egitimler  → CorporateTrainingsPage
-#/isbirlikleri                  → CollaborationsPage
-#/hakkimizda                    → AboutPage
+/                               → HomePage
+/cozumler                       → SolutionsPage
+/egitimler/ai-factory           → AIFactoryPage
+/egitimler/kurumsal-egitimler   → CorporateTrainingsPage
+/isbirlikleri                   → CollaborationsPage
+/hakkimizda                     → AboutPage
+/blog                           → BlogIndexPage
+/blog/[slug]                    → Blog Post (Dinamik MDX Sayfası)
 ```
 
 ### Navigasyon Yapısı (Navbar)
@@ -114,16 +116,18 @@ Site **hash-based routing** kullanır (`window.location.hash`):
 Navbar (pill-shaped, glassmorphism, sticky)
 │
 ├── Çözümler (dropdown)
-│   ├── Artifex Campus → #/cozumler (Tak-çıkar AI çözümleri — "Çok Yakında")
-│   └── Hizmetler      → #/cozumler (alt bölüm — danışmanlık, otomasyon kartları)
+│   ├── Artifex Campus → /cozumler (Tak-çıkar AI çözümleri — "Çok Yakında")
+│   └── Hizmetler      → /cozumler (alt bölüm — danışmanlık, otomasyon kartları)
 │
 ├── Eğitimler (dropdown)
-│   ├── AI Factory          → #/egitimler/ai-factory (AI otomasyon satış eğitimi)
-│   └── Kurumsal Eğitimler  → #/egitimler/kurumsal-egitimler (kurumsal workshop/danışmanlık)
+│   ├── AI Factory          → /egitimler/ai-factory (AI otomasyon satış eğitimi)
+│   └── Kurumsal Eğitimler  → /egitimler/kurumsal-egitimler (kurumsal workshop/danışmanlık)
 │
-├── İş Birlikleri → #/isbirlikleri
+├── İş Birlikleri → /isbirlikleri
 │
-├── Hakkımızda → #/hakkimizda
+├── Hakkımızda → /hakkimizda
+│
+├── Blog → /blog
 │
 └── 🌐 Dil Seçici (sağ üst) → EN / TR / ZH / ES
 ```
@@ -302,6 +306,12 @@ Bu sitede **herhangi bir metin değişikliği** yapıldığında:
 - **SolutionsPage** — Artifex Campus başlığı "Tak-çıkar AI çözümleri" olarak değiştirildi, "Çok Yakında" butonu
 - **CollaborationsPage** — PieChart ve Globe arka plan ikonları kaldırıldı
 - **AboutPage** — Tüm 6 insan ekip üyesine LinkedIn profil fotoğrafları eklendi (Ceren, Sarper, Ece, Berke, Savaş, Okan)
+
+### 🚀 Blog Sistemi ve Next.js App Router Entegrasyonu
+- **App Router Dönüşümü** — Vite/React mimarisinden tam teşekküllü Next.js App Router yapısına geçiş yapıldı (SEO Native).
+- **Blog MDX Altyapısı** — `/blog` ve `/blog/[slug]` sayfaları eklendi. `src/content/blog` klasöründeki MDX dosyaları otomatik okunur.
+- **Kapak Görseli AI Pipeline** — `Blog_Yazici/fetch_and_resize_cover.py` eklendi. Bu adım; ImgBB + Kie AI (Nano Banana 2) kullanarak Google Drive'daki rastgele kapak resimlerini outpaint edip 16:9 formatlı muazzam webp dosyalarına çevirir.
+- **Navigasyon ve UI İyileştirmeleri** — Blog butonu Navbar'ın en sağına eklendi, Blog post içi geri dönüş aksiyonları ana sayfaya bağlandı.
 
 ### Bekleyen İşler
 - [ ] Production deploy (GitHub push + Railway) — `/canli-yayina-al` ile

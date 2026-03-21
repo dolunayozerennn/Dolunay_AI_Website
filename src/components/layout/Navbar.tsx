@@ -170,14 +170,6 @@ export function Navbar() {
               </AnimatePresence>
             </div>
 
-            {/* Blog */}
-            <Link 
-              href="/blog"
-              className="text-sm font-medium text-gray-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/[0.04] transition-all duration-300"
-            >
-              Blog
-            </Link>
-
             {/* İş Birlikleri */}
             <Link 
               href="/isbirlikleri"
@@ -192,6 +184,14 @@ export function Navbar() {
               className="text-sm font-medium text-gray-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/[0.04] transition-all duration-300"
             >
               {t('nav.about')}
+            </Link>
+
+            {/* Blog */}
+            <Link 
+              href="/blog"
+              className="text-sm font-medium text-gray-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/[0.04] transition-all duration-300"
+            >
+              Blog
             </Link>
           </div>
         </div>
@@ -263,14 +263,6 @@ export function Navbar() {
               <div className="h-px bg-white/[0.08] my-3 mx-2" />
 
               <Link 
-                href="/blog"
-                className="text-gray-300 hover:text-white font-medium px-4 py-2.5 rounded-lg hover:bg-white/[0.04] transition-all"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Blog
-              </Link>
-
-              <Link 
                 href="/isbirlikleri"
                 className="text-gray-300 hover:text-white font-medium px-4 py-2.5 rounded-lg hover:bg-white/[0.04] transition-all"
                 onClick={() => setIsMobileMenuOpen(false)}
@@ -283,6 +275,16 @@ export function Navbar() {
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {t('nav.about')}
+              </Link>
+
+              <div className="h-px bg-white/[0.08] my-3 mx-2" />
+
+              <Link 
+                href="/blog"
+                className="text-gray-300 hover:text-white font-medium px-4 py-2.5 rounded-lg hover:bg-white/[0.04] transition-all"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Blog
               </Link>
 
               <div className="h-px bg-white/[0.08] my-3 mx-2" />
