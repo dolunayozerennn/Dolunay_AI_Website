@@ -220,20 +220,17 @@ const virals = [
 
 const brands = ['CapCut', 'VidAU', 'Lexi', 'KickResume', 'TopView', 'Higgsfield'];
 
-// ─── Instagram Reel Embed Component ────────────────────────────────────────────
-// Instagram's blockquote+embed.js method and /reel/ID/embed/ both fail for these
-// reels. We use a hybrid approach: try iframe embed first, with a premium
-// fallback card that links directly to the reel on Instagram.
-function InstagramReelEmbed({ reelId, brand, views, type, gradient, href }: {
-  reelId: string;
+// ─── Viral Reel Card Component ─────────────────────────────────────────────────
+// Instagram embeds (blockquote, iframe, /embed/) are all blocked for Reels.
+// Premium poster card design with gradient background + play button overlay.
+// Clicking opens the Reel directly on Instagram.
+function ViralReelCard({ brand, views, type, gradient, href }: {
   brand: string;
   views: string;
   type: string;
   gradient: string;
   href: string;
 }) {
-  const [embedFailed, setEmbedFailed] = useState(false);
-
   return (
     <a
       href={href}
@@ -242,67 +239,64 @@ function InstagramReelEmbed({ reelId, brand, views, type, gradient, href }: {
       className="group relative rounded-3xl overflow-hidden block cursor-pointer"
       style={{ aspectRatio: '9/16' }}
     >
-      {/* Gradient border glow */}
-      <div className={`absolute -inset-[1px] bg-gradient-to-br ${gradient} rounded-3xl opacity-20 group-hover:opacity-50 transition-opacity duration-500 blur-[1px]`} />
+      {/* Animated gradient border glow */}
+      <div className={`absolute -inset-[1px] bg-gradient-to-br ${gradient} rounded-3xl opacity-30 group-hover:opacity-70 transition-opacity duration-500 blur-[2px]`} />
 
-      {/* Dark container */}
-      <div className="relative h-full rounded-3xl overflow-hidden bg-[#0a0a0f] border border-white/[0.06]">
+      {/* Dark card container */}
+      <div className="relative h-full rounded-3xl overflow-hidden bg-gradient-to-b from-[#0c0c14] to-[#080810] border border-white/[0.06]">
 
-        {/* Try iframe embed — will be hidden if fails */}
-        {!embedFailed && (
-          <iframe
-            src={`https://www.instagram.com/reel/${reelId}/embed/`}
-            className="absolute inset-0 w-full h-full border-0"
-            allowFullScreen
-            loading="lazy"
-            onError={() => setEmbedFailed(true)}
-            style={{
-              transform: 'scale(1.05)',
-              transformOrigin: 'center center',
-            }}
-          />
-        )}
+        {/* Gradient background fill */}
+        <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-25 group-hover:opacity-40 transition-opacity duration-700`} />
 
-        {/* Gradient fallback overlay — always visible on top of iframe for branding */}
-        <div className={`absolute inset-0 bg-gradient-to-br ${gradient} transition-opacity duration-500 ${embedFailed ? 'opacity-80' : 'opacity-0 group-hover:opacity-20'}`} />
+        {/* Decorative light blobs */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-[15%] left-[10%] w-32 h-32 rounded-full bg-white/[0.06] blur-2xl group-hover:bg-white/[0.12] transition-all duration-700" />
+          <div className="absolute bottom-[25%] right-[5%] w-24 h-24 rounded-full bg-white/[0.04] blur-xl group-hover:bg-white/[0.08] transition-all duration-700" />
+        </div>
 
-        {/* Pattern overlay for depth */}
-        <div className="absolute inset-0 opacity-10 pointer-events-none" style={{
-          backgroundImage: `radial-gradient(circle at 30% 20%, rgba(255,255,255,0.15) 0%, transparent 50%), radial-gradient(circle at 70% 80%, rgba(255,255,255,0.1) 0%, transparent 40%)`,
-        }} />
+        {/* Grid pattern overlay */}
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
+          style={{
+            backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+            backgroundSize: '24px 24px',
+          }}
+        />
 
-        {/* Center content — play button for fallback */}
-        {embedFailed && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
-            <Instagram className="w-8 h-8 text-white/60 mb-3" />
-            <div className="relative">
-              <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center group-hover:bg-white/30 group-hover:scale-110 transition-all duration-300">
-                <svg className="w-7 h-7 text-white fill-white ml-0.5" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              </div>
+        {/* Center content — Instagram icon + play button */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
+          <Instagram className="w-8 h-8 text-white/40 mb-4 group-hover:text-white/70 transition-colors duration-300" />
+          <div className="relative">
+            {/* Pulse ring */}
+            <div className="absolute inset-0 w-16 h-16 rounded-full bg-white/10 animate-ping" style={{ animationDuration: '2.5s' }} />
+            {/* Play button */}
+            <div className="relative w-16 h-16 rounded-full bg-white/15 backdrop-blur-md border border-white/25 flex items-center justify-center group-hover:bg-white/25 group-hover:scale-110 group-hover:border-white/40 transition-all duration-300">
+              <svg className="w-7 h-7 text-white fill-white ml-0.5 drop-shadow-lg" viewBox="0 0 24 24">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+              </svg>
             </div>
-            <span className="mt-3 text-[10px] text-white/60 font-medium uppercase tracking-[0.15em] group-hover:text-white/90 transition-colors">
-              Reels'i İzle
-            </span>
           </div>
-        )}
+          <span className="mt-4 text-[10px] text-white/40 font-medium uppercase tracking-[0.2em] group-hover:text-white/80 transition-colors duration-300">
+            Reels'i İzle
+          </span>
+        </div>
 
         {/* Top badge — view count */}
-        <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/10">
+        <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10">
           <Eye className="w-3 h-3 text-white/80" />
           <span className="text-xs font-bold text-white">{views}</span>
         </div>
 
-        {/* Bottom overlay with brand info */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 via-black/60 to-transparent z-20">
-          <h3 className="text-sm font-bold text-white mb-0.5">{brand}</h3>
-          <div className="text-[10px] text-white/60 font-medium uppercase tracking-wider">
+        {/* Bottom overlay with brand info + type */}
+        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-20">
+          <h3 className="text-sm font-bold text-white mb-0.5 drop-shadow-md">{brand}</h3>
+          <div className="text-[10px] text-white/50 font-medium uppercase tracking-wider">
             {type}
           </div>
         </div>
 
-        {/* Hover glow effect */}
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-          style={{ boxShadow: 'inset 0 0 60px rgba(255,255,255,0.1)' }}
+        {/* Hover inner glow */}
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-3xl"
+          style={{ boxShadow: 'inset 0 0 80px rgba(255,255,255,0.08)' }}
         />
       </div>
     </a>
@@ -611,8 +605,7 @@ export function CollaborationsPage() {
                 whileHover={{ scale: 1.03, y: -4 }}
                 transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
               >
-                <InstagramReelEmbed
-                  reelId={item.reelId}
+                <ViralReelCard
                   brand={item.brand}
                   views={item.views}
                   type={item.type}
