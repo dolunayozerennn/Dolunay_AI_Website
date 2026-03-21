@@ -1,7 +1,11 @@
-import { motion } from 'framer-motion';
-import { useRef } from 'react';
-import type { MouseEvent } from 'react';
-import { ArrowRight, ExternalLink } from 'lucide-react';
+'use client'
+
+import { motion } from 'framer-motion'
+import { useRef } from 'react'
+import type { MouseEvent } from 'react'
+import { ArrowRight, ExternalLink } from 'lucide-react'
+import { useTranslation } from '@/i18n/i18n'
+import Link from 'next/link'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 50, filter: 'blur(4px)' },
@@ -37,21 +41,14 @@ function ProductCard({ headline, description, tag, buttonLabel, href, external, 
     cardRef.current.style.setProperty('--mouse-y', `${y}%`);
   };
 
-  return (
-    <motion.a
-      href={href}
-      target={external ? '_blank' : undefined}
-      rel={external ? 'noopener noreferrer' : undefined}
-      ref={cardRef}
-      variants={fadeUp}
-      custom={custom}
-      onMouseMove={handleMouse}
-      className={`group flex flex-col h-[520px] rounded-[2rem] p-5 overflow-hidden relative transition-all duration-500 hover:-translate-y-2 ${
-        isPrimary 
-          ? 'bg-gradient-to-br from-[#7e22ce] to-[#581c87] border-none shadow-[0_8px_30px_rgba(126,34,206,0.3)]' 
-          : 'bg-[#0f0f12] border border-white/10 hover:border-white/20 hover:shadow-[0_8px_30px_rgba(0,0,0,0.5)]'
-      }`}
-    >
+  const cardClasses = `group flex flex-col h-[520px] rounded-[2rem] p-5 overflow-hidden relative transition-all duration-500 hover:-translate-y-2 ${
+    isPrimary 
+      ? 'bg-gradient-to-br from-[#7e22ce] to-[#581c87] border-none shadow-[0_8px_30px_rgba(126,34,206,0.3)]' 
+      : 'bg-[#0f0f12] border border-white/10 hover:border-white/20 hover:shadow-[0_8px_30px_rgba(0,0,0,0.5)]'
+  }`;
+
+  const content = (
+    <>
       {/* Background glow on hover */}
       <div
         className="absolute -top-20 left-1/2 -translate-x-1/2 w-[200px] h-[200px] rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
@@ -93,7 +90,7 @@ function ProductCard({ headline, description, tag, buttonLabel, href, external, 
         <div className={`absolute inset-0 z-10 bg-gradient-to-t ${isPrimary ? 'from-[#581c87]/90 via-[#581c87]/20' : 'from-[#0f0f12]/90 via-[#0f0f12]/20'} to-transparent opacity-80`} />
         {imageSrc ? (
           <img 
-            src={`${import.meta.env.BASE_URL}${imageSrc}`} 
+            src={`/${imageSrc}`} 
             alt={headline} 
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
           />
@@ -115,18 +112,50 @@ function ProductCard({ headline, description, tag, buttonLabel, href, external, 
           </div>
         </div>
       </div>
-    </motion.a>
+    </>
+  );
+
+  if (external) {
+    return (
+      <motion.a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        ref={cardRef}
+        variants={fadeUp}
+        custom={custom}
+        onMouseMove={handleMouse}
+        className={cardClasses}
+      >
+        {content}
+      </motion.a>
+    );
+  }
+
+  return (
+    <motion.div
+      ref={cardRef as React.Ref<HTMLDivElement>}
+      variants={fadeUp}
+      custom={custom}
+      onMouseMove={handleMouse}
+      className={cardClasses}
+    >
+      <Link href={href} className="absolute inset-0 z-30" />
+      {content}
+    </motion.div>
   );
 }
 
 export function ProductsSection() {
+  const { t } = useTranslation();
+
   const products = [
     {
-      headline: 'İşletmeni AI ile Dönüştür',
-      description: 'KOBİ\'ler ve işletme sahipleri için hazır AI çözüm paketleri, eğitimler ve otomasyon araçları.',
-      tag: 'İşletmeler & KOBİ\'ler',
-      buttonLabel: 'Artifex Campus\'e Git',
-      href: '#/cozumler',
+      headline: t('products.card1Headline'),
+      description: t('products.card1Desc'),
+      tag: t('products.card1Tag'),
+      buttonLabel: t('products.card1Button'),
+      href: '/cozumler/artifex-campus',
       external: false,
       accentColor: '#7c3aed',
       glowColor: 'rgba(124, 58, 237, 0.15)',
@@ -134,11 +163,11 @@ export function ProductsSection() {
       isPrimary: true,
     },
     {
-      headline: 'Kurumsal AI Altyapısı',
-      description: 'Holdinglere ve büyük ölçekli operasyonlara özel, terzi işi yapay zeka otomasyon ve danışmanlık hizmetleri.',
-      tag: 'Holdingler & Kurumsal',
-      buttonLabel: 'Hizmetleri Öğren',
-      href: '#/cozumler',
+      headline: t('products.card2Headline'),
+      description: t('products.card2Desc'),
+      tag: t('products.card2Tag'),
+      buttonLabel: t('products.card2Button'),
+      href: '/cozumler/artifex-campus',
       external: false,
       accentColor: '#a855f7',
       glowColor: 'rgba(168, 85, 247, 0.12)',
@@ -146,10 +175,10 @@ export function ProductsSection() {
       isPrimary: false,
     },
     {
-      headline: 'Fikrini İşe Dönüştür',
-      description: 'Yapay zekayı iş modeline dönüştürmek isteyen bireysel girişimciler için topluluk, mentorluk ve kaynaklar.',
-      tag: 'Bireysel Girişimciler',
-      buttonLabel: 'AI Factory\'ye Git',
+      headline: t('products.card3Headline'),
+      description: t('products.card3Desc'),
+      tag: t('products.card3Tag'),
+      buttonLabel: t('products.card3Button'),
       href: 'https://www.skool.com/yapay-zeka-factory/about?ref=044f39496d4f45fab11775bcefe4b7f4',
       external: true,
       accentColor: '#00d4ff',
@@ -158,11 +187,11 @@ export function ProductsSection() {
       isPrimary: false,
     },
     {
-      headline: 'Markanı Milyonlara Taşı',
-      description: 'Profesyonel içerik üretimi ve influencer işbirlikleri ile markanızı geniş kitlelere ulaştırın.',
-      tag: 'Markalar & Ajanslar',
-      buttonLabel: 'İşbirliği Yap',
-      href: '#/isbirlikleri',
+      headline: t('products.card4Headline'),
+      description: t('products.card4Desc'),
+      tag: t('products.card4Tag'),
+      buttonLabel: t('products.card4Button'),
+      href: '/isbirlikleri',
       external: false,
       accentColor: '#ec4899',
       glowColor: 'rgba(236, 72, 153, 0.12)',
@@ -184,14 +213,14 @@ export function ProductsSection() {
           className="text-center max-w-3xl mx-auto mb-16"
         >
           <motion.span variants={fadeUp} custom={0} className="inline-block text-electric-blue text-sm font-semibold tracking-[0.2em] uppercase mb-4">
-            Size Uygun Çözüm
+            {t('products.sectionTag')}
           </motion.span>
           <motion.h2 variants={fadeUp} custom={1} className="text-4xl md:text-5xl font-bold mb-5 tracking-tight">
-            Hangi aşamada{' '}
-            <span className="text-gradient-accent">olursanız olun</span>
+            {t('products.sectionTitle')}{' '}
+            <span className="text-gradient-accent">{t('products.sectionTitleHighlight')}</span>
           </motion.h2>
           <motion.p variants={fadeUp} custom={2} className="text-gray-400 text-lg leading-relaxed">
-            Bireysel girişimciden kurumsal holdinglere, her ölçekte yapay zeka çözümleri sunuyoruz.
+            {t('products.sectionDesc')}
           </motion.p>
         </motion.div>
 
@@ -203,7 +232,7 @@ export function ProductsSection() {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
         >
           {products.map((product, i) => (
-            <ProductCard key={product.headline} {...product} custom={i} />
+            <ProductCard key={i} {...product} custom={i} />
           ))}
         </motion.div>
       </div>
