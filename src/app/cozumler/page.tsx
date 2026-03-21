@@ -1,12 +1,12 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import type { MouseEvent } from 'react';
 import {
   Users, GraduationCap, ArrowUpRight, Sparkles, TrendingUp, ExternalLink
 } from 'lucide-react';
-import { ServicesSection } from '../components/sections/ServicesSection';
+import { ServicesSection } from '@/components/sections/ServicesSection';
 
 function SkoolIcon({ className }: { className?: string }) {
   return (
@@ -41,7 +41,7 @@ function BentoCard({ children, className = '', custom = 0 }: { children: React.R
       variants={fadeUp}
       custom={custom}
       onMouseMove={handleMouse}
-      className={`bento-card ${className}`}
+      className={`bento-card relative overflow-hidden ${className}`}
     >
       {children}
     </motion.div>
@@ -53,7 +53,7 @@ const readySolutions = [
     title: 'Artifex Campus',
     description: 'İşletmenizi AI ile dönüştürecek hazır çözüm paketleri. Personel tasarrufu sağlayan, operasyonel yükü sıfıra indiren sonuç odaklı B2B yapay zeka otomasyonları.',
     features: ['Hazır Kurulum', 'Anında Başlama', '7/24 Operasyon', 'Ölçeklenebilir'],
-    href: '#/cozumler',
+    href: '/cozumler',
     accentColor: '#7c3aed',
     icon: <Sparkles className="w-6 h-6" />,
     external: false,
@@ -65,7 +65,7 @@ const customSolutions = [
     title: 'Danışmanlık & Özel Çözümler',
     description: 'Kurumsal firmalar ve hacimli operasyonlar için terzi işi yapay zeka altyapıları. Şirketinize özel AI otomasyon ve danışmanlık hizmetleri.',
     features: ['Özel Tasarım', 'Keşif Analizi', 'API Entegrasyonu', 'Eğitim & Destek'],
-    href: '#services',
+    href: '/hizmetler',
     accentColor: '#00d4ff',
     icon: <TrendingUp className="w-6 h-6" />,
     external: false,
@@ -126,7 +126,7 @@ export default function SolutionsPage() {
               </motion.h3>
               <div className="flex-1 flex flex-col gap-6">
                 {readySolutions.map((solution, i) => (
-                  <BentoCard key={solution.title} custom={i + 1} className="!rounded-3xl relative flex-1 flex flex-col group">
+                  <BentoCard key={solution.title} custom={i + 1} className="!rounded-3xl relative flex-1 flex flex-col group p-6 border border-white/5 bg-white/5 backdrop-blur-sm">
                     <div className="absolute -top-px left-[15%] right-[15%] h-[1px] bg-gradient-to-r from-transparent via-accent-purple/50 to-transparent opacity-50 group-hover:opacity-100 transition-opacity" />
                     <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[200px] h-[200px] rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" style={{ background: 'rgba(124, 58, 237, 0.08)' }} />
                     <div className="relative z-10 flex flex-col h-full">
@@ -160,7 +160,7 @@ export default function SolutionsPage() {
               </motion.h3>
               <div className="flex-1 flex flex-col gap-6">
                 {customSolutions.map((solution, i) => (
-                  <BentoCard key={solution.title} custom={i + 1} className="!rounded-3xl relative flex-1 flex flex-col group">
+                  <BentoCard key={solution.title} custom={i + 1} className="!rounded-3xl relative flex-1 flex flex-col group p-6 border border-white/5 bg-white/5 backdrop-blur-sm">
                     <div className="absolute -top-px left-[15%] right-[15%] h-[1px] bg-gradient-to-r from-transparent via-electric-blue/50 to-transparent opacity-50 group-hover:opacity-100 transition-opacity" />
                     <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[200px] h-[200px] rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" style={{ background: 'rgba(0, 212, 255, 0.08)' }} />
                     <div className="relative z-10 flex flex-col h-full">
@@ -218,7 +218,7 @@ export default function SolutionsPage() {
             className="grid grid-cols-1 md:grid-cols-2 gap-6"
           >
             {educations.map((edu, i) => (
-              <BentoCard key={edu.title} custom={i} className="!rounded-3xl relative group overflow-hidden">
+              <BentoCard key={edu.title} custom={i} className="!rounded-3xl relative group overflow-hidden p-6 border border-white/5 bg-white/5 backdrop-blur-sm">
                 <div
                   className="absolute -top-px left-[15%] right-[15%] h-[1px] opacity-40 group-hover:opacity-100 transition-opacity duration-500"
                   style={{ background: `linear-gradient(90deg, transparent, ${edu.bgGlow.replace('0.1', '0.8')}, transparent)` }}
@@ -239,7 +239,7 @@ export default function SolutionsPage() {
                   <p className="text-sm font-medium text-gray-300 mb-3">{edu.subtitle}</p>
                   <p className="text-gray-400 text-sm leading-relaxed mb-6">{edu.description}</p>
 
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between mt-auto">
                     <span className="flex items-center gap-2 text-xs text-gray-500">
                       <Users className="w-3.5 h-3.5" />
                       {edu.members}
