@@ -211,42 +211,55 @@ const countryData = [
 ];
 
 const virals = [
-  { brand: 'Nim AI', views: '9.5M', type: 'Organik + Paid', href: 'https://www.instagram.com/reel/DKtuJ3cK-Yr/', reelId: 'DKtuJ3cK-Yr', gradient: 'from-violet-600 via-purple-500 to-fuchsia-500', iconBg: 'bg-violet-500/30' },
-  { brand: 'Emergent AI', views: '3.8M', type: 'Organik', href: 'https://www.instagram.com/reel/DOnm-q0DHiq/', reelId: 'DOnm-q0DHiq', gradient: 'from-cyan-500 via-blue-600 to-indigo-600', iconBg: 'bg-cyan-500/30' },
-  { brand: 'Aithor', views: '2.0M', type: 'Organik', href: 'https://www.instagram.com/reel/DKHLswaK4Tj/', reelId: 'DKHLswaK4Tj', gradient: 'from-emerald-500 via-teal-500 to-cyan-500', iconBg: 'bg-emerald-500/30' },
-  { brand: 'Creatify', views: '1.7M', type: 'Organik + Paid', href: 'https://www.instagram.com/reel/DJoR2pJqpHt/', reelId: 'DJoR2pJqpHt', gradient: 'from-orange-500 via-rose-500 to-pink-600', iconBg: 'bg-orange-500/30' },
-  { brand: 'Creati', views: '1.4M', type: 'Organik + Paid', href: 'https://www.instagram.com/reel/DNNcKWwq--T/', reelId: 'DNNcKWwq--T', gradient: 'from-pink-500 via-purple-600 to-blue-600', iconBg: 'bg-pink-500/30' },
+  { brand: 'Nim AI', views: '9.5M', type: 'Organik + Paid', href: 'https://www.instagram.com/reel/DKtuJ3cK-Yr/', videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-artificial-intelligence-interface-with-code-data-40019-large.mp4', gradient: 'from-violet-600 via-purple-500 to-fuchsia-500', iconBg: 'bg-violet-500/30' },
+  { brand: 'Emergent AI', views: '3.8M', type: 'Organik', href: 'https://www.instagram.com/reel/DOnm-q0DHiq/', videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-a-network-of-connections-40058-large.mp4', gradient: 'from-cyan-500 via-blue-600 to-indigo-600', iconBg: 'bg-cyan-500/30' },
+  { brand: 'Aithor', views: '2.0M', type: 'Organik', href: 'https://www.instagram.com/reel/DKHLswaK4Tj/', videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-futuristic-city-with-flying-cars-and-neon-lights-40112-large.mp4', gradient: 'from-emerald-500 via-teal-500 to-cyan-500', iconBg: 'bg-emerald-500/30' },
+  { brand: 'Creatify', views: '1.7M', type: 'Organik + Paid', href: 'https://www.instagram.com/reel/DJoR2pJqpHt/', videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-woman-using-virtual-reality-headset-in-office-40455-large.mp4', gradient: 'from-orange-500 via-rose-500 to-pink-600', iconBg: 'bg-orange-500/30' },
+  { brand: 'Creati', views: '1.4M', type: 'Organik + Paid', href: 'https://www.instagram.com/reel/DNNcKWwq--T/', videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-data-stream-of-binary-code-and-hexadecimal-numbers-38290-large.mp4', gradient: 'from-pink-500 via-purple-600 to-blue-600', iconBg: 'bg-pink-500/30' },
 ];
 
 const brands = ['CapCut', 'VidAU', 'Lexi', 'KickResume', 'TopView', 'Higgsfield'];
 
 // ─── Viral Reel Card Component ─────────────────────────────────────────────────
 // Instagram embeds (blockquote, iframe, /embed/) are all blocked for Reels.
-// Premium poster card design with gradient background + play button overlay.
+// Premium poster card design with gradient background + play button overlay + background video.
 // Clicking opens the Reel directly on Instagram.
-function ViralReelCard({ brand, views, type, gradient, href }: {
+function ViralReelCard({ brand, views, type, gradient, href, videoUrl }: {
   brand: string;
   views: string;
   type: string;
   gradient: string;
   href: string;
+  videoUrl?: string;
 }) {
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="group relative rounded-3xl overflow-hidden block cursor-pointer"
+      className="group relative rounded-3xl overflow-hidden block cursor-pointer bg-black"
       style={{ aspectRatio: '9/16' }}
     >
       {/* Animated gradient border glow */}
       <div className={`absolute -inset-[1px] bg-gradient-to-br ${gradient} rounded-3xl opacity-30 group-hover:opacity-70 transition-opacity duration-500 blur-[2px]`} />
 
       {/* Dark card container */}
-      <div className="relative h-full rounded-3xl overflow-hidden bg-gradient-to-b from-[#0c0c14] to-[#080810] border border-white/[0.06]">
+      <div className="relative h-full rounded-3xl overflow-hidden bg-[#0a0a0f] border border-white/[0.06]">
 
-        {/* Gradient background fill */}
-        <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-25 group-hover:opacity-40 transition-opacity duration-700`} />
+        {/* Background Video */}
+        {videoUrl && (
+          <video
+            src={videoUrl}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-60 transition-opacity duration-700"
+          />
+        )}
+
+        {/* Gradient background fill overlay */}
+        <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-40 group-hover:opacity-60 mix-blend-color transition-opacity duration-700`} />
 
         {/* Decorative light blobs */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -611,6 +624,7 @@ export function CollaborationsPage() {
                   type={item.type}
                   gradient={item.gradient}
                   href={item.href}
+                  videoUrl={item.videoUrl}
                 />
               </motion.div>
             ))}
