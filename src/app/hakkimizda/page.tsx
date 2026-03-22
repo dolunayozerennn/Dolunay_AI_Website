@@ -22,12 +22,12 @@ const scaleIn = {
 };
 
 const teamMembers = [
-  { name: 'Ceren', role: 'Partnership Manager', type: 'human' as const, initial: 'C', color: 'from-pink-500 to-rose-600' },
-  { name: 'Sarper', role: 'Social Media Ads Manager', type: 'human' as const, initial: 'S', color: 'from-blue-500 to-indigo-600' },
-  { name: 'Ece', role: 'Sales Specialist', type: 'human' as const, initial: 'E', color: 'from-purple-500 to-violet-600' },
-  { name: 'Berke', role: 'Video Editor', type: 'human' as const, initial: 'B', color: 'from-orange-500 to-amber-600' },
-  { name: 'Savaş', role: 'B2B Operations Lead', type: 'human' as const, initial: 'S', color: 'from-teal-500 to-emerald-600' },
-  { name: 'Okan', role: 'B2B Automation Lead', type: 'human' as const, initial: 'O', color: 'from-cyan-500 to-blue-600' },
+  { name: 'Ceren', role: 'Partnership Manager', type: 'human' as const, initial: 'C', color: 'from-pink-500 to-rose-600', avatar: '/images/team/ceren.jpeg' },
+  { name: 'Sarper', role: 'Social Media Ads Manager', type: 'human' as const, initial: 'S', color: 'from-blue-500 to-indigo-600', avatar: '/images/team/sarper.jpg' },
+  { name: 'Ece', role: 'Sales Specialist', type: 'human' as const, initial: 'E', color: 'from-purple-500 to-violet-600', avatar: '/images/team/ece.jpeg' },
+  { name: 'Berke', role: 'Video Editor', type: 'human' as const, initial: 'B', color: 'from-orange-500 to-amber-600', avatar: '/images/team/berke.jpeg' },
+  { name: 'Savaş', role: 'B2B Operations Lead', type: 'human' as const, initial: 'S', color: 'from-teal-500 to-emerald-600', avatar: '/images/team/savas.jpeg' },
+  { name: 'Okan', role: 'B2B Automation Lead', type: 'human' as const, initial: 'O', color: 'from-cyan-500 to-blue-600', avatar: '/images/team/okan.jpg' },
   { name: 'Bobby', role: 'Designer', type: 'ai' as const, initial: '🎨', color: 'from-pink-400 to-purple-500', avatar: '/team/bobby_ai.png' },
   { name: 'Gipsy', role: 'Web Site Developer', type: 'ai' as const, initial: '💻', color: 'from-cyan-400 to-blue-500', avatar: '/team/gipsy_ai.png' },
   { name: 'Daisy', role: 'Customer Support', type: 'ai' as const, initial: '💬', color: 'from-green-400 to-emerald-500', avatar: '/team/daisy_ai.png' },

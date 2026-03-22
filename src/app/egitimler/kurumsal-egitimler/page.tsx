@@ -19,7 +19,8 @@ const educationClients = [
     desc: '2 günlük yapay zeka araçları workshop\'u düzenlendi.',
     gradient: 'from-emerald-500 to-teal-600',
     bgGlow: 'rgba(52, 211, 153, 0.12)',
-    logoDomain: 'turkiyefinans.com.tr'
+    logoDomain: 'turkiyefinans.com.tr',
+    logo: '/images/logos/turkiye-finans-logo.png'
   },
   {
     name: 'Misyon Bankası',
@@ -40,14 +41,16 @@ const educationClients = [
     desc: '45.000+ öğrenciye ulaşan best-seller yapay zeka eğitimi yayınlandı.',
     gradient: 'from-violet-500 to-purple-700',
     bgGlow: 'rgba(139, 92, 246, 0.12)',
-    logoDomain: 'udemy.com'
+    logoDomain: 'udemy.com',
+    logo: '/images/logos/Udemy_logo.svg (1).png'
   },
   {
     name: 'GittiGidiyor',
     desc: 'Yapay zeka ve otomasyon eğitimi gerçekleştirildi.',
     gradient: 'from-orange-500 to-amber-600',
     bgGlow: 'rgba(249, 115, 22, 0.12)',
-    logoDomain: 'gittigidiyor.com'
+    logoDomain: 'gittigidiyor.com',
+    logo: '/images/logos/images (8) copy 2.png'
   },
   {
     name: 'Trendyol',
@@ -93,9 +96,15 @@ function RefCard({ client, index }: { client: typeof educationClients[0]; index:
       <div className="relative z-10">
         {/* Icon + Name */}
         <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${client.gradient} flex items-center justify-center text-white shadow-lg mb-5 group-hover:scale-110 transition-transform duration-500 overflow-hidden`}>
-          {!imgError && client.logoDomain ? (
+          {client.logo ? (
             <img 
-              src={`https://www.google.com/s2/favicons?sz=128&domain=${client.logoDomain}`} 
+              src={client.logo} 
+              alt={`${client.name} logo`} 
+              className="w-full h-full object-contain bg-white p-2"
+            />
+          ) : !imgError && client.logoDomain ? (
+            <img 
+              src={`https://www.google.com/s2/favicons?domain=${client.logoDomain}&sz=128`} 
               alt={`${client.name} logo`} 
               className="w-full h-full object-cover bg-white p-1.5"
               onError={() => setImgError(true)}

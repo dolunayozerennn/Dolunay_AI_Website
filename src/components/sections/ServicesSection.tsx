@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Search, Target, Settings, CheckCircle2, ArrowUpRight, Building2, GraduationCap } from 'lucide-react'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import type { MouseEvent } from 'react'
 
 const fadeUp = {
@@ -41,41 +41,52 @@ const educationClients = [
     desc: '2 günlük yapay zeka araçları workshop\'u düzenlendi.',
     gradient: 'from-emerald-500 to-teal-600',
     bgGlow: 'rgba(52, 211, 153, 0.12)',
+    logoDomain: 'turkiyefinans.com.tr',
+    logo: '/images/logos/turkiye-finans-logo.png'
   },
   {
     name: 'Misyon Bankası',
     desc: '6 saatlik online eğitim serisi (5 seans, 120 katılımcı) düzenlendi. Personel ile bire bir danışmanlık gerçekleştirildi.',
     gradient: 'from-slate-400 to-slate-600',
     bgGlow: 'rgba(148, 163, 184, 0.12)',
+    logoDomain: 'misyon.com.tr'
   },
   {
     name: 'Başkent Üniversitesi',
     desc: 'Yapay zeka araçları eğitimi düzenlendi.',
     gradient: 'from-red-500 to-rose-600',
     bgGlow: 'rgba(239, 68, 68, 0.12)',
+    logoDomain: 'baskent.edu.tr'
   },
   {
     name: 'Udemy',
     desc: '45.000+ öğrenciye ulaşan best-seller yapay zeka eğitimi yayınlandı.',
     gradient: 'from-violet-500 to-purple-700',
     bgGlow: 'rgba(139, 92, 246, 0.12)',
+    logoDomain: 'udemy.com',
+    logo: '/images/logos/Udemy_logo.svg (1).png'
   },
   {
     name: 'GittiGidiyor',
     desc: 'Yapay zeka ve otomasyon eğitimi gerçekleştirildi.',
     gradient: 'from-orange-500 to-amber-600',
     bgGlow: 'rgba(249, 115, 22, 0.12)',
+    logoDomain: 'gittigidiyor.com',
+    logo: '/images/logos/images (8) copy 2.png'
   },
   {
     name: 'Trendyol',
     desc: 'Yapay zeka araçları ve verimlilik eğitimi düzenlendi.',
     gradient: 'from-orange-600 to-red-500',
     bgGlow: 'rgba(234, 88, 12, 0.12)',
+    logoDomain: 'trendyol.com'
   },
 ]
 
 function RefCard({ client, index }: { client: typeof educationClients[0]; index: number }) {
   const cardRef = useRef<HTMLDivElement>(null)
+    const [imgError, setImgError] = useState(false)
+
   const handleMouse = (e: MouseEvent) => {
     if (!cardRef.current) return
     const rect = cardRef.current.getBoundingClientRect()
@@ -102,8 +113,23 @@ function RefCard({ client, index }: { client: typeof educationClients[0]; index:
         style={{ background: client.bgGlow }}
       />
       <div className="relative z-10">
-        <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${client.gradient} flex items-center justify-center text-white shadow-lg mb-5 group-hover:scale-110 transition-transform duration-500`}>
-          <GraduationCap className="w-5 h-5" />
+        <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${client.gradient} flex items-center justify-center text-white shadow-lg mb-5 group-hover:scale-110 transition-transform duration-500 overflow-hidden`}>
+          {client.logo ? (
+            <img 
+              src={client.logo} 
+              alt={`${client.name} logo`} 
+              className="w-full h-full object-contain bg-white p-2"
+            />
+          ) : !imgError && client.logoDomain ? (
+            <img 
+              src={`https://www.google.com/s2/favicons?domain=${client.logoDomain}&sz=128`} 
+              alt={`${client.name} logo`} 
+              className="w-full h-full object-cover bg-white p-1.5"
+              onError={() => setImgError(true)}
+            />
+          ) : (
+            <GraduationCap className="w-6 h-6" />
+          )}
         </div>
         <h4 className="text-lg font-bold text-white mb-2">{client.name}</h4>
         <p className="text-gray-500 text-sm leading-relaxed">{client.desc}</p>
