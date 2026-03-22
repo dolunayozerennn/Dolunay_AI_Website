@@ -279,7 +279,19 @@ Bu sitede **herhangi bir metin değişikliği** yapıldığında:
 | `CollaborationsPage.tsx` | `collaborations.*` |
 | `CorporateTrainingsPage.tsx` | `corporateTrainings.*` |
 
-## 📝 Son Değişiklikler (21 Mart 2026)
+## 📝 Son Değişiklikler (22 Mart 2026)
+
+### 🚀 Cloudflare'den Netlify Otonomisine Geçiş (MCP)
+- **Altyapı Migrasyonu:** Cloudflare Pages'in Next.js SSR ve API projelerinde yarattığı "Statik Export" kısıtlamaları tamamen kaldırılarak projede tam kapsamlı **Netlify Otonomisine** geçildi.
+- **Agent Integrasyonu:** Netlify MCP sunucusu Antigravity sistemine bağlandı. AI ajanı, site yapılandırmasını otopilotta yönetiyor.
+- **SSL ve Custom Domain:** `dolunay.ai` özel alan adı başarıyla Cloudflare DNS üzerinden yönetilerek (Proxy kapalı - DNS Only olarak) Netlify Let's Encrypt sunucularına bağlandı ve SSL tam aktif hale getirildi.
+
+### 🎨 Tailwind CSS v4 & Next.js 15 Optimizasyonları
+- **Purge/Source Düzeltmesi:** Tailwind CSS v4 ortamında dinamik sınıf yapılandırmaları ve utility class'ların Cloudflare/Vercel build esnasında kaybolması/kırılması (purged) sorunu giderildi. Global css içine `@source "../";` eklenerek src/ bileşenlerinin izlenmesi garantiye alındı.
+- **Dinamik Optimizasyon:** `images: { unoptimized: true }` korundu ancak genel `output: 'export'` kısıtlaması temizlenerek (Netlify destekli) Server-Side Rendering (SSR) kapıları tamamen açıldı.
+- **Tasarım İyileştirmeleri:** "İş Birlikleri", "Kurumsal Eğitimler" ve "AI Factory" sayfalarındaki Glassmorfizm, Bento kartlar ve Hero Section tasarımları Cloudflare build engine engellerinden kurtarılarak %100 orijinal stiliyle yayına alındı.
+
+## 📝 Son Değişiklikler (İçerik Geçmişi — 21 Mart 2026)
 
 ### 🌐 i18n — 4 Dil Desteği (YENİ)
 - **Custom i18n sistemi** — React Context + JSON locale dosyaları
