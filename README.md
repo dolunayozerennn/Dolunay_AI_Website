@@ -6,8 +6,8 @@
 
 | Platform | URL |
 |---|---|
-| **Cloudflare Pages (Ana)** | https://dolunay.ai |
-| **Preview** | https://dolunay-ai-website.pages.dev |
+| **Netlify (Ana)** | https://dolunay.ai |
+| **Preview** | https://friendly-rabanadas-0e4beb.netlify.app |
 
 ## 🏗 Teknoloji Stack
 
@@ -211,15 +211,14 @@ npm run dev
 npm run build
 ```
 
-## 🚂 Deploy (Cloudflare Pages)
+## 🚂 Deploy (Netlify MCP Otonomisi)
 
-Proje **Cloudflare Pages** üzerinde statik HTML yayını yapacak şekilde kurgulanmıştır (Next.js Static Export). Node.js sunucusuna ihtiyaç yoktur.
+Proje **Netlify** üzerinde barındırılacak şekilde kurgulanmıştır (Next.js SSR/Functions destekli). Cloudflare Pages'in statik HTML kısıtlamaları terk edilmiştir.
 
-### Otonom GitHub Actions Mimarisi
-- **Workflow:** `.github/workflows/deploy.yml`
-- **Trigger:** Push to `dev` branch
-- **Süreç:** GitHub üzerinde `npm run build` ile Next.js SSG derlemesi otomatik başlar. Çıkan saf `/out` dosyaları otonom olarak `main` dalına itilir.
-- **Yayın:** Cloudflare Pages yalnızca statik HTML barındıran `main` dalını okur ve edge network üzerinden dünya genelinde kesintisiz ve milisaniye hızında sunar. Herhangi bir "Cloudflare Build" dakikası harcamaz.
+### Antigravity & Netlify MCP Entegrasyonu
+- **Mimari:** Bu proje, Netlify gösterge paneline (dashboard) manuel giriş yapılmasını tamamen ortadan kaldıran uçtan uca AI otonomisine sahiptir.
+- **Süreç:** GitHub üzerinden yapılan güncellemeler otomatik olarak Netlify tarafından derlenirken, Antigravity AI ajanı `netlify-mcp-server` aracılığıyla projeyi `93e952dd-4720-4bca-93e8-55ddcaa844f6` (Site ID) üzerinden takip eder, pipeline durumunu denetler ve site yapılandırmasını otonom olarak yönetir.
+- **Avantaj:** Tam teşekküllü Next.js 15 SSR yetenekleri, API route desteği ve sıfır-konfigürasyon otonom dağıtım.
 
 ## 🖼 Görsel Yönetimi
 
@@ -320,7 +319,8 @@ Bu sitede **herhangi bir metin değişikliği** yapıldığında:
 - **Creator Portresi ve Eksik Componentler** — Kullanıcı portresi ve "Eğitim & Danışmanlık Referansları" gibi spesifik alanlar eski build referanslarından alınarak kayıpsız yerine konuldu.
 
 ### Bekleyen İşler
-- [ ] Production deploy (GitHub push + Railway) — `/canli-yayina-al` ile
+- [x] Netlify MCP Entegrasyonu & Cloudflare migrasyonunun tamamlanması
+- [x] Next.js `output: 'export'` kısıtlamasının kaldırılması ve SSR aktivasyonu
 
 ---
 
