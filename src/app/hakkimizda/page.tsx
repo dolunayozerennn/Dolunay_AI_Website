@@ -98,7 +98,7 @@ export default function AboutPage() {
                 <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-medium ${
                   member.type === 'ai' 
                     ? 'bg-cyan-500/10 border border-cyan-500/20 text-cyan-400'
-                    : 'bg-white/[0.04] border border-white/[0.06] text-gray-500'
+                    : 'bg-blue-500/10 border border-blue-500/20 text-blue-400'
                 }`}>
                   {member.type === 'ai' ? <Bot className="w-2.5 h-2.5" /> : <User className="w-2.5 h-2.5" />}
                   {member.type === 'ai' ? 'Yapay Zeka' : 'İnsan'}

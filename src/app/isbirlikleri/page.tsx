@@ -453,7 +453,7 @@ export default function CollaborationsPage() {
             </div>
 
             <img
-              src={`${'/'}portrait.jpg`}
+              src={`${'/'}portrait_hero.jpg`}
               alt="Dolunay Özeren"
               className="relative z-10 w-[340px] h-[340px] object-cover rounded-3xl border border-white/[0.08]"
               style={{ boxShadow: '0 40px 100px rgba(0,0,0,0.5), 0 0 60px rgba(124,58,237,0.1)' }}
@@ -478,9 +478,6 @@ export default function CollaborationsPage() {
           >
             {/* Gender Dist */}
             <BentoCard custom={1} className="!rounded-3xl !p-8 relative overflow-hidden backdrop-blur-xl bg-white/[0.02] border border-white/[0.05]">
-              <div className="absolute top-0 right-0 p-6 opacity-10">
-                <PieChart className="w-24 h-24" />
-              </div>
               <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
                 <Users className="w-5 h-5 text-pink-400" />
                 Cinsiyet Dağılımı
@@ -550,9 +547,6 @@ export default function CollaborationsPage() {
 
             {/* Geography */}
             <BentoCard custom={3} className="!rounded-3xl !p-8 relative overflow-hidden backdrop-blur-xl bg-white/[0.02] border border-white/[0.05]">
-              <div className="absolute -bottom-10 -right-10 opacity-5">
-                <Globe className="w-64 h-64" />
-              </div>
               <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
                 <Globe className="w-5 h-5 text-green-400" />
                 Coğrafya

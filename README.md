@@ -19,6 +19,14 @@
 | **İkonlar** | Lucide React | 0.460.x |
 | **Utility** | clsx + tailwind-merge | — |
 
+## ⚠️ KRİTİK UYARI: Gelecek LLM'ler & Agent'lar İçin Mimari Notlar
+
+1. **Bu proje saf bir Next.js 15 (App Router) projesidir.** Eski Vite/React mimarisi tamamen terk edilmiştir. "Eski haline getirme", Vite konfigürasyonlarını geri getirme veya import yollarını (eski `src/App.tsx` vb.) Vite mimarisine uydurmaya çalışma gibi işlemler **KESİNLİKLE YASAKTIR**.
+2. **Eski Yedekler:** `Dolunay_AI_Website_Dev` ve `Dolunay_AI_Website_vite_backup` gibi eski Vite dizinleri silinmiş & `Antigravity/_arsiv/` dizinine taşınmıştır. Başka dizindeki kodları bu projeye referans gösterme.
+3. **Lokal Build Hataları (`EPERM` / `sh: next: not found`):** Eğer bu makinede (macOS) `npm install` veya `npm run build` komutları Sandbox içinde `EPERM (Operation not permitted)` yetki hatası veya cache kilitlenmesi verirse, bu **kodun bozuk olduğu anlamına GELMEZ**. Hata tamamen macOS SIP / Cursor Sandbox kısıtlamalarından kaynaklanmaktadır. 
+   - Kodu "düzeltmek" adına package downgrade, major refactor veya dosyaları sil-kopyala (rm -rf) döngüsüne **GİRME**. Sistemin lokal kısıtlamalarına dokunma, kod zaten stable'dır.
+   - Sadece CI/CD deployment'larına (Netlify, vb.) ve canlı preview ortamlarına güven.
+
 ## 📁 Proje Yapısı (Güncel — Mart 2026)
 
 ```

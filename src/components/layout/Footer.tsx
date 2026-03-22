@@ -30,21 +30,29 @@ export function Footer() {
               dolunay<span className="text-electric-blue">.ai</span>
             </Link>
             <p className="text-gray-500 text-sm max-w-xs">{t('footer.description')}</p>
+            <div className="mt-2 flex gap-4">
+              {socialLinks.map((link, i) => (
+                <a
+                  key={i}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={link.label}
+                  className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/20 hover:-translate-y-1 transition-all duration-300"
+                >
+                  {link.icon}
+                </a>
+              ))}
+            </div>
           </div>
 
-          <div className="flex gap-4">
-            {socialLinks.map((link, i) => (
-              <a
-                key={i}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={link.label}
-                className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/20 hover:-translate-y-1 transition-all duration-300"
-              >
-                {link.icon}
-              </a>
-            ))}
+          <div className="flex flex-col sm:flex-row gap-6 sm:gap-12 text-center sm:text-left text-sm text-gray-400">
+            <div className="flex flex-col gap-3">
+              <span className="text-white font-semibold mb-1">Kurumsal</span>
+              <Link href="/sozlesmeler/uyelik" className="hover:text-white transition-colors">Üyelik Sözleşmesi</Link>
+              <Link href="/sozlesmeler/mesafeli-satis" className="hover:text-white transition-colors">Mesafeli Satış Sözleşmesi</Link>
+              <Link href="/sozlesmeler/kvkk" className="hover:text-white transition-colors">Gizlilik ve KVKK Politikası</Link>
+            </div>
           </div>
 
         </div>
