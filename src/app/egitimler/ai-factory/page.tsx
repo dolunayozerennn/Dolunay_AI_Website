@@ -1,136 +1,37 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Play, TrendingUp, ShoppingCart, Building2, Home, Linkedin } from 'lucide-react'
-import { useRef } from 'react'
-import type { MouseEvent } from 'react'
-import { useTranslation } from '@/i18n/i18n'
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 50, filter: 'blur(4px)' },
-  visible: (i: number) => ({
-    opacity: 1, y: 0, filter: 'blur(0px)',
-    transition: { duration: 0.7, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }
-  })
-}
-
-const automations = [
-  { icon: <Play className="w-6 h-6" />, title: "YouTube Otomasyonu", desc: "Kanal yönetiminizi, içerik üretiminizi ve SEO süreçlerinizi birlikte otopilota alıyoruz.", color: "text-red-400", size: "md:col-span-2" },
-  { icon: <TrendingUp className="w-6 h-6" />, title: "Influencer Otomasyonu", desc: "Marka işbirliklerinizi ve DM yönetiminizi yapay zeka ile birlikte ölçeklendiriyoruz.", color: "text-pink-400", size: "" },
-  { icon: <ShoppingCart className="w-6 h-6" />, title: "Süpermarket Otomasyonu", desc: "Stok takibi ve müşteri ilişkilerinize akıllı çözümler getiriyoruz.", color: "text-green-400", size: "" },
-  { icon: <Building2 className="w-6 h-6" />, title: "Otel Otomasyonu", desc: "Rezervasyon ve misafir iletişiminizi 7/24 AI ile yönetiyoruz.", color: "text-amber-400", size: "" },
-  { icon: <Home className="w-6 h-6" />, title: "Emlak Otomasyonu", desc: "Lead toplama ve müşteri eşleştirme süreçlerinizi birlikte hızlandırıyoruz.", color: "text-orange-400", size: "" },
-  { icon: <Linkedin className="w-6 h-6" />, title: "LinkedIn Otomasyonu", desc: "B2B ağ büyümenizi ve satış tünellerinizi birlikte otomatikleştiriyoruz.", color: "text-blue-400", size: "md:col-span-2" },
-]
-
-const testimonials = [
-  { name: "Mehmet Y.", role: "E-Ticaret Girişimcisi", text: "AI Factory sayesinde YouTube kanalım 3 ayda 100K aboneye ulaştı." },
-  { name: "Ayşe K.", role: "Dijital Pazarlamacı", text: "Influencer otomasyonu ile müşterilerime çok daha hızlı dönüş sağlıyorum." },
-  { name: "Can D.", role: "Emlak Danışmanı", text: "Lead toplama sürecim tamamen otomatik. Her gün yeni müşterilerle tanışıyorum." },
-]
-
-function BentoCard({ children, className = "", custom = 0 }: { children: React.ReactNode; className?: string; custom?: number }) {
-  const cardRef = useRef<HTMLDivElement>(null)
-  
-  const handleMouse = (e: MouseEvent) => {
-    if (!cardRef.current) return
-    const rect = cardRef.current.getBoundingClientRect()
-    const x = ((e.clientX - rect.left) / rect.width) * 100
-    const y = ((e.clientY - rect.top) / rect.height) * 100
-    cardRef.current.style.setProperty('--mouse-x', `${x}%`)
-    cardRef.current.style.setProperty('--mouse-y', `${y}%`)
-  }
-
-  return (
-    <motion.div 
-      ref={cardRef}
-      variants={fadeUp}
-      custom={custom}
-      onMouseMove={handleMouse}
-      className={`bento-card ${className}`}
-    >
-      {children}
-    </motion.div>
-  )
-}
+import { ArrowUpRight } from 'lucide-react'
 
 export default function AIFactoryPage() {
-  const { t } = useTranslation()
-
   return (
-    <div className="min-h-screen bg-[#050508] relative pt-12 pb-24 overflow-hidden">
-      {/* Background element */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-electric-blue/5 blur-[150px] rounded-full pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-20">
-        
-        {/* Section Header */}
-        <motion.div 
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          className="text-center max-w-3xl mx-auto mb-20"
+    <div className="pt-32 pb-24 relative min-h-screen flex flex-col items-center justify-center">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-500/10 blur-[120px] rounded-full pointer-events-none" />
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
         >
-          <motion.span variants={fadeUp} custom={0} className="inline-block px-4 py-2 rounded-full bg-electric-blue/10 border border-electric-blue/20 text-electric-blue text-sm font-bold tracking-[0.2em] uppercase mb-6">
-            AI FACTORY
-          </motion.span>
-          <motion.h1 variants={fadeUp} custom={1} className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight text-white leading-[1.1]">
-            Yapay zekâ ile kendi işinizi kurun,{' '}
-            <span className="text-gradient-accent">gelirinizi birlikte büyütelim.</span>
-          </motion.h1>
-          <motion.p variants={fadeUp} custom={2} className="text-gray-400 text-lg md:text-xl leading-relaxed">
-            Dolunay Özeren'in kurduğu AI Factory, bireysel girişimciler ve freelancerlar 
-            için kullanıma hazır otomasyon sistemleri sunan premium topluluktur.
-          </motion.p>
+          <span className="inline-block text-indigo-400 text-sm font-semibold tracking-[0.2em] uppercase mb-4">
+            AI Factory
+          </span>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight text-white">
+            Yapay Zeka Otomasyonları Satarak{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-600">Gelir Elde Etmeyi Öğren</span>
+          </h1>
+          <p className="text-gray-400 text-lg md:text-xl leading-relaxed mb-10 max-w-2xl mx-auto">
+            Bireysel girişimciler ve freelancerlar için kullanıma hazır otomasyon sistemleri sunan premium topluluk. Kendi işinizi kurun ve yapay zeka devriminde yerinizi alın.
+          </p>
+          <a 
+            href="https://www.skool.com/yapay-zeka-factory/about?ref=044f39496d4f45fab11775bcefe4b7f4"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-xl text-lg font-bold text-white bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 transition-all duration-300 shadow-lg shadow-indigo-500/25"
+          >
+            Topluluğa Katıl <ArrowUpRight className="w-5 h-5" />
+          </a>
         </motion.div>
-
-        {/* Bento Grid */}
-        <motion.div 
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-24"
-        >
-          {automations.map((item, i) => (
-            <BentoCard key={i} custom={i} className={item.size}>
-              <div className={`w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center mb-5 ${item.color}`}>
-                {item.icon}
-              </div>
-              <h3 className="text-xl font-bold text-white mb-2">{item.title}</h3>
-              <p className="text-gray-400 text-sm leading-relaxed">{item.desc}</p>
-            </BentoCard>
-          ))}
-        </motion.div>
-
-        {/* Testimonials */}
-        <motion.div 
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          className="max-w-5xl mx-auto"
-        >
-          <motion.h3 variants={fadeUp} custom={0} className="text-center text-gray-500 text-sm font-semibold tracking-[0.2em] uppercase mb-10">
-            Başarı Hikayeleri
-          </motion.h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {testimonials.map((t, i) => (
-              <BentoCard key={i} custom={i + 1} className="!p-6 relative group overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-electric-blue/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <p className="text-gray-300 text-sm leading-relaxed mb-6 italic relative z-10">"{t.text}"</p>
-                <div className="flex items-center gap-3 relative z-10">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-electric-blue/30 to-accent-purple/30 flex items-center justify-center text-sm font-bold text-white border border-white/10">
-                    {t.name.charAt(0)}
-                  </div>
-                  <div>
-                    <p className="text-white text-sm font-semibold">{t.name}</p>
-                    <p className="text-gray-500 text-xs">{t.role}</p>
-                  </div>
-                </div>
-              </BentoCard>
-            ))}
-          </div>
-        </motion.div>
-
       </div>
     </div>
   )

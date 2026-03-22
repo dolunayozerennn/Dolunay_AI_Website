@@ -4,7 +4,6 @@ import { motion } from 'framer-motion'
 import { Search, Target, Settings, CheckCircle2, ArrowUpRight, Building2, GraduationCap } from 'lucide-react'
 import { useRef } from 'react'
 import type { MouseEvent } from 'react'
-import { useTranslation } from '@/i18n/i18n'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 50, filter: 'blur(4px)' },
@@ -12,8 +11,16 @@ const fadeUp = {
     opacity: 1, y: 0, filter: 'blur(0px)',
     transition: { duration: 0.7, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] }
   })
-};
+}
 
+const steps = [
+  { icon: <Search className="w-6 h-6" />, title: "Keşif & Analiz", desc: "Mevcut iş akışlarınızı birlikte dinliyor, AI ile optimize edilebilecek darboğazları tespit ediyoruz.", num: "01" },
+  { icon: <Target className="w-6 h-6" />, title: "Sistem Tasarımı", desc: "İhtiyaçlarınıza en uygun yapay zeka araçlarını ve otomasyon senaryolarını birlikte haritalandırıyoruz.", num: "02" },
+  { icon: <Settings className="w-6 h-6" />, title: "Kurulum & Entegrasyon", desc: "Sistemleri kuruyor, API bağlantılarını yapıyor ve birlikte test ediyoruz.", num: "03" },
+  { icon: <CheckCircle2 className="w-6 h-6" />, title: "Eğitim & Teslim", desc: "Ekibinize sistein nasıl kullanılacağını öğretiyor ve anahtar teslim bırakıyoruz.", num: "04" },
+]
+
+// ─── Hizmet Müşterileri (Logo Marquee) ─────────────────────────────────────────
 const serviceClients = [
   { name: 'VARTUR', logo: '/images/logos/images (24).jpeg', invert: false },
   { name: 'musixXen', logo: '/images/logos/unnamed (4).jpg', invert: false },
@@ -25,7 +32,7 @@ const serviceClients = [
   { name: 'VoyantAI', logo: '/images/logos/Screenshot 2026-03-16 at 22.06.12.png', invert: false },
   { name: 'Udemy', logo: '/images/logos/Udemy_logo.svg (1).png', invert: true },
   { name: 'GittiGidiyor', logo: '/images/logos/images (8) copy 2.png', invert: false },
-];
+]
 
 // ─── Eğitim & Danışmanlık Referansları ─────────────────────────────────────────
 const educationClients = [
@@ -65,18 +72,18 @@ const educationClients = [
     gradient: 'from-orange-600 to-red-500',
     bgGlow: 'rgba(234, 88, 12, 0.12)',
   },
-];
+]
 
 function RefCard({ client, index }: { client: typeof educationClients[0]; index: number }) {
-  const cardRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null)
   const handleMouse = (e: MouseEvent) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    cardRef.current.style.setProperty('--mouse-x', `${x}%`);
-    cardRef.current.style.setProperty('--mouse-y', `${y}%`);
-  };
+    if (!cardRef.current) return
+    const rect = cardRef.current.getBoundingClientRect()
+    const x = ((e.clientX - rect.left) / rect.width) * 100
+    const y = ((e.clientY - rect.top) / rect.height) * 100
+    cardRef.current.style.setProperty('--mouse-x', `${x}%`)
+    cardRef.current.style.setProperty('--mouse-y', `${y}%`)
+  }
 
   return (
     <motion.div
@@ -102,19 +109,10 @@ function RefCard({ client, index }: { client: typeof educationClients[0]; index:
         <p className="text-gray-500 text-sm leading-relaxed">{client.desc}</p>
       </div>
     </motion.div>
-  );
+  )
 }
 
 export function ServicesSection() {
-  const { t } = useTranslation();
-
-  const steps = [
-    { icon: <Search className="w-6 h-6" />, title: t('services.step1Title'), desc: t('services.step1Desc'), num: "01" },
-    { icon: <Target className="w-6 h-6" />, title: t('services.step2Title'), desc: t('services.step2Desc'), num: "02" },
-    { icon: <Settings className="w-6 h-6" />, title: t('services.step3Title'), desc: t('services.step3Desc'), num: "03" },
-    { icon: <CheckCircle2 className="w-6 h-6" />, title: t('services.step4Title'), desc: t('services.step4Desc'), num: "04" },
-  ];
-
   return (
     <section id="services" className="py-32 relative">
       <div className="section-divider max-w-5xl mx-auto mb-32" />
@@ -128,14 +126,15 @@ export function ServicesSection() {
           className="text-center max-w-3xl mx-auto mb-24"
         >
           <motion.span variants={fadeUp} custom={0} className="inline-block text-electric-blue text-sm font-semibold tracking-[0.2em] uppercase mb-4">
-            {t('services.sectionTag')}
+            Hizmetler
           </motion.span>
-          <motion.h2 variants={fadeUp} custom={1} className="text-4xl md:text-6xl font-bold mb-6 tracking-tight">
-            {t('services.sectionTitle')}{' '}
-            <span className="text-gradient-accent">{t('services.sectionTitleHighlight')}</span>
+          <motion.h2 variants={fadeUp} custom={1} className="text-4xl md:text-6xl font-bold mb-6 tracking-tight text-white">
+            Danışmanlık &{' '}
+            <span className="text-gradient-accent">Otomasyon</span>
           </motion.h2>
           <motion.p variants={fadeUp} custom={2} className="text-gray-400 text-lg leading-relaxed">
-            {t('services.sectionDesc')}
+            Sadece standart paketler değil, kurumsal firmalar ve hacimli operasyonlar 
+            için terzi işi yapay zeka altyapılarını birlikte kuruyoruz.
           </motion.p>
         </motion.div>
 
@@ -175,7 +174,7 @@ export function ServicesSection() {
         >
           <motion.div variants={fadeUp} custom={0} className="flex items-center gap-3 justify-center mb-10">
             <Building2 className="w-4 h-4 text-electric-blue" />
-            <span className="text-sm font-semibold text-gray-500 uppercase tracking-[0.2em]">{t('services.clientsTitle')}</span>
+            <span className="text-sm font-semibold text-gray-500 uppercase tracking-[0.2em]">Hizmet Müşterilerimiz</span>
           </motion.div>
 
           <motion.div
@@ -221,7 +220,7 @@ export function ServicesSection() {
               <GraduationCap className="w-4 h-4 text-accent-purple" />
               <span className="text-sm font-semibold text-gray-500 uppercase tracking-[0.2em]">Eğitim & Danışmanlık Referansları</span>
             </div>
-            <motion.h3 variants={fadeUp} custom={1} className="text-2xl md:text-4xl font-bold tracking-tight mb-4">
+            <motion.h3 variants={fadeUp} custom={1} className="text-2xl md:text-4xl font-bold tracking-tight mb-4 text-white">
               Birlikte çalıştığımız{' '}
               <span className="text-gradient-accent">kurumlar</span>
             </motion.h3>
@@ -255,12 +254,13 @@ export function ServicesSection() {
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-electric-blue/5 blur-[100px] rounded-full pointer-events-none" />
           
           <h3 className="text-3xl md:text-4xl font-bold text-white mb-5 tracking-tight relative z-10">
-            {t('services.ctaTitle')}
+            Projeyi Birlikte İnşa Edelim
           </h3>
           <p className="text-gray-400 mb-10 max-w-xl mx-auto relative z-10 leading-relaxed">
-            {t('services.ctaDesc')}
+            Hizmetlerimiz, danışmanlık talepleriniz veya marka işbirlikleri için 
+            bizimle doğrudan iletişime geçebilirsiniz.
           </p>
-          <a href="mailto:savas@dolunay.ai" className="group relative inline-flex items-center gap-2 px-10 py-4 rounded-2xl font-bold text-lg bg-gradient-to-r from-electric-blue/20 to-accent-purple/20 border border-electric-blue/30 hover:border-electric-blue/60 transition-all duration-500 hover:shadow-[0_0_50px_rgba(0,212,255,0.2)] z-10">
+          <a href="mailto:savas@dolunay.ai" className="group relative inline-flex items-center gap-2 px-10 py-4 rounded-2xl font-bold text-lg bg-gradient-to-r from-electric-blue/20 to-accent-purple/20 border border-electric-blue/30 hover:border-electric-blue/60 transition-all duration-500 hover:shadow-[0_0_50px_rgba(0,212,255,0.2)] z-10 text-white">
             savas@dolunay.ai
             <ArrowUpRight className="w-5 h-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </a>
@@ -268,5 +268,5 @@ export function ServicesSection() {
         
       </div>
     </section>
-  );
+  )
 }
