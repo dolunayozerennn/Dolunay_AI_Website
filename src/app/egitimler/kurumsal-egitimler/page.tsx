@@ -200,7 +200,7 @@ export default function CorporateTrainingsPage() {
               {/* Fallback pattern or generic building image for hero, since actual kurumsal_holding.jpg might be missing */}
               <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/40 to-purple-900/40 opacity-80 mix-blend-luminosity" />
               
-              <div className="absolute inset-0 bg-[url('/images/egitimler/egitim2.jpg')] bg-cover bg-center opacity-70 hover:opacity-90 transition-all duration-1000" />
+              <div className="absolute inset-0 bg-[url('/images/egitimler/egitim2.webp')] bg-cover bg-center opacity-70 hover:opacity-90 transition-all duration-1000" />
               <div className="absolute inset-0 bg-gradient-to-t from-[#050508] via-[#050508]/40 to-[#050508]/20" />
               
               <div className="absolute bottom-10 left-10 right-10 flex flex-col items-center p-6 rounded-2xl bg-black/60 backdrop-blur-md border border-white/10">
@@ -267,7 +267,7 @@ export default function CorporateTrainingsPage() {
                viewport={{ once: true }}
                className="relative h-64 md:h-full rounded-3xl overflow-hidden border border-white/10 group"
              >
-               <img src="/images/egitimler/egitim1.jpg" alt="Kurumsal Eğitim" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
+               <img src="/images/egitimler/egitim1.webp" alt="Kurumsal Eğitim" loading="lazy" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                  <span className="text-white font-medium">Uygulamalı Atölye</span>
                </div>
@@ -280,7 +280,7 @@ export default function CorporateTrainingsPage() {
                  transition={{ delay: 0.2 }}
                  className="relative h-64 rounded-3xl overflow-hidden border border-white/10 group"
                >
-                 <img src="/images/egitimler/egitim2.jpg" alt="Kurumsal Eğitim" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" style={{ objectPosition: 'center 65%' }} />
+                 <img src="/images/egitimler/egitim2.webp" alt="Kurumsal Eğitim" loading="lazy" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" style={{ objectPosition: 'center 65%' }} />
                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                    <span className="text-white font-medium">İnteraktif Sunum</span>
                  </div>
@@ -292,7 +292,7 @@ export default function CorporateTrainingsPage() {
                  transition={{ delay: 0.4 }}
                  className="relative h-64 rounded-3xl overflow-hidden border border-white/10 group bg-white/[0.02]"
                >
-                 <img src="/images/egitimler/egitim3.jpg" alt="Kurumsal Eğitim" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" style={{ objectPosition: 'center 75%' }} />
+                 <img src="/images/egitimler/egitim3.webp" alt="Kurumsal Eğitim" loading="lazy" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" style={{ objectPosition: 'center 75%' }} />
                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                    <span className="text-white font-medium">Birebir Danışmanlık</span>
                  </div>

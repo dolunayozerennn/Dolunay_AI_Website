@@ -454,8 +454,9 @@ export default function CollaborationsPage() {
             </div>
 
             <img
-              src={`${'/'}portrait_hero_v4.jpg`}
+              src="/portrait_hero_v4.webp"
               alt="Dolunay Özeren"
+              loading="lazy"
               className="relative z-10 w-[340px] h-[340px] object-cover rounded-3xl border border-white/[0.08]"
               style={{ boxShadow: '0 40px 100px rgba(0,0,0,0.5), 0 0 60px rgba(124,58,237,0.1)' }}
             />

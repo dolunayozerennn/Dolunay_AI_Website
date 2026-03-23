@@ -23,16 +23,16 @@ const scaleIn = {
 };
 
 const teamMembers = [
-  { name: 'Ceren', role: 'Partnership Manager', type: 'human' as const, initial: 'C', color: 'from-pink-500 to-rose-600', avatar: '/images/team/ceren.jpeg' },
-  { name: 'Sarper', role: 'Social Media Ads Manager', type: 'human' as const, initial: 'S', color: 'from-blue-500 to-indigo-600', avatar: '/images/team/sarper.jpg' },
-  { name: 'Ece', role: 'Sales Specialist', type: 'human' as const, initial: 'E', color: 'from-purple-500 to-violet-600', avatar: '/images/team/ece.jpeg' },
-  { name: 'Berke', role: 'Video Editor', type: 'human' as const, initial: 'B', color: 'from-orange-500 to-amber-600', avatar: '/images/team/berke.jpeg' },
-  { name: 'Savaş', role: 'B2B Operations Lead', type: 'human' as const, initial: 'S', color: 'from-teal-500 to-emerald-600', avatar: '/images/team/savas.jpeg' },
-  { name: 'Okan', role: 'B2B Automation Lead', type: 'human' as const, initial: 'O', color: 'from-cyan-500 to-blue-600', avatar: '/images/team/okan.jpg' },
-  { name: 'Bobby', role: 'Designer', type: 'ai' as const, initial: '🎨', color: 'from-pink-400 to-purple-500', avatar: '/team/bobby_ai.png' },
-  { name: 'Gipsy', role: 'Web Site Developer', type: 'ai' as const, initial: '💻', color: 'from-cyan-400 to-blue-500', avatar: '/team/gipsy_ai.png' },
-  { name: 'Daisy', role: 'Customer Support', type: 'ai' as const, initial: '💬', color: 'from-green-400 to-emerald-500', avatar: '/team/daisy_ai.png' },
-  { name: 'Joshua', role: 'Lead Generation', type: 'ai' as const, initial: '🎯', color: 'from-amber-400 to-orange-500', avatar: '/team/joshua_ai.png' },
+  { name: 'Ceren', role: 'Partnership Manager', type: 'human' as const, initial: 'C', color: 'from-pink-500 to-rose-600', avatar: '/images/team/ceren.webp' },
+  { name: 'Sarper', role: 'Social Media Ads Manager', type: 'human' as const, initial: 'S', color: 'from-blue-500 to-indigo-600', avatar: '/images/team/sarper.webp' },
+  { name: 'Ece', role: 'Sales Specialist', type: 'human' as const, initial: 'E', color: 'from-purple-500 to-violet-600', avatar: '/images/team/ece.webp' },
+  { name: 'Berke', role: 'Video Editor', type: 'human' as const, initial: 'B', color: 'from-orange-500 to-amber-600', avatar: '/images/team/berke.webp' },
+  { name: 'Savaş', role: 'B2B Operations Lead', type: 'human' as const, initial: 'S', color: 'from-teal-500 to-emerald-600', avatar: '/images/team/savas.webp' },
+  { name: 'Okan', role: 'B2B Automation Lead', type: 'human' as const, initial: 'O', color: 'from-cyan-500 to-blue-600', avatar: '/images/team/okan.webp' },
+  { name: 'Bobby', role: 'Designer', type: 'ai' as const, initial: '🎨', color: 'from-pink-400 to-purple-500', avatar: '/team/bobby_ai.webp' },
+  { name: 'Gipsy', role: 'Web Site Developer', type: 'ai' as const, initial: '💻', color: 'from-cyan-400 to-blue-500', avatar: '/team/gipsy_ai.webp' },
+  { name: 'Daisy', role: 'Customer Support', type: 'ai' as const, initial: '💬', color: 'from-green-400 to-emerald-500', avatar: '/team/daisy_ai.webp' },
+  { name: 'Joshua', role: 'Lead Generation', type: 'ai' as const, initial: '🎯', color: 'from-amber-400 to-orange-500', avatar: '/team/joshua_ai.webp' },
 ];
 
 export default function AboutPage() {
@@ -86,7 +86,7 @@ export default function AboutPage() {
                   member.avatar ? '' : `bg-gradient-to-br ${member.color} shadow-lg`
                 } flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-500`}>
                   {member.avatar ? (
-                    <img src={member.avatar} alt={member.name} className="w-full h-full object-cover rounded-2xl shadow-lg border border-white/10" />
+                    <img src={member.avatar} alt={member.name} loading="lazy" className="w-full h-full object-cover rounded-2xl shadow-lg border border-white/10" />
                   ) : member.type === 'ai' ? (
                     <span className="text-xl">{member.initial}</span>
                   ) : (

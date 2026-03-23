@@ -92,6 +92,7 @@ function ProductCard({ headline, description, tag, buttonLabel, href, external, 
           <img 
             src={imageSrc} 
             alt={headline} 
+            loading="lazy"
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
           />
         ) : (
@@ -159,7 +160,7 @@ export function ProductsSection() {
       external: false,
       accentColor: '#a855f7',
       glowColor: 'rgba(168, 85, 247, 0.12)',
-      imageSrc: '/images/products/kurumsal_holding.jpg',
+      imageSrc: '/images/products/kurumsal_holding.webp',
       isPrimary: true,
     },
     {
@@ -171,7 +172,7 @@ export function ProductsSection() {
       external: false,
       accentColor: '#7c3aed',
       glowColor: 'rgba(124, 58, 237, 0.15)',
-      imageSrc: '/images/products/isletme_kobi_real2.jpg',
+      imageSrc: '/images/products/isletme_kobi_real2.webp',
       isPrimary: false,
     },
     {
@@ -183,7 +184,7 @@ export function ProductsSection() {
       external: false,
       accentColor: '#ec4899',
       glowColor: 'rgba(236, 72, 153, 0.12)',
-      imageSrc: '/images/products/marka_isbirligi.jpg',
+      imageSrc: '/images/products/marka_isbirligi.webp',
       isPrimary: false,
     },
     {
@@ -195,7 +196,7 @@ export function ProductsSection() {
       external: true,
       accentColor: '#00d4ff',
       glowColor: 'rgba(0, 212, 255, 0.12)',
-      imageSrc: '/images/products/girisimci_real2.jpg',
+      imageSrc: '/images/products/girisimci_real2.webp',
       isPrimary: false,
     },
   ];
