@@ -14,7 +14,7 @@ export function Footer() {
     { icon: <Instagram className="w-5 h-5" />, href: "https://instagram.com/dolunay.ai", label: "Instagram" },
     { icon: <Youtube className="w-5 h-5" />, href: "https://youtube.com/@dolunayozeren", label: "YouTube" },
     { icon: <Twitter className="w-5 h-5" />, href: "https://twitter.com/dolunayozeren", label: "Twitter" },
-    { icon: <Mail className="w-5 h-5" />, href: "mailto:savas@dolunay.ai", label: "Email" },
+    { icon: <Mail className="w-5 h-5" />, href: "mailto:dolunay@dolunay.ai", label: "Email" },
   ];
 
   return (
@@ -49,7 +49,7 @@ export function Footer() {
           <div className="flex flex-col sm:flex-row gap-6 sm:gap-12 text-center sm:text-left text-sm text-gray-400">
             <div className="flex flex-col gap-3">
               <span className="text-white font-semibold mb-1">Kurumsal</span>
-              <Link href="/sozlesmeler/uyelik" className="hover:text-white transition-colors">Üyelik Sözleşmesi</Link>
+
               <Link href="/sozlesmeler/mesafeli-satis" className="hover:text-white transition-colors">Mesafeli Satış Sözleşmesi</Link>
               <Link href="/sozlesmeler/kvkk" className="hover:text-white transition-colors">Gizlilik ve KVKK Politikası</Link>
             </div>

@@ -18,7 +18,9 @@
     "corporateTrainingsDesc": "Kurumunuza özel yapay zeka entegrasyonu eğitimleri"
   },
   "footer": {
-    "bio": "Yapay zeka eğitmeni ve builder. İşletmeler için AI otomasyon çözümleri üretiyor, girişimcilere yapay zekayı iş modeline dönüştürmeyi öğretiyorum."
+    "bio": "Yapay zeka eğitmeni ve builder. İşletmeler için AI otomasyon çözümleri üretiyor, girişimcilere yapay zekayı iş modeline dönüştürmeyi öğretiyorum.",
+    "description": "Yapay zeka eğitmeni ve builder. İşletmeler için AI otomasyon çözümleri üretiyor, girişimcilere yapay zekayı iş modeline dönüştürmeyi öğretiyorum.",
+    "rights": "Tüm hakları saklıdır."
   },
   "hero": {
     "titleLine1": "Yapay zeka?",
@@ -128,7 +130,7 @@
     "step3Desc": "Sistemleri kuruyor, API bağlantılarını yapıyor ve birlikte test ediyoruz.",
     "step4Title": "Eğitim & Teslim",
     "step4Desc": "Ekibinize sistemin nasıl kullanılacağını öğretiyor ve anahtar teslim bırakıyoruz.",
-    "clientsTitle": "Hizmet Müşterilerimiz",
+    "clientsTitle": "Hizmet Verdiğimiz Markalar",
     "ctaTitle": "Projeyi Birlikte İnşa Edelim",
     "ctaDesc": "Hizmetlerimiz, danışmanlık talepleriniz veya marka işbirlikleri için bizimle doğrudan iletişime geçebilirsiniz."
   },

@@ -92,7 +92,7 @@ const educations = [
     icon: <GraduationCap className="w-7 h-7" />,
     gradient: 'from-violet-500 to-purple-700',
     bgGlow: 'rgba(139, 92, 246, 0.1)',
-    members: '45K+ Öğrenci',
+    members: '45.000+ Öğrenci',
     badge: 'Udemy Bestseller',
   },
 ];

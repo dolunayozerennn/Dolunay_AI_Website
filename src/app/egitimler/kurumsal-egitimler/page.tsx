@@ -16,7 +16,7 @@ const fadeUp = {
 const educationClients = [
   {
     name: 'Türkiye Finans Katılım Bankası',
-    desc: '2 günlük yapay zeka araçları workshop\'u düzenlendi.',
+    desc: 'İkişer defa iki günlük yapay zeka araçları ve otomasyon workshopu düzenlendi.',
     gradient: 'from-emerald-500 to-teal-600',
     bgGlow: 'rgba(52, 211, 153, 0.12)',
     logoDomain: 'turkiyefinans.com.tr',
@@ -38,7 +38,7 @@ const educationClients = [
   },
   {
     name: 'Udemy',
-    desc: '45.000+ öğrenciye ulaşan best-seller yapay zeka eğitimi yayınlandı.',
+    desc: '45.000+ öğrenciye eğitim verildi.',
     gradient: 'from-violet-500 to-purple-700',
     bgGlow: 'rgba(139, 92, 246, 0.12)',
     logoDomain: 'udemy.com',
@@ -46,7 +46,7 @@ const educationClients = [
   },
   {
     name: 'GittiGidiyor',
-    desc: 'Yapay zeka ve otomasyon eğitimi gerçekleştirildi.',
+    desc: 'GittiGidiyor Akademi\'nin tek resmi eğitmeni olarak satıcı eğitimleri düzenlendi.',
     gradient: 'from-orange-500 to-amber-600',
     bgGlow: 'rgba(249, 115, 22, 0.12)',
     logoDomain: 'gittigidiyor.com',
@@ -54,7 +54,7 @@ const educationClients = [
   },
   {
     name: 'Trendyol',
-    desc: 'Yapay zeka araçları ve verimlilik eğitimi düzenlendi.',
+    desc: 'Trendyol\'da mağaza açma ve satıcı olma eğitimi 15.000+ öğrenciye ulaştı.',
     gradient: 'from-orange-600 to-red-500',
     bgGlow: 'rgba(234, 88, 12, 0.12)',
     logoDomain: 'trendyol.com'
@@ -183,7 +183,7 @@ export default function CorporateTrainingsPage() {
             </ul>
             
             <a 
-              href="mailto:savas@dolunay.ai"
+              href="mailto:dolunay@dolunay.ai"
               className="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white bg-gradient-to-r from-accent-purple to-electric-blue hover:from-accent-violet hover:to-electric-blue border border-transparent rounded-2xl transition-all hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(124,58,237,0.3)] hover:shadow-[0_0_50px_rgba(124,58,237,0.5)]"
             >
               Kurumsal Talep Oluştur
@@ -200,7 +200,7 @@ export default function CorporateTrainingsPage() {
               {/* Fallback pattern or generic building image for hero, since actual kurumsal_holding.jpg might be missing */}
               <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/40 to-purple-900/40 opacity-80 mix-blend-luminosity" />
               
-              <div className="absolute inset-0 bg-[url('/images/egitimler/egitim2.jpg')] bg-cover bg-center opacity-70 mix-blend-luminosity hover:mix-blend-normal transition-all duration-1000" />
+              <div className="absolute inset-0 bg-[url('/images/egitimler/egitim2.jpg')] bg-cover bg-center opacity-70 hover:opacity-90 transition-all duration-1000" />
               <div className="absolute inset-0 bg-gradient-to-t from-[#050508] via-[#050508]/40 to-[#050508]/20" />
               
               <div className="absolute bottom-10 left-10 right-10 flex flex-col items-center p-6 rounded-2xl bg-black/60 backdrop-blur-md border border-white/10">
@@ -280,7 +280,7 @@ export default function CorporateTrainingsPage() {
                  transition={{ delay: 0.2 }}
                  className="relative h-64 rounded-3xl overflow-hidden border border-white/10 group"
                >
-                 <img src="/images/egitimler/egitim2.jpg" alt="Kurumsal Eğitim" className="w-full h-full object-cover object-top opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
+                 <img src="/images/egitimler/egitim2.jpg" alt="Kurumsal Eğitim" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" style={{ objectPosition: 'center 65%' }} />
                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                    <span className="text-white font-medium">İnteraktif Sunum</span>
                  </div>
@@ -292,7 +292,7 @@ export default function CorporateTrainingsPage() {
                  transition={{ delay: 0.4 }}
                  className="relative h-64 rounded-3xl overflow-hidden border border-white/10 group bg-white/[0.02]"
                >
-                 <img src="/images/egitimler/egitim3.jpg" alt="Kurumsal Eğitim" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
+                 <img src="/images/egitimler/egitim3.jpg" alt="Kurumsal Eğitim" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" style={{ objectPosition: 'center 75%' }} />
                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                    <span className="text-white font-medium">Birebir Danışmanlık</span>
                  </div>

@@ -18,13 +18,15 @@
     "corporateTrainingsDesc": "Formación de integración IA a medida para tu organización"
   },
   "footer": {
-    "bio": "Formador y constructor de IA. Creo soluciones de automatización con IA para empresas y enseño a emprendedores cómo convertir la IA en un modelo de negocio."
+    "bio": "Formador y constructor de IA. Creo soluciones de automatización con IA para empresas y enseño a emprendedores cómo convertir la IA en un modelo de negocio.",
+    "description": "Formador y constructor de IA. Creando soluciones de automatización con IA para empresas y enseñando a emprendedores cómo convertir la IA en un modelo de negocio.",
+    "rights": "Todos los derechos reservados."
   },
   "hero": {
     "titleLine1": "¿Inteligencia artificial?",
     "titleHighlight": "Dolunay.",
     "subtitle": "El ecosistema de IA independiente más grande de Turquía, convirtiendo la inteligencia artificial en resultados reales — desde individuos hasta empresas.",
-    "stat1Title": "250K+ seguidores · 100M+ visualizaciones",
+    "stat1Title": "250.000+ seguidores · 100M+ visualizaciones",
     "stat1Desc": "El creador de contenido de IA independiente más seguido de Turquía.",
     "stat2Title": "1.000+ miembros · 10+ historias de éxito",
     "stat2Desc": "Comunidad de emprendedores que generan ingresos con IA.",

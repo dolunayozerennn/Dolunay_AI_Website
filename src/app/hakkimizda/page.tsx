@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useRef, useState } from 'react';
 import type { MouseEvent } from 'react';
 import { Bot, User } from 'lucide-react';
+import { useTranslation } from '@/i18n/i18n';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 50, filter: 'blur(4px)' },
@@ -35,6 +36,7 @@ const teamMembers = [
 ];
 
 export default function AboutPage() {
+  const { t } = useTranslation();
   return (
     <div className="pt-24 pb-12">
       <section className="py-12 relative" id="about">
@@ -52,14 +54,14 @@ export default function AboutPage() {
             className="text-center max-w-3xl mx-auto mb-16"
           >
             <motion.span variants={fadeUp} custom={0} className="inline-block text-electric-blue text-sm font-semibold tracking-[0.2em] uppercase mb-4">
-              Hakkımızda
+              {t('about.sectionTag')}
             </motion.span>
             <motion.h2 variants={fadeUp} custom={1} className="text-3xl md:text-5xl font-bold mb-5 tracking-tight">
-              İnsan + AI:{' '}
-              <span className="text-gradient-accent">Etki yaratan ekip</span>
+              {t('about.sectionTitle')}{' '}
+              <span className="text-gradient-accent">{t('about.sectionTitleHighlight')}</span>
             </motion.h2>
             <motion.p variants={fadeUp} custom={2} className="text-gray-400 text-lg leading-relaxed">
-              İnsan yeteneklerini yapay zeka gücüyle birleştiren hibrit bir ekiple çalışıyoruz.
+              {t('about.sectionDesc')}
             </motion.p>
           </motion.div>
 
@@ -101,7 +103,7 @@ export default function AboutPage() {
                     : 'bg-blue-500/10 border border-blue-500/20 text-blue-400'
                 }`}>
                   {member.type === 'ai' ? <Bot className="w-2.5 h-2.5" /> : <User className="w-2.5 h-2.5" />}
-                  {member.type === 'ai' ? 'Yapay Zeka' : 'İnsan'}
+                  {member.type === 'ai' ? t('about.aiLabel') : t('about.humanLabel')}
                 </div>
               </motion.div>
             ))}

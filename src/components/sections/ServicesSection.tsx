@@ -17,7 +17,7 @@ const steps = [
   { icon: <Search className="w-6 h-6" />, title: "Keşif & Analiz", desc: "Mevcut iş akışlarınızı birlikte dinliyor, AI ile optimize edilebilecek darboğazları tespit ediyoruz.", num: "01" },
   { icon: <Target className="w-6 h-6" />, title: "Sistem Tasarımı", desc: "İhtiyaçlarınıza en uygun yapay zeka araçlarını ve otomasyon senaryolarını birlikte haritalandırıyoruz.", num: "02" },
   { icon: <Settings className="w-6 h-6" />, title: "Kurulum & Entegrasyon", desc: "Sistemleri kuruyor, API bağlantılarını yapıyor ve birlikte test ediyoruz.", num: "03" },
-  { icon: <CheckCircle2 className="w-6 h-6" />, title: "Eğitim & Teslim", desc: "Ekibinize sistein nasıl kullanılacağını öğretiyor ve anahtar teslim bırakıyoruz.", num: "04" },
+  { icon: <CheckCircle2 className="w-6 h-6" />, title: "Eğitim & Teslim", desc: "Ekibinize sistemin nasıl kullanılacağını öğretiyor ve anahtar teslim bırakıyoruz.", num: "04" },
 ]
 
 // ─── Hizmet Müşterileri (Logo Marquee) ─────────────────────────────────────────
@@ -34,52 +34,54 @@ const serviceClients = [
   { name: 'GittiGidiyor', logo: '/images/logos/images (8) copy 2.png', invert: false },
 ]
 
-// ─── Eğitim & Danışmanlık Referansları ─────────────────────────────────────────
+// ─── Hizmet Referansları ─────────────────────────────────────────
 const educationClients = [
   {
-    name: 'Türkiye Finans Katılım Bankası',
-    desc: '2 günlük yapay zeka araçları workshop\'u düzenlendi.',
+    name: 'Çam Hotel Termal Resort',
+    desc: 'Instagram, WhatsApp ve Messenger mesajları yapay zeka tarafından 7/24 her dilde tam otomatik cevaplanmaktadır.',
     gradient: 'from-emerald-500 to-teal-600',
     bgGlow: 'rgba(52, 211, 153, 0.12)',
-    logoDomain: 'turkiyefinans.com.tr',
-    logo: '/images/logos/turkiye-finans-logo.png'
+    logoDomain: 'camhotel.com',
+    logo: '/images/logos/cam-logo-new (3).webp'
   },
   {
-    name: 'Misyon Bankası',
-    desc: '6 saatlik online eğitim serisi (5 seans, 120 katılımcı) düzenlendi. Personel ile bire bir danışmanlık gerçekleştirildi.',
+    name: 'Forbest',
+    desc: '17 farklı mağazanın stok sistemi yapay zeka tarafından tam otomatik takip edilmekte; satın alım departmanına akıllı analizler üretip raporlanmaktadır.',
     gradient: 'from-slate-400 to-slate-600',
     bgGlow: 'rgba(148, 163, 184, 0.12)',
-    logoDomain: 'misyon.com.tr'
+    logoDomain: 'forbest.com.tr',
+    logo: '/images/logos/images (8).png'
   },
   {
-    name: 'Başkent Üniversitesi',
-    desc: 'Yapay zeka araçları eğitimi düzenlendi.',
-    gradient: 'from-red-500 to-rose-600',
-    bgGlow: 'rgba(239, 68, 68, 0.12)',
-    logoDomain: 'baskent.edu.tr'
-  },
-  {
-    name: 'Udemy',
-    desc: '45.000+ öğrenciye ulaşan best-seller yapay zeka eğitimi yayınlandı.',
+    name: 'Voyant AI',
+    desc: 'Haftalık performans raporları NETN otomasyonuyla tam otomatik hale getirildi.',
     gradient: 'from-violet-500 to-purple-700',
     bgGlow: 'rgba(139, 92, 246, 0.12)',
-    logoDomain: 'udemy.com',
-    logo: '/images/logos/Udemy_logo.svg (1).png'
+    logoDomain: 'voyant.ai',
+    logo: '/images/logos/Screenshot 2026-03-16 at 22.06.12.png'
   },
   {
-    name: 'GittiGidiyor',
-    desc: 'Yapay zeka ve otomasyon eğitimi gerçekleştirildi.',
+    name: 'Vartur',
+    desc: 'WhatsApp otomasyonu sayesinde binlerce müşteriye her gün düzenli kontrol ettikleri kanaldan (WhatsApp\'tan) 50\'nin üzerinde reklam kampanyası düzenlendi.',
     gradient: 'from-orange-500 to-amber-600',
     bgGlow: 'rgba(249, 115, 22, 0.12)',
-    logoDomain: 'gittigidiyor.com',
-    logo: '/images/logos/images (8) copy 2.png'
+    logoDomain: 'vartur.com',
+    logo: '/images/logos/images (24).jpeg'
   },
   {
-    name: 'Trendyol',
-    desc: 'Yapay zeka araçları ve verimlilik eğitimi düzenlendi.',
+    name: 'WeBee',
+    desc: 'Otellerin sosyal medya mesajlarının tam otomatik cevaplandırıldığı yapay zeka ürünü, WeBee Insta adıyla yayınlandı.',
+    gradient: 'from-cyan-500 to-blue-600',
+    bgGlow: 'rgba(6, 182, 212, 0.12)',
+    logoDomain: 'webee.com',
+    logo: '/images/logos/images (8) copy.png'
+  },
+  {
+    name: 'Sweatcoin App',
+    desc: 'Influencer iletişim süreçlerinde Google Sheet, Notion ve Gmail entegrasyonlarıyla bütün iletişim süreçleri tam otomatikleştirildi.',
     gradient: 'from-orange-600 to-red-500',
     bgGlow: 'rgba(234, 88, 12, 0.12)',
-    logoDomain: 'trendyol.com'
+    logoDomain: 'sweatco.in'
   },
 ]
 
@@ -200,7 +202,7 @@ export function ServicesSection() {
         >
           <motion.div variants={fadeUp} custom={0} className="flex items-center gap-3 justify-center mb-10">
             <Building2 className="w-4 h-4 text-electric-blue" />
-            <span className="text-sm font-semibold text-gray-500 uppercase tracking-[0.2em]">Hizmet Müşterilerimiz</span>
+            <span className="text-sm font-semibold text-gray-500 uppercase tracking-[0.2em]">Hizmet Verdiğimiz Markalar</span>
           </motion.div>
 
           <motion.div
@@ -233,7 +235,7 @@ export function ServicesSection() {
         </motion.div>
 
         {/* ═══════════════════════════════════════════════════════════════════════ */}
-        {/*  EĞİTİM & DANIŞMANLIK REFERANSLARI                                   */}
+        {/*  ÇÖZÜM ORTAKLARIMIZ                                                   */}
         {/* ═══════════════════════════════════════════════════════════════════════ */}
         <motion.div
           initial="hidden"
@@ -243,15 +245,15 @@ export function ServicesSection() {
         >
           <motion.div variants={fadeUp} custom={0} className="text-center max-w-3xl mx-auto mb-14">
             <div className="flex items-center gap-3 justify-center mb-4">
-              <GraduationCap className="w-4 h-4 text-accent-purple" />
-              <span className="text-sm font-semibold text-gray-500 uppercase tracking-[0.2em]">Eğitim & Danışmanlık Referansları</span>
+              <Building2 className="w-4 h-4 text-accent-purple" />
+              <span className="text-sm font-semibold text-gray-500 uppercase tracking-[0.2em]">Çözüm Ortaklarımız</span>
             </div>
             <motion.h3 variants={fadeUp} custom={1} className="text-2xl md:text-4xl font-bold tracking-tight mb-4 text-white">
               Birlikte çalıştığımız{' '}
               <span className="text-gradient-accent">kurumlar</span>
             </motion.h3>
             <motion.p variants={fadeUp} custom={2} className="text-gray-400 leading-relaxed">
-              Türkiye'nin önde gelen kurum ve kuruluşlarına yapay zeka eğitimleri ve danışmanlık hizmetleri sunduk.
+              Birlikte çalıştığımız markalar için geliştirdiğimiz yapay zeka çözümleri.
             </motion.p>
           </motion.div>
 

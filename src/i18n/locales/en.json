@@ -18,13 +18,15 @@
     "corporateTrainingsDesc": "Custom AI integration training for your organization"
   },
   "footer": {
-    "bio": "AI trainer and builder. I create AI automation solutions for businesses and teach entrepreneurs how to turn AI into a business model."
+    "bio": "AI trainer and builder. I create AI automation solutions for businesses and teach entrepreneurs how to turn AI into a business model.",
+    "description": "AI trainer and builder. Creating AI automation solutions for businesses and teaching entrepreneurs how to turn AI into a business model.",
+    "rights": "All rights reserved."
   },
   "hero": {
     "titleLine1": "Artificial intelligence?",
     "titleHighlight": "Dolunay.",
     "subtitle": "Turkey's largest independent AI ecosystem, turning artificial intelligence into real results — from individuals to enterprises.",
-    "stat1Title": "250K+ followers · 100M+ views",
+    "stat1Title": "250,000+ followers · 100M+ views",
     "stat1Desc": "Turkey's most followed independent AI content creator.",
     "stat2Title": "1,000+ members · 10+ success stories",
     "stat2Desc": "A community of entrepreneurs earning with AI.",
