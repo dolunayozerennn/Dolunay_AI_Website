@@ -35,7 +35,17 @@ const serviceClients = [
 ]
 
 // ─── Hizmet Referansları ─────────────────────────────────────────
-const educationClients = [
+
+type ServiceClient = {
+  name: string;
+  desc: string;
+  gradient: string;
+  bgGlow: string;
+  logoDomain?: string;
+  logo?: string;
+};
+
+const educationClients: ServiceClient[] = [
   {
     name: 'Çam Hotel Termal Resort',
     desc: 'Instagram, WhatsApp ve Messenger mesajları yapay zeka tarafından 7/24 her dilde tam otomatik cevaplanmaktadır.',
@@ -288,8 +298,8 @@ export function ServicesSection() {
             Hizmetlerimiz, danışmanlık talepleriniz veya marka işbirlikleri için 
             bizimle doğrudan iletişime geçebilirsiniz.
           </p>
-          <a href="mailto:savas@dolunay.ai" className="group relative inline-flex items-center gap-2 px-10 py-4 rounded-2xl font-bold text-lg bg-gradient-to-r from-electric-blue/20 to-accent-purple/20 border border-electric-blue/30 hover:border-electric-blue/60 transition-all duration-500 hover:shadow-[0_0_50px_rgba(0,212,255,0.2)] z-10 text-white">
-            savas@dolunay.ai
+          <a href="mailto:dolunay@dolunay.ai" className="group relative inline-flex items-center gap-2 px-10 py-4 rounded-2xl font-bold text-lg bg-gradient-to-r from-electric-blue/20 to-accent-purple/20 border border-electric-blue/30 hover:border-electric-blue/60 transition-all duration-500 hover:shadow-[0_0_50px_rgba(0,212,255,0.2)] z-10 text-white">
+            dolunay@dolunay.ai
             <ArrowUpRight className="w-5 h-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </a>
         </motion.div>
