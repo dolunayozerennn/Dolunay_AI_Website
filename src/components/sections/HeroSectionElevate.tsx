@@ -47,16 +47,16 @@ export function HeroSectionElevate({ bgImage }: { bgImage: string }) {
 
           <Reveal delay={0.4}>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-12 border-t border-white/10 w-full mt-4">
-              <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-5 rounded-xl">
-                <p className="text-sm text-white font-semibold mb-3">{t('hero.stat1Title')}</p>
+              <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-4 lg:p-5 rounded-xl h-full flex flex-col">
+                <p className="text-[13px] lg:text-sm text-white font-bold mb-2 tracking-tight">{t('hero.stat1Title')}</p>
                 <div className="text-xs text-gray-400 leading-relaxed">{t('hero.stat1Desc')}</div>
               </div>
-              <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-5 rounded-xl">
-                <p className="text-sm text-white font-semibold mb-3">{t('hero.stat2Title')}</p>
+              <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-4 lg:p-5 rounded-xl h-full flex flex-col">
+                <p className="text-[13px] lg:text-sm text-white font-bold mb-2 tracking-tight">{t('hero.stat2Title')}</p>
                 <div className="text-xs text-gray-400 leading-relaxed">{t('hero.stat2Desc')}</div>
               </div>
-              <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-5 rounded-xl">
-                <p className="text-sm text-white font-semibold mb-3">{t('hero.stat3Title')}</p>
+              <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-4 lg:p-5 rounded-xl h-full flex flex-col">
+                <p className="text-[13px] lg:text-sm text-white font-bold mb-2 tracking-tight">{t('hero.stat3Title')}</p>
                 <div className="text-xs text-gray-400 leading-relaxed">{t('hero.stat3Desc')}</div>
               </div>
             </div>

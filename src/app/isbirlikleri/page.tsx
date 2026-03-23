@@ -112,7 +112,7 @@ const platforms = [
   {
     name: 'Instagram',
     handle: '@dolunayozeren',
-    followers: '200K+',
+    followers: '200.000+',
     icon: <Instagram className="w-6 h-6" />,
     gradient: 'from-pink-500 to-purple-600',
     bgGlow: 'rgba(236, 72, 153, 0.15)',
@@ -120,12 +120,12 @@ const platforms = [
     href: 'https://www.instagram.com/dolunay_ozeren/',
     metric: 'Takipçi',
     engagementLabel: 'Erişim / Post',
-    engagementValue: '50K+'
+    engagementValue: '50.000+'
   },
   {
     name: 'TikTok',
     handle: '@dolunayozeren',
-    followers: '37K+',
+    followers: '37.000+',
     icon: <TikTokIcon className="w-6 h-6" />,
     gradient: 'from-cyan-400 to-blue-600',
     bgGlow: 'rgba(0, 212, 255, 0.15)',
@@ -133,12 +133,12 @@ const platforms = [
     href: 'https://tiktok.com/@dolunayozeren',
     metric: 'Takipçi',
     engagementLabel: 'Ort. İzlenme',
-    engagementValue: '100K+'
+    engagementValue: '100.000+'
   },
   {
     name: 'YouTube',
     handle: '@dolunayozeren',
-    followers: '43K+',
+    followers: '43.000+',
     icon: <Youtube className="w-6 h-6" />,
     gradient: 'from-red-500 to-orange-600',
     bgGlow: 'rgba(239, 68, 68, 0.15)',
@@ -146,12 +146,12 @@ const platforms = [
     href: 'https://youtube.com/@dolunayozeren',
     metric: 'Abone',
     engagementLabel: 'Ort. İzlenme',
-    engagementValue: '25K+'
+    engagementValue: '25.000+'
   },
   {
     name: 'Facebook',
     handle: 'Dolunay Özeren',
-    followers: '15K+',
+    followers: '15.000+',
     icon: <Facebook className="w-6 h-6" />,
     gradient: 'from-blue-500 to-blue-700',
     bgGlow: 'rgba(59, 130, 246, 0.15)',
@@ -159,12 +159,12 @@ const platforms = [
     href: 'https://www.facebook.com/profile.php?id=61561973441859',
     metric: 'Takipçi',
     engagementLabel: 'Ort. Etkileşim',
-    engagementValue: '5K+'
+    engagementValue: '5.000+'
   },
   {
     name: 'Udemy',
     handle: 'Dolunay Özeren',
-    followers: '45K+',
+    followers: '45.000+',
     icon: <GraduationCap className="w-6 h-6" />,
     gradient: 'from-violet-500 to-purple-700',
     bgGlow: 'rgba(139, 92, 246, 0.15)',
@@ -192,8 +192,8 @@ const platforms = [
 // ─── Highlight Stats ────────────────────────────────────────────────────────────
 const highlightStats = [
   { icon: <Eye className="w-5 h-5" />, value: 10, suffix: 'M+', label: 'Aylık Ort. İzlenme', color: 'from-cyan-500 to-blue-600' },
-  { icon: <Heart className="w-5 h-5" />, value: 300, suffix: 'K+', label: 'Aylık Etkileşim', color: 'from-pink-500 to-rose-600' },
-  { icon: <Users className="w-5 h-5" />, value: 300, suffix: 'K+', label: 'Toplam Takipçi', color: 'from-violet-500 to-purple-600' },
+  { icon: <Heart className="w-5 h-5" />, value: 300, suffix: '.000+', label: 'Aylık Etkileşim', color: 'from-pink-500 to-rose-600' },
+  { icon: <Users className="w-5 h-5" />, value: 300, suffix: '.000+', label: 'Toplam Takipçi', color: 'from-violet-500 to-purple-600' },
   { icon: <Activity className="w-5 h-5" />, value: 100, suffix: 'M+', label: 'Toplam İzlenme', color: 'from-amber-400 to-orange-500' },
 ];
 
@@ -218,6 +218,7 @@ const virals = [
   { brand: 'Aithor', views: '2.0M', type: 'Organik', href: 'https://www.instagram.com/reel/DKHLswaK4Tj/', videoUrl: '/videos/reel3.mp4', gradient: 'from-emerald-500 via-teal-500 to-cyan-500', iconBg: 'bg-emerald-500/30' },
   { brand: 'Creatify', views: '1.7M', type: 'Organik + Paid', href: 'https://www.instagram.com/reel/DJoR2pJqpHt/', videoUrl: '/videos/reel4.mp4', gradient: 'from-orange-500 via-rose-500 to-pink-600', iconBg: 'bg-orange-500/30' },
   { brand: 'Creati', views: '1.4M', type: 'Organik + Paid', href: 'https://www.instagram.com/reel/DNNcKWwq--T/', videoUrl: '/videos/reel5.mp4', gradient: 'from-pink-500 via-purple-600 to-blue-600', iconBg: 'bg-pink-500/30' },
+  { brand: 'Kimi AI', views: '2.0M', type: 'Organik', href: 'https://www.instagram.com/reel/DUXxKHVCgW6/', videoUrl: '/videos/reel6.mp4', gradient: 'from-amber-500 via-orange-500 to-red-500', iconBg: 'bg-amber-500/30' },
 ];
 
 const brands = ['CapCut', 'VidAU', 'Lexi', 'KickResume', 'TopView', 'Higgsfield'];
@@ -453,7 +454,7 @@ export default function CollaborationsPage() {
             </div>
 
             <img
-              src={`${'/'}portrait_hero.jpg`}
+              src={`${'/'}portrait_hero_v4.jpg`}
               alt="Dolunay Özeren"
               className="relative z-10 w-[340px] h-[340px] object-cover rounded-3xl border border-white/[0.08]"
               style={{ boxShadow: '0 40px 100px rgba(0,0,0,0.5), 0 0 60px rgba(124,58,237,0.1)' }}
@@ -603,7 +604,7 @@ export default function CollaborationsPage() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.05 }}
-            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-5 mb-16"
+            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-5 mb-16"
           >
             {virals.map((item, i) => (
               <motion.div

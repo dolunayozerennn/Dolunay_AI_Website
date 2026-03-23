@@ -86,7 +86,7 @@ function ProductCard({ headline, description, tag, buttonLabel, href, external, 
       </div>
 
       {/* Image Container */}
-      <div className="relative w-full flex-1 rounded-2xl overflow-hidden mt-auto bg-black/50 border border-white/5">
+      <div className="relative w-full aspect-square rounded-2xl overflow-hidden mt-auto bg-black/50 border border-white/5">
         <div className={`absolute inset-0 z-10 bg-gradient-to-t ${isPrimary ? 'from-[#581c87]/90 via-[#581c87]/20' : 'from-[#0f0f12]/90 via-[#0f0f12]/20'} to-transparent opacity-80`} />
         {imageSrc ? (
           <img 
@@ -171,7 +171,7 @@ export function ProductsSection() {
       external: false,
       accentColor: '#7c3aed',
       glowColor: 'rgba(124, 58, 237, 0.15)',
-      imageSrc: '/images/products/isletme_kobi.jpg',
+      imageSrc: '/images/products/isletme_kobi_real2.jpg',
       isPrimary: false,
     },
     {
@@ -195,7 +195,7 @@ export function ProductsSection() {
       external: true,
       accentColor: '#00d4ff',
       glowColor: 'rgba(0, 212, 255, 0.12)',
-      imageSrc: '/images/products/girisimci.jpg',
+      imageSrc: '/images/products/girisimci_real2.jpg',
       isPrimary: false,
     },
   ];
