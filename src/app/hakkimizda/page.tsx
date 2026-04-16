@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useRef, useState } from 'react';
 import type { MouseEvent } from 'react';
 import { Bot, User } from 'lucide-react';
+import Image from 'next/image';
 import { useTranslation } from '@/i18n/i18n';
 
 const fadeUp = {
@@ -86,7 +87,7 @@ export default function AboutPage() {
                   member.avatar ? '' : `bg-gradient-to-br ${member.color} shadow-lg`
                 } flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-500`}>
                   {member.avatar ? (
-                    <img src={member.avatar} alt={member.name} loading="lazy" className="w-full h-full object-cover rounded-2xl shadow-lg border border-white/10" />
+                    <Image src={member.avatar} alt={member.name} width={112} height={112} className="w-full h-full object-cover rounded-2xl shadow-lg border border-white/10" />
                   ) : member.type === 'ai' ? (
                     <span className="text-xl">{member.initial}</span>
                   ) : (

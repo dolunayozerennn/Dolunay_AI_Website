@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { useTranslation } from '@/i18n/i18n'
+import Image from 'next/image'
 
 function Reveal({ children, delay = 0, className = '' }: {
   children: React.ReactNode; delay?: number; className?: string;
@@ -23,11 +24,17 @@ export function HeroSectionElevate({ bgImage }: { bgImage: string }) {
 
   return (
     <section
-      className="relative min-h-screen flex flex-col justify-center bg-cover bg-center bg-[#1a1110]"
-      style={{ backgroundImage: `url('${bgImage}')` }}
+      className="relative min-h-screen flex flex-col justify-center bg-[#1a1110] overflow-hidden"
       id="hero-elevate"
     >
-      <div className="absolute inset-0 bg-gradient-to-r from-[#000000] via-[#000000]/60 to-transparent opacity-90" />
+      <Image 
+        src={bgImage} 
+        alt="Dolunay AI Hero" 
+        fill 
+        priority 
+        className="object-cover object-center absolute inset-0 z-0"
+      />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#000000] via-[#000000]/60 to-transparent opacity-90 z-0" />
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-16 pt-24 pb-16">
         <div className="max-w-[42rem]">

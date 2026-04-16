@@ -19,6 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticUrls = [
     '',
     '/blog',
+    '/cozumler',
     '/cozumler/artifex-campus',
     '/cozumler/hizmetler',
     '/egitimler/ai-factory',

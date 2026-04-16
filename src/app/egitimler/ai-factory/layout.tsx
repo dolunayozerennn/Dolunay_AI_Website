@@ -10,5 +10,25 @@ export const metadata: Metadata = {
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Course',
+    name: 'AI Factory',
+    description: 'Yapay Zeka Otomasyonları satarak gelir elde etmeyi öğrenin. Bireysel girişimciler ve freelancerlar için kullanıma hazır sistemler.',
+    provider: {
+      '@type': 'Organization',
+      name: 'Dolunay AI',
+      sameAs: 'https://dolunay.ai'
+    }
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      {children}
+    </>
+  )
 }

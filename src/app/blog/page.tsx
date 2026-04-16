@@ -5,6 +5,11 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Blog',
   description: 'Yapay zeka asistanları, otomasyonlar ve teknoloji dünyasındaki en son yenilikler hakkında makaleler.',
+  openGraph: {
+    title: 'Blog | dolunay.ai',
+    description: 'Yapay zeka asistanları, otomasyonlar ve teknoloji dünyasındaki en son yenilikler hakkında makaleler.',
+    url: 'https://dolunay.ai/blog',
+  },
 }
 
 export default function BlogPage() {

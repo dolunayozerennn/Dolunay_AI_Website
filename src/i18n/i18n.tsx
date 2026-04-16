@@ -26,7 +26,7 @@ const STORAGE_KEY = 'dolunay_ai_lang';
 
 // ─── Detect browser language ────────────────────────────────────────────────────
 function detectLanguage(): Language {
-  if (typeof window === 'undefined') return 'en';
+  if (typeof window === 'undefined') return 'tr';
   
   // 1. Check localStorage
   try {
@@ -44,7 +44,7 @@ function detectLanguage(): Language {
   }
 
   // 3. Default fallback
-  return 'en';
+  return 'tr';
 }
 
 // ─── Context ────────────────────────────────────────────────────────────────────
@@ -54,13 +54,13 @@ interface LanguageContextType {
 }
 
 const LanguageContext = createContext<LanguageContextType>({
-  language: 'en',
+  language: 'tr',
   setLanguage: () => {},
 });
 
 // ─── Provider ───────────────────────────────────────────────────────────────────
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguageState] = useState<Language>('en');
+  const [language, setLanguageState] = useState<Language>('tr');
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -103,7 +103,7 @@ export function useLanguage() {
  */
 export function useTranslation() {
   const { language, setLanguage } = useContext(LanguageContext);
-  const translations = locales[language] || locales.en;
+  const translations = locales[language] || locales.tr;
 
   const t = useCallback((key: string): string => {
     const parts = key.split('.');
@@ -112,8 +112,8 @@ export function useTranslation() {
       if (value && typeof value === 'object' && part in (value as Record<string, unknown>)) {
         value = (value as Record<string, unknown>)[part];
       } else {
-        // Fallback to English
-        let fallback: unknown = locales.en;
+        // Fallback to Turkish
+        let fallback: unknown = locales.tr;
         for (const p of parts) {
           if (fallback && typeof fallback === 'object' && p in (fallback as Record<string, unknown>)) {
             fallback = (fallback as Record<string, unknown>)[p];

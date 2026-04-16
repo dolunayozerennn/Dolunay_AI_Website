@@ -89,6 +89,8 @@ export function Navbar() {
             >
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                aria-expanded={isDropdownOpen}
+                aria-haspopup="true"
                 className="flex items-center gap-1 text-sm font-medium text-gray-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/[0.04] transition-all duration-300"
               >
                 {t('nav.solutions')}
@@ -134,6 +136,8 @@ export function Navbar() {
             >
               <button
                 onClick={() => setIsTrainingDropdownOpen(!isTrainingDropdownOpen)}
+                aria-expanded={isTrainingDropdownOpen}
+                aria-haspopup="true"
                 className="flex items-center gap-1 text-sm font-medium text-gray-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/[0.04] transition-all duration-300"
               >
                 {t('nav.trainings')}
@@ -207,6 +211,8 @@ export function Navbar() {
           <div className="md:hidden flex items-center pr-1">
             <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-expanded={isMobileMenuOpen}
+              aria-label="Menüyü Aç/Kapat"
               className="text-gray-300 hover:text-white transition-colors p-2"
             >
               {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}

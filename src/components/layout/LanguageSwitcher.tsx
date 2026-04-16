@@ -93,6 +93,8 @@ export function LanguageSwitcher({ mobile = false }: { mobile?: boolean }) {
     >
       <button
         onClick={() => setIsOpen(!isOpen)}
+        aria-expanded={isOpen}
+        aria-label="Dil Değiştir (Change Language)"
         className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white hover:bg-white/[0.04] transition-all duration-300"
       >
         <Globe className="w-4 h-4 opacity-70" />

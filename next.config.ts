@@ -1,10 +1,8 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  output: 'export',
-  images: {
-    unoptimized: true,
-  },
+  /* Site was restricted to export and unoptimized images. 
+     Now unlocked for full Netlify SSR and Image Optimization. */
 }
 
 export default nextConfig

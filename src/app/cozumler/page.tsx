@@ -7,6 +7,7 @@ import {
   Users, GraduationCap, ArrowUpRight, Sparkles, TrendingUp, ExternalLink
 } from 'lucide-react';
 import { ServicesSection } from '@/components/sections/ServicesSection';
+import { useTranslation } from '@/i18n/i18n';
 
 function SkoolIcon({ className }: { className?: string }) {
   return (
@@ -48,56 +49,58 @@ function BentoCard({ children, className = '', custom = 0 }: { children: React.R
   );
 }
 
-const readySolutions = [
-  {
-    title: 'Artifex Campus',
-    description: 'İşletmenizi AI ile dönüştürecek hazır çözüm paketleri. Personel tasarrufu sağlayan, operasyonel yükü sıfıra indiren sonuç odaklı B2B yapay zeka otomasyonları.',
-    features: ['Hazır Kurulum', 'Anında Başlama', '7/24 Operasyon', 'Ölçeklenebilir'],
-    href: '/cozumler',
-    accentColor: '#7c3aed',
-    icon: <Sparkles className="w-6 h-6" />,
-    external: false,
-  },
-];
-
-const customSolutions = [
-  {
-    title: 'Danışmanlık & Özel Çözümler',
-    description: 'Kurumsal firmalar ve hacimli operasyonlar için terzi işi yapay zeka altyapıları. Şirketinize özel AI otomasyon ve danışmanlık hizmetleri.',
-    features: ['Özel Tasarım', 'Keşif Analizi', 'API Entegrasyonu', 'Eğitim & Destek'],
-    href: '/hizmetler',
-    accentColor: '#00d4ff',
-    icon: <TrendingUp className="w-6 h-6" />,
-    external: false,
-  },
-];
-
-const educations = [
-  {
-    title: 'AI Factory',
-    subtitle: 'Yapay Zeka Otomasyonları ile Gelir Elde Etmeyi Öğren',
-    description: 'Bireysel girişimciler ve freelancerlar için kullanıma hazır otomasyon sistemleri sunan premium topluluk.',
-    href: 'https://www.skool.com/yapay-zeka-factory/about?ref=044f39496d4f45fab11775bcefe4b7f4',
-    icon: <SkoolIcon className="w-7 h-7" />,
-    gradient: 'from-emerald-400 to-teal-600',
-    bgGlow: 'rgba(52, 211, 153, 0.1)',
-    members: '500+ Üye',
-    badge: 'Topluluk',
-  },
-  {
-    title: 'Yapay Zeka Eğitimi',
-    subtitle: 'Sıfırdan Yapay Zeka Uzmanlığı: ChatGPT ve 20+ Araç',
-    description: 'Udemy\'nin en çok satan yapay zeka eğitimi. 45.000+ öğrenci tarafından tercih edildi.',
-    href: 'https://www.udemy.com/course/ai-yapay-zeka-uzmanligi-chatgpt-midjourney-dalle-ve-fazlasi/?referralCode=906FDE49207D6106DCBF',
-    icon: <GraduationCap className="w-7 h-7" />,
-    gradient: 'from-violet-500 to-purple-700',
-    bgGlow: 'rgba(139, 92, 246, 0.1)',
-    members: '45.000+ Öğrenci',
-    badge: 'Udemy Bestseller',
-  },
-];
-
 export default function SolutionsPage() {
+  const { t } = useTranslation();
+
+  const readySolutions = [
+    {
+      title: t('solutions.readyItemTitle'),
+      description: t('solutions.readyItemDesc'),
+      features: [t('solutions.readyItemFeature1'), t('solutions.readyItemFeature2'), t('solutions.readyItemFeature3'), t('solutions.readyItemFeature4')],
+      href: '/cozumler',
+      accentColor: '#7c3aed',
+      icon: <Sparkles className="w-6 h-6" />,
+      external: false,
+    },
+  ];
+
+  const customSolutions = [
+    {
+      title: t('solutions.customItemTitle'),
+      description: t('solutions.customItemDesc'),
+      features: [t('solutions.customItemFeature1'), t('solutions.customItemFeature2'), t('solutions.customItemFeature3'), t('solutions.customItemFeature4')],
+      href: '/cozumler/hizmetler',
+      accentColor: '#00d4ff',
+      icon: <TrendingUp className="w-6 h-6" />,
+      external: false,
+    },
+  ];
+
+  const educations = [
+    {
+      title: t('solutions.aiFactoryTitle'),
+      subtitle: t('solutions.aiFactorySubtitle'),
+      description: t('solutions.aiFactoryDesc'),
+      href: 'https://www.skool.com/yapay-zeka-factory/about?ref=044f39496d4f45fab11775bcefe4b7f4',
+      icon: <SkoolIcon className="w-7 h-7" />,
+      gradient: 'from-emerald-400 to-teal-600',
+      bgGlow: 'rgba(52, 211, 153, 0.1)',
+      members: t('solutions.aiFactoryMembers'),
+      badge: t('solutions.aiFactoryBadge'),
+    },
+    {
+      title: t('solutions.udemyTitle'),
+      subtitle: t('solutions.udemySubtitle'),
+      description: t('solutions.udemyDesc'),
+      href: 'https://www.udemy.com/course/ai-yapay-zeka-uzmanligi-chatgpt-midjourney-dalle-ve-fazlasi/?referralCode=906FDE49207D6106DCBF',
+      icon: <GraduationCap className="w-7 h-7" />,
+      gradient: 'from-violet-500 to-purple-700',
+      bgGlow: 'rgba(139, 92, 246, 0.1)',
+      members: t('solutions.udemyMembers'),
+      badge: t('solutions.udemyBadge'),
+    },
+  ];
+
   return (
     <div className="pt-24 pb-12">
       {/* ÇÖZÜMLER */}
@@ -110,11 +113,11 @@ export default function SolutionsPage() {
             className="text-center max-w-3xl mx-auto mb-16"
           >
             <motion.span variants={fadeUp} custom={0} className="inline-block text-accent-purple text-sm font-semibold tracking-[0.2em] uppercase mb-4">
-              Çözümler
+              {t('solutions.badge')}
             </motion.span>
             <motion.h2 variants={fadeUp} custom={1} className="text-3xl md:text-5xl font-bold mb-5 tracking-tight">
-              İhtiyacınıza{' '}
-              <span className="text-gradient-accent">özel çözümler</span>
+              {t('solutions.title')}{' '}
+              <span className="text-gradient-accent">{t('solutions.titleHighlight')}</span>
             </motion.h2>
           </motion.div>
 
@@ -122,7 +125,7 @@ export default function SolutionsPage() {
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} className="flex flex-col h-full">
               <motion.h3 variants={fadeUp} custom={0} className="text-sm font-semibold text-gray-500 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
                 <div className="w-5 h-[1px] bg-accent-purple" />
-                Hazır Çözümler
+                {t('solutions.readyTitle')}
               </motion.h3>
               <div className="flex-1 flex flex-col gap-6">
                 {readySolutions.map((solution, i) => (
@@ -144,7 +147,7 @@ export default function SolutionsPage() {
                       </div>
                       <div className="mt-auto">
                         <a href={solution.href} className="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-accent-purple transition-colors">
-                          Keşfet <ArrowUpRight className="w-4 h-4" />
+                          {t('solutions.exploreBtn')} <ArrowUpRight className="w-4 h-4" />
                         </a>
                       </div>
                     </div>
@@ -156,7 +159,7 @@ export default function SolutionsPage() {
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} className="flex flex-col h-full">
               <motion.h3 variants={fadeUp} custom={0} className="text-sm font-semibold text-gray-500 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
                 <div className="w-5 h-[1px] bg-electric-blue" />
-                Size Özel Çözümler
+                {t('solutions.customTitle')}
               </motion.h3>
               <div className="flex-1 flex flex-col gap-6">
                 {customSolutions.map((solution, i) => (
@@ -178,7 +181,7 @@ export default function SolutionsPage() {
                       </div>
                       <div className="mt-auto">
                         <a href={solution.href} className="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-electric-blue transition-colors">
-                          İncele <ArrowUpRight className="w-4 h-4" />
+                          {t('solutions.reviewBtn')} <ArrowUpRight className="w-4 h-4" />
                         </a>
                       </div>
                     </div>
@@ -200,14 +203,14 @@ export default function SolutionsPage() {
             className="text-center max-w-3xl mx-auto mb-16"
           >
             <motion.span variants={fadeUp} custom={0} className="inline-block text-emerald-400 text-sm font-semibold tracking-[0.2em] uppercase mb-4">
-              Eğitimler
+              {t('solutions.eduBadge')}
             </motion.span>
             <motion.h2 variants={fadeUp} custom={1} className="text-3xl md:text-5xl font-bold mb-5 tracking-tight">
-              Yapay zekayı{' '}
-              <span className="text-gradient-accent">öğrenmeye başla</span>
+              {t('solutions.eduTitle')}{' '}
+              <span className="text-gradient-accent">{t('solutions.eduTitleHighlight')}</span>
             </motion.h2>
             <motion.p variants={fadeUp} custom={2} className="text-gray-400 text-lg leading-relaxed">
-              Sıfırdan ileri seviyeye, kendi hızında öğreneceğin kapsamlı eğitim programları.
+              {t('solutions.eduDesc')}
             </motion.p>
           </motion.div>
 
@@ -250,7 +253,7 @@ export default function SolutionsPage() {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-white/[0.05] border border-white/[0.08] hover:bg-white/[0.08] hover:border-white/[0.15] text-white transition-all duration-300"
                     >
-                      Katıl <ExternalLink className="w-3.5 h-3.5" />
+                      {t('solutions.joinBtn')} <ExternalLink className="w-3.5 h-3.5" />
                     </a>
                   </div>
                 </div>

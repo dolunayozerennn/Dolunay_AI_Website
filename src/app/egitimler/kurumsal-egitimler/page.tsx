@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { useRef, useState } from 'react'
 import type { MouseEvent } from 'react'
 import { GraduationCap, Building, Target, Presentation, Briefcase, Zap, CheckCircle2 } from 'lucide-react'
+import { useTranslation } from '@/i18n/i18n'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 50, filter: 'blur(4px)' },
@@ -13,55 +14,7 @@ const fadeUp = {
   })
 }
 
-const educationClients = [
-  {
-    name: 'Türkiye Finans Katılım Bankası',
-    desc: 'İkişer defa iki günlük yapay zeka araçları ve otomasyon workshopu düzenlendi.',
-    gradient: 'from-emerald-500 to-teal-600',
-    bgGlow: 'rgba(52, 211, 153, 0.12)',
-    logoDomain: 'turkiyefinans.com.tr',
-    logo: '/images/logos/turkiye-finans-logo.png'
-  },
-  {
-    name: 'Misyon Bankası',
-    desc: '6 saatlik online eğitim serisi (5 seans, 120 katılımcı) düzenlendi. Personel ile bire bir danışmanlık gerçekleştirildi.',
-    gradient: 'from-slate-400 to-slate-600',
-    bgGlow: 'rgba(148, 163, 184, 0.12)',
-    logoDomain: 'misyon.com.tr'
-  },
-  {
-    name: 'Başkent Üniversitesi',
-    desc: 'Yapay zeka araçları eğitimi düzenlendi.',
-    gradient: 'from-red-500 to-rose-600',
-    bgGlow: 'rgba(239, 68, 68, 0.12)',
-    logoDomain: 'baskent.edu.tr'
-  },
-  {
-    name: 'Udemy',
-    desc: '45.000+ öğrenciye eğitim verildi.',
-    gradient: 'from-violet-500 to-purple-700',
-    bgGlow: 'rgba(139, 92, 246, 0.12)',
-    logoDomain: 'udemy.com',
-    logo: '/images/logos/udemy-logo.png'
-  },
-  {
-    name: 'GittiGidiyor',
-    desc: 'GittiGidiyor Akademi\'nin tek resmi eğitmeni olarak satıcı eğitimleri düzenlendi.',
-    gradient: 'from-orange-500 to-amber-600',
-    bgGlow: 'rgba(249, 115, 22, 0.12)',
-    logoDomain: 'gittigidiyor.com',
-    logo: '/images/logos/gittigidiyor-logo.png'
-  },
-  {
-    name: 'Trendyol',
-    desc: 'Trendyol\'da mağaza açma ve satıcı olma eğitimi 15.000+ öğrenciye ulaştı.',
-    gradient: 'from-orange-600 to-red-500',
-    bgGlow: 'rgba(234, 88, 12, 0.12)',
-    logoDomain: 'trendyol.com'
-  },
-]
-
-function RefCard({ client, index }: { client: typeof educationClients[0]; index: number }) {
+function RefCard({ client, index }: { client: any; index: number }) {
   const cardRef = useRef<HTMLDivElement>(null)
   const [imgError, setImgError] = useState(false)
 
@@ -121,28 +74,78 @@ function RefCard({ client, index }: { client: typeof educationClients[0]; index:
 }
 
 export default function CorporateTrainingsPage() {
+  const { t } = useTranslation();
+
+  const educationClients = [
+    {
+      name: t('corporateTrainings.client1Name'),
+      desc: t('corporateTrainings.client1Desc'),
+      gradient: 'from-emerald-500 to-teal-600',
+      bgGlow: 'rgba(52, 211, 153, 0.12)',
+      logoDomain: 'turkiyefinans.com.tr',
+      logo: '/images/logos/turkiye-finans-logo.png'
+    },
+    {
+      name: t('corporateTrainings.client2Name'),
+      desc: t('corporateTrainings.client2Desc'),
+      gradient: 'from-slate-400 to-slate-600',
+      bgGlow: 'rgba(148, 163, 184, 0.12)',
+      logoDomain: 'misyon.com.tr'
+    },
+    {
+      name: t('corporateTrainings.client3Name'),
+      desc: t('corporateTrainings.client3Desc'),
+      gradient: 'from-red-500 to-rose-600',
+      bgGlow: 'rgba(239, 68, 68, 0.12)',
+      logoDomain: 'baskent.edu.tr'
+    },
+    {
+      name: t('corporateTrainings.client4Name'),
+      desc: t('corporateTrainings.client4Desc'),
+      gradient: 'from-violet-500 to-purple-700',
+      bgGlow: 'rgba(139, 92, 246, 0.12)',
+      logoDomain: 'udemy.com',
+      logo: '/images/logos/udemy-logo.png'
+    },
+    {
+      name: t('corporateTrainings.client5Name'),
+      desc: t('corporateTrainings.client5Desc'),
+      gradient: 'from-orange-500 to-amber-600',
+      bgGlow: 'rgba(249, 115, 22, 0.12)',
+      logoDomain: 'gittigidiyor.com',
+      logo: '/images/logos/gittigidiyor-logo.png'
+    },
+    {
+      name: t('corporateTrainings.client6Name'),
+      desc: t('corporateTrainings.client6Desc'),
+      gradient: 'from-orange-600 to-red-500',
+      bgGlow: 'rgba(234, 88, 12, 0.12)',
+      logoDomain: 'trendyol.com'
+    },
+  ];
+
   const benefits = [
-    "Çalışan verimliliğinde 3 kata varan artış",
-    "Operasyonel süreçlerde yapay zekâ entegrasyonu",
-    "Maliyetleri düşüren otomasyon sistemleri",
-    "Sektörünüze özel AI kullanım haritaları",
+    t('corporateTrainings.benefit1'),
+    t('corporateTrainings.benefit2'),
+    t('corporateTrainings.benefit3'),
+    t('corporateTrainings.benefit4'),
   ]
 
   const features = [
     {
       icon: <Building className="w-8 h-8 text-electric-blue" />,
-      title: "Şirkete Özel Müfredat",
-      desc: "Standart eğitimler yerine şirketinize, departmanlarınıza ve hedeflerinize özel bir içerik hazırlıyoruz."
+      title: t('corporateTrainings.feat1Title'),
+      desc: t('corporateTrainings.feat1Desc')
     },
     {
       icon: <Target className="w-8 h-8 text-[#f97316]" />,
-      title: "Uygulamalı Dönüşüm",
-      desc: "Sadece teorik anlatım değil, çalışanlarınızın anında kullanabileceği pratik araçlarla sahaya iniyoruz."
+      title: t('corporateTrainings.feat2Title'),
+      desc: t('corporateTrainings.feat2Desc')
     },
     {
       icon: <Presentation className="w-8 h-8 text-accent-purple" />,
-      title: "Yönetici Vizyonu",
-      desc: "Karar alıcılar için yapay zekâyı stratejik bir büyüme argümanı olarak nasıl kullanacaklarını aktarıyoruz."
+      title: t('corporateTrainings.feat3Title'),
+      desc: t('corporateTrainings.feat3Desc')
     }
   ]
 
@@ -161,14 +164,14 @@ export default function CorporateTrainingsPage() {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
             <span className="inline-block px-4 py-2 rounded-full bg-accent-purple/10 border border-accent-purple/20 text-accent-purple text-sm font-bold tracking-wider mb-6 uppercase">
-              Kurumsal Eğitimler
+              {t('corporateTrainings.badge')}
             </span>
             <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight mb-8 leading-[1.1]">
-              Şirketinizi <span className="text-gradient-accent">Yapay Zekâ</span> <br />
-              Çağına Taşıyın
+              {t('corporateTrainings.titleLine1')} <span className="text-gradient-accent">{t('corporateTrainings.titleHighlight')}</span> <br />
+              {t('corporateTrainings.titleLine2')}
             </h1>
             <p className="text-gray-400 text-lg md:text-xl leading-relaxed mb-10">
-              Uluslararası holdinglerden KOBİ'lere kadar her ölçekte şirketin yapay zekâ entegrasyonu sürecine liderlik ediyoruz. Ekibinizi AI ile tanıştırın, rekabette yıllarca öne geçin.
+              {t('corporateTrainings.desc')}
             </p>
             
             <ul className="space-y-4 mb-12">
@@ -186,7 +189,7 @@ export default function CorporateTrainingsPage() {
               href="mailto:dolunay@dolunay.ai"
               className="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white bg-gradient-to-r from-accent-purple to-electric-blue hover:from-accent-violet hover:to-electric-blue border border-transparent rounded-2xl transition-all hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(124,58,237,0.3)] hover:shadow-[0_0_50px_rgba(124,58,237,0.5)]"
             >
-              Kurumsal Talep Oluştur
+              {t('corporateTrainings.ctaBtn')}
             </a>
           </motion.div>
           
@@ -197,7 +200,6 @@ export default function CorporateTrainingsPage() {
             className="relative"
           >
             <div className="relative aspect-square w-full max-w-[500px] mx-auto rounded-[3rem] overflow-hidden border border-white/10 shadow-[0_0_60px_rgba(124,58,237,0.15)] bg-[#0c0c14]">
-              {/* Fallback pattern or generic building image for hero, since actual kurumsal_holding.jpg might be missing */}
               <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/40 to-purple-900/40 opacity-80 mix-blend-luminosity" />
               
               <div className="absolute inset-0 bg-[url('/images/egitimler/egitim2.webp')] bg-cover bg-center opacity-70 hover:opacity-90 transition-all duration-1000" />
@@ -209,7 +211,7 @@ export default function CorporateTrainingsPage() {
                   <div className="w-12 h-12 rounded-full border-2 border-black bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center text-white"><Zap size={20} /></div>
                   <div className="w-12 h-12 rounded-full border-2 border-black bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center text-white"><Target size={20} /></div>
                 </div>
-                <p className="text-white text-sm font-semibold text-center">Geleceğin organizasyon yapısını birlikte kuralım.</p>
+                <p className="text-white text-sm font-semibold text-center">{t('corporateTrainings.heroImgDesc')}</p>
               </div>
             </div>
           </motion.div>
@@ -225,14 +227,14 @@ export default function CorporateTrainingsPage() {
           <motion.div variants={fadeUp} custom={0} className="text-center max-w-3xl mx-auto mb-14">
             <div className="flex items-center gap-3 justify-center mb-4">
               <GraduationCap className="w-5 h-5 text-accent-purple" />
-              <span className="text-sm font-semibold text-gray-500 uppercase tracking-[0.2em]">Referanslar</span>
+              <span className="text-sm font-semibold text-gray-500 uppercase tracking-[0.2em]">{t('corporateTrainings.refsBadge')}</span>
             </div>
             <motion.h3 variants={fadeUp} custom={1} className="text-3xl md:text-5xl font-bold tracking-tight mb-6 text-white">
-              Birlikte çalıştığımız{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-purple to-electric-blue">kurumlar</span>
+              {t('corporateTrainings.refsTitle')}{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-purple to-electric-blue">{t('corporateTrainings.refsTitleHighlight')}</span>
             </motion.h3>
             <motion.p variants={fadeUp} custom={2} className="text-gray-400 text-lg leading-relaxed">
-              Türkiye'nin önde gelen kurum ve kuruluşlarına yapay zeka eğitimleri ve danışmanlık hizmetleri sunduk.
+              {t('corporateTrainings.refsDesc')}
             </motion.p>
           </motion.div>
 
@@ -256,8 +258,8 @@ export default function CorporateTrainingsPage() {
             viewport={{ once: true }}
             className="text-center max-w-3xl mx-auto mb-14"
           >
-             <h3 className="text-3xl font-bold text-white mb-4">Eğitimlerimizden Kareler</h3>
-             <p className="text-gray-400 text-lg">Katılımcıların yapay zeka araçlarını canlı olarak deneyimlediği uygulamalı workshop süreçlerimizden görüntüler.</p>
+             <h3 className="text-3xl font-bold text-white mb-4">{t('corporateTrainings.galleryTitle')}</h3>
+             <p className="text-gray-400 text-lg">{t('corporateTrainings.galleryDesc')}</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
@@ -269,7 +271,7 @@ export default function CorporateTrainingsPage() {
              >
                <img src="/images/egitimler/egitim1.webp" alt="Kurumsal Eğitim" loading="lazy" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                 <span className="text-white font-medium">Uygulamalı Atölye</span>
+                 <span className="text-white font-medium">{t('corporateTrainings.galleryImg1')}</span>
                </div>
              </motion.div>
              <div className="grid grid-cols-1 gap-6">
@@ -282,7 +284,7 @@ export default function CorporateTrainingsPage() {
                >
                  <img src="/images/egitimler/egitim2.webp" alt="Kurumsal Eğitim" loading="lazy" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" style={{ objectPosition: 'center 65%' }} />
                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                   <span className="text-white font-medium">İnteraktif Sunum</span>
+                   <span className="text-white font-medium">{t('corporateTrainings.galleryImg2')}</span>
                  </div>
                </motion.div>
                <motion.div 
@@ -294,7 +296,7 @@ export default function CorporateTrainingsPage() {
                >
                  <img src="/images/egitimler/egitim3.webp" alt="Kurumsal Eğitim" loading="lazy" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" style={{ objectPosition: 'center 75%' }} />
                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                   <span className="text-white font-medium">Birebir Danışmanlık</span>
+                   <span className="text-white font-medium">{t('corporateTrainings.galleryImg3')}</span>
                  </div>
                </motion.div>
              </div>
@@ -309,7 +311,7 @@ export default function CorporateTrainingsPage() {
             viewport={{ once: true }}
             className="text-center text-3xl font-bold text-white mb-16"
           >
-            Neden Bizi Seçmelisiniz?
+            {t('corporateTrainings.featTitle')}
           </motion.h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {features.map((feature, i) => (
