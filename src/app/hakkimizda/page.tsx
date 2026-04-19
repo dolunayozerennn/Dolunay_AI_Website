@@ -34,6 +34,9 @@ const teamMembers = [
   { name: 'Gipsy', role: 'Web Site Developer', type: 'ai' as const, initial: '💻', color: 'from-cyan-400 to-blue-500', avatar: '/team/gipsy_ai.webp' },
   { name: 'Daisy', role: 'Customer Support', type: 'ai' as const, initial: '💬', color: 'from-green-400 to-emerald-500', avatar: '/team/daisy_ai.webp' },
   { name: 'Joshua', role: 'Lead Generation', type: 'ai' as const, initial: '🎯', color: 'from-amber-400 to-orange-500', avatar: '/team/joshua_ai.webp' },
+  { name: 'Atlas', role: 'Video Producer', type: 'ai' as const, initial: '🎬', color: 'from-red-500 to-rose-600', avatar: '/team/atlas_ai.png' },
+  { name: 'Luna', role: 'Content Writer', type: 'ai' as const, initial: '✍️', color: 'from-slate-300 to-gray-400', avatar: '/team/luna_ai.png' },
+  { name: 'Rex', role: 'Social Media Manager', type: 'ai' as const, initial: '📱', color: 'from-indigo-500 to-violet-600', avatar: '/team/rex_ai.png' },
 ];
 
 export default function AboutPage() {
