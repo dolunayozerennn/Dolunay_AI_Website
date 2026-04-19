@@ -26,3 +26,11 @@ node_modules_bad
 .npm-cache
 .git_bad
 .next
+.netlify
+.env*
+build
+dist
+out
+.DS_Store
+__pycache__/
+*.pyc

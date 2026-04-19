@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { useRef, useState } from 'react'
 import type { MouseEvent } from 'react'
+import Image from 'next/image'
 import { GraduationCap, Building, Target, Presentation, Briefcase, Zap, CheckCircle2 } from 'lucide-react'
 import { useTranslation } from '@/i18n/i18n'
 
@@ -48,19 +49,23 @@ function RefCard({ client, index }: { client: any; index: number }) {
 
       <div className="relative z-10">
         {/* Icon + Name */}
-        <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${client.gradient} flex items-center justify-center text-white shadow-lg mb-5 group-hover:scale-110 transition-transform duration-500 overflow-hidden`}>
+        <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${client.gradient} flex items-center justify-center text-white shadow-lg mb-5 group-hover:scale-110 transition-transform duration-500 overflow-hidden relative`}>
           {client.logo ? (
-            <img 
+            <Image 
               src={client.logo} 
-              alt={`${client.name} logo`} 
-              className="w-full h-full object-contain bg-white p-2"
+              alt={`${client.name} logo`}
+              fill
+              className="object-contain bg-white p-2"
             />
           ) : !imgError && client.logoDomain ? (
-            <img 
+            <Image 
               src={`https://www.google.com/s2/favicons?domain=${client.logoDomain}&sz=128`} 
               alt={`${client.name} logo`} 
+              width={128}
+              height={128}
               className="w-full h-full object-cover bg-white p-1.5"
               onError={() => setImgError(true)}
+              unoptimized
             />
           ) : (
             <GraduationCap className="w-6 h-6" />
@@ -269,7 +274,7 @@ export default function CorporateTrainingsPage() {
                viewport={{ once: true }}
                className="relative h-64 md:h-full rounded-3xl overflow-hidden border border-white/10 group"
              >
-               <img src="/images/egitimler/egitim1.webp" alt="Kurumsal Eğitim" loading="lazy" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
+               <Image src="/images/egitimler/egitim1.webp" alt="Kurumsal Eğitim" fill className="object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                  <span className="text-white font-medium">{t('corporateTrainings.galleryImg1')}</span>
                </div>
@@ -282,7 +287,7 @@ export default function CorporateTrainingsPage() {
                  transition={{ delay: 0.2 }}
                  className="relative h-64 rounded-3xl overflow-hidden border border-white/10 group"
                >
-                 <img src="/images/egitimler/egitim2.webp" alt="Kurumsal Eğitim" loading="lazy" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" style={{ objectPosition: 'center 65%' }} />
+                 <Image src="/images/egitimler/egitim2.webp" alt="Kurumsal Eğitim" fill className="object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" style={{ objectPosition: 'center 65%' }} />
                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                    <span className="text-white font-medium">{t('corporateTrainings.galleryImg2')}</span>
                  </div>
@@ -294,7 +299,7 @@ export default function CorporateTrainingsPage() {
                  transition={{ delay: 0.4 }}
                  className="relative h-64 rounded-3xl overflow-hidden border border-white/10 group bg-white/[0.02]"
                >
-                 <img src="/images/egitimler/egitim3.webp" alt="Kurumsal Eğitim" loading="lazy" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" style={{ objectPosition: 'center 75%' }} />
+                 <Image src="/images/egitimler/egitim3.webp" alt="Kurumsal Eğitim" fill className="object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" style={{ objectPosition: 'center 75%' }} />
                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                    <span className="text-white font-medium">{t('corporateTrainings.galleryImg3')}</span>
                  </div>

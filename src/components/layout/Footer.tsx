@@ -11,9 +11,9 @@ export function Footer() {
 
   const socialLinks = [
     { icon: <Linkedin className="w-5 h-5" />, href: "https://www.linkedin.com/in/dolunayozeren/", label: "LinkedIn" },
-    { icon: <Instagram className="w-5 h-5" />, href: "https://instagram.com/dolunay.ai", label: "Instagram" },
+    { icon: <Instagram className="w-5 h-5" />, href: "https://www.instagram.com/dolunay_ozeren/", label: "Instagram" },
     { icon: <Youtube className="w-5 h-5" />, href: "https://youtube.com/@dolunayozeren", label: "YouTube" },
-    { icon: <Twitter className="w-5 h-5" />, href: "https://twitter.com/dolunayozeren", label: "Twitter" },
+    { icon: <Twitter className="w-5 h-5" />, href: "https://x.com/dolunayozerenn", label: "X" },
     { icon: <Mail className="w-5 h-5" />, href: "mailto:dolunay@dolunay.ai", label: "Email" },
   ];
 

@@ -2,8 +2,10 @@ import type { Metadata } from 'next'
 import { DM_Sans, Space_Grotesk } from 'next/font/google'
 import { LanguageProvider } from '@/i18n/i18n'
 import { Navbar } from '@/components/layout/Navbar'
-import { Footer } from '@/components/layout/Footer'
+import dynamic from 'next/dynamic'
 import './globals.css'
+
+const Footer = dynamic(() => import('@/components/layout/Footer').then(mod => mod.Footer))
 
 const dmSans = DM_Sans({
   subsets: ['latin', 'latin-ext'],

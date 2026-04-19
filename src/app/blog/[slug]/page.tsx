@@ -57,8 +57,15 @@ const components = {
   // Custom MDX Components can be added here
   img: (props: any) => (
     <span className="block relative w-full mt-10 mb-10 overflow-hidden rounded-2xl border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.5)]">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img {...props} className="w-full h-auto object-cover m-0 rounded-2xl" alt={props.alt || ''} />
+      <Image 
+        {...props} 
+        width={1200}
+        height={675}
+        style={{ width: '100%', height: 'auto' }}
+        className="object-cover m-0 rounded-2xl" 
+        alt={props.alt || ''} 
+        unoptimized
+      />
     </span>
   ),
   a: (props: any) => (
@@ -108,6 +115,24 @@ export default async function BlogPost(
 
   return (
     <article className="min-h-screen bg-[#050508] pb-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Article',
+            headline: post.title,
+            image: post.coverImage ? [`https://dolunay.ai${post.coverImage}`] : [],
+            datePublished: post.date,
+            dateModified: post.date,
+            author: [{
+              '@type': 'Person',
+              name: 'Dolunay Özeren',
+              url: 'https://dolunay.ai/hakkimizda'
+            }]
+          })
+        }}
+      />
       {/* Blog Article Progress Bar Component (Optional for future) */}
       
       {/* Hero Header Section */}

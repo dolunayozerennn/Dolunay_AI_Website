@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { Search, Target, Settings, CheckCircle2, ArrowUpRight, Building2, GraduationCap } from 'lucide-react'
 import { useRef, useState } from 'react'
 import type { MouseEvent } from 'react'
+import Image from 'next/image'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 50, filter: 'blur(4px)' },
@@ -125,19 +126,23 @@ function RefCard({ client, index }: { client: typeof educationClients[0]; index:
         style={{ background: client.bgGlow }}
       />
       <div className="relative z-10">
-        <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${client.gradient} flex items-center justify-center text-white shadow-lg mb-5 group-hover:scale-110 transition-transform duration-500 overflow-hidden`}>
+        <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${client.gradient} flex items-center justify-center text-white shadow-lg mb-5 group-hover:scale-110 transition-transform duration-500 overflow-hidden relative`}>
           {client.logo ? (
-            <img 
+            <Image 
               src={client.logo} 
-              alt={`${client.name} logo`} 
-              className="w-full h-full object-contain bg-white p-2"
+              alt={`${client.name} logo`}
+              fill
+              className="object-contain bg-white p-2"
             />
           ) : !imgError && client.logoDomain ? (
-            <img 
+            <Image 
               src={`https://www.google.com/s2/favicons?domain=${client.logoDomain}&sz=128`} 
               alt={`${client.name} logo`} 
+              width={128}
+              height={128}
               className="w-full h-full object-cover bg-white p-1.5"
               onError={() => setImgError(true)}
+              unoptimized
             />
           ) : (
             <GraduationCap className="w-6 h-6" />
@@ -231,12 +236,13 @@ export function ServicesSection() {
               {[...serviceClients, ...serviceClients].map((client, i) => (
                 <div
                   key={`${client.name}-${i}`}
-                  className="flex-shrink-0 px-10 md:px-14 flex items-center justify-center"
+                  className="flex-shrink-0 px-10 md:px-14 flex items-center justify-center relative h-12 w-32"
                 >
-                  <img
+                  <Image
                     src={client.logo}
                     alt={client.name}
-                    className={`h-10 md:h-12 w-auto object-contain opacity-50 hover:opacity-100 transition-all duration-500 select-none ${client.invert ? 'invert' : ''}`}
+                    fill
+                    className={`object-contain opacity-50 hover:opacity-100 transition-all duration-500 select-none ${client.invert ? 'invert' : ''}`}
                   />
                 </div>
               ))}

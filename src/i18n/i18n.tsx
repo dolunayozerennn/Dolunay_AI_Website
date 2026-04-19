@@ -125,7 +125,7 @@ export function useTranslation() {
       }
     }
     return typeof value === 'string' ? value : key;
-  }, [language, translations]);
+  }, [translations]);
 
   return { t, language, setLanguage };
 }

@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef, useState } from 'react';
 import type { MouseEvent } from 'react';
+import Image from 'next/image';
 import {
   Instagram, Youtube, Facebook, Users, GraduationCap,
   Mail, ArrowUpRight, Eye, ExternalLink, Heart,
@@ -453,10 +454,13 @@ export default function CollaborationsPage() {
               </div>
             </div>
 
-            <img
+            <Image
               src="/portrait_hero_v4.webp"
               alt="Dolunay Özeren"
-              loading="lazy"
+              width={340}
+              height={340}
+              quality={90}
+              priority
               className="relative z-10 w-[340px] h-[340px] object-cover rounded-3xl border border-white/[0.08]"
               style={{ boxShadow: '0 40px 100px rgba(0,0,0,0.5), 0 0 60px rgba(124,58,237,0.1)' }}
             />

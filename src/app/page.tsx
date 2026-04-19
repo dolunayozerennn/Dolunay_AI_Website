@@ -1,5 +1,7 @@
+import dynamic from 'next/dynamic'
 import { HeroSectionElevate } from '@/components/sections/HeroSectionElevate'
-import { ProductsSection } from '@/components/sections/ProductsSection'
+
+const ProductsSection = dynamic(() => import('@/components/sections/ProductsSection').then(mod => mod.ProductsSection))
 
 export default function Home() {
   return (

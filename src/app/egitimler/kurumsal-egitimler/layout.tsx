@@ -1,14 +1,35 @@
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Kurumsal Eğitimler',
-  description: 'Şirketinizi yapay zeka çağına taşıyın. Uluslararası holdinglerden KOBİ\'lere kadar her ölçekte şirkete özel AI eğitimleri.',
+  title: 'Kurumsal Eğitimler | dolunay.ai',
+  description: 'Şirketiniz için sıfırdan yapay zeka entegrasyonu, verimlilik artışı ve departman bazlı uygulamalı kurumsal AI eğitimleri.',
   openGraph: {
-    title: 'Kurumsal Eğitimler | dolunay.ai',
-    description: 'Şirketinizi yapay zeka çağına taşıyın. Uluslararası holdinglerden KOBİ\'lere kadar her ölçekte şirkete özel AI eğitimleri.',
+    title: 'Kurumsal Yapay Zeka Eğitimleri | dolunay.ai',
+    description: 'Şirketiniz için sıfırdan yapay zeka entegrasyonu, verimlilik artışı ve departman bazlı uygulamalı kurumsal AI eğitimleri.',
+    url: 'https://dolunay.ai/egitimler/kurumsal-egitimler',
   }
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Course',
+            name: 'Kurumsal Yapay Zeka Uygulamalı Eğitimi',
+            description: 'Şirketler için uygulamalı prompt engineering, yöneticilere özel stratejik AI entegrasyonu ve otomasyon eğitimi.',
+            provider: {
+              '@type': 'Organization',
+              name: 'dolunay.ai',
+              sameAs: 'https://dolunay.ai'
+            }
+          })
+        }}
+      />
+      {children}
+    </>
+  )
 }

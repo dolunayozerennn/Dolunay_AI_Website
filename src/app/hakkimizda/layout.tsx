@@ -1,11 +1,12 @@
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Hakkımızda',
-  description: 'Dolunay.ai ekibi ile tanışın. İnsan ve yapay zeka entegrasyonuyla çalışan hibrid takımımız ve vizyonumuz.',
+  title: 'Hakkımda & Ekibimiz | dolunay.ai',
+  description: 'Dolunay Özeren kimdir? Antigravity yapay zeka takımı, otonom AI ajanlarımız ve ekibimizin arkasındaki vizyon.',
   openGraph: {
-    title: 'Hakkımızda | dolunay.ai',
-    description: 'Dolunay.ai ekibi ile tanışın. İnsan ve yapay zeka entegrasyonuyla çalışan hibrid takımımız ve vizyonumuz.',
+    title: 'Hakkımda & Ekibimiz | dolunay.ai',
+    description: 'Dolunay Özeren kimdir? Antigravity yapay zeka takımı, otonom AI ajanlarımız ve ekibimizin arkasındaki vizyon.',
+    url: 'https://dolunay.ai/hakkimizda',
   }
 }
 

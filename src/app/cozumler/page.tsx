@@ -57,7 +57,7 @@ export default function SolutionsPage() {
       title: t('solutions.readyItemTitle'),
       description: t('solutions.readyItemDesc'),
       features: [t('solutions.readyItemFeature1'), t('solutions.readyItemFeature2'), t('solutions.readyItemFeature3'), t('solutions.readyItemFeature4')],
-      href: '/cozumler',
+      href: '/cozumler/artifex-campus',
       accentColor: '#7c3aed',
       icon: <Sparkles className="w-6 h-6" />,
       external: false,

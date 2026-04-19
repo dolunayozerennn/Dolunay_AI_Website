@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { useRef } from 'react'
 import type { MouseEvent } from 'react'
+import Image from 'next/image'
 import { ArrowRight, ExternalLink } from 'lucide-react'
 import { useTranslation } from '@/i18n/i18n'
 import Link from 'next/link'
@@ -89,11 +90,12 @@ function ProductCard({ headline, description, tag, buttonLabel, href, external, 
       <div className="relative w-full aspect-square rounded-2xl overflow-hidden mt-auto bg-black/50 border border-white/5">
         <div className={`absolute inset-0 z-10 bg-gradient-to-t ${isPrimary ? 'from-[#581c87]/90 via-[#581c87]/20' : 'from-[#0f0f12]/90 via-[#0f0f12]/20'} to-transparent opacity-80`} />
         {imageSrc ? (
-          <img 
+          <Image 
             src={imageSrc} 
-            alt={headline} 
-            loading="lazy"
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+            alt={headline}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-105" 
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
