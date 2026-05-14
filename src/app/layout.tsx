@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { DM_Sans, Space_Grotesk } from 'next/font/google'
+import { Inter_Tight, JetBrains_Mono } from 'next/font/google'
 import { LanguageProvider } from '@/i18n/i18n'
 import { Navbar } from '@/components/layout/Navbar'
 import dynamic from 'next/dynamic'
@@ -7,16 +7,18 @@ import './globals.css'
 
 const Footer = dynamic(() => import('@/components/layout/Footer').then(mod => mod.Footer))
 
-const dmSans = DM_Sans({
+const interTight = Inter_Tight({
   subsets: ['latin', 'latin-ext'],
-  variable: '--font-dm-sans',
+  variable: '--font-inter-tight',
   display: 'swap',
+  weight: ['300', '400', '500', '600', '700', '800'],
 })
 
-const spaceGrotesk = Space_Grotesk({
+const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin', 'latin-ext'],
-  variable: '--font-space-grotesk',
+  variable: '--font-jetbrains-mono',
   display: 'swap',
+  weight: ['400', '500', '600'],
 })
 
 export const metadata: Metadata = {
@@ -73,11 +75,13 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="tr" className={`${dmSans.variable} ${spaceGrotesk.variable}`} suppressHydrationWarning>
+    <html lang="tr" className={`${interTight.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
       <head>
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <meta name="theme-color" content="#08090C" />
       </head>
-      <body className="min-h-screen bg-gray-950 text-white font-sans selection:bg-purple-500/30">
+      <body className="min-h-screen bg-[#08090C] text-[#F4F2EC] font-sans selection:bg-[#4F8BFF]/35">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

@@ -43,9 +43,9 @@ function ProductCard({ headline, description, tag, buttonLabel, href, external, 
   };
 
   const cardClasses = `group flex flex-col h-[520px] rounded-[2rem] p-5 overflow-hidden relative transition-all duration-500 hover:-translate-y-2 ${
-    isPrimary 
-      ? 'bg-gradient-to-br from-[#7e22ce] to-[#581c87] border-none shadow-[0_8px_30px_rgba(126,34,206,0.3)]' 
-      : 'bg-[#0f0f12] border border-white/10 hover:border-white/20 hover:shadow-[0_8px_30px_rgba(0,0,0,0.5)]'
+    isPrimary
+      ? 'bg-gradient-to-br from-[#2F6BE6] to-[#1E4DAA] border border-white/10 shadow-[0_8px_30px_rgba(79,139,255,0.32)]'
+      : 'bg-[#0E0F14] border border-white/[0.07] hover:border-[#4F8BFF]/40 hover:shadow-[0_8px_30px_rgba(0,0,0,0.5)]'
   }`;
 
   const content = (
@@ -67,11 +67,11 @@ function ProductCard({ headline, description, tag, buttonLabel, href, external, 
         >
           {tag}
         </div>
-        <div 
+        <div
           className={`w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 ${
-            isPrimary 
-              ? 'bg-white text-[#6b21a8] group-hover:scale-110 shadow-lg' 
-              : 'bg-white/5 text-white border border-white/10 group-hover:bg-white group-hover:text-black group-hover:scale-110'
+            isPrimary
+              ? 'bg-[#EDEAE3] text-[#08090C] group-hover:scale-110 shadow-lg'
+              : 'bg-white/5 text-white border border-white/10 group-hover:bg-[#4F8BFF] group-hover:text-[#08090C] group-hover:scale-110'
           }`}
         >
           {external ? <ExternalLink className="w-4 h-4" /> : <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />}
@@ -81,14 +81,14 @@ function ProductCard({ headline, description, tag, buttonLabel, href, external, 
       {/* Content */}
       <div className="relative z-10 flex flex-col mb-5">
         <h3 className="text-2xl font-bold text-white mb-3 leading-tight tracking-tight font-display">{headline}</h3>
-        <p className={`text-[15px] leading-relaxed line-clamp-3 ${isPrimary ? 'text-purple-100/90' : 'text-gray-400 group-hover:text-gray-300 transition-colors'}`}>
+        <p className={`text-[15px] leading-relaxed line-clamp-3 ${isPrimary ? 'text-blue-50/90' : 'text-gray-400 group-hover:text-gray-300 transition-colors'}`}>
           {description}
         </p>
       </div>
 
       {/* Image Container */}
       <div className="relative w-full aspect-square rounded-2xl overflow-hidden mt-auto bg-black/50 border border-white/5">
-        <div className={`absolute inset-0 z-10 bg-gradient-to-t ${isPrimary ? 'from-[#581c87]/90 via-[#581c87]/20' : 'from-[#0f0f12]/90 via-[#0f0f12]/20'} to-transparent opacity-80`} />
+        <div className={`absolute inset-0 z-10 bg-gradient-to-t ${isPrimary ? 'from-[#1E4DAA]/90 via-[#1E4DAA]/20' : 'from-[#0E0F14]/90 via-[#0E0F14]/20'} to-transparent opacity-80`} />
         {imageSrc ? (
           <Image 
             src={imageSrc} 
@@ -160,8 +160,8 @@ export function ProductsSection() {
       buttonLabel: t('products.card2Button'),
       href: '/cozumler#hizmetler',
       external: false,
-      accentColor: '#a855f7',
-      glowColor: 'rgba(168, 85, 247, 0.12)',
+      accentColor: '#4F8BFF',
+      glowColor: 'rgba(79, 139, 255, 0.22)',
       imageSrc: '/images/products/kurumsal_holding.webp',
       isPrimary: true,
     },
@@ -172,8 +172,8 @@ export function ProductsSection() {
       buttonLabel: t('products.card1Button'),
       href: '/cozumler/artifex-campus',
       external: false,
-      accentColor: '#7c3aed',
-      glowColor: 'rgba(124, 58, 237, 0.15)',
+      accentColor: '#7AA8FF',
+      glowColor: 'rgba(122, 168, 255, 0.18)',
       imageSrc: '/images/products/isletme_kobi_real2.webp',
       isPrimary: false,
     },
@@ -184,8 +184,8 @@ export function ProductsSection() {
       buttonLabel: t('products.card4Button'),
       href: '/isbirlikleri',
       external: false,
-      accentColor: '#ec4899',
-      glowColor: 'rgba(236, 72, 153, 0.12)',
+      accentColor: '#EDEAE3',
+      glowColor: 'rgba(237, 234, 227, 0.10)',
       imageSrc: '/images/products/marka_isbirligi.webp',
       isPrimary: false,
     },
@@ -196,8 +196,8 @@ export function ProductsSection() {
       buttonLabel: t('products.card3Button'),
       href: 'https://www.skool.com/yapay-zeka-factory/about?ref=044f39496d4f45fab11775bcefe4b7f4',
       external: true,
-      accentColor: '#00d4ff',
-      glowColor: 'rgba(0, 212, 255, 0.12)',
+      accentColor: '#4F8BFF',
+      glowColor: 'rgba(79, 139, 255, 0.22)',
       imageSrc: '/images/products/girisimci_real2.webp',
       isPrimary: false,
     },
@@ -205,8 +205,8 @@ export function ProductsSection() {
 
   return (
     <section id="products" className="py-24 relative">
-      <div className="section-divider max-w-5xl mx-auto mb-24" />
-      
+      <div className="halftone-divider max-w-5xl mx-auto mb-24" />
+
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
@@ -215,7 +215,8 @@ export function ProductsSection() {
           viewport={{ once: true, amount: 0.3 }}
           className="text-center max-w-3xl mx-auto mb-16"
         >
-          <motion.span variants={fadeUp} custom={0} className="inline-block text-electric-blue text-sm font-semibold tracking-[0.2em] uppercase mb-4">
+          <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 mono-label mb-4 text-[#4F8BFF]" style={{fontSize: '0.78rem'}}>
+            <span className="halftone-arc" aria-hidden />
             {t('products.sectionTag')}
           </motion.span>
           <motion.h2 variants={fadeUp} custom={1} className="text-4xl md:text-5xl font-bold mb-5 tracking-tight">

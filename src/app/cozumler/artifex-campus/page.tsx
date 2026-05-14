@@ -6,8 +6,8 @@ import Link from 'next/link'
 
 export default function ArtifexCampusPage() {
   return (
-    <div className="pt-32 pb-24 relative min-h-screen bg-[#050508] flex items-center justify-center">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-500/10 blur-[120px] rounded-full pointer-events-none" />
+    <div className="pt-32 pb-24 relative min-h-screen bg-[#08090C] flex items-center justify-center">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/10 blur-[120px] rounded-full pointer-events-none" />
       
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
         <motion.div
@@ -15,7 +15,7 @@ export default function ArtifexCampusPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <div className="w-16 h-16 rounded-2xl bg-[#7c3aed]/10 border border-[#7c3aed]/20 flex items-center justify-center text-[#7c3aed] mx-auto mb-6">
+          <div className="w-16 h-16 rounded-2xl bg-[#4F8BFF]/10 border border-[#4F8BFF]/20 flex items-center justify-center text-[#4F8BFF] mx-auto mb-6">
             <Sparkles className="w-8 h-8" />
           </div>
           
@@ -24,7 +24,7 @@ export default function ArtifexCampusPage() {
           </span>
 
           <h1 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight text-white">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-[#7c3aed]">Artifex Campus</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-[#4F8BFF]">Artifex Campus</span>
           </h1>
           
           <p className="text-gray-400 text-lg md:text-xl leading-relaxed mb-10 max-w-2xl mx-auto">
@@ -33,7 +33,7 @@ export default function ArtifexCampusPage() {
 
           <div className="flex flex-wrap items-center justify-center gap-3 mb-12">
             {['Hazır Kurulum', 'Anında Başlama', '7/24 Operasyon', 'Ölçeklenebilir'].map((feature) => (
-              <span key={feature} className="px-4 py-2 rounded-xl text-sm font-medium bg-[#7c3aed]/10 border border-[#7c3aed]/20 text-[#7c3aed]">
+              <span key={feature} className="px-4 py-2 rounded-xl text-sm font-medium bg-[#4F8BFF]/10 border border-[#4F8BFF]/20 text-[#4F8BFF]">
                 {feature}
               </span>
             ))}

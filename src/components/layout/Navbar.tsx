@@ -6,6 +6,7 @@ import { Menu, X, ChevronDown } from 'lucide-react'
 import { useTranslation } from '@/i18n/i18n'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export function Navbar() {
   const { t } = useTranslation();
@@ -67,14 +68,24 @@ export function Navbar() {
         isScrolled ? 'pt-3' : 'pt-6'
       } px-4 sm:px-6`}
     >
-      <div className="flex items-center justify-between w-full max-w-[1240px] bg-[#0c0c14]/40 backdrop-blur-xl border border-white/[0.08] rounded-full px-4 sm:px-5 py-2.5 shadow-[0_8px_32px_rgba(0,0,0,0.12)]">
-        
+      <div className="flex items-center justify-between w-full max-w-[1240px] bg-[#0E0F14]/55 backdrop-blur-xl border border-white/[0.06] rounded-full px-4 sm:px-5 py-2.5 shadow-[0_8px_32px_rgba(0,0,0,0.18)]">
+
         {/* Left Side: Logo + Links */}
         <div className="flex items-center gap-8 lg:gap-12">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group shrink-0 pl-2">
-            <span className="text-xl font-bold tracking-tight text-white">
-              dolunay<span className="text-gradient-accent">.ai</span>
+          {/* Logo — D11 Ash mark + wordmark */}
+          <Link href="/" className="flex items-center gap-2.5 group shrink-0 pl-1">
+            <span className="relative inline-flex h-8 w-8 items-center justify-center transition-transform duration-500 group-hover:rotate-[8deg]">
+              <Image
+                src="/brand/01-mark-light-transparent.svg"
+                alt=""
+                width={32}
+                height={32}
+                priority
+                className="h-8 w-8"
+              />
+            </span>
+            <span className="text-[1.05rem] font-semibold tracking-tight text-[#F4F2EC]">
+              dolunay<span className="text-[#4F8BFF]">.ai</span>
             </span>
           </Link>
           
@@ -104,7 +115,7 @@ export function Navbar() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 8, scale: 0.96 }}
                     transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                    className="absolute top-full left-0 mt-2 w-56 bg-[#0c0c14]/95 backdrop-blur-xl border border-white/[0.08] rounded-xl overflow-hidden shadow-2xl shadow-black/40"
+                    className="absolute top-full left-0 mt-2 w-56 bg-[#0E0F14]/95 backdrop-blur-xl border border-white/[0.08] rounded-xl overflow-hidden shadow-2xl shadow-black/40"
                   >
                     <Link
                       href="/cozumler/artifex-campus"
@@ -151,7 +162,7 @@ export function Navbar() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 8, scale: 0.96 }}
                     transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                    className="absolute top-full left-0 mt-2 w-64 bg-[#0c0c14]/95 backdrop-blur-xl border border-white/[0.08] rounded-xl overflow-hidden shadow-2xl shadow-black/40"
+                    className="absolute top-full left-0 mt-2 w-64 bg-[#0E0F14]/95 backdrop-blur-xl border border-white/[0.08] rounded-xl overflow-hidden shadow-2xl shadow-black/40"
                   >
                     <Link
                       href="/egitimler/ai-factory"
@@ -229,7 +240,7 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden absolute top-[calc(100%+12px)] w-[calc(100%-2rem)] max-w-sm mx-auto left-4 right-4 bg-[#0c0c14]/95 backdrop-blur-xl border border-white/[0.08] rounded-2xl p-4 shadow-2xl"
+            className="md:hidden absolute top-[calc(100%+12px)] w-[calc(100%-2rem)] max-w-sm mx-auto left-4 right-4 bg-[#0E0F14]/95 backdrop-blur-xl border border-white/[0.08] rounded-2xl p-4 shadow-2xl"
           >
             <div className="flex flex-col space-y-1">
               <div className="px-3 py-2 text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]">{t('nav.solutions')}</div>

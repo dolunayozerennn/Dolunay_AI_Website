@@ -12,8 +12,9 @@ export async function generateMetadata(
   props: { params: Promise<{ id: string }> }
 ): Promise<Metadata> {
   const params = await props.params
+  const video = videos.find((v) => v.id === params.id)
   return {
-    title: `Reklam ${params.id}`,
+    title: video?.label ?? `Reklam ${params.id}`,
     robots: { index: false, follow: false },
   }
 }
@@ -27,18 +28,13 @@ export default async function ReklamTekVideoPage(
 
   return (
     <div className="min-h-screen pt-24 pb-24 relative">
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-accent-purple/5 blur-[150px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-electric-blue/5 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#4F8BFF]/5 blur-[150px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#4F8BFF]/5 blur-[120px] rounded-full pointer-events-none" />
 
       <div className="max-w-xl mx-auto px-4 sm:px-6 relative z-10">
-        <div className="text-center mb-12">
-          <span className="inline-block text-electric-blue text-sm font-semibold tracking-[0.2em] uppercase mb-4">
-            Görüştüğümüz Reklam
-          </span>
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-white">
-            Hatırlatma
-          </h1>
-        </div>
+        <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white text-center mb-8">
+          {video.label}
+        </h1>
 
         <div className="mx-auto w-full max-w-sm">
           <video

@@ -91,7 +91,7 @@ export default function KVKKPolitikasiPage() {
           <h2 className="text-xl font-semibold text-white mt-8">9. İletişim</h2>
           <p>
             KVKK kapsamındaki haklarınızı kullanmak veya konuyla ilgili sorularınız için{' '}
-            <a href="mailto:dolunay@dolunay.ai" className="text-electric-blue hover:underline">
+            <a href="mailto:dolunay@dolunay.ai" className="text-[#4F8BFF] hover:underline">
               dolunay@dolunay.ai
             </a>{' '}
             adresinden bize ulaşabilirsiniz. Başvurularınız en geç 30 gün içinde yanıtlanacaktır.

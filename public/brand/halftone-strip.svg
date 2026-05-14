@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 12" width="480" height="12" preserveAspectRatio="none">
+  <!-- Halftone strip echoing D11 Ash mark — dots grow left→right (ash → moon lit side) -->
+  <circle cx="6" cy="6" r="0.6" fill="#F4F2EC"/>
+  <circle cx="22" cy="6" r="0.8" fill="#F4F2EC"/>
+  <circle cx="38" cy="6" r="1.0" fill="#F4F2EC"/>
+  <circle cx="54" cy="6" r="1.2" fill="#F4F2EC"/>
+  <circle cx="70" cy="6" r="1.4" fill="#F4F2EC"/>
+  <circle cx="86" cy="6" r="1.6" fill="#F4F2EC"/>
+  <circle cx="102" cy="6" r="1.8" fill="#F4F2EC"/>
+  <circle cx="118" cy="6" r="2.0" fill="#F4F2EC"/>
+  <circle cx="134" cy="6" r="2.2" fill="#F4F2EC"/>
+  <circle cx="150" cy="6" r="2.4" fill="#F4F2EC"/>
+  <circle cx="166" cy="6" r="2.6" fill="#F4F2EC"/>
+  <circle cx="182" cy="6" r="2.8" fill="#F4F2EC"/>
+  <circle cx="198" cy="6" r="3.0" fill="#F4F2EC"/>
+  <circle cx="214" cy="6" r="3.2" fill="#F4F2EC"/>
+  <circle cx="230" cy="6" r="3.4" fill="#F4F2EC"/>
+  <circle cx="246" cy="6" r="3.6" fill="#F4F2EC"/>
+  <circle cx="262" cy="6" r="3.8" fill="#F4F2EC"/>
+  <circle cx="278" cy="6" r="4.0" fill="#F4F2EC"/>
+  <circle cx="294" cy="6" r="4.2" fill="#F4F2EC"/>
+  <circle cx="310" cy="6" r="4.4" fill="#F4F2EC"/>
+  <circle cx="326" cy="6" r="4.4" fill="#4F8BFF"/>
+  <circle cx="342" cy="6" r="4.4" fill="#4F8BFF"/>
+  <circle cx="358" cy="6" r="4.4" fill="#4F8BFF"/>
+  <circle cx="374" cy="6" r="4.4" fill="#4F8BFF"/>
+  <circle cx="390" cy="6" r="4.4" fill="#4F8BFF"/>
+  <circle cx="406" cy="6" r="4.4" fill="#4F8BFF"/>
+  <circle cx="422" cy="6" r="4.4" fill="#4F8BFF"/>
+  <circle cx="438" cy="6" r="4.4" fill="#4F8BFF"/>
+  <circle cx="454" cy="6" r="4.4" fill="#4F8BFF"/>
+  <circle cx="470" cy="6" r="4.4" fill="#4F8BFF"/>
+</svg>

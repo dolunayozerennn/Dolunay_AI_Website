@@ -68,7 +68,7 @@ export function LanguageSwitcher({ mobile = false }: { mobile?: boolean }) {
               onClick={() => handleLanguageSelect(lang.code)}
               className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-all ${
                 (mounted.current ? language === lang.code : lang.code === 'tr')
-                  ? 'bg-electric-blue/10 text-electric-blue border border-electric-blue/20'
+                  ? 'bg-[#4F8BFF]/10 text-[#4F8BFF] border border-[#4F8BFF]/20'
                   : 'text-gray-400 hover:text-white hover:bg-white/[0.04] border border-transparent'
               }`}
             >
@@ -103,7 +103,7 @@ export function LanguageSwitcher({ mobile = false }: { mobile?: boolean }) {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full mt-2 w-48 bg-[#0c0c14]/95 backdrop-blur-xl border border-white/[0.08] rounded-xl shadow-2xl py-2 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+        <div className="absolute right-0 top-full mt-2 w-48 bg-[#0E0F14]/95 backdrop-blur-xl border border-white/[0.08] rounded-xl shadow-2xl py-2 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
           {languages.map((lang) => (
             <button
               key={lang.code}
@@ -117,7 +117,7 @@ export function LanguageSwitcher({ mobile = false }: { mobile?: boolean }) {
                 </span>
               </div>
               {(mounted.current ? language === lang.code : lang.code === 'tr') && (
-                <Check className="w-4 h-4 text-electric-blue" />
+                <Check className="w-4 h-4 text-[#4F8BFF]" />
               )}
             </button>
           ))}

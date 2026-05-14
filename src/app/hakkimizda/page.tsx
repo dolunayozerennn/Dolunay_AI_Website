@@ -24,19 +24,19 @@ const scaleIn = {
 };
 
 const teamMembers = [
-  { name: 'Ceren', role: 'Partnership Manager', type: 'human' as const, initial: 'C', color: 'from-pink-500 to-rose-600', avatar: '/images/team/ceren.webp' },
-  { name: 'Sarper', role: 'Social Media Ads Manager', type: 'human' as const, initial: 'S', color: 'from-blue-500 to-indigo-600', avatar: '/images/team/sarper.webp' },
-  { name: 'Ece', role: 'Sales Specialist', type: 'human' as const, initial: 'E', color: 'from-purple-500 to-violet-600', avatar: '/images/team/ece.webp' },
-  { name: 'Berke', role: 'Video Editor', type: 'human' as const, initial: 'B', color: 'from-orange-500 to-amber-600', avatar: '/images/team/berke.webp' },
-  { name: 'Savaş', role: 'B2B Operations Lead', type: 'human' as const, initial: 'S', color: 'from-teal-500 to-emerald-600', avatar: '/images/team/savas.webp' },
-  { name: 'Okan', role: 'B2B Automation Lead', type: 'human' as const, initial: 'O', color: 'from-cyan-500 to-blue-600', avatar: '/images/team/okan.webp' },
-  { name: 'Bobby', role: 'Designer', type: 'ai' as const, initial: '🎨', color: 'from-pink-400 to-purple-500', avatar: '/team/bobby_ai.webp' },
-  { name: 'Gipsy', role: 'Web Site Developer', type: 'ai' as const, initial: '💻', color: 'from-cyan-400 to-blue-500', avatar: '/team/gipsy_ai.webp' },
-  { name: 'Daisy', role: 'Customer Support', type: 'ai' as const, initial: '💬', color: 'from-green-400 to-emerald-500', avatar: '/team/daisy_ai.webp' },
-  { name: 'Joshua', role: 'Lead Generation', type: 'ai' as const, initial: '🎯', color: 'from-amber-400 to-orange-500', avatar: '/team/joshua_ai.webp' },
-  { name: 'Atlas', role: 'Video Producer', type: 'ai' as const, initial: '🎬', color: 'from-red-500 to-rose-600', avatar: '/team/atlas_ai.png' },
+  { name: 'Ceren', role: 'Partnership Manager', type: 'human' as const, initial: 'C', color: 'from-blue-500 to-stone-600', avatar: '/images/team/ceren.webp' },
+  { name: 'Sarper', role: 'Social Media Ads Manager', type: 'human' as const, initial: 'S', color: 'from-blue-500 to-blue-600', avatar: '/images/team/sarper.webp' },
+  { name: 'Ece', role: 'Sales Specialist', type: 'human' as const, initial: 'E', color: 'from-blue-500 to-blue-600', avatar: '/images/team/ece.webp' },
+  { name: 'Berke', role: 'Video Editor', type: 'human' as const, initial: 'B', color: 'from-stone-500 to-stone-600', avatar: '/images/team/berke.webp' },
+  { name: 'Savaş', role: 'B2B Operations Lead', type: 'human' as const, initial: 'S', color: 'from-blue-500 to-blue-600', avatar: '/images/team/savas.webp' },
+  { name: 'Okan', role: 'B2B Automation Lead', type: 'human' as const, initial: 'O', color: 'from-blue-500 to-blue-600', avatar: '/images/team/okan.webp' },
+  { name: 'Bobby', role: 'Designer', type: 'ai' as const, initial: '🎨', color: 'from-blue-400 to-blue-500', avatar: '/team/bobby_ai.webp' },
+  { name: 'Gipsy', role: 'Web Site Developer', type: 'ai' as const, initial: '💻', color: 'from-blue-400 to-blue-500', avatar: '/team/gipsy_ai.webp' },
+  { name: 'Daisy', role: 'Customer Support', type: 'ai' as const, initial: '💬', color: 'from-green-400 to-blue-500', avatar: '/team/daisy_ai.webp' },
+  { name: 'Joshua', role: 'Lead Generation', type: 'ai' as const, initial: '🎯', color: 'from-stone-400 to-stone-500', avatar: '/team/joshua_ai.webp' },
+  { name: 'Atlas', role: 'Video Producer', type: 'ai' as const, initial: '🎬', color: 'from-stone-500 to-stone-600', avatar: '/team/atlas_ai.png' },
   { name: 'Luna', role: 'Content Writer', type: 'ai' as const, initial: '✍️', color: 'from-slate-300 to-gray-400', avatar: '/team/luna_ai.png' },
-  { name: 'Rex', role: 'Social Media Manager', type: 'ai' as const, initial: '📱', color: 'from-indigo-500 to-violet-600', avatar: '/team/rex_ai.png' },
+  { name: 'Rex', role: 'Social Media Manager', type: 'ai' as const, initial: '📱', color: 'from-blue-500 to-blue-600', avatar: '/team/rex_ai.png' },
 ];
 
 export default function AboutPage() {
@@ -46,8 +46,8 @@ export default function AboutPage() {
       <section className="py-12 relative" id="about">
         
         {/* Background Elements */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-accent-purple/5 blur-[150px] rounded-full pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-electric-blue/5 blur-[120px] rounded-full pointer-events-none" />
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#4F8BFF]/5 blur-[150px] rounded-full pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#4F8BFF]/5 blur-[120px] rounded-full pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
@@ -57,9 +57,7 @@ export default function AboutPage() {
             viewport={{ once: true, amount: 0.3 }}
             className="text-center max-w-3xl mx-auto mb-16"
           >
-            <motion.span variants={fadeUp} custom={0} className="inline-block text-electric-blue text-sm font-semibold tracking-[0.2em] uppercase mb-4">
-              {t('about.sectionTag')}
-            </motion.span>
+            <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 text-[#4F8BFF] text-sm font-semibold tracking-[0.2em] uppercase mb-4"><span className="halftone-arc" aria-hidden />{t('about.sectionTag')}</motion.span>
             <motion.h2 variants={fadeUp} custom={1} className="text-3xl md:text-5xl font-bold mb-5 tracking-tight">
               {t('about.sectionTitle')}{' '}
               <span className="text-gradient-accent">{t('about.sectionTitleHighlight')}</span>
@@ -83,7 +81,7 @@ export default function AboutPage() {
                 className="bento-card !rounded-3xl !p-5 text-center group relative overflow-hidden bg-white/5 border border-white/5 backdrop-blur-sm"
               >
                 {member.type === 'ai' && (
-                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
+                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-blue-500/50 to-transparent" />
                 )}
 
                 <div className={`w-14 h-14 rounded-2xl ${
@@ -103,7 +101,7 @@ export default function AboutPage() {
 
                 <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-medium ${
                   member.type === 'ai' 
-                    ? 'bg-cyan-500/10 border border-cyan-500/20 text-cyan-400'
+                    ? 'bg-blue-500/10 border border-blue-500/20 text-blue-400'
                     : 'bg-blue-500/10 border border-blue-500/20 text-blue-400'
                 }`}>
                   {member.type === 'ai' ? <Bot className="w-2.5 h-2.5" /> : <User className="w-2.5 h-2.5" />}
