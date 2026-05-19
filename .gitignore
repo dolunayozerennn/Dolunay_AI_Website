@@ -34,3 +34,6 @@ out
 .DS_Store
 __pycache__/
 *.pyc
+
+# Portrait generation alternatives (large, not for production)
+public/portrait_alternatives/
