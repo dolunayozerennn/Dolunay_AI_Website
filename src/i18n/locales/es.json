@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "dolunay.ai — Formador & Constructor de IA",
+    "title": "dolunay.ai · Formador & Constructor de IA",
     "description": "Formador y constructor de IA. Soluciones de automatización con IA para empresas, comunidad AI Factory para emprendedores."
   },
   "nav": {
@@ -22,6 +22,12 @@
     "description": "Formador y constructor de IA. Creando soluciones de automatización con IA para empresas y enseñando a emprendedores cómo convertir la IA en un modelo de negocio.",
     "rights": "Todos los derechos reservados."
   },
+  "cookie": {
+    "aria": "Aviso de cookies",
+    "body": "Este sitio utiliza cookies funcionales para recordar tu preferencia de idioma. Para conocer tus derechos KVKK:",
+    "link": "Lee nuestra política de privacidad",
+    "accept": "Aceptar y continuar"
+  },
   "hero": {
     "titleLine1": "¿Inteligencia artificial?",
     "titleHighlight": "Dolunay.",
@@ -31,7 +37,9 @@
     "stat2Title": "1.000+ miembros · 10+ historias de éxito",
     "stat2Desc": "Comunidad de emprendedores que generan ingresos con IA.",
     "stat3Title": "10+ clientes corporativos · 50+ colaboraciones de marca",
-    "stat3Desc": "Automatización IA personalizada para empresas y alianzas globales con marcas."
+    "stat3Desc": "Automatización IA personalizada para empresas y alianzas globales con marcas.",
+    "ctaPrimary": "Únete a AI Factory",
+    "ctaSecondary": "Consultoría corporativa"
   },
   "products": {
     "sectionTag": "La Solución Adecuada para Ti",

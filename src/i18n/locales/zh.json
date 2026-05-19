@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "dolunay.ai — 人工智能培训师与构建者",
+    "title": "dolunay.ai · 人工智能培训师与构建者",
     "description": "人工智能培训师与构建者。为企业提供AI自动化解决方案，为创业者提供AI Factory社区。"
   },
   "nav": {
@@ -22,6 +22,12 @@
     "description": "人工智能培训师与构建者。为企业创建AI自动化解决方案，教授创业者如何将AI转化为商业模式。",
     "rights": "保留所有权利。"
   },
+  "cookie": {
+    "aria": "Cookie 通知",
+    "body": "本站使用功能性 Cookie 来记住您的语言偏好。要查看您的 KVKK 权利：",
+    "link": "阅读我们的隐私政策",
+    "accept": "好的，继续"
+  },
   "hero": {
     "titleLine1": "人工智能？",
     "titleHighlight": "Dolunay.",
@@ -31,7 +37,9 @@
     "stat2Title": "1,000+成员 · 10+成功案例",
     "stat2Desc": "用AI赚钱的创业者社区。",
     "stat3Title": "10+企业客户 · 50+品牌合作",
-    "stat3Desc": "企业定制AI自动化和全球品牌合作伙伴关系。"
+    "stat3Desc": "企业定制AI自动化和全球品牌合作伙伴关系。",
+    "ctaPrimary": "加入 AI Factory",
+    "ctaSecondary": "企业咨询"
   },
   "products": {
     "sectionTag": "适合您的解决方案",

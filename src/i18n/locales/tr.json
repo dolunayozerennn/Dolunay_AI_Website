@@ -22,6 +22,12 @@
     "description": "Yapay zeka eğitmeni ve builder. İşletmeler için AI otomasyon çözümleri üretiyor, girişimcilere yapay zekayı iş modeline dönüştürmeyi öğretiyorum.",
     "rights": "Tüm hakları saklıdır."
   },
+  "cookie": {
+    "aria": "Çerez bilgilendirme",
+    "body": "Sitemiz dil tercihini hatırlamak için işlevsel çerez kullanır. KVKK kapsamında haklarınızı görmek için:",
+    "link": "KVKK politikamızı oku",
+    "accept": "Tamam, devam et"
+  },
   "hero": {
     "titleLine1": "Yapay zeka?",
     "titleHighlight": "Dolunay.",
@@ -31,7 +37,9 @@
     "stat2Title": "1.000+ üye · 10+ başarı hikayesi",
     "stat2Desc": "Yapay zekayla para kazanan girişimciler topluluğu.",
     "stat3Title": "10+ kurumsal müşteri · 50+ marka iş birliği",
-    "stat3Desc": "Şirketlere özel AI otomasyon ve global marka partnerlikleri."
+    "stat3Desc": "Şirketlere özel AI otomasyon ve global marka partnerlikleri.",
+    "ctaPrimary": "AI Factory'ye katıl",
+    "ctaSecondary": "Kurumsal danışmanlık"
   },
   "products": {
     "sectionTag": "Size Uygun Çözüm",

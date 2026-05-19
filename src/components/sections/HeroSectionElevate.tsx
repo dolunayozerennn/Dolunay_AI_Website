@@ -73,9 +73,28 @@ export function HeroSectionElevate({ bgImage }: { bgImage: string }) {
           </Reveal>
 
           <Reveal delay={0.25}>
-            <p className="text-[#C9CCD4] text-lg sm:text-xl font-light leading-relaxed mb-10 max-w-lg">
+            <p className="text-[#C9CCD4] text-lg sm:text-xl font-light leading-relaxed mb-8 max-w-lg">
               {t('hero.subtitle')}
             </p>
+          </Reveal>
+
+          <Reveal delay={0.32}>
+            <div className="flex flex-col sm:flex-row gap-3 mb-10">
+              <a
+                href="https://www.skool.com/yapay-zeka-factory/about?ref=044f39496d4f45fab11775bcefe4b7f4"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center px-7 py-3.5 rounded-full bg-[#4F8BFF] text-white text-sm font-semibold hover:bg-[#3a73e6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4F8BFF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#08090C] transition-colors"
+              >
+                {t('hero.ctaPrimary')}
+              </a>
+              <a
+                href="mailto:dolunay@dolunay.ai?subject=Kurumsal%20dan%C4%B1%C5%9Fmanl%C4%B1k%20talebi&body=Merhaba%2C%20kurumumuz%20i%C3%A7in%20yapay%20zeka%20dan%C4%B1%C5%9Fmanl%C4%B1%C4%9F%C4%B1%20hakk%C4%B1nda%20konu%C5%9Fmak%20istiyorum."
+                className="inline-flex items-center justify-center px-7 py-3.5 rounded-full border border-white/20 bg-white/5 text-white text-sm font-semibold hover:bg-white/10 hover:border-white/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 transition-colors"
+              >
+                {t('hero.ctaSecondary')}
+              </a>
+            </div>
           </Reveal>
 
           <Reveal delay={0.4}>
@@ -86,7 +105,7 @@ export function HeroSectionElevate({ bgImage }: { bgImage: string }) {
                 { code: '03', title: t('hero.stat3Title'), desc: t('hero.stat3Desc') },
               ].map((stat) => (
                 <div key={stat.code} className="bg-white/[0.04] backdrop-blur-sm border border-white/10 p-5 rounded-xl h-full flex flex-col hover:border-[#4F8BFF]/30 transition-colors duration-500">
-                  <span className="font-mono text-[10px] tracking-[0.2em] text-[#4F8BFF]/80 mb-3">— {stat.code}</span>
+                  <span className="font-mono text-[10px] tracking-[0.2em] text-[#4F8BFF]/80 mb-3">{stat.code}</span>
                   <p className="text-[13px] lg:text-sm text-[#F4F2EC] font-semibold mb-2 tracking-tight">{stat.title}</p>
                   <div className="text-xs text-[#8A8E99] leading-relaxed">{stat.desc}</div>
                 </div>

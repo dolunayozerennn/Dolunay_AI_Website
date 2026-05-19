@@ -113,7 +113,7 @@ const platforms = [
   {
     name: 'Instagram',
     handle: '@dolunayozeren',
-    followers: '200.000+',
+    followers: '250.000+',
     icon: <Instagram className="w-6 h-6" />,
     gradient: 'from-blue-500 to-blue-600',
     bgGlow: 'rgba(237, 234, 227, 0.15)',

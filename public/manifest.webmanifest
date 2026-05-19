@@ -1,0 +1,32 @@
+{
+  "name": "dolunay.ai · Yapay Zeka Eğitmen & Builder",
+  "short_name": "dolunay.ai",
+  "description": "Yapay zeka eğitmeni ve builder. İşletmeler için AI otomasyon çözümleri, girişimciler için AI Factory topluluğu.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#08090C",
+  "theme_color": "#08090C",
+  "lang": "tr",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/og-image.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

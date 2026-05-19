@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "dolunay.ai — AI Trainer & Builder",
+    "title": "dolunay.ai · AI Trainer & Builder",
     "description": "AI trainer & builder. AI automation solutions for businesses, AI Factory community for entrepreneurs."
   },
   "nav": {
@@ -22,6 +22,12 @@
     "description": "AI trainer and builder. Creating AI automation solutions for businesses and teaching entrepreneurs how to turn AI into a business model.",
     "rights": "All rights reserved."
   },
+  "cookie": {
+    "aria": "Cookie notice",
+    "body": "This site uses functional cookies to remember your language preference. To view your KVKK rights:",
+    "link": "Read our privacy policy",
+    "accept": "OK, continue"
+  },
   "hero": {
     "titleLine1": "Artificial intelligence?",
     "titleHighlight": "Dolunay.",
@@ -31,7 +37,9 @@
     "stat2Title": "1,000+ members · 10+ success stories",
     "stat2Desc": "A community of entrepreneurs earning with AI.",
     "stat3Title": "10+ enterprise clients · 50+ brand collaborations",
-    "stat3Desc": "Custom AI automation for companies and global brand partnerships."
+    "stat3Desc": "Custom AI automation for companies and global brand partnerships.",
+    "ctaPrimary": "Join AI Factory",
+    "ctaSecondary": "Enterprise consulting"
   },
   "products": {
     "sectionTag": "Right Solution for You",

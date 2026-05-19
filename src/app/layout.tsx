@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic'
 import './globals.css'
 
 const Footer = dynamic(() => import('@/components/layout/Footer').then(mod => mod.Footer))
+const CookieBanner = dynamic(() => import('@/components/CookieBanner').then(mod => mod.CookieBanner))
 
 const interTight = Inter_Tight({
   subsets: ['latin', 'latin-ext'],
@@ -24,7 +25,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL('https://dolunay.ai'),
   title: {
-    default: 'dolunay.ai — Yapay Zeka Eğitmen & Builder',
+    default: 'dolunay.ai · Yapay Zeka Eğitmen & Builder',
     template: '%s | dolunay.ai',
   },
   description: 'Yapay zeka eğitmeni & builder. İşletmeler için AI otomasyon çözümleri, girişimciler için AI Factory topluluğu.',
@@ -36,20 +37,20 @@ export const metadata: Metadata = {
     locale: 'tr_TR',
     url: 'https://dolunay.ai',
     siteName: 'dolunay.ai',
-    title: 'dolunay.ai — Yapay Zeka Eğitmen & Builder',
+    title: 'dolunay.ai · Yapay Zeka Eğitmen & Builder',
     description: 'Yapay zeka eğitmeni & builder. İşletmeler için AI otomasyon çözümleri, girişimciler için AI Factory topluluğu.',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'dolunay.ai — Yapay Zeka Eğitmen & Builder',
+        alt: 'dolunay.ai · Yapay Zeka Eğitmen & Builder',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'dolunay.ai — Yapay Zeka Eğitmen & Builder',
+    title: 'dolunay.ai · Yapay Zeka Eğitmen & Builder',
     description: 'Yapay zeka eğitmeni & builder. İşletmeler için AI otomasyon çözümleri.',
     images: ['/og-image.png'],
   },
@@ -79,6 +80,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/manifest.webmanifest" />
         <meta name="theme-color" content="#08090C" />
       </head>
       <body className="min-h-screen bg-[#08090C] text-[#F4F2EC] font-sans selection:bg-[#4F8BFF]/35">
@@ -111,6 +113,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          <CookieBanner />
         </LanguageProvider>
       </body>
     </html>
