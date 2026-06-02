@@ -111,11 +111,11 @@ export default function KurumsalPaketlerPage() {
               <div className="relative z-10 flex flex-col h-full">
                 <h2 className="text-2xl font-bold text-white mb-4">{p.ad}</h2>
 
-                <div className="flex items-baseline gap-2 mb-6">
-                  <span className="text-4xl md:text-5xl font-bold text-gradient-accent">
+                <div className="flex items-baseline gap-1.5 mb-6">
+                  <span className="text-xl font-semibold text-white/85">
                     ₺{p.fiyat}
                   </span>
-                  <span className="text-gray-500 text-sm font-medium">+ KDV</span>
+                  <span className="text-gray-500 text-xs">+ KDV</span>
                 </div>
 
                 <div className="space-y-2.5 mb-6 text-sm">
