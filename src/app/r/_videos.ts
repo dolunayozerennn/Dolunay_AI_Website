@@ -5,7 +5,7 @@ export type ReklamVideo = {
 }
 
 export const videos: ReklamVideo[] = [
-  { id: '1', src: '/videos/r1.mp4', label: 'Reklam 1' },
-  { id: '2', src: '/videos/r2.mp4', label: 'Reklam 2' },
-  { id: '3', src: '/videos/r3.mp4', label: 'Reklam 3' },
+  { id: 'ai-donusum', src: '/videos/r1.mp4', label: 'AI Dönüşümünüzü Biz Yapalım' },
+  { id: 'musteri-cevap', src: '/videos/r2.mp4', label: 'Müşterilerinize Cevap Yazmayı Bırakın' },
+  { id: 'telefon-ai', src: '/videos/r3.mp4', label: 'Telefonlarınıza Yapay Zeka Baksın' },
 ]

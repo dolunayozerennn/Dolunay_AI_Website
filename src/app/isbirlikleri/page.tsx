@@ -115,9 +115,9 @@ const platforms = [
     handle: '@dolunayozeren',
     followers: '200.000+',
     icon: <Instagram className="w-6 h-6" />,
-    gradient: 'from-pink-500 to-purple-600',
-    bgGlow: 'rgba(236, 72, 153, 0.15)',
-    textColor: 'text-pink-400',
+    gradient: 'from-blue-500 to-blue-600',
+    bgGlow: 'rgba(237, 234, 227, 0.15)',
+    textColor: 'text-blue-400',
     href: 'https://www.instagram.com/dolunay_ozeren/',
     metric: 'Takipçi',
     engagementLabel: 'Erişim / Post',
@@ -128,9 +128,9 @@ const platforms = [
     handle: '@dolunayozeren',
     followers: '37.000+',
     icon: <TikTokIcon className="w-6 h-6" />,
-    gradient: 'from-cyan-400 to-blue-600',
-    bgGlow: 'rgba(0, 212, 255, 0.15)',
-    textColor: 'text-cyan-400',
+    gradient: 'from-blue-400 to-blue-600',
+    bgGlow: 'rgba(79, 139, 255, 0.15)',
+    textColor: 'text-blue-400',
     href: 'https://tiktok.com/@dolunayozeren',
     metric: 'Takipçi',
     engagementLabel: 'Ort. İzlenme',
@@ -141,9 +141,9 @@ const platforms = [
     handle: '@dolunayozeren',
     followers: '43.000+',
     icon: <Youtube className="w-6 h-6" />,
-    gradient: 'from-red-500 to-orange-600',
+    gradient: 'from-stone-500 to-stone-600',
     bgGlow: 'rgba(239, 68, 68, 0.15)',
-    textColor: 'text-red-400',
+    textColor: 'text-stone-400',
     href: 'https://youtube.com/@dolunayozeren',
     metric: 'Abone',
     engagementLabel: 'Ort. İzlenme',
@@ -167,9 +167,9 @@ const platforms = [
     handle: 'Dolunay Özeren',
     followers: '45.000+',
     icon: <GraduationCap className="w-6 h-6" />,
-    gradient: 'from-violet-500 to-purple-700',
+    gradient: 'from-blue-500 to-blue-700',
     bgGlow: 'rgba(139, 92, 246, 0.15)',
-    textColor: 'text-violet-400',
+    textColor: 'text-blue-400',
     href: 'https://www.udemy.com/course/ai-yapay-zeka-uzmanligi-chatgpt-midjourney-dalle-ve-fazlasi/?referralCode=906FDE49207D6106DCBF',
     metric: 'Öğrenci',
     engagementLabel: 'Eğitmen Puanı',
@@ -180,9 +180,9 @@ const platforms = [
     handle: 'AI Factory',
     followers: '500+',
     icon: <SkoolIcon className="w-6 h-6" />,
-    gradient: 'from-emerald-400 to-teal-600',
+    gradient: 'from-blue-400 to-blue-600',
     bgGlow: 'rgba(52, 211, 153, 0.15)',
-    textColor: 'text-emerald-400',
+    textColor: 'text-blue-400',
     href: 'https://www.skool.com/yapay-zeka-factory/about?ref=044f39496d4f45fab11775bcefe4b7f4',
     metric: 'Üye',
     engagementLabel: 'Topluluk',
@@ -192,18 +192,18 @@ const platforms = [
 
 // ─── Highlight Stats ────────────────────────────────────────────────────────────
 const highlightStats = [
-  { icon: <Eye className="w-5 h-5" />, value: 10, suffix: 'M+', label: 'Aylık Ort. İzlenme', color: 'from-cyan-500 to-blue-600' },
-  { icon: <Heart className="w-5 h-5" />, value: 300, suffix: '.000+', label: 'Aylık Etkileşim', color: 'from-pink-500 to-rose-600' },
-  { icon: <Users className="w-5 h-5" />, value: 300, suffix: '.000+', label: 'Toplam Takipçi', color: 'from-violet-500 to-purple-600' },
-  { icon: <Activity className="w-5 h-5" />, value: 100, suffix: 'M+', label: 'Toplam İzlenme', color: 'from-amber-400 to-orange-500' },
+  { icon: <Eye className="w-5 h-5" />, value: 10, suffix: 'M+', label: 'Aylık Ort. İzlenme', color: 'from-blue-500 to-blue-600' },
+  { icon: <Heart className="w-5 h-5" />, value: 300, suffix: '.000+', label: 'Aylık Etkileşim', color: 'from-blue-500 to-stone-600' },
+  { icon: <Users className="w-5 h-5" />, value: 300, suffix: '.000+', label: 'Toplam Takipçi', color: 'from-blue-500 to-blue-600' },
+  { icon: <Activity className="w-5 h-5" />, value: 100, suffix: 'M+', label: 'Toplam İzlenme', color: 'from-stone-400 to-stone-500' },
 ];
 
 // ─── Demographics Data ─────────────────────────────────────────────────────────
 const ageData = [
   { label: '18-24', value: 31.1, color: 'bg-blue-500' },
-  { label: '25-34', value: 41.2, color: 'bg-purple-500' },
-  { label: '35-44', value: 14.4, color: 'bg-pink-500' },
-  { label: '45-54', value: 5.5, color: 'bg-orange-500' },
+  { label: '25-34', value: 41.2, color: 'bg-blue-500' },
+  { label: '35-44', value: 14.4, color: 'bg-blue-500' },
+  { label: '45-54', value: 5.5, color: 'bg-stone-500' },
 ];
 
 const countryData = [
@@ -214,12 +214,12 @@ const countryData = [
 ];
 
 const virals = [
-  { brand: 'Nim AI', views: '9.5M', type: 'Organik + Paid', href: 'https://www.instagram.com/reel/DKtuJ3cK-Yr/', videoUrl: '/videos/reel1.mp4', gradient: 'from-violet-600 via-purple-500 to-fuchsia-500', iconBg: 'bg-violet-500/30' },
-  { brand: 'Emergent AI', views: '3.8M', type: 'Organik', href: 'https://www.instagram.com/reel/DOnm-q0DHiq/', videoUrl: '/videos/reel2.mp4', gradient: 'from-cyan-500 via-blue-600 to-indigo-600', iconBg: 'bg-cyan-500/30' },
-  { brand: 'Aithor', views: '2.0M', type: 'Organik', href: 'https://www.instagram.com/reel/DKHLswaK4Tj/', videoUrl: '/videos/reel3.mp4', gradient: 'from-emerald-500 via-teal-500 to-cyan-500', iconBg: 'bg-emerald-500/30' },
-  { brand: 'Creatify', views: '1.7M', type: 'Organik + Paid', href: 'https://www.instagram.com/reel/DJoR2pJqpHt/', videoUrl: '/videos/reel4.mp4', gradient: 'from-orange-500 via-rose-500 to-pink-600', iconBg: 'bg-orange-500/30' },
-  { brand: 'Creati', views: '1.4M', type: 'Organik + Paid', href: 'https://www.instagram.com/reel/DNNcKWwq--T/', videoUrl: '/videos/reel5.mp4', gradient: 'from-pink-500 via-purple-600 to-blue-600', iconBg: 'bg-pink-500/30' },
-  { brand: 'Kimi AI', views: '2.0M', type: 'Organik', href: 'https://www.instagram.com/reel/DUXxKHVCgW6/', videoUrl: '/videos/reel6.mp4', gradient: 'from-amber-500 via-orange-500 to-red-500', iconBg: 'bg-amber-500/30' },
+  { brand: 'Nim AI', views: '9.5M', type: 'Organik + Paid', href: 'https://www.instagram.com/reel/DKtuJ3cK-Yr/', videoUrl: '/videos/reel1.mp4', gradient: 'from-blue-600 via-blue-500 to-blue-500', iconBg: 'bg-blue-500/30' },
+  { brand: 'Emergent AI', views: '3.8M', type: 'Organik', href: 'https://www.instagram.com/reel/DOnm-q0DHiq/', videoUrl: '/videos/reel2.mp4', gradient: 'from-blue-500 via-blue-600 to-blue-600', iconBg: 'bg-blue-500/30' },
+  { brand: 'Aithor', views: '2.0M', type: 'Organik', href: 'https://www.instagram.com/reel/DKHLswaK4Tj/', videoUrl: '/videos/reel3.mp4', gradient: 'from-blue-500 via-blue-500 to-blue-500', iconBg: 'bg-blue-500/30' },
+  { brand: 'Creatify', views: '1.7M', type: 'Organik + Paid', href: 'https://www.instagram.com/reel/DJoR2pJqpHt/', videoUrl: '/videos/reel4.mp4', gradient: 'from-stone-500 via-stone-500 to-blue-600', iconBg: 'bg-stone-500/30' },
+  { brand: 'Creati', views: '1.4M', type: 'Organik + Paid', href: 'https://www.instagram.com/reel/DNNcKWwq--T/', videoUrl: '/videos/reel5.mp4', gradient: 'from-blue-500 via-blue-600 to-blue-600', iconBg: 'bg-blue-500/30' },
+  { brand: 'Kimi AI', views: '2.0M', type: 'Organik', href: 'https://www.instagram.com/reel/DUXxKHVCgW6/', videoUrl: '/videos/reel6.mp4', gradient: 'from-stone-500 via-stone-500 to-stone-500', iconBg: 'bg-stone-500/30' },
 ];
 
 const brands = ['CapCut', 'VidAU', 'Lexi', 'KickResume', 'TopView', 'Higgsfield'];
@@ -346,12 +346,12 @@ export default function CollaborationsPage() {
         >
           {/* Base gradient */}
           <div className="absolute inset-0" style={{
-            background: 'radial-gradient(ellipse 80% 60% at 30% 40%, rgba(124, 58, 237, 0.08) 0%, transparent 60%), radial-gradient(ellipse 60% 50% at 70% 60%, rgba(236, 72, 153, 0.06) 0%, transparent 50%), linear-gradient(180deg, #050508 0%, #0a0a12 50%, #050508 100%)'
+            background: 'radial-gradient(ellipse 80% 60% at 30% 40%, rgba(79, 139, 255, 0.08) 0%, transparent 60%), radial-gradient(ellipse 60% 50% at 70% 60%, rgba(237, 234, 227, 0.06) 0%, transparent 50%), linear-gradient(180deg, #08090C 0%, #0a0a12 50%, #08090C 100%)'
           }} />
           {/* Subtle floating orbs */}
-          <div className="absolute top-[20%] left-[15%] w-[300px] h-[300px] rounded-full blur-[120px] opacity-60 pointer-events-none" style={{ background: 'rgba(124, 58, 237, 0.06)' }} />
-          <div className="absolute bottom-[10%] right-[20%] w-[250px] h-[250px] rounded-full blur-[100px] opacity-50 pointer-events-none" style={{ background: 'rgba(236, 72, 153, 0.05)' }} />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#050508]/30 via-transparent to-[#050508]" />
+          <div className="absolute top-[20%] left-[15%] w-[300px] h-[300px] rounded-full blur-[120px] opacity-60 pointer-events-none" style={{ background: 'rgba(79, 139, 255, 0.06)' }} />
+          <div className="absolute bottom-[10%] right-[20%] w-[250px] h-[250px] rounded-full blur-[100px] opacity-50 pointer-events-none" style={{ background: 'rgba(237, 234, 227, 0.05)' }} />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#08090C]/30 via-transparent to-[#08090C]" />
         </motion.div>
 
         {/* Grid overlay */}
@@ -378,8 +378,8 @@ export default function CollaborationsPage() {
             >
               <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full mb-6 border border-white/[0.08] bg-white/[0.03] backdrop-blur-md">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-500 opacity-60" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-pink-500" />
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-60" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500" />
                 </span>
                 <span className="text-gray-400 text-xs font-medium tracking-[0.18em] uppercase">
                   Creator Media Kit
@@ -443,14 +443,14 @@ export default function CollaborationsPage() {
             {/* Glow behind photo */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="w-[400px] h-[400px] rounded-full blur-[120px]"
-                style={{ background: 'radial-gradient(circle, rgba(236,72,153,0.15) 0%, rgba(124,58,237,0.1) 50%, transparent 70%)' }}
+                style={{ background: 'radial-gradient(circle, rgba(237, 234, 227, 0.15) 0%, rgba(79, 139, 255, 0.1) 50%, transparent 70%)' }}
               />
             </div>
             
             {/* Orbit ring */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="w-[380px] h-[380px] rounded-full border border-white/[0.06]" style={{ animation: 'spin 30s linear infinite' }}>
-                <div className="absolute w-2 h-2 rounded-full bg-pink-500" style={{ top: -4, left: '50%', marginLeft: -4, boxShadow: '0 0 12px rgba(236,72,153,0.6)' }} />
+                <div className="absolute w-2 h-2 rounded-full bg-blue-500" style={{ top: -4, left: '50%', marginLeft: -4, boxShadow: '0 0 12px rgba(237, 234, 227, 0.6)' }} />
               </div>
             </div>
 
@@ -462,13 +462,13 @@ export default function CollaborationsPage() {
               quality={90}
               priority
               className="relative z-10 w-[340px] h-[340px] object-cover rounded-3xl border border-white/[0.08]"
-              style={{ boxShadow: '0 40px 100px rgba(0,0,0,0.5), 0 0 60px rgba(124,58,237,0.1)' }}
+              style={{ boxShadow: '0 40px 100px rgba(0,0,0,0.5), 0 0 60px rgba(79, 139, 255, 0.1)' }}
             />
           </motion.div>
         </motion.div>
 
         {/* Bottom gradient */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#050508] to-transparent pointer-events-none z-20" />
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#08090C] to-transparent pointer-events-none z-20" />
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════════ */}
@@ -485,7 +485,7 @@ export default function CollaborationsPage() {
             {/* Gender Dist */}
             <BentoCard custom={1} className="!rounded-3xl !p-8 relative overflow-hidden backdrop-blur-xl bg-white/[0.02] border border-white/[0.05]">
               <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                <Users className="w-5 h-5 text-pink-400" />
+                <Users className="w-5 h-5 text-blue-400" />
                 Cinsiyet Dağılımı
               </h3>
               
@@ -500,7 +500,7 @@ export default function CollaborationsPage() {
                       initial={{ width: 0 }}
                       whileInView={{ width: '83.7%' }}
                       transition={{ duration: 1, delay: 0.2 }}
-                      className="h-full bg-gradient-to-r from-blue-600 to-cyan-400 rounded-full"
+                      className="h-full bg-gradient-to-r from-blue-600 to-blue-400 rounded-full"
                     />
                   </div>
                 </div>
@@ -510,14 +510,14 @@ export default function CollaborationsPage() {
                 <div className="w-full">
                   <div className="flex justify-between text-sm mb-2 font-medium">
                     <span className="text-white">Kadın</span>
-                    <span className="text-pink-400">16.3%</span>
+                    <span className="text-blue-400">16.3%</span>
                   </div>
                   <div className="h-3 bg-white/[0.05] rounded-full overflow-hidden">
                     <motion.div 
                       initial={{ width: 0 }}
                       whileInView={{ width: '16.3%' }}
                       transition={{ duration: 1, delay: 0.3 }}
-                      className="h-full bg-gradient-to-r from-pink-600 to-purple-400 rounded-full"
+                      className="h-full bg-gradient-to-r from-blue-600 to-blue-400 rounded-full"
                     />
                   </div>
                 </div>
@@ -527,7 +527,7 @@ export default function CollaborationsPage() {
             {/* Age Dist */}
             <BentoCard custom={2} className="!rounded-3xl !p-8 relative overflow-hidden backdrop-blur-xl bg-white/[0.02] border border-white/[0.05]">
               <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                <BarChart3 className="w-5 h-5 text-purple-400" />
+                <BarChart3 className="w-5 h-5 text-blue-400" />
                 Yaş Dağılımı
               </h3>
               
@@ -593,9 +593,7 @@ export default function CollaborationsPage() {
             viewport={{ once: true, amount: 0.3 }}
             className="text-center max-w-3xl mx-auto mb-16"
           >
-            <motion.span variants={fadeUp} custom={0} className="inline-block text-purple-500 text-sm font-semibold tracking-[0.2em] uppercase mb-4">
-              Öne Çıkan Çalışmalar
-            </motion.span>
+            <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 text-blue-500 text-sm font-semibold tracking-[0.2em] uppercase mb-4"><span className="halftone-arc" aria-hidden />Öne Çıkan Çalışmalar</motion.span>
             <motion.h2 variants={fadeUp} custom={1} className="text-3xl md:text-5xl font-bold mb-5 tracking-tight">
               Milyonlarca İzlenen <span className="text-gradient-accent">Viral İçerikler</span>
             </motion.h2>
@@ -656,8 +654,8 @@ export default function CollaborationsPage() {
       {/* ══════════════════════════════════════════════════════════════════════ */}
       {/*  SOCIAL MEDIA PLATFORMS — BENTO GRID                                 */}
       {/* ══════════════════════════════════════════════════════════════════════ */}
-      <section className="py-24 relative bg-[#050508]/50">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/5 to-transparent pointer-events-none" />
+      <section className="py-24 relative bg-[#08090C]/50">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-900/5 to-transparent pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
           <motion.div
@@ -666,9 +664,7 @@ export default function CollaborationsPage() {
             viewport={{ once: true, amount: 0.3 }}
             className="text-center max-w-3xl mx-auto mb-16"
           >
-            <motion.span variants={fadeUp} custom={0} className="inline-block text-cyan-400 text-sm font-semibold tracking-[0.2em] uppercase mb-4">
-              Platform Erişimi
-            </motion.span>
+            <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 text-blue-400 text-sm font-semibold tracking-[0.2em] uppercase mb-4"><span className="halftone-arc" aria-hidden />Platform Erişimi</motion.span>
             <motion.h2 variants={fadeUp} custom={1} className="text-3xl md:text-5xl font-bold mb-5 tracking-tight">
               Tüm platformlarda{' '}
               <span className="text-gradient-accent">aktif kitle</span>
@@ -744,7 +740,7 @@ export default function CollaborationsPage() {
       {/*  İLETİŞİM CTA                                                       */}
       {/* ══════════════════════════════════════════════════════════════════════ */}
       <section className="py-24 relative" id="contact">
-        <div className="section-divider max-w-5xl mx-auto mb-24" />
+        <div className="halftone-divider max-w-5xl mx-auto mb-24" />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -754,16 +750,16 @@ export default function CollaborationsPage() {
             className="bento-card !rounded-3xl !p-12 md:!p-16 text-center relative overflow-hidden"
           >
             {/* Top accent */}
-            <div className="absolute top-0 left-[10%] right-[10%] h-[1px] bg-gradient-to-r from-transparent via-pink-500/40 to-transparent" />
+            <div className="absolute top-0 left-[10%] right-[10%] h-[1px] bg-gradient-to-r from-transparent via-blue-500/40 to-transparent" />
             
             {/* Background glow */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-pink-500/5 blur-[100px] rounded-full pointer-events-none" />
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[300px] h-[150px] bg-accent-purple/5 blur-[80px] rounded-full pointer-events-none" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-blue-500/5 blur-[100px] rounded-full pointer-events-none" />
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[300px] h-[150px] bg-[#4F8BFF]/5 blur-[80px] rounded-full pointer-events-none" />
             
             <div className="relative z-10">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-6 border border-pink-500/20 bg-pink-500/5">
-                <Sparkles className="w-3.5 h-3.5 text-pink-400" />
-                <span className="text-pink-400 text-xs font-semibold tracking-wider uppercase">Sponsorluk & İş Birliği</span>
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-6 border border-blue-500/20 bg-blue-500/5">
+                <Sparkles className="w-3.5 h-3.5 text-blue-400" />
+                <span className="text-blue-400 text-xs font-semibold tracking-wider uppercase">Sponsorluk & İş Birliği</span>
               </div>
 
               <h3 className="text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight">
@@ -777,9 +773,9 @@ export default function CollaborationsPage() {
 
               <a 
                 href="mailto:ceren@dolunay.ai" 
-                className="group relative inline-flex items-center gap-3 px-10 py-4 rounded-2xl font-bold text-lg bg-gradient-to-r from-pink-500/20 to-accent-purple/20 border border-pink-500/30 hover:border-pink-500/60 transition-all duration-500 hover:shadow-[0_0_50px_rgba(236,72,153,0.2)] z-10"
+                className="group relative inline-flex items-center gap-3 px-10 py-4 rounded-2xl font-bold text-lg bg-gradient-to-r from-blue-500/20 to-[#4F8BFF]/20 border border-blue-500/30 hover:border-blue-500/60 transition-all duration-500 hover:shadow-[0_0_50px_rgba(237, 234, 227, 0.2)] z-10"
               >
-                <Mail className="w-5 h-5 text-pink-400" />
+                <Mail className="w-5 h-5 text-blue-400" />
                 <span>ceren@dolunay.ai</span>
                 <ArrowUpRight className="w-5 h-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </a>

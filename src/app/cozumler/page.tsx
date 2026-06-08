@@ -58,7 +58,7 @@ export default function SolutionsPage() {
       description: t('solutions.readyItemDesc'),
       features: [t('solutions.readyItemFeature1'), t('solutions.readyItemFeature2'), t('solutions.readyItemFeature3'), t('solutions.readyItemFeature4')],
       href: '/cozumler/artifex-campus',
-      accentColor: '#7c3aed',
+      accentColor: '#4F8BFF',
       icon: <Sparkles className="w-6 h-6" />,
       external: false,
     },
@@ -70,7 +70,7 @@ export default function SolutionsPage() {
       description: t('solutions.customItemDesc'),
       features: [t('solutions.customItemFeature1'), t('solutions.customItemFeature2'), t('solutions.customItemFeature3'), t('solutions.customItemFeature4')],
       href: '/cozumler/hizmetler',
-      accentColor: '#00d4ff',
+      accentColor: '#4F8BFF',
       icon: <TrendingUp className="w-6 h-6" />,
       external: false,
     },
@@ -83,7 +83,7 @@ export default function SolutionsPage() {
       description: t('solutions.aiFactoryDesc'),
       href: 'https://www.skool.com/yapay-zeka-factory/about?ref=044f39496d4f45fab11775bcefe4b7f4',
       icon: <SkoolIcon className="w-7 h-7" />,
-      gradient: 'from-emerald-400 to-teal-600',
+      gradient: 'from-blue-400 to-blue-600',
       bgGlow: 'rgba(52, 211, 153, 0.1)',
       members: t('solutions.aiFactoryMembers'),
       badge: t('solutions.aiFactoryBadge'),
@@ -94,7 +94,7 @@ export default function SolutionsPage() {
       description: t('solutions.udemyDesc'),
       href: 'https://www.udemy.com/course/ai-yapay-zeka-uzmanligi-chatgpt-midjourney-dalle-ve-fazlasi/?referralCode=906FDE49207D6106DCBF',
       icon: <GraduationCap className="w-7 h-7" />,
-      gradient: 'from-violet-500 to-purple-700',
+      gradient: 'from-blue-500 to-blue-700',
       bgGlow: 'rgba(139, 92, 246, 0.1)',
       members: t('solutions.udemyMembers'),
       badge: t('solutions.udemyBadge'),
@@ -112,9 +112,7 @@ export default function SolutionsPage() {
             viewport={{ once: true, amount: 0.3 }}
             className="text-center max-w-3xl mx-auto mb-16"
           >
-            <motion.span variants={fadeUp} custom={0} className="inline-block text-accent-purple text-sm font-semibold tracking-[0.2em] uppercase mb-4">
-              {t('solutions.badge')}
-            </motion.span>
+            <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 text-[#4F8BFF] text-sm font-semibold tracking-[0.2em] uppercase mb-4"><span className="halftone-arc" aria-hidden />{t('solutions.badge')}</motion.span>
             <motion.h2 variants={fadeUp} custom={1} className="text-3xl md:text-5xl font-bold mb-5 tracking-tight">
               {t('solutions.title')}{' '}
               <span className="text-gradient-accent">{t('solutions.titleHighlight')}</span>
@@ -124,29 +122,29 @@ export default function SolutionsPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} className="flex flex-col h-full">
               <motion.h3 variants={fadeUp} custom={0} className="text-sm font-semibold text-gray-500 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
-                <div className="w-5 h-[1px] bg-accent-purple" />
+                <div className="w-5 h-[1px] bg-[#4F8BFF]" />
                 {t('solutions.readyTitle')}
               </motion.h3>
               <div className="flex-1 flex flex-col gap-6">
                 {readySolutions.map((solution, i) => (
                   <BentoCard key={solution.title} custom={i + 1} className="!rounded-3xl relative flex-1 flex flex-col group p-6 border border-white/5 bg-white/5 backdrop-blur-sm">
-                    <div className="absolute -top-px left-[15%] right-[15%] h-[1px] bg-gradient-to-r from-transparent via-accent-purple/50 to-transparent opacity-50 group-hover:opacity-100 transition-opacity" />
-                    <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[200px] h-[200px] rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" style={{ background: 'rgba(124, 58, 237, 0.08)' }} />
+                    <div className="absolute -top-px left-[15%] right-[15%] h-[1px] bg-gradient-to-r from-transparent via-[#4F8BFF]/50 to-transparent opacity-50 group-hover:opacity-100 transition-opacity" />
+                    <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[200px] h-[200px] rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" style={{ background: 'rgba(79, 139, 255, 0.08)' }} />
                     <div className="relative z-10 flex flex-col h-full">
                       <div className="flex-1">
-                        <div className="w-12 h-12 rounded-2xl bg-accent-purple/10 border border-accent-purple/20 flex items-center justify-center text-accent-purple mb-5 group-hover:scale-110 transition-transform duration-500">
+                        <div className="w-12 h-12 rounded-2xl bg-[#4F8BFF]/10 border border-[#4F8BFF]/20 flex items-center justify-center text-[#4F8BFF] mb-5 group-hover:scale-110 transition-transform duration-500">
                           {solution.icon}
                         </div>
                         <h4 className="text-2xl font-bold text-white mb-3">{solution.title}</h4>
                         <p className="text-gray-400 text-sm leading-relaxed mb-6">{solution.description}</p>
                         <div className="flex flex-wrap gap-2 mb-6">
                           {solution.features.map((f) => (
-                            <span key={f} className="px-3 py-1 rounded-lg text-xs font-medium bg-accent-purple/10 border border-accent-purple/20 text-accent-purple">{f}</span>
+                            <span key={f} className="px-3 py-1 rounded-lg text-xs font-medium bg-[#4F8BFF]/10 border border-[#4F8BFF]/20 text-[#4F8BFF]">{f}</span>
                           ))}
                         </div>
                       </div>
                       <div className="mt-auto">
-                        <a href={solution.href} className="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-accent-purple transition-colors">
+                        <a href={solution.href} className="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-[#4F8BFF] transition-colors">
                           {t('solutions.exploreBtn')} <ArrowUpRight className="w-4 h-4" />
                         </a>
                       </div>
@@ -158,29 +156,29 @@ export default function SolutionsPage() {
 
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} className="flex flex-col h-full">
               <motion.h3 variants={fadeUp} custom={0} className="text-sm font-semibold text-gray-500 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
-                <div className="w-5 h-[1px] bg-electric-blue" />
+                <div className="w-5 h-[1px] bg-[#4F8BFF]" />
                 {t('solutions.customTitle')}
               </motion.h3>
               <div className="flex-1 flex flex-col gap-6">
                 {customSolutions.map((solution, i) => (
                   <BentoCard key={solution.title} custom={i + 1} className="!rounded-3xl relative flex-1 flex flex-col group p-6 border border-white/5 bg-white/5 backdrop-blur-sm">
-                    <div className="absolute -top-px left-[15%] right-[15%] h-[1px] bg-gradient-to-r from-transparent via-electric-blue/50 to-transparent opacity-50 group-hover:opacity-100 transition-opacity" />
-                    <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[200px] h-[200px] rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" style={{ background: 'rgba(0, 212, 255, 0.08)' }} />
+                    <div className="absolute -top-px left-[15%] right-[15%] h-[1px] bg-gradient-to-r from-transparent via-[#4F8BFF]/50 to-transparent opacity-50 group-hover:opacity-100 transition-opacity" />
+                    <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[200px] h-[200px] rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" style={{ background: 'rgba(79, 139, 255, 0.08)' }} />
                     <div className="relative z-10 flex flex-col h-full">
                       <div className="flex-1">
-                        <div className="w-12 h-12 rounded-2xl bg-electric-blue/10 border border-electric-blue/20 flex items-center justify-center text-electric-blue mb-5 group-hover:scale-110 transition-transform duration-500">
+                        <div className="w-12 h-12 rounded-2xl bg-[#4F8BFF]/10 border border-[#4F8BFF]/20 flex items-center justify-center text-[#4F8BFF] mb-5 group-hover:scale-110 transition-transform duration-500">
                           {solution.icon}
                         </div>
                         <h4 className="text-2xl font-bold text-white mb-3">{solution.title}</h4>
                         <p className="text-gray-400 text-sm leading-relaxed mb-6">{solution.description}</p>
                         <div className="flex flex-wrap gap-2 mb-6">
                           {solution.features.map((f) => (
-                            <span key={f} className="px-3 py-1 rounded-lg text-xs font-medium bg-electric-blue/10 border border-electric-blue/20 text-electric-blue">{f}</span>
+                            <span key={f} className="px-3 py-1 rounded-lg text-xs font-medium bg-[#4F8BFF]/10 border border-[#4F8BFF]/20 text-[#4F8BFF]">{f}</span>
                           ))}
                         </div>
                       </div>
                       <div className="mt-auto">
-                        <a href={solution.href} className="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-electric-blue transition-colors">
+                        <a href={solution.href} className="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-[#4F8BFF] transition-colors">
                           {t('solutions.reviewBtn')} <ArrowUpRight className="w-4 h-4" />
                         </a>
                       </div>
@@ -202,7 +200,7 @@ export default function SolutionsPage() {
             viewport={{ once: true, amount: 0.3 }}
             className="text-center max-w-3xl mx-auto mb-16"
           >
-            <motion.span variants={fadeUp} custom={0} className="inline-block text-emerald-400 text-sm font-semibold tracking-[0.2em] uppercase mb-4">
+            <motion.span variants={fadeUp} custom={0} className="inline-block text-blue-400 text-sm font-semibold tracking-[0.2em] uppercase mb-4">
               {t('solutions.eduBadge')}
             </motion.span>
             <motion.h2 variants={fadeUp} custom={1} className="text-3xl md:text-5xl font-bold mb-5 tracking-tight">

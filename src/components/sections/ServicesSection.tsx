@@ -50,7 +50,7 @@ const educationClients: ServiceClient[] = [
   {
     name: 'Çam Hotel Termal Resort',
     desc: 'Instagram, WhatsApp ve Messenger mesajları yapay zeka tarafından 7/24 her dilde tam otomatik cevaplanmaktadır.',
-    gradient: 'from-emerald-500 to-teal-600',
+    gradient: 'from-blue-500 to-blue-600',
     bgGlow: 'rgba(52, 211, 153, 0.12)',
     logoDomain: 'camhotel.com',
     logo: '/images/logos/cam-logo-new (3).webp'
@@ -66,7 +66,7 @@ const educationClients: ServiceClient[] = [
   {
     name: 'Voyant AI',
     desc: 'Haftalık performans raporları NETN otomasyonuyla tam otomatik hale getirildi.',
-    gradient: 'from-violet-500 to-purple-700',
+    gradient: 'from-blue-500 to-blue-700',
     bgGlow: 'rgba(139, 92, 246, 0.12)',
     logoDomain: 'voyant.ai',
     logo: '/images/logos/Screenshot 2026-03-16 at 22.06.12.png'
@@ -74,7 +74,7 @@ const educationClients: ServiceClient[] = [
   {
     name: 'Vartur',
     desc: 'WhatsApp otomasyonu sayesinde binlerce müşteriye her gün düzenli kontrol ettikleri kanaldan (WhatsApp\'tan) 50\'nin üzerinde reklam kampanyası düzenlendi.',
-    gradient: 'from-orange-500 to-amber-600',
+    gradient: 'from-stone-500 to-stone-600',
     bgGlow: 'rgba(249, 115, 22, 0.12)',
     logoDomain: 'vartur.com',
     logo: '/images/logos/images (24).jpeg'
@@ -82,7 +82,7 @@ const educationClients: ServiceClient[] = [
   {
     name: 'WeBee',
     desc: 'Otellerin sosyal medya mesajlarının tam otomatik cevaplandırıldığı yapay zeka ürünü, WeBee Insta adıyla yayınlandı.',
-    gradient: 'from-cyan-500 to-blue-600',
+    gradient: 'from-blue-500 to-blue-600',
     bgGlow: 'rgba(6, 182, 212, 0.12)',
     logoDomain: 'webee.com',
     logo: '/images/logos/images (8) copy.png'
@@ -90,7 +90,7 @@ const educationClients: ServiceClient[] = [
   {
     name: 'Sweatcoin App',
     desc: 'Influencer iletişim süreçlerinde Google Sheet, Notion ve Gmail entegrasyonlarıyla bütün iletişim süreçleri tam otomatikleştirildi.',
-    gradient: 'from-orange-600 to-red-500',
+    gradient: 'from-stone-600 to-stone-500',
     bgGlow: 'rgba(234, 88, 12, 0.12)',
     logoDomain: 'sweatco.in'
   },
@@ -158,7 +158,7 @@ function RefCard({ client, index }: { client: typeof educationClients[0]; index:
 export function ServicesSection() {
   return (
     <section id="services" className="py-32 relative">
-      <div className="section-divider max-w-5xl mx-auto mb-32" />
+      <div className="halftone-divider max-w-5xl mx-auto mb-32" />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
@@ -168,9 +168,7 @@ export function ServicesSection() {
           viewport={{ once: true, amount: 0.3 }}
           className="text-center max-w-3xl mx-auto mb-24"
         >
-          <motion.span variants={fadeUp} custom={0} className="inline-block text-electric-blue text-sm font-semibold tracking-[0.2em] uppercase mb-4">
-            Hizmetler
-          </motion.span>
+          <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 text-[#4F8BFF] text-sm font-semibold tracking-[0.2em] uppercase mb-4"><span className="halftone-arc" aria-hidden />Hizmetler</motion.span>
           <motion.h2 variants={fadeUp} custom={1} className="text-4xl md:text-6xl font-bold mb-6 tracking-tight text-white">
             Danışmanlık &{' '}
             <span className="text-gradient-accent">Otomasyon</span>
@@ -199,7 +197,7 @@ export function ServicesSection() {
                 {step.num}
               </span>
               
-              <div className="w-12 h-12 rounded-2xl bg-electric-blue/10 border border-electric-blue/20 flex items-center justify-center mb-6 text-electric-blue group-hover:scale-110 transition-transform duration-500">
+              <div className="w-12 h-12 rounded-2xl bg-[#4F8BFF]/10 border border-[#4F8BFF]/20 flex items-center justify-center mb-6 text-[#4F8BFF] group-hover:scale-110 transition-transform duration-500">
                 {step.icon}
               </div>
               <h4 className="text-lg font-bold text-white mb-3">{step.title}</h4>
@@ -216,7 +214,7 @@ export function ServicesSection() {
           className="mb-32"
         >
           <motion.div variants={fadeUp} custom={0} className="flex items-center gap-3 justify-center mb-10">
-            <Building2 className="w-4 h-4 text-electric-blue" />
+            <Building2 className="w-4 h-4 text-[#4F8BFF]" />
             <span className="text-sm font-semibold text-gray-500 uppercase tracking-[0.2em]">Hizmet Verdiğimiz Markalar</span>
           </motion.div>
 
@@ -225,12 +223,12 @@ export function ServicesSection() {
             custom={1}
             className="relative py-8 rounded-3xl overflow-hidden"
             style={{
-              background: 'linear-gradient(135deg, rgba(255,255,255,0.015) 0%, rgba(0,212,255,0.02) 50%, rgba(124,58,237,0.015) 100%)',
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.015) 0%, rgba(79, 139, 255, 0.02) 50%, rgba(79, 139, 255, 0.015) 100%)',
               border: '1px solid rgba(255,255,255,0.04)',
             }}
           >
-            <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-[#050508] to-transparent z-10 pointer-events-none" />
-            <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-[#050508] to-transparent z-10 pointer-events-none" />
+            <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-[#08090C] to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-[#08090C] to-transparent z-10 pointer-events-none" />
 
             <div className="flex animate-[marquee_30s_linear_infinite] hover:[animation-play-state:paused]">
               {[...serviceClients, ...serviceClients].map((client, i) => (
@@ -261,7 +259,7 @@ export function ServicesSection() {
         >
           <motion.div variants={fadeUp} custom={0} className="text-center max-w-3xl mx-auto mb-14">
             <div className="flex items-center gap-3 justify-center mb-4">
-              <Building2 className="w-4 h-4 text-accent-purple" />
+              <Building2 className="w-4 h-4 text-[#4F8BFF]" />
               <span className="text-sm font-semibold text-gray-500 uppercase tracking-[0.2em]">Çözüm Ortaklarımız</span>
             </div>
             <motion.h3 variants={fadeUp} custom={1} className="text-2xl md:text-4xl font-bold tracking-tight mb-4 text-white">
@@ -294,8 +292,8 @@ export function ServicesSection() {
           id="contact"
           className="bento-card !rounded-3xl !p-12 md:!p-16 text-center max-w-4xl mx-auto relative overflow-hidden"
         >
-          <div className="absolute top-0 left-[10%] right-[10%] h-[1px] bg-gradient-to-r from-transparent via-electric-blue/40 to-transparent" />
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-electric-blue/5 blur-[100px] rounded-full pointer-events-none" />
+          <div className="absolute top-0 left-[10%] right-[10%] h-[1px] bg-gradient-to-r from-transparent via-[#4F8BFF]/40 to-transparent" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-[#4F8BFF]/5 blur-[100px] rounded-full pointer-events-none" />
           
           <h3 className="text-3xl md:text-4xl font-bold text-white mb-5 tracking-tight relative z-10">
             Projeyi Birlikte İnşa Edelim
@@ -304,7 +302,7 @@ export function ServicesSection() {
             Hizmetlerimiz, danışmanlık talepleriniz veya marka işbirlikleri için 
             bizimle doğrudan iletişime geçebilirsiniz.
           </p>
-          <a href="mailto:dolunay@dolunay.ai" className="group relative inline-flex items-center gap-2 px-10 py-4 rounded-2xl font-bold text-lg bg-gradient-to-r from-electric-blue/20 to-accent-purple/20 border border-electric-blue/30 hover:border-electric-blue/60 transition-all duration-500 hover:shadow-[0_0_50px_rgba(0,212,255,0.2)] z-10 text-white">
+          <a href="mailto:dolunay@dolunay.ai" className="group relative inline-flex items-center gap-2 px-10 py-4 rounded-2xl font-bold text-lg bg-gradient-to-r from-[#4F8BFF]/20 to-[#4F8BFF]/20 border border-[#4F8BFF]/30 hover:border-[#4F8BFF]/60 transition-all duration-500 hover:shadow-[0_0_50px_rgba(79, 139, 255, 0.2)] z-10 text-white">
             dolunay@dolunay.ai
             <ArrowUpRight className="w-5 h-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </a>

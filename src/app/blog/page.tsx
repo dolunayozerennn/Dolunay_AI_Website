@@ -16,17 +16,15 @@ export default function BlogPage() {
   const posts = getPosts()
 
   return (
-    <div className="min-h-screen bg-[#050508] relative pt-12 pb-24">
+    <div className="min-h-screen bg-[#08090C] relative pt-12 pb-24">
       {/* Background Glows */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-electric-blue/5 blur-[120px] rounded-[100%] pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[#4F8BFF]/5 blur-[120px] rounded-[100%] pointer-events-none" />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Header Section */}
         <div className="max-w-3xl mb-16 md:mb-24">
-          <span className="inline-block text-electric-blue text-sm font-semibold tracking-[0.2em] uppercase mb-4">
-            DOLUNAY.AI BLOG
-          </span>
+          <span className="inline-flex items-center gap-2 text-[#4F8BFF] text-sm font-semibold tracking-[0.2em] uppercase mb-4"><span className="halftone-arc" aria-hidden />DOLUNAY.AI BLOG</span>
           <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tight mb-6">
             Yeni Nesil Teknolojileri <br className="hidden md:block" />
             <span className="text-gradient-accent">Keşfedin</span>

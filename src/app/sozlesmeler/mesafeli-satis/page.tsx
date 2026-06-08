@@ -75,7 +75,7 @@ export default function MesafeliSatisSozlesmesiPage() {
           <h2 className="text-xl font-semibold text-white mt-8">7. İletişim</h2>
           <p>
             Sözleşme ile ilgili her türlü soru ve talepleriniz için{' '}
-            <a href="mailto:dolunay@dolunay.ai" className="text-electric-blue hover:underline">
+            <a href="mailto:dolunay@dolunay.ai" className="text-[#4F8BFF] hover:underline">
               dolunay@dolunay.ai
             </a>{' '}
             adresinden bize ulaşabilirsiniz.

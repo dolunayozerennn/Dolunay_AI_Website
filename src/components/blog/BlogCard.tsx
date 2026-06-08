@@ -13,11 +13,11 @@ export function BlogCard({ post }: { post: Post }) {
 
   return (
     <Link href={`/blog/${post.slug}`} className="group block">
-      <article className="bento-card !p-0 h-full flex flex-col group-hover:border-electric-blue/30 transition-all duration-300">
+      <article className="bento-card !p-0 h-full flex flex-col group-hover:border-[#4F8BFF]/30 transition-all duration-300">
         
         {/* Image Container */}
         {post.coverImage && (
-          <div className="relative w-full aspect-video overflow-hidden bg-[#0c0c14]">
+          <div className="relative w-full aspect-video overflow-hidden bg-[#0E0F14]">
             <Image
               src={post.coverImage}
               alt={post.title}
@@ -33,7 +33,7 @@ export function BlogCard({ post }: { post: Post }) {
           {/* Metadata */}
           <div className="flex items-center gap-4 text-xs font-medium text-gray-400 mb-4">
             <div className="flex items-center gap-1.5 bg-white/5 py-1 px-2.5 rounded-full border border-white/10">
-              <Calendar className="w-3.5 h-3.5 text-electric-blue" />
+              <Calendar className="w-3.5 h-3.5 text-[#4F8BFF]" />
               <span>{dateFormatted}</span>
             </div>
             <div className="flex items-center gap-1.5">
@@ -42,7 +42,7 @@ export function BlogCard({ post }: { post: Post }) {
             </div>
           </div>
 
-          <h3 className="text-xl md:text-2xl font-bold text-white mb-3 tracking-tight group-hover:text-electric-blue transition-colors line-clamp-2">
+          <h3 className="text-xl md:text-2xl font-bold text-white mb-3 tracking-tight group-hover:text-[#4F8BFF] transition-colors line-clamp-2">
             {post.title}
           </h3>
           
@@ -51,7 +51,7 @@ export function BlogCard({ post }: { post: Post }) {
           </p>
 
           <div className="mt-auto flex items-center justify-between pt-4 border-t border-white/5">
-            <span className="text-sm font-semibold text-white group-hover:text-electric-blue transition-colors flex items-center gap-2">
+            <span className="text-sm font-semibold text-white group-hover:text-[#4F8BFF] transition-colors flex items-center gap-2">
               Okumaya başla
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="transform group-hover:translate-x-1 transition-transform" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14"></path>

@@ -85,7 +85,7 @@ export default function CorporateTrainingsPage() {
     {
       name: t('corporateTrainings.client1Name'),
       desc: t('corporateTrainings.client1Desc'),
-      gradient: 'from-emerald-500 to-teal-600',
+      gradient: 'from-blue-500 to-blue-600',
       bgGlow: 'rgba(52, 211, 153, 0.12)',
       logoDomain: 'turkiyefinans.com.tr',
       logo: '/images/logos/turkiye-finans-logo.png'
@@ -100,14 +100,14 @@ export default function CorporateTrainingsPage() {
     {
       name: t('corporateTrainings.client3Name'),
       desc: t('corporateTrainings.client3Desc'),
-      gradient: 'from-red-500 to-rose-600',
+      gradient: 'from-stone-500 to-stone-600',
       bgGlow: 'rgba(239, 68, 68, 0.12)',
       logoDomain: 'baskent.edu.tr'
     },
     {
       name: t('corporateTrainings.client4Name'),
       desc: t('corporateTrainings.client4Desc'),
-      gradient: 'from-violet-500 to-purple-700',
+      gradient: 'from-blue-500 to-blue-700',
       bgGlow: 'rgba(139, 92, 246, 0.12)',
       logoDomain: 'udemy.com',
       logo: '/images/logos/udemy-logo.png'
@@ -115,7 +115,7 @@ export default function CorporateTrainingsPage() {
     {
       name: t('corporateTrainings.client5Name'),
       desc: t('corporateTrainings.client5Desc'),
-      gradient: 'from-orange-500 to-amber-600',
+      gradient: 'from-stone-500 to-stone-600',
       bgGlow: 'rgba(249, 115, 22, 0.12)',
       logoDomain: 'gittigidiyor.com',
       logo: '/images/logos/gittigidiyor-logo.png'
@@ -123,7 +123,7 @@ export default function CorporateTrainingsPage() {
     {
       name: t('corporateTrainings.client6Name'),
       desc: t('corporateTrainings.client6Desc'),
-      gradient: 'from-orange-600 to-red-500',
+      gradient: 'from-stone-600 to-stone-500',
       bgGlow: 'rgba(234, 88, 12, 0.12)',
       logoDomain: 'trendyol.com'
     },
@@ -138,26 +138,26 @@ export default function CorporateTrainingsPage() {
 
   const features = [
     {
-      icon: <Building className="w-8 h-8 text-electric-blue" />,
+      icon: <Building className="w-8 h-8 text-[#4F8BFF]" />,
       title: t('corporateTrainings.feat1Title'),
       desc: t('corporateTrainings.feat1Desc')
     },
     {
-      icon: <Target className="w-8 h-8 text-[#f97316]" />,
+      icon: <Target className="w-8 h-8 text-[#EDEAE3]" />,
       title: t('corporateTrainings.feat2Title'),
       desc: t('corporateTrainings.feat2Desc')
     },
     {
-      icon: <Presentation className="w-8 h-8 text-accent-purple" />,
+      icon: <Presentation className="w-8 h-8 text-[#4F8BFF]" />,
       title: t('corporateTrainings.feat3Title'),
       desc: t('corporateTrainings.feat3Desc')
     }
   ]
 
   return (
-    <div className="pt-32 pb-24 relative min-h-screen bg-[#050508] overflow-hidden">
+    <div className="pt-32 pb-24 relative min-h-screen bg-[#08090C] overflow-hidden">
       {/* Background Header Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-accent-purple/5 blur-[120px] rounded-[100%] pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-[#4F8BFF]/5 blur-[120px] rounded-[100%] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
@@ -168,7 +168,7 @@ export default function CorporateTrainingsPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
-            <span className="inline-block px-4 py-2 rounded-full bg-accent-purple/10 border border-accent-purple/20 text-accent-purple text-sm font-bold tracking-wider mb-6 uppercase">
+            <span className="inline-block px-4 py-2 rounded-full bg-[#4F8BFF]/10 border border-[#4F8BFF]/20 text-[#4F8BFF] text-sm font-bold tracking-wider mb-6 uppercase">
               {t('corporateTrainings.badge')}
             </span>
             <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight mb-8 leading-[1.1]">
@@ -183,7 +183,7 @@ export default function CorporateTrainingsPage() {
               {benefits.map((benefit, i) => (
                 <li key={i} className="flex items-center gap-3 text-gray-300">
                   <div className="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center shrink-0">
-                    <CheckCircle2 className="w-4 h-4 text-accent-purple" />
+                    <CheckCircle2 className="w-4 h-4 text-[#4F8BFF]" />
                   </div>
                   <span>{benefit}</span>
                 </li>
@@ -192,7 +192,7 @@ export default function CorporateTrainingsPage() {
             
             <a 
               href="mailto:dolunay@dolunay.ai"
-              className="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white bg-gradient-to-r from-accent-purple to-electric-blue hover:from-accent-violet hover:to-electric-blue border border-transparent rounded-2xl transition-all hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(124,58,237,0.3)] hover:shadow-[0_0_50px_rgba(124,58,237,0.5)]"
+              className="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white bg-gradient-to-r from-[#4F8BFF] to-[#4F8BFF] hover:from-[#7AA8FF] hover:to-[#4F8BFF] border border-transparent rounded-2xl transition-all hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(79, 139, 255, 0.3)] hover:shadow-[0_0_50px_rgba(79, 139, 255, 0.5)]"
             >
               {t('corporateTrainings.ctaBtn')}
             </a>
@@ -204,17 +204,17 @@ export default function CorporateTrainingsPage() {
             transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             className="relative"
           >
-            <div className="relative aspect-square w-full max-w-[500px] mx-auto rounded-[3rem] overflow-hidden border border-white/10 shadow-[0_0_60px_rgba(124,58,237,0.15)] bg-[#0c0c14]">
-              <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/40 to-purple-900/40 opacity-80 mix-blend-luminosity" />
+            <div className="relative aspect-square w-full max-w-[500px] mx-auto rounded-[3rem] overflow-hidden border border-white/10 shadow-[0_0_60px_rgba(79, 139, 255, 0.15)] bg-[#0E0F14]">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-blue-900/40 opacity-80 mix-blend-luminosity" />
               
               <div className="absolute inset-0 bg-[url('/images/egitimler/egitim2.webp')] bg-cover bg-center opacity-70 hover:opacity-90 transition-all duration-1000" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#050508] via-[#050508]/40 to-[#050508]/20" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#08090C] via-[#08090C]/40 to-[#08090C]/20" />
               
               <div className="absolute bottom-10 left-10 right-10 flex flex-col items-center p-6 rounded-2xl bg-black/60 backdrop-blur-md border border-white/10">
                 <div className="flex -space-x-4 mb-3">
-                  <div className="w-12 h-12 rounded-full border-2 border-black bg-gradient-to-br from-electric-blue to-accent-purple flex items-center justify-center text-white"><Briefcase size={20} /></div>
-                  <div className="w-12 h-12 rounded-full border-2 border-black bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center text-white"><Zap size={20} /></div>
-                  <div className="w-12 h-12 rounded-full border-2 border-black bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center text-white"><Target size={20} /></div>
+                  <div className="w-12 h-12 rounded-full border-2 border-black bg-gradient-to-br from-[#4F8BFF] to-[#4F8BFF] flex items-center justify-center text-white"><Briefcase size={20} /></div>
+                  <div className="w-12 h-12 rounded-full border-2 border-black bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white"><Zap size={20} /></div>
+                  <div className="w-12 h-12 rounded-full border-2 border-black bg-gradient-to-br from-stone-400 to-stone-500 flex items-center justify-center text-white"><Target size={20} /></div>
                 </div>
                 <p className="text-white text-sm font-semibold text-center">{t('corporateTrainings.heroImgDesc')}</p>
               </div>
@@ -231,12 +231,12 @@ export default function CorporateTrainingsPage() {
         >
           <motion.div variants={fadeUp} custom={0} className="text-center max-w-3xl mx-auto mb-14">
             <div className="flex items-center gap-3 justify-center mb-4">
-              <GraduationCap className="w-5 h-5 text-accent-purple" />
+              <GraduationCap className="w-5 h-5 text-[#4F8BFF]" />
               <span className="text-sm font-semibold text-gray-500 uppercase tracking-[0.2em]">{t('corporateTrainings.refsBadge')}</span>
             </div>
             <motion.h3 variants={fadeUp} custom={1} className="text-3xl md:text-5xl font-bold tracking-tight mb-6 text-white">
               {t('corporateTrainings.refsTitle')}{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-purple to-electric-blue">{t('corporateTrainings.refsTitleHighlight')}</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4F8BFF] to-[#4F8BFF]">{t('corporateTrainings.refsTitleHighlight')}</span>
             </motion.h3>
             <motion.p variants={fadeUp} custom={2} className="text-gray-400 text-lg leading-relaxed">
               {t('corporateTrainings.refsDesc')}
