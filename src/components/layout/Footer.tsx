@@ -48,10 +48,31 @@ export function Footer() {
             </div>
           </div>
 
+          {/* Bu bloktaki linkler yalnızca ziyaretçi için değil: menüdeki Eğitimler
+              listesi ancak tıklanınca DOM'a giriyor, o yüzden arama motorları
+              eğitim sayfalarını hiç göremiyordu. Buradaki linkler her zaman
+              sayfada durur ve o sayfaları keşfedilebilir yapar. */}
           <div className="flex flex-col sm:flex-row gap-6 sm:gap-12 text-center sm:text-left text-sm text-gray-400">
+            <div className="flex flex-col gap-3">
+              <span className="text-white font-semibold mb-1">Eğitimler</span>
+
+              <Link href="/egitimler/ai-factory" className="hover:text-white transition-colors">AI Factory</Link>
+              <Link href="/egitimler/kurumsal-egitimler" className="hover:text-white transition-colors">Kurumsal Eğitimler</Link>
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <span className="text-white font-semibold mb-1">Çözümler</span>
+
+              <Link href="/cozumler/hizmetler" className="hover:text-white transition-colors">Hizmetler</Link>
+              <Link href="/cozumler/artifex-campus" className="hover:text-white transition-colors">Artifex Campus</Link>
+              <Link href="/isbirlikleri" className="hover:text-white transition-colors">İşbirlikleri</Link>
+            </div>
+
             <div className="flex flex-col gap-3">
               <span className="text-white font-semibold mb-1">Kurumsal</span>
 
+              <Link href="/hakkimizda" className="hover:text-white transition-colors">Hakkımızda</Link>
+              <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>
               <Link href="/sozlesmeler/mesafeli-satis" className="hover:text-white transition-colors">Mesafeli Satış Sözleşmesi</Link>
               <Link href="/sozlesmeler/kvkk" className="hover:text-white transition-colors">Gizlilik ve KVKK Politikası</Link>
             </div>

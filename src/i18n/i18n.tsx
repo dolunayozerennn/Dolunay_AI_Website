@@ -34,14 +34,11 @@ function detectLanguage(): Language {
     if (stored && stored in locales) return stored as Language;
   } catch { /* ignore */ }
 
-  // 2. Check navigator.language
-  if (typeof navigator !== 'undefined') {
-    const browserLang = navigator.language?.toLowerCase() || '';
-    if (browserLang.startsWith('tr')) return 'tr';
-    if (browserLang.startsWith('zh')) return 'zh';
-    if (browserLang.startsWith('es')) return 'es';
-    if (browserLang.startsWith('en')) return 'en';
-  }
+  // 2. Tarayıcı diline BAKILMAZ (bilerek).
+  // Googlebot sayfaları en-US ile açar. Tarayıcı dilinden dil seçilirse site
+  // Google'a İngilizce görünür ve Türkçe aramalarda çıkma şansı düşer.
+  // Dil yalnızca ziyaretçi seçiciyi kendisi kullanınca değişir, o seçim de
+  // localStorage'da saklanır (yukarıdaki 1. adım).
 
   // 3. Default fallback
   return 'tr';
@@ -73,16 +70,17 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     try { localStorage.setItem(STORAGE_KEY, lang); } catch { /* ignore */ }
   }, []);
 
-  // Update <html lang> and document title on language change
+  // <html lang> ziyaretçinin seçtiği dile göre güncellenir.
+  //
+  // document.title ve meta description BİLEREK güncellenmez. Eskiden burada
+  // dil paketindeki TEK genel başlık her sayfaya basılıyordu: blog yazısının
+  // kendi başlığı silinip "dolunay.ai · AI Trainer & Builder" yazılıyordu.
+  // Google sayfayı açıp render ettiği için dizine o genel başlıkla giriyordu,
+  // yani her sayfa aynı başlıkla görünüyordu. Başlıklar artık sunucudan
+  // geldiği gibi kalır (her sayfanın kendi metadata'sı).
   useEffect(() => {
     if (!mounted) return;
     document.documentElement.lang = language === 'zh' ? 'zh-CN' : language;
-    const meta = locales[language]?.meta as { title?: string; description?: string } | undefined;
-    if (meta?.title) document.title = meta.title;
-    const descTag = document.querySelector('meta[name="description"]');
-    if (descTag && meta?.description) {
-      descTag.setAttribute('content', meta.description);
-    }
   }, [language, mounted]);
 
   return (

@@ -66,7 +66,10 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: 'https://dolunay.ai',
+    // './' metadataBase + o anki yol olarak çözülür, yani her sayfa KENDİ adresini
+    // canonical gösterir. Sabit 'https://dolunay.ai' yazılırsa tüm alt sayfalar
+    // Google'a "asıl adres ana sayfa" der ve dizinden düşer.
+    canonical: './',
   },
 }
 
