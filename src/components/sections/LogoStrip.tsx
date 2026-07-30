@@ -14,7 +14,7 @@ const LOGOS: LogoEntry[] = [
   { name: 'Trendyol' },
   { name: 'GittiGidiyor', src: '/images/logos/gittigidiyor-logo.png' },
   { name: 'Başkent Üniversitesi' },
-  { name: 'Misyon Yayınları' },
+  { name: 'Misyon Bankası' },
 ]
 
 export function LogoStrip() {

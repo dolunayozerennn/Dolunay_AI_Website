@@ -28,6 +28,20 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Mobil menu acikken: Escape kapatir, arka plan kaymaz.
+  // Ikisi de eksikti; menuyu kapatan kullanici kaldigi yeri kaybediyordu.
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    const kacisTusu = (e: KeyboardEvent) => { if (e.key === 'Escape') setIsMobileMenuOpen(false) };
+    document.addEventListener('keydown', kacisTusu);
+    const oncekiTasma = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', kacisTusu);
+      document.body.style.overflow = oncekiTasma;
+    };
+  }, [isMobileMenuOpen]);
+
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -117,6 +131,15 @@ export function Navbar() {
                     transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
                     className="absolute top-full left-0 mt-2 w-56 bg-[#0E0F14]/95 backdrop-blur-xl border border-white/[0.08] rounded-xl overflow-hidden shadow-2xl shadow-black/40"
                   >
+                    {/* /cozumler menude hic yoktu; tek girisi altbilgideki linkti. */}
+                    <Link
+                      href="/cozumler"
+                      onClick={() => setIsDropdownOpen(false)}
+                      className="flex flex-col px-5 py-3.5 hover:bg-white/[0.04] transition-all duration-300 border-b border-white/[0.04]"
+                    >
+                      <span className="text-sm font-medium text-white">Tüm Çözümler</span>
+                      <span className="text-xs text-gray-500 mt-0.5">İşletmeler ve girişimciler için hepsi</span>
+                    </Link>
                     <Link
                       href="/cozumler/artifex-campus"
                       onClick={() => setIsDropdownOpen(false)}
@@ -224,7 +247,7 @@ export function Navbar() {
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-expanded={isMobileMenuOpen}
               aria-label="Menüyü Aç/Kapat"
-              className="text-gray-300 hover:text-white transition-colors p-2"
+              className="text-gray-300 hover:text-white transition-colors p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
             >
               {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
@@ -240,7 +263,7 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden absolute top-[calc(100%+12px)] w-[calc(100%-2rem)] max-w-sm mx-auto left-4 right-4 bg-[#0E0F14]/95 backdrop-blur-xl border border-white/[0.08] rounded-2xl p-4 shadow-2xl"
+            className="md:hidden absolute top-[calc(100%+12px)] w-[calc(100%-2rem)] max-w-sm mx-auto left-4 right-4 bg-[#0E0F14]/95 backdrop-blur-xl border border-white/[0.08] rounded-2xl p-4 shadow-2xl max-h-[calc(100dvh-6rem)] overflow-y-auto overscroll-contain"
           >
             <div className="flex flex-col space-y-1">
               <div className="px-3 py-2 text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]">{t('nav.solutions')}</div>

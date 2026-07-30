@@ -32,6 +32,13 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    /* Dekoratif isik kutulari sabit genislikte (800-1400px) ve ortalanmis duruyor.
+       Telefonda sayfayi ekrandan genis yapiyorlardi: 390px ekranda sayfa 595px
+       oluyor ve yana ~205px bos alana kayiyordu. body'deki overflow-x tek basina
+       yetmiyor, kaydirma html uzerinde gerceklesiyor.
+       'clip' kullaniliyor, 'hidden' degil: hidden bir kaydirma baglami yaratir ve
+       /hakkimizda'daki lg:sticky sutunu bozar. clip kaydirmayi keser, sticky calisir. */
+    overflow-x: clip;
   }
   body {
     background-color: var(--color-night);

@@ -38,9 +38,13 @@ export function CookieBanner() {
       role="dialog"
       aria-live="polite"
       aria-label={t('cookie.aria')}
-      className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:max-w-sm z-50 rounded-2xl border border-white/15 bg-[#0E0F14]/95 backdrop-blur-md shadow-2xl p-5 transition-opacity duration-500"
+      /* Telefonda band ekranin alt dortte birini kapliyordu ve ana sayfadaki iki
+         cagri butonunun ustune biniyordu (kisa telefonlarda ikincisi tamamen
+         gorunmez oluyordu). Telefonda artik tek satir: metin solda, buton sagda.
+         Masaustunde eski sag-alt kutu duzeni aynen kaliyor. */
+      className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:max-w-sm z-50 rounded-2xl border border-white/15 bg-[#0E0F14]/95 backdrop-blur-md shadow-2xl p-3.5 md:p-5 transition-opacity duration-500 flex items-center gap-3 md:block"
     >
-      <p className="text-sm text-[#C9CCD4] leading-relaxed mb-4">
+      <p className="text-xs md:text-sm text-[#C9CCD4] leading-snug md:leading-relaxed md:mb-4 flex-1">
         {t('cookie.body')}{' '}
         <Link
           href="/sozlesmeler/kvkk"
@@ -51,7 +55,7 @@ export function CookieBanner() {
       </p>
       <button
         onClick={handleAccept}
-        className="w-full px-4 py-2.5 rounded-full bg-[#4F8BFF] text-white text-sm font-semibold hover:bg-[#3a73e6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4F8BFF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0E0F14] transition-colors"
+        className="shrink-0 min-h-[44px] px-4 py-2.5 rounded-full bg-[#4F8BFF] text-white text-sm font-semibold hover:bg-[#3a73e6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4F8BFF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0E0F14] transition-colors md:w-full"
       >
         {t('cookie.accept')}
       </button>

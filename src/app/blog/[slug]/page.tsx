@@ -224,8 +224,10 @@ export default async function BlogPost(
           <div className="bg-gradient-to-br from-white/5 to-transparent border border-white/10 rounded-3xl p-8 md:p-12 text-center relative overflow-hidden">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[100px] bg-[#4F8BFF]/10 blur-[50px] pointer-events-none" />
             <h4 className="text-2xl font-bold text-white mb-4 relative z-10">Kendi AI Sisteminizi Kurmaya Hazır mısınız?</h4>
-            <Link href="/" className="relative z-10 inline-flex items-center justify-center px-8 py-4 text-sm font-bold text-white bg-white/10 hover:bg-white/20 border border-white/20 rounded-2xl transition-all hover:scale-105 active:scale-95">
-              Dolunay AI Ana Sayfaya Dön
+            {/* Eskiden bu buton ana sayfaya donuyordu: satis sorusu sorulup cevap
+                olarak ziyaretci basa gonderiliyordu. Artik hizmet sayfasina gidiyor. */}
+            <Link href="/cozumler/hizmetler" className="relative z-10 inline-flex items-center justify-center px-8 py-4 text-sm font-bold text-white bg-white/10 hover:bg-white/20 border border-white/20 rounded-2xl transition-all hover:scale-105 active:scale-95">
+              Hizmetleri İncele
             </Link>
           </div>
         </div>

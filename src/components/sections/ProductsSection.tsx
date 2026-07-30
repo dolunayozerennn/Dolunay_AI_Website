@@ -158,7 +158,7 @@ export function ProductsSection() {
       description: t('products.card2Desc'),
       tag: t('products.card2Tag'),
       buttonLabel: t('products.card2Button'),
-      href: '/cozumler#hizmetler',
+      href: '/cozumler#services',
       external: false,
       accentColor: '#4F8BFF',
       glowColor: 'rgba(79, 139, 255, 0.22)',

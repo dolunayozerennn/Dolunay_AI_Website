@@ -236,11 +236,22 @@ function ViralReelCard({ brand, views, type, gradient, href, videoUrl }: {
   href: string;
   videoUrl?: string;
 }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Video yalnizca ziyaretci karta gelince iniyor. preload="none" oldugu icin
+  // play() cagrilana kadar tek bayt inmiyor.
+  const oynat = () => { videoRef.current?.play().catch(() => {}) };
+  const durdur = () => { videoRef.current?.pause() };
+
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
+      onMouseEnter={oynat}
+      onMouseLeave={durdur}
+      onFocus={oynat}
+      onBlur={durdur}
       className="group relative rounded-3xl overflow-hidden block cursor-pointer bg-black"
       style={{ aspectRatio: '9/16' }}
     >
@@ -250,11 +261,18 @@ function ViralReelCard({ brand, views, type, gradient, href, videoUrl }: {
       {/* Dark card container */}
       <div className="relative h-full rounded-3xl overflow-hidden bg-[#0a0a0f] border border-white/[0.06]">
 
-        {/* Background Video */}
+        {/* Arka plan videosu.
+            Eskiden alti video da autoPlay ile aciliyordu: sayfa acilir acilmaz
+            22 MB iniyordu ve telefonda yuklenmesi 10 saniye suruyordu. Videolar
+            burada dekoratif (200 piksel genislikte, yari saydam, ustunde yazi var).
+            Simdi once kapak goruntusu (toplam 148 KB) geliyor, video yalnizca
+            fareyle uzerine gelinince iniyor ve oynuyor. */}
         {videoUrl && (
           <video
+            ref={videoRef}
             src={videoUrl}
-            autoPlay
+            poster={videoUrl.replace('/videos/', '/videos/poster/').replace('.mp4', '.webp')}
+            preload="none"
             loop
             muted
             playsInline
@@ -707,11 +725,14 @@ export default function CollaborationsPage() {
                         <p className="text-xs text-gray-500">{platform.handle}</p>
                       </div>
                     </div>
+                    {/* Etiketi yoktu: ekran okuyucu yalnizca "baglanti" diyor, nereye
+                        gittigini soylemiyordu. Dokunma alani da 32 pikseldi, 44 oldu. */}
                     <a
                       href={platform.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-8 h-8 rounded-lg bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-gray-500 hover:text-white hover:border-white/[0.15] transition-all duration-300"
+                      aria-label={`${platform.name} hesabını aç`}
+                      className="w-11 h-11 rounded-lg bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-gray-500 hover:text-white hover:border-white/[0.15] transition-all duration-300"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
                     </a>
