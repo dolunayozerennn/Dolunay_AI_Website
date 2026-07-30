@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Kurumsal Eğitimler | dolunay.ai',
+  title: 'Kurumsal Eğitimler',
   description: 'Şirketiniz için sıfırdan yapay zeka entegrasyonu, verimlilik artışı ve departman bazlı uygulamalı kurumsal AI eğitimleri.',
   openGraph: {
     title: 'Kurumsal Yapay Zeka Eğitimleri | dolunay.ai',

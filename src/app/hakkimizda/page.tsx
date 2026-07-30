@@ -126,9 +126,9 @@ export default function AboutV3() {
             <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 text-[#4F8BFF] text-sm font-semibold tracking-[0.2em] uppercase mb-4">
               <span className="halftone-arc" aria-hidden />{t('about.sectionTag')}
             </motion.span>
-            <motion.h2 variants={fadeUp} custom={1} className="text-3xl md:text-5xl font-bold mb-5 tracking-tight">
+            <motion.h1 variants={fadeUp} custom={1} className="text-3xl md:text-5xl font-bold mb-5 tracking-tight">
               Üç iş kolu, <span className="text-gradient-accent">üç farklı ekip</span>
-            </motion.h2>
+            </motion.h1>
             <motion.p variants={fadeUp} custom={2} className="text-gray-400 text-lg leading-relaxed">
               İşletmelere yapay zeka otomasyonu, markalara işbirlikleri, girişimcilere eğitim. Üçünü de farklı bir ekiple yürütüyoruz.
             </motion.p>

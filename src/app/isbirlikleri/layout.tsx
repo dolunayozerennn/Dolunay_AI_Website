@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Marka İşbirlikleri & Sponsorluklar | dolunay.ai',
+  title: 'Marka İşbirlikleri & Sponsorluklar',
   description: 'Yapay zeka ürünleriniz, SaaS uygulamalarınız veya teknoloji servisleriniz için 500.000+ izlenmeli video içerik üretimi ve B2B marka sponsorluk paketleri.',
   openGraph: {
     title: 'Marka İşbirlikleri & Sponsorluklar | dolunay.ai',

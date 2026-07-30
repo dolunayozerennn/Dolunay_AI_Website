@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'AI Factory: Girişimci Yapay Zeka Eğitimi | dolunay.ai',
+  title: 'AI Factory: Girişimci Yapay Zeka Eğitimi',
   description: 'Girişimciler ve profesyoneller için sıfırdan yapay zeka otomasyonu, pasif gelir ve ürün çıkarma topluluğu. Skool üzerinden ulaşıma açık.',
   openGraph: {
     title: 'AI Factory Topluluğu | dolunay.ai',

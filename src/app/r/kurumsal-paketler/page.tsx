@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Sparkles, Users, Clock, Check, Mail, Star } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Kurumsal Eğitim Paketleri 2026 | dolunay.ai',
+  title: 'Kurumsal Eğitim Paketleri 2026',
   description: 'Şirketlere özel yapay zeka eğitim paketleri ve güncel fiyat listesi.',
   robots: { index: false, follow: false },
 }

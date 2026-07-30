@@ -35,7 +35,9 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'tr_TR',
-    url: 'https://dolunay.ai',
+    // canonical ile ayni mantik: './' o anki sayfaya cozulur. Sabit birakilirsa
+    // kendi metadata'si olmayan sayfalar paylasilirken 'bu sayfa ana sayfadir' der.
+    url: './',
     siteName: 'dolunay.ai',
     title: 'dolunay.ai · Yapay Zeka Eğitmen & Builder',
     description: 'Yapay zeka eğitmeni & builder. İşletmeler için AI otomasyon çözümleri, girişimciler için AI Factory topluluğu.',

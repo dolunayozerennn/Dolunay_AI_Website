@@ -1,3 +1,13 @@
+import type { Metadata } from 'next'
+
+// 404 sayfasi indekslenmemeli; canonical de uretilmemeli (yoksa var olmayan
+// /_not-found adresini isaret ediyor).
+export const metadata: Metadata = {
+  title: 'Sayfa bulunamadı',
+  robots: { index: false, follow: false },
+  alternates: {},
+}
+
 import Link from 'next/link';
 
 export default function NotFound() {

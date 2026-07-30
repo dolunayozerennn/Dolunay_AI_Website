@@ -31,8 +31,8 @@ const serviceClients = [
   { name: 'Acarsan', logo: '/images/logos/356395_259272.webp', invert: false },
   { name: 'WeBee', logo: '/images/logos/images (8) copy.png', invert: false },
   { name: 'VoyantAI', logo: '/images/logos/Screenshot 2026-03-16 at 22.06.12.png', invert: false },
-  { name: 'Udemy', logo: '/images/logos/Udemy_logo.svg (1).png', invert: true },
-  { name: 'GittiGidiyor', logo: '/images/logos/images (8) copy 2.png', invert: false },
+  { name: 'Udemy', logo: '/images/logos/udemy-logo.png', invert: true },
+  { name: 'GittiGidiyor', logo: '/images/logos/gittigidiyor-logo.png', invert: false },
 ]
 
 // ─── Hizmet Referansları ─────────────────────────────────────────
@@ -155,7 +155,11 @@ function RefCard({ client, index }: { client: typeof educationClients[0]; index:
   )
 }
 
-export function ServicesSection() {
+// asHeading: bu blok /cozumler/hizmetler sayfasında sayfanın TEK içeriği olduğu için
+// oradaki başlık h1 olmalı (sayfanın h1'i yoktu). /cozumler içinde ise bir bölüm
+// başlığıdır, h2 kalır. Görsel olarak ikisi de aynı.
+export function ServicesSection({ asHeading = 'h2' }: { asHeading?: 'h1' | 'h2' } = {}) {
+  const Heading = motion[asHeading];
   return (
     <section id="services" className="py-32 relative">
       <div className="halftone-divider max-w-5xl mx-auto mb-32" />
@@ -169,10 +173,10 @@ export function ServicesSection() {
           className="text-center max-w-3xl mx-auto mb-24"
         >
           <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 text-[#4F8BFF] text-sm font-semibold tracking-[0.2em] uppercase mb-4"><span className="halftone-arc" aria-hidden />Hizmetler</motion.span>
-          <motion.h2 variants={fadeUp} custom={1} className="text-4xl md:text-6xl font-bold mb-6 tracking-tight text-white">
+          <Heading variants={fadeUp} custom={1} className="text-4xl md:text-6xl font-bold mb-6 tracking-tight text-white">
             Danışmanlık &{' '}
             <span className="text-gradient-accent">Otomasyon</span>
-          </motion.h2>
+          </Heading>
           <motion.p variants={fadeUp} custom={2} className="text-gray-400 text-lg leading-relaxed">
             Sadece standart paketler değil, kurumsal firmalar ve hacimli operasyonlar 
             için terzi işi yapay zeka altyapılarını birlikte kuruyoruz.

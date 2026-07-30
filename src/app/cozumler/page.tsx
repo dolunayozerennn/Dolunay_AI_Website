@@ -113,10 +113,10 @@ export default function SolutionsPage() {
             className="text-center max-w-3xl mx-auto mb-16"
           >
             <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 text-[#4F8BFF] text-sm font-semibold tracking-[0.2em] uppercase mb-4"><span className="halftone-arc" aria-hidden />{t('solutions.badge')}</motion.span>
-            <motion.h2 variants={fadeUp} custom={1} className="text-3xl md:text-5xl font-bold mb-5 tracking-tight">
+            <motion.h1 variants={fadeUp} custom={1} className="text-3xl md:text-5xl font-bold mb-5 tracking-tight">
               {t('solutions.title')}{' '}
               <span className="text-gradient-accent">{t('solutions.titleHighlight')}</span>
-            </motion.h2>
+            </motion.h1>
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">

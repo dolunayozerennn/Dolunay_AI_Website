@@ -21,7 +21,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/blog',
     '/cozumler',
     '/cozumler/artifex-campus',
-    '/cozumler/hizmetler',
+    // '/cozumler/hizmetler' bilerek YOK: govdesi /cozumler'in kopyasi, canonical oraya bakiyor.
     '/egitimler/ai-factory',
     '/egitimler/kurumsal-egitimler',
     '/isbirlikleri',

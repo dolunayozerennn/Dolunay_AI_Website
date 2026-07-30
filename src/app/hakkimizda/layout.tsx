@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Hakkımda & Ekibimiz | dolunay.ai',
+  title: 'Hakkımda & Ekibimiz',
   description: 'Dolunay Özeren kimdir? Antigravity yapay zeka takımı, otonom AI ajanlarımız ve ekibimizin arkasındaki vizyon.',
   openGraph: {
     title: 'Hakkımda & Ekibimiz | dolunay.ai',

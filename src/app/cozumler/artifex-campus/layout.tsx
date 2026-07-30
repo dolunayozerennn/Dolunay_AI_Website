@@ -1,5 +1,8 @@
 import type { Metadata } from 'next'
 
+// Not: '/cozumler' layout'u kendi title'ini duz metin olarak tanimladigi icin
+// kokteki '%s | dolunay.ai' sablonu BU alt sayfalara inmez. Marka adi burada
+// elle yazilir; kaldirilirsa baslik markasiz kalir.
 export const metadata: Metadata = {
   title: 'Artifex Campus & Otonom Sistem Kurulumu | dolunay.ai',
   description: 'İşletmeler ve startup\'lar için A\'dan Z\'ye özel yapay zeka ajanları, otonom pazarlama sistemleri ve mimari danışmanlık hizmetleri.',

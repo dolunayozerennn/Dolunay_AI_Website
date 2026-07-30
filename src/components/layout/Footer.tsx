@@ -63,6 +63,7 @@ export function Footer() {
             <div className="flex flex-col gap-3">
               <span className="text-white font-semibold mb-1">Çözümler</span>
 
+              <Link href="/cozumler" className="hover:text-white transition-colors">Tüm Çözümler</Link>
               <Link href="/cozumler/hizmetler" className="hover:text-white transition-colors">Hizmetler</Link>
               <Link href="/cozumler/artifex-campus" className="hover:text-white transition-colors">Artifex Campus</Link>
               <Link href="/isbirlikleri" className="hover:text-white transition-colors">İşbirlikleri</Link>
