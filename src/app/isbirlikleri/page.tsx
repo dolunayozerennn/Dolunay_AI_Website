@@ -204,7 +204,6 @@ const platforms = [
 // ─── Highlight Stats ────────────────────────────────────────────────────────────
 const highlightStats = [
   { icon: <Eye className="w-5 h-5" />, value: 10, suffix: 'M+', labelKey: 'collaborations.statMonthlyViews', color: 'from-blue-500 to-blue-600' },
-  { icon: <Heart className="w-5 h-5" />, value: 300000, suffix: '+', labelKey: 'collaborations.statMonthlyEngagement', color: 'from-blue-500 to-stone-600' },
   { icon: <Users className="w-5 h-5" />, value: 300000, suffix: '+', labelKey: 'collaborations.statTotalFollowers', color: 'from-blue-500 to-blue-600' },
   { icon: <Activity className="w-5 h-5" />, value: 200, suffix: 'M+', labelKey: 'collaborations.statTotalViews', color: 'from-stone-400 to-stone-500' },
 ];
@@ -451,7 +450,7 @@ export default function CollaborationsPage() {
             <motion.div
               initial="hidden"
               animate="visible"
-              className="grid grid-cols-2 sm:grid-cols-4 gap-3"
+              className="grid grid-cols-1 sm:grid-cols-3 gap-3"
             >
               {highlightStats.map((stat, i) => (
                 <motion.div
