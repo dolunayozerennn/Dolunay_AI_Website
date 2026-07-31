@@ -17,11 +17,15 @@ export function LanguageSwitcher({ mobile = false }: { mobile?: boolean }) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Default to tr initially to prevent hydration mismatch
-  const mounted = useRef(false);
+  // Sunucu HTML'i her zaman tr uretir; ilk cizimde de tr gosterilir ki
+  // hydration uyusmazligi olmasin, sonra gercek dile gecilir.
+  // ONEMLI: bu bir useRef DEGIL, useState. useRef ile yazildiginda deger
+  // degisse bile yeniden cizim tetiklenmiyordu; secici Ingilizce gezerken bile
+  // "Türkçe" yazili kaliyor ve yanlis dili secili gosteriyordu.
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    mounted.current = true;
+    setMounted(true);
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsOpen(false);
@@ -59,7 +63,7 @@ export function LanguageSwitcher({ mobile = false }: { mobile?: boolean }) {
       <div className="py-2">
         <div className="flex items-center gap-2 px-4 py-2 text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-1">
           <Globe className="w-3.5 h-3.5" />
-          <span>{t('nav.language')}: {mounted.current ? currentLang.name : 'Türkçe'}</span>
+          <span>{t('nav.language')}: {mounted ? currentLang.name : 'Türkçe'}</span>
         </div>
         <div className="grid grid-cols-2 gap-2 px-3">
           {languages.map((lang) => (
@@ -67,7 +71,7 @@ export function LanguageSwitcher({ mobile = false }: { mobile?: boolean }) {
               key={lang.code}
               onClick={() => handleLanguageSelect(lang.code)}
               className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-all ${
-                (mounted.current ? language === lang.code : lang.code === 'tr')
+                (mounted ? language === lang.code : lang.code === 'tr')
                   ? 'bg-[#4F8BFF]/10 text-[#4F8BFF] border border-[#4F8BFF]/20'
                   : 'text-gray-400 hover:text-white hover:bg-white/[0.04] border border-transparent'
               }`}
@@ -98,7 +102,7 @@ export function LanguageSwitcher({ mobile = false }: { mobile?: boolean }) {
         className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white hover:bg-white/[0.04] transition-all duration-300"
       >
         <Globe className="w-4 h-4 opacity-70" />
-        <span className="uppercase">{mounted.current ? language : 'TR'}</span>
+        <span className="uppercase">{mounted ? language : 'TR'}</span>
         <ChevronDown className={`w-3.5 h-3.5 opacity-50 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
@@ -112,11 +116,11 @@ export function LanguageSwitcher({ mobile = false }: { mobile?: boolean }) {
             >
               <div className="flex items-center gap-3">
                 <span className="text-lg leading-none">{lang.flag}</span>
-                <span className={`font-medium ${(mounted.current ? language === lang.code : lang.code === 'tr') ? 'text-white' : 'text-gray-400'}`}>
+                <span className={`font-medium ${(mounted ? language === lang.code : lang.code === 'tr') ? 'text-white' : 'text-gray-400'}`}>
                   {lang.name}
                 </span>
               </div>
-              {(mounted.current ? language === lang.code : lang.code === 'tr') && (
+              {(mounted ? language === lang.code : lang.code === 'tr') && (
                 <Check className="w-4 h-4 text-[#4F8BFF]" />
               )}
             </button>

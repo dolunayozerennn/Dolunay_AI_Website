@@ -41,6 +41,11 @@ function BentoCard({ children, className = '', custom = 0 }: { children: React.R
       ref={cardRef}
       variants={fadeUp}
       custom={custom}
+      // initial + animate BURADA acikca veriliyor: kart ust bir motion blogunun
+      // variant zincirine BAGLI KALMASIN. Dil degisince o zincir kopuyor ve kart
+      // "hidden"da (opacity 0) takili kaliyordu, sayfa bos gorunuyordu.
+      initial="hidden"
+      animate="visible"
       onMouseMove={handleMouse}
       className={`bento-card relative overflow-hidden ${className}`}
     >
@@ -108,11 +113,21 @@ export default function SolutionsPage() {
           </motion.div>
 
           <div className="grid grid-cols-1 gap-8 items-stretch max-w-2xl mx-auto">
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} className="flex flex-col h-full">
-              <motion.h3 variants={fadeUp} custom={0} className="text-sm font-semibold text-gray-500 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
+            {/* Bu blok BILEREK animasyonsuz (plain div).
+                Artifex kaldirilinca kart sayfanin ust kismina tasindi ve acilista
+                zaten ekranda oluyor. Dil Turkce disindaysa saglayici sayfayi once
+                tr ile ciziyor, sonra dili degistirip yeniden ciziyor; bu ikinci
+                cizimde framer-motion'un variant zinciri kartta "hidden"da takili
+                kaliyor ve kart opacity 0'da kaliyordu. Yani yabanci ziyaretci
+                Cozumler sayfasini BOMBOS goruyordu.
+                Ust seviyede motion kalmayinca cocuklar dogal (gorunur) haliyle
+                ciziliyor. Kucuk bir giris animasyonu kaybi, karsiliginda sayfanin
+                her dilde kesin gorunmesi. */}
+            <div className="flex flex-col h-full">
+              <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
                 <div className="w-5 h-[1px] bg-[#4F8BFF]" />
                 {t('solutions.customTitle')}
-              </motion.h3>
+              </h3>
               <div className="flex-1 flex flex-col gap-6">
                 {customSolutions.map((solution, i) => (
                   <BentoCard key={solution.title} custom={i + 1} className="!rounded-3xl relative flex-1 flex flex-col group p-6 border border-white/5 bg-white/5 backdrop-blur-sm">
@@ -140,7 +155,7 @@ export default function SolutionsPage() {
                   </BentoCard>
                 ))}
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
