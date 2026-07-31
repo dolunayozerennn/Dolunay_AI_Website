@@ -1,20 +1,21 @@
+'use client'
+
 import Link from 'next/link'
 import Image from 'next/image'
 import { Calendar, Clock } from 'lucide-react'
-import type { Post } from '@/lib/mdx'
+import type { PostMeta } from '@/lib/mdx'
+import { useTranslation } from '@/i18n/i18n'
+import { useDateFormatter } from './BlogChrome'
 
-export function BlogCard({ post }: { post: Post }) {
-  // Format date correctly (e.g., "16 Mart 2026")
-  const dateFormatted = new Date(post.date).toLocaleDateString('tr-TR', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-  });
+export function BlogCard({ post }: { post: PostMeta }) {
+  const { t } = useTranslation()
+  const bicimle = useDateFormatter()
+  const dateFormatted = bicimle(post.date)
 
   return (
     <Link href={`/blog/${post.slug}`} className="group block">
       <article className="bento-card !p-0 h-full flex flex-col group-hover:border-[#4F8BFF]/30 transition-all duration-300">
-        
+
         {/* Image Container */}
         {post.coverImage && (
           <div className="relative w-full aspect-video overflow-hidden bg-[#0E0F14]">
@@ -27,7 +28,7 @@ export function BlogCard({ post }: { post: Post }) {
             />
           </div>
         )}
-        
+
         {/* Content */}
         <div className="p-6 md:p-8 flex flex-col flex-1">
           {/* Metadata */}
@@ -38,27 +39,27 @@ export function BlogCard({ post }: { post: Post }) {
             </div>
             <div className="flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5 text-gray-500" />
-              <span>{post.readingTime}</span>
+              <span>{post.readingMinutes} {t('blog.readMinutes')}</span>
             </div>
           </div>
 
           <h3 className="text-xl md:text-2xl font-bold text-white mb-3 tracking-tight group-hover:text-[#4F8BFF] transition-colors line-clamp-2">
             {post.title}
           </h3>
-          
+
           <p className="text-gray-400 text-sm leading-relaxed mb-6 line-clamp-3">
             {post.excerpt}
           </p>
 
           <div className="mt-auto flex items-center justify-between pt-4 border-t border-white/5">
             <span className="text-sm font-semibold text-white group-hover:text-[#4F8BFF] transition-colors flex items-center gap-2">
-              Okumaya başla
+              {t('blog.readMore')}
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="transform group-hover:translate-x-1 transition-transform" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14"></path>
                 <path d="m12 5 7 7-7 7"></path>
               </svg>
             </span>
-            
+
             {/* Tags */}
             {post.tags && post.tags.length > 0 && (
               <div className="flex gap-2">

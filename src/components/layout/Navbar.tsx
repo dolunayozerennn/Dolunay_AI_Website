@@ -137,16 +137,8 @@ export function Navbar() {
                       onClick={() => setIsDropdownOpen(false)}
                       className="flex flex-col px-5 py-3.5 hover:bg-white/[0.04] transition-all duration-300 border-b border-white/[0.04]"
                     >
-                      <span className="text-sm font-medium text-white">Tüm Çözümler</span>
-                      <span className="text-xs text-gray-500 mt-0.5">İşletmeler ve girişimciler için hepsi</span>
-                    </Link>
-                    <Link
-                      href="/cozumler/artifex-campus"
-                      onClick={() => setIsDropdownOpen(false)}
-                      className="flex flex-col px-5 py-3.5 hover:bg-white/[0.04] transition-all duration-300 border-b border-white/[0.04]"
-                    >
-                      <span className="text-sm font-medium text-white">{t('nav.artifexCampus')}</span>
-                      <span className="text-xs text-gray-500 mt-0.5">{t('nav.artifexCampusDesc')}</span>
+                      <span className="text-sm font-medium text-white">{t('nav.allSolutions')}</span>
+                      <span className="text-xs text-gray-500 mt-0.5">{t('nav.allSolutionsDesc')}</span>
                     </Link>
                     <Link
                       href="/cozumler/hizmetler"
@@ -229,7 +221,7 @@ export function Navbar() {
               href="/blog"
               className="text-sm font-medium text-gray-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/[0.04] transition-all duration-300"
             >
-              Blog
+              {t('nav.blog')}
             </Link>
           </div>
         </div>
@@ -246,7 +238,7 @@ export function Navbar() {
             <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-expanded={isMobileMenuOpen}
-              aria-label="Menüyü Aç/Kapat"
+              aria-label={t('nav.menuToggle')}
               className="text-gray-300 hover:text-white transition-colors p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
             >
               {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
@@ -267,13 +259,6 @@ export function Navbar() {
           >
             <div className="flex flex-col space-y-1">
               <div className="px-3 py-2 text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]">{t('nav.solutions')}</div>
-              <Link 
-                href="/cozumler/artifex-campus"
-                className="text-gray-300 hover:text-white font-medium px-4 py-2.5 rounded-lg hover:bg-white/[0.04] transition-all"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Artifex Campus
-              </Link>
               <Link 
                 href="/cozumler/hizmetler"
                 className="text-gray-300 hover:text-white font-medium px-4 py-2.5 rounded-lg hover:bg-white/[0.04] transition-all"
@@ -324,7 +309,7 @@ export function Navbar() {
                 className="text-gray-300 hover:text-white font-medium px-4 py-2.5 rounded-lg hover:bg-white/[0.04] transition-all"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Blog
+                {t('nav.blog')}
               </Link>
 
               <div className="h-px bg-white/[0.08] my-3 mx-2" />

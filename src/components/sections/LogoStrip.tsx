@@ -2,9 +2,12 @@
 
 import { motion } from 'framer-motion'
 import Image from 'next/image'
+import { useTranslation } from '@/i18n/i18n'
 
 type LogoEntry = {
   name: string
+  /** Kurum adinin cevirisi varsa (universite, banka) buradan okunur. */
+  nameKey?: string
   src?: string
 }
 
@@ -13,15 +16,17 @@ const LOGOS: LogoEntry[] = [
   { name: 'Udemy', src: '/images/logos/udemy-logo.png' },
   { name: 'Trendyol' },
   { name: 'GittiGidiyor', src: '/images/logos/gittigidiyor-logo.png' },
-  { name: 'Başkent Üniversitesi' },
-  { name: 'Misyon Bankası' },
+  { name: 'Başkent Üniversitesi', nameKey: 'corporateTrainings.client3Name' },
+  { name: 'Misyon Bankası', nameKey: 'corporateTrainings.client2Name' },
 ]
 
 export function LogoStrip() {
+  const { t } = useTranslation()
+
   return (
     <section
       className="relative py-16 md:py-20 bg-[#08090C] border-t border-b border-white/[0.06]"
-      aria-label="Çalışılan kurumlar"
+      aria-label={t('logoStrip.aria')}
     >
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16">
         <motion.div
@@ -32,10 +37,10 @@ export function LogoStrip() {
           className="text-center mb-10"
         >
           <span className="font-mono text-[10px] tracking-[0.3em] text-[#4F8BFF]/80 uppercase">
-            Eğitim verdiği kurumlar
+            {t('logoStrip.tag')}
           </span>
           <p className="mt-3 text-lg md:text-xl text-[#C9CCD4] font-light max-w-2xl mx-auto leading-relaxed">
-            Türkiye'nin önde gelen kurumları yapay zeka eğitimlerini Dolunay'dan aldı.
+            {t('logoStrip.desc')}
           </p>
         </motion.div>
 
@@ -46,29 +51,32 @@ export function LogoStrip() {
           transition={{ duration: 0.8, delay: 0.1 }}
           className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 items-center"
         >
-          {LOGOS.map((logo) => (
-            <li
-              key={logo.name}
-              className="flex items-center justify-center h-16 px-4 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-white/15 hover:bg-white/[0.05] transition-colors"
-              title={logo.name}
-            >
-              {logo.src ? (
-                <div className="relative w-full h-10">
-                  <Image
-                    src={logo.src}
-                    alt={`${logo.name} logosu`}
-                    fill
-                    className="object-contain opacity-80 hover:opacity-100 transition-opacity"
-                    sizes="(max-width: 768px) 50vw, 16vw"
-                  />
-                </div>
-              ) : (
-                <span className="text-sm md:text-base font-semibold text-[#C9CCD4]/70 hover:text-white transition-colors text-center leading-tight">
-                  {logo.name}
-                </span>
-              )}
-            </li>
-          ))}
+          {LOGOS.map((logo) => {
+            const ad = logo.nameKey ? t(logo.nameKey) : logo.name
+            return (
+              <li
+                key={logo.name}
+                className="flex items-center justify-center h-16 px-4 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-white/15 hover:bg-white/[0.05] transition-colors"
+                title={ad}
+              >
+                {logo.src ? (
+                  <div className="relative w-full h-10">
+                    <Image
+                      src={logo.src}
+                      alt={ad}
+                      fill
+                      className="object-contain opacity-80 hover:opacity-100 transition-opacity"
+                      sizes="(max-width: 768px) 50vw, 16vw"
+                    />
+                  </div>
+                ) : (
+                  <span className="text-sm md:text-base font-semibold text-[#C9CCD4]/70 hover:text-white transition-colors text-center leading-tight">
+                    {ad}
+                  </span>
+                )}
+              </li>
+            )
+          })}
         </motion.ul>
       </div>
     </section>

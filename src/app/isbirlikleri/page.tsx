@@ -9,6 +9,15 @@ import {
   Mail, ArrowUpRight, Eye, ExternalLink, Heart,
   Globe, BarChart3, Activity, PieChart, Sparkles
 } from 'lucide-react';
+import { useTranslation, type Language } from '@/i18n/i18n';
+
+// Rakamlar dile gore bicimlenir: 250.000+ (tr/es) ↔ 250,000+ (en/zh).
+const NUMBER_LOCALE: Record<Language, string> = {
+  tr: 'tr-TR',
+  en: 'en-US',
+  es: 'es-ES',
+  zh: 'zh-CN',
+};
 
 // ─── Custom Icons ──────────────────────────────────────────────────────────────
 function TikTokIcon({ className }: { className?: string }) {
@@ -45,7 +54,7 @@ const scaleIn = {
 };
 
 // ─── Counter Animation ─────────────────────────────────────────────────────────
-function AnimatedCounter({ target, suffix = '', decimals = 0 }: { target: number; suffix?: string, decimals?: number }) {
+function AnimatedCounter({ target, suffix = '', decimals = 0, locale = 'tr-TR' }: { target: number; suffix?: string, decimals?: number, locale?: string }) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
   const hasAnimated = useRef(false);
@@ -69,7 +78,7 @@ function AnimatedCounter({ target, suffix = '', decimals = 0 }: { target: number
   };
 
   const formatNumber = (num: number) => {
-    return Number(num).toLocaleString('tr-TR', { maximumFractionDigits: decimals, minimumFractionDigits: decimals });
+    return Number(num).toLocaleString(locale, { maximumFractionDigits: decimals, minimumFractionDigits: decimals });
   };
 
   return (
@@ -109,93 +118,95 @@ function BentoCard({ children, className = '', custom = 0 }: { children: React.R
 }
 
 // ─── Social Media Platform Data ────────────────────────────────────────────────
+// Rakamlar SAYI olarak durur, ekranda ziyaretcinin diline gore bicimlenir.
+// Etiketler ceviri paketinden gelir (collaborations.*).
 const platforms = [
   {
     name: 'Instagram',
     handle: '@dolunayozeren',
-    followers: '250.000+',
+    followers: 250000,
     icon: <Instagram className="w-6 h-6" />,
     gradient: 'from-blue-500 to-blue-600',
     bgGlow: 'rgba(237, 234, 227, 0.15)',
     textColor: 'text-blue-400',
     href: 'https://www.instagram.com/dolunay_ozeren/',
-    metric: 'Takipçi',
-    engagementLabel: 'Erişim / Post',
-    engagementValue: '50.000+'
+    metricKey: 'collaborations.follower',
+    engagementLabelKey: 'collaborations.reachPerPost',
+    engagementValue: 50000
   },
   {
     name: 'TikTok',
     handle: '@dolunayozeren',
-    followers: '37.000+',
+    followers: 37000,
     icon: <TikTokIcon className="w-6 h-6" />,
     gradient: 'from-blue-400 to-blue-600',
     bgGlow: 'rgba(79, 139, 255, 0.15)',
     textColor: 'text-blue-400',
     href: 'https://tiktok.com/@dolunayozeren',
-    metric: 'Takipçi',
-    engagementLabel: 'Ort. İzlenme',
-    engagementValue: '100.000+'
+    metricKey: 'collaborations.follower',
+    engagementLabelKey: 'collaborations.avgViews',
+    engagementValue: 100000
   },
   {
     name: 'YouTube',
     handle: '@dolunayozeren',
-    followers: '43.000+',
+    followers: 43000,
     icon: <Youtube className="w-6 h-6" />,
     gradient: 'from-stone-500 to-stone-600',
     bgGlow: 'rgba(239, 68, 68, 0.15)',
     textColor: 'text-stone-400',
     href: 'https://youtube.com/@dolunayozeren',
-    metric: 'Abone',
-    engagementLabel: 'Ort. İzlenme',
-    engagementValue: '25.000+'
+    metricKey: 'collaborations.subscriber',
+    engagementLabelKey: 'collaborations.avgViews',
+    engagementValue: 25000
   },
   {
     name: 'Facebook',
     handle: 'Dolunay Özeren',
-    followers: '15.000+',
+    followers: 15000,
     icon: <Facebook className="w-6 h-6" />,
     gradient: 'from-blue-500 to-blue-700',
     bgGlow: 'rgba(59, 130, 246, 0.15)',
     textColor: 'text-blue-400',
     href: 'https://www.facebook.com/profile.php?id=61561973441859',
-    metric: 'Takipçi',
-    engagementLabel: 'Ort. Etkileşim',
-    engagementValue: '5.000+'
+    metricKey: 'collaborations.follower',
+    engagementLabelKey: 'collaborations.avgEngagement',
+    engagementValue: 5000
   },
   {
     name: 'Udemy',
     handle: 'Dolunay Özeren',
-    followers: '45.000+',
+    followers: 45000,
     icon: <GraduationCap className="w-6 h-6" />,
     gradient: 'from-blue-500 to-blue-700',
     bgGlow: 'rgba(139, 92, 246, 0.15)',
     textColor: 'text-blue-400',
     href: 'https://www.udemy.com/course/ai-yapay-zeka-uzmanligi-chatgpt-midjourney-dalle-ve-fazlasi/?referralCode=906FDE49207D6106DCBF',
-    metric: 'Öğrenci',
-    engagementLabel: 'Eğitmen Puanı',
+    metricKey: 'collaborations.student',
+    engagementLabelKey: 'collaborations.instructorRating',
     engagementValue: '4.7 ⭐'
   },
   {
     name: 'Skool',
     handle: 'AI Factory',
-    followers: '500+',
+    followers: 400,
     icon: <SkoolIcon className="w-6 h-6" />,
     gradient: 'from-blue-400 to-blue-600',
     bgGlow: 'rgba(52, 211, 153, 0.15)',
     textColor: 'text-blue-400',
     href: 'https://www.skool.com/yapay-zeka-factory/about?ref=044f39496d4f45fab11775bcefe4b7f4',
-    metric: 'Üye',
-    engagementLabel: 'Topluluk',
+    metricKey: 'collaborations.member',
+    engagementLabelKey: 'collaborations.community',
     engagementValue: 'Premium'
   }
 ];
 
 // ─── Highlight Stats ────────────────────────────────────────────────────────────
 const highlightStats = [
-  { icon: <Eye className="w-5 h-5" />, value: 10, suffix: 'M+', label: 'Aylık Ort. İzlenme', color: 'from-blue-500 to-blue-600' },
-  { icon: <Heart className="w-5 h-5" />, value: 300, suffix: '.000+', label: 'Aylık Etkileşim', color: 'from-blue-500 to-stone-600' },
-  { icon: <Users className="w-5 h-5" />, value: 300, suffix: '.000+', label: 'Toplam Takipçi', color: 'from-blue-500 to-blue-600' },
-  { icon: <Activity className="w-5 h-5" />, value: 100, suffix: 'M+', label: 'Toplam İzlenme', color: 'from-stone-400 to-stone-500' },
+  { icon: <Eye className="w-5 h-5" />, value: 10, suffix: 'M+', labelKey: 'collaborations.statMonthlyViews', color: 'from-blue-500 to-blue-600' },
+  { icon: <Heart className="w-5 h-5" />, value: 300000, suffix: '+', labelKey: 'collaborations.statMonthlyEngagement', color: 'from-blue-500 to-stone-600' },
+  { icon: <Users className="w-5 h-5" />, value: 300000, suffix: '+', labelKey: 'collaborations.statTotalFollowers', color: 'from-blue-500 to-blue-600' },
+  { icon: <Activity className="w-5 h-5" />, value: 200, suffix: 'M+', labelKey: 'collaborations.statTotalViews', color: 'from-stone-400 to-stone-500' },
 ];
 
 // ─── Demographics Data ─────────────────────────────────────────────────────────
@@ -207,19 +218,19 @@ const ageData = [
 ];
 
 const countryData = [
-  { label: 'Türkiye', value: 88.8, flag: '🇹🇷' },
-  { label: 'Azerbaycan', value: 3.0, flag: '🇦🇿' },
-  { label: 'Almanya', value: 1.6, flag: '🇩🇪' },
-  { label: 'Kıbrıs', value: 0.7, flag: '🇨🇾' },
+  { labelKey: 'collaborations.turkey', value: 88.8, flag: '🇹🇷' },
+  { labelKey: 'collaborations.azerbaijan', value: 3.0, flag: '🇦🇿' },
+  { labelKey: 'collaborations.germany', value: 1.6, flag: '🇩🇪' },
+  { labelKey: 'collaborations.cyprus', value: 0.7, flag: '🇨🇾' },
 ];
 
 const virals = [
-  { brand: 'Nim AI', views: '9.5M', type: 'Organik + Paid', href: 'https://www.instagram.com/reel/DKtuJ3cK-Yr/', videoUrl: '/videos/reel1.mp4', gradient: 'from-blue-600 via-blue-500 to-blue-500', iconBg: 'bg-blue-500/30' },
-  { brand: 'Emergent AI', views: '3.8M', type: 'Organik', href: 'https://www.instagram.com/reel/DOnm-q0DHiq/', videoUrl: '/videos/reel2.mp4', gradient: 'from-blue-500 via-blue-600 to-blue-600', iconBg: 'bg-blue-500/30' },
-  { brand: 'Aithor', views: '2.0M', type: 'Organik', href: 'https://www.instagram.com/reel/DKHLswaK4Tj/', videoUrl: '/videos/reel3.mp4', gradient: 'from-blue-500 via-blue-500 to-blue-500', iconBg: 'bg-blue-500/30' },
-  { brand: 'Creatify', views: '1.7M', type: 'Organik + Paid', href: 'https://www.instagram.com/reel/DJoR2pJqpHt/', videoUrl: '/videos/reel4.mp4', gradient: 'from-stone-500 via-stone-500 to-blue-600', iconBg: 'bg-stone-500/30' },
-  { brand: 'Creati', views: '1.4M', type: 'Organik + Paid', href: 'https://www.instagram.com/reel/DNNcKWwq--T/', videoUrl: '/videos/reel5.mp4', gradient: 'from-blue-500 via-blue-600 to-blue-600', iconBg: 'bg-blue-500/30' },
-  { brand: 'Kimi AI', views: '2.0M', type: 'Organik', href: 'https://www.instagram.com/reel/DUXxKHVCgW6/', videoUrl: '/videos/reel6.mp4', gradient: 'from-stone-500 via-stone-500 to-stone-500', iconBg: 'bg-stone-500/30' },
+  { brand: 'Nim AI', views: '9.5M', typeKey: 'collaborations.organicPaid', href: 'https://www.instagram.com/reel/DKtuJ3cK-Yr/', videoUrl: '/videos/reel1.mp4', gradient: 'from-blue-600 via-blue-500 to-blue-500', iconBg: 'bg-blue-500/30' },
+  { brand: 'Emergent AI', views: '3.8M', typeKey: 'collaborations.organic', href: 'https://www.instagram.com/reel/DOnm-q0DHiq/', videoUrl: '/videos/reel2.mp4', gradient: 'from-blue-500 via-blue-600 to-blue-600', iconBg: 'bg-blue-500/30' },
+  { brand: 'Aithor', views: '2.0M', typeKey: 'collaborations.organic', href: 'https://www.instagram.com/reel/DKHLswaK4Tj/', videoUrl: '/videos/reel3.mp4', gradient: 'from-blue-500 via-blue-500 to-blue-500', iconBg: 'bg-blue-500/30' },
+  { brand: 'Creatify', views: '1.7M', typeKey: 'collaborations.organicPaid', href: 'https://www.instagram.com/reel/DJoR2pJqpHt/', videoUrl: '/videos/reel4.mp4', gradient: 'from-stone-500 via-stone-500 to-blue-600', iconBg: 'bg-stone-500/30' },
+  { brand: 'Creati', views: '1.4M', typeKey: 'collaborations.organicPaid', href: 'https://www.instagram.com/reel/DNNcKWwq--T/', videoUrl: '/videos/reel5.mp4', gradient: 'from-blue-500 via-blue-600 to-blue-600', iconBg: 'bg-blue-500/30' },
+  { brand: 'Kimi AI', views: '2.0M', typeKey: 'collaborations.organic', href: 'https://www.instagram.com/reel/DUXxKHVCgW6/', videoUrl: '/videos/reel6.mp4', gradient: 'from-stone-500 via-stone-500 to-stone-500', iconBg: 'bg-stone-500/30' },
 ];
 
 const brands = ['CapCut', 'VidAU', 'Lexi', 'KickResume', 'TopView', 'Higgsfield'];
@@ -228,13 +239,14 @@ const brands = ['CapCut', 'VidAU', 'Lexi', 'KickResume', 'TopView', 'Higgsfield'
 // Instagram embeds (blockquote, iframe, /embed/) are all blocked for Reels.
 // Premium poster card design with gradient background + play button overlay + background video.
 // Clicking opens the Reel directly on Instagram.
-function ViralReelCard({ brand, views, type, gradient, href, videoUrl }: {
+function ViralReelCard({ brand, views, type, gradient, href, videoUrl, watchLabel }: {
   brand: string;
   views: string;
   type: string;
   gradient: string;
   href: string;
   videoUrl?: string;
+  watchLabel: string;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -311,7 +323,7 @@ function ViralReelCard({ brand, views, type, gradient, href, videoUrl }: {
             </div>
           </div>
           <span className="mt-4 text-[10px] text-white/40 font-medium uppercase tracking-[0.2em] group-hover:text-white/80 transition-colors duration-300">
-            Reels'i İzle
+            {watchLabel}
           </span>
         </div>
 
@@ -342,6 +354,17 @@ function ViralReelCard({ brand, views, type, gradient, href, videoUrl }: {
 //  MAIN COMPONENT
 // ═══════════════════════════════════════════════════════════════════════════════
 export default function CollaborationsPage() {
+  const { t, language } = useTranslation();
+  const numberLocale = NUMBER_LOCALE[language] || 'tr-TR';
+  // 250000 -> "250.000+" (tr) / "250,000+" (en). Metin degerler (Premium, 4.7 ⭐) oldugu gibi kalir.
+  const sayi = (v: number | string) =>
+    typeof v === 'number' ? `${v.toLocaleString(numberLocale)}+` : v;
+  // Turkcede yuzde isareti bastadir (%88,8); diger dillerde sonda (88.8%).
+  const yuzde = (v: number) => {
+    const n = v.toLocaleString(numberLocale, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+    return language === 'tr' ? `%${n}` : `${n}%`;
+  };
+
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -400,7 +423,7 @@ export default function CollaborationsPage() {
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500" />
                 </span>
                 <span className="text-gray-400 text-xs font-medium tracking-[0.18em] uppercase">
-                  Creator Media Kit
+                  {t('collaborations.badge')}
                 </span>
               </div>
             </motion.div>
@@ -421,7 +444,7 @@ export default function CollaborationsPage() {
               transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
               className="text-gray-400 text-lg md:text-xl max-w-lg leading-relaxed mb-8"
             >
-              AI odaklı içerik üreticisi ve teknoloji eğitmeni. Viral potansiyeli yüksek inovatif içeriklerle markanızı milyonlara ulaştırın.
+              {t('collaborations.heroSubtitle')}
             </motion.p>
 
             {/* Quick Stats Row */}
@@ -432,7 +455,7 @@ export default function CollaborationsPage() {
             >
               {highlightStats.map((stat, i) => (
                 <motion.div
-                  key={stat.label}
+                  key={stat.labelKey}
                   variants={scaleIn}
                   custom={i + 3}
                   className="text-center p-3 rounded-2xl bg-white/[0.03] border border-white/[0.06] backdrop-blur-sm relative overflow-hidden group"
@@ -442,10 +465,10 @@ export default function CollaborationsPage() {
                     {stat.icon}
                   </div>
                   <div className="text-xl sm:text-2xl font-bold text-white relative z-10">
-                    {typeof stat.value === 'number' && stat.value < 10 && !Number.isInteger(stat.value) ? stat.value : <AnimatedCounter target={stat.value} suffix={stat.suffix} decimals={!Number.isInteger(stat.value) ? 1 : 0} />}
+                    {typeof stat.value === 'number' && stat.value < 10 && !Number.isInteger(stat.value) ? stat.value : <AnimatedCounter target={stat.value} suffix={stat.suffix} decimals={!Number.isInteger(stat.value) ? 1 : 0} locale={numberLocale} />}
                     {typeof stat.value === 'number' && stat.value < 10 && !Number.isInteger(stat.value) && stat.suffix}
                   </div>
-                  <div className="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider relative z-10">{stat.label}</div>
+                  <div className="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider relative z-10">{t(stat.labelKey)}</div>
                 </motion.div>
               ))}
             </motion.div>
@@ -504,14 +527,14 @@ export default function CollaborationsPage() {
             <BentoCard custom={1} className="!rounded-3xl !p-8 relative overflow-hidden backdrop-blur-xl bg-white/[0.02] border border-white/[0.05]">
               <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
                 <Users className="w-5 h-5 text-blue-400" />
-                Cinsiyet Dağılımı
+                {t('collaborations.genderTitle')}
               </h3>
               
               <div className="flex items-end gap-6 mb-4">
                 <div className="w-full">
                   <div className="flex justify-between text-sm mb-2 font-medium">
-                    <span className="text-white">Erkek</span>
-                    <span className="text-accent-blue">83.7%</span>
+                    <span className="text-white">{t('collaborations.male')}</span>
+                    <span className="text-accent-blue">{yuzde(83.7)}</span>
                   </div>
                   <div className="h-3 bg-white/[0.05] rounded-full overflow-hidden">
                     <motion.div 
@@ -527,8 +550,8 @@ export default function CollaborationsPage() {
               <div className="flex items-end gap-6">
                 <div className="w-full">
                   <div className="flex justify-between text-sm mb-2 font-medium">
-                    <span className="text-white">Kadın</span>
-                    <span className="text-blue-400">16.3%</span>
+                    <span className="text-white">{t('collaborations.female')}</span>
+                    <span className="text-blue-400">{yuzde(16.3)}</span>
                   </div>
                   <div className="h-3 bg-white/[0.05] rounded-full overflow-hidden">
                     <motion.div 
@@ -546,7 +569,7 @@ export default function CollaborationsPage() {
             <BentoCard custom={2} className="!rounded-3xl !p-8 relative overflow-hidden backdrop-blur-xl bg-white/[0.02] border border-white/[0.05]">
               <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
                 <BarChart3 className="w-5 h-5 text-blue-400" />
-                Yaş Dağılımı
+                {t('collaborations.ageTitle')}
               </h3>
               
               <div className="space-y-4">
@@ -554,7 +577,7 @@ export default function CollaborationsPage() {
                   <div key={item.label}>
                     <div className="flex justify-between text-sm mb-1.5">
                       <span className="text-gray-300">{item.label}</span>
-                      <span className="text-white font-medium">%{item.value}</span>
+                      <span className="text-white font-medium">{yuzde(item.value)}</span>
                     </div>
                     <div className="h-2 bg-white/[0.05] rounded-full overflow-hidden">
                       <motion.div 
@@ -573,7 +596,7 @@ export default function CollaborationsPage() {
             <BentoCard custom={3} className="!rounded-3xl !p-8 relative overflow-hidden backdrop-blur-xl bg-white/[0.02] border border-white/[0.05]">
               <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
                 <Globe className="w-5 h-5 text-green-400" />
-                Coğrafya
+                {t('collaborations.geographyTitle')}
               </h3>
               
               <div className="grid grid-cols-2 gap-4">
@@ -582,14 +605,14 @@ export default function CollaborationsPage() {
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 + (i * 0.1) }}
-                    key={country.label} 
+                    key={country.labelKey}
                     className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.04] flex flex-col justify-between"
                   >
                     <div className="flex justify-between items-start mb-2">
                       <span className="text-2xl">{country.flag}</span>
-                      <span className="text-white font-bold text-lg">%{country.value}</span>
+                      <span className="text-white font-bold text-lg">{yuzde(country.value)}</span>
                     </div>
-                    <div className="text-xs text-gray-400 font-medium uppercase tracking-wider">{country.label}</div>
+                    <div className="text-xs text-gray-400 font-medium uppercase tracking-wider">{t(country.labelKey)}</div>
                   </motion.div>
                 ))}
               </div>
@@ -611,12 +634,12 @@ export default function CollaborationsPage() {
             viewport={{ once: true, amount: 0.3 }}
             className="text-center max-w-3xl mx-auto mb-16"
           >
-            <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 text-blue-500 text-sm font-semibold tracking-[0.2em] uppercase mb-4"><span className="halftone-arc" aria-hidden />Öne Çıkan Çalışmalar</motion.span>
+            <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 text-blue-500 text-sm font-semibold tracking-[0.2em] uppercase mb-4"><span className="halftone-arc" aria-hidden />{t('collaborations.featuredWorksTag')}</motion.span>
             <motion.h2 variants={fadeUp} custom={1} className="text-3xl md:text-5xl font-bold mb-5 tracking-tight">
-              Milyonlarca İzlenen <span className="text-gradient-accent">Viral İçerikler</span>
+              {t('collaborations.featuredWorksTitle')} <span className="text-gradient-accent">{t('collaborations.featuredWorksTitleHighlight')}</span>
             </motion.h2>
             <motion.p variants={fadeUp} custom={2} className="text-gray-400 text-lg leading-relaxed">
-              Dünyanın önde gelen yapay zeka markalarıyla gerçekleştirdiğimiz ve milyonlarca izlenmeye ulaşan projelerimizden bazıları.
+              {t('collaborations.featuredWorksDesc')}
             </motion.p>
           </motion.div>
 
@@ -639,10 +662,11 @@ export default function CollaborationsPage() {
                 <ViralReelCard
                   brand={item.brand}
                   views={item.views}
-                  type={item.type}
+                  type={t(item.typeKey)}
                   gradient={item.gradient}
                   href={item.href}
                   videoUrl={item.videoUrl}
+                  watchLabel={t('collaborations.watchReel')}
                 />
               </motion.div>
             ))}
@@ -657,7 +681,7 @@ export default function CollaborationsPage() {
             className="flex flex-wrap justify-center items-center gap-4 sm:gap-8 opacity-70"
           >
             <span className="text-gray-500 text-sm font-semibold uppercase tracking-widest mr-4 hidden md:block">
-              Diğer İş Birlikleri:
+              {t('collaborations.otherCollabs')}
             </span>
             {brands.map((brand) => (
               <div key={brand} className="text-xl font-bold text-gray-400 hover:text-white transition-colors cursor-default">
@@ -682,13 +706,13 @@ export default function CollaborationsPage() {
             viewport={{ once: true, amount: 0.3 }}
             className="text-center max-w-3xl mx-auto mb-16"
           >
-            <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 text-blue-400 text-sm font-semibold tracking-[0.2em] uppercase mb-4"><span className="halftone-arc" aria-hidden />Platform Erişimi</motion.span>
+            <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 text-blue-400 text-sm font-semibold tracking-[0.2em] uppercase mb-4"><span className="halftone-arc" aria-hidden />{t('collaborations.platformReachTag')}</motion.span>
             <motion.h2 variants={fadeUp} custom={1} className="text-3xl md:text-5xl font-bold mb-5 tracking-tight">
-              Tüm platformlarda{' '}
-              <span className="text-gradient-accent">aktif kitle</span>
+              {t('collaborations.platformReachTitle')}{' '}
+              <span className="text-gradient-accent">{t('collaborations.platformReachTitleHighlight')}</span>
             </motion.h2>
             <motion.p variants={fadeUp} custom={2} className="text-gray-400 text-lg leading-relaxed">
-              6 farklı platformda, yapay zeka ve teknolojiye tutkulu yüz binlerce takipçiye aynı anda ulaşma imkanı.
+              {t('collaborations.platformReachDesc')}
             </motion.p>
           </motion.div>
 
@@ -731,7 +755,7 @@ export default function CollaborationsPage() {
                       href={platform.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      aria-label={`${platform.name} hesabını aç`}
+                      aria-label={t('collaborations.openProfileAria').replace('{name}', platform.name)}
                       className="w-11 h-11 rounded-lg bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-gray-500 hover:text-white hover:border-white/[0.15] transition-all duration-300"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
@@ -740,15 +764,15 @@ export default function CollaborationsPage() {
 
                   {/* Main Number */}
                   <div className="mb-4">
-                    <div className="text-3xl font-extrabold text-white tracking-tight">{platform.followers}</div>
-                    <div className="text-xs text-gray-500 font-medium uppercase tracking-wider">{platform.metric}</div>
+                    <div className="text-3xl font-extrabold text-white tracking-tight">{sayi(platform.followers)}</div>
+                    <div className="text-xs text-gray-500 font-medium uppercase tracking-wider">{t(platform.metricKey)}</div>
                   </div>
 
                   {/* Engagement Metric */}
                   <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/[0.03] border border-white/[0.04]">
                     <Heart className="w-3.5 h-3.5 text-gray-500" />
-                    <span className="text-xs text-gray-400">{platform.engagementLabel}:</span>
-                    <span className={`text-xs font-semibold ${platform.textColor}`}>{platform.engagementValue}</span>
+                    <span className="text-xs text-gray-400">{t(platform.engagementLabelKey)}:</span>
+                    <span className={`text-xs font-semibold ${platform.textColor}`}>{sayi(platform.engagementValue)}</span>
                   </div>
                 </div>
               </BentoCard>
@@ -780,16 +804,16 @@ export default function CollaborationsPage() {
             <div className="relative z-10">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-6 border border-blue-500/20 bg-blue-500/5">
                 <Sparkles className="w-3.5 h-3.5 text-blue-400" />
-                <span className="text-blue-400 text-xs font-semibold tracking-wider uppercase">Sponsorluk & İş Birliği</span>
+                <span className="text-blue-400 text-xs font-semibold tracking-wider uppercase">{t('collaborations.ctaBadge')}</span>
               </div>
 
               <h3 className="text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight">
-                Birlikte Büyüyelim
+                {t('collaborations.ctaTitle')}
               </h3>
               <p className="text-gray-400 mb-10 max-w-xl mx-auto leading-relaxed">
-                Yapay zeka ve teknoloji odağındaki içeriklerimizle markanızı doğru kitleye ulaştırmak için
-                <strong className="text-white"> marka iş birlikleri </strong>
-                sürecimizi inceleyebilirsiniz.
+                {t('collaborations.ctaDesc')}
+                <strong className="text-white"> {t('collaborations.ctaDescBold')} </strong>
+                {t('collaborations.ctaDescEnd')}
               </p>
 
               <a 

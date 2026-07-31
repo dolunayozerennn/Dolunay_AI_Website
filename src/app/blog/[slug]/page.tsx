@@ -2,8 +2,7 @@ import { getPostBySlug, getPosts } from '@/lib/mdx'
 import { notFound } from 'next/navigation'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import Image from 'next/image'
-import Link from 'next/link'
-import { ArrowLeft, Calendar, Clock } from 'lucide-react'
+import { BackToBlog, PostMetaLine, PostCta, TurkishOnlyNotice } from '@/components/blog/BlogChrome'
 import type { Metadata } from 'next'
 
 // Next.js params type for Next.js 15+ dynamic routes (often requires resolution)
@@ -107,12 +106,6 @@ export default async function BlogPost(
     notFound()
   }
 
-  const dateFormatted = new Date(post.date).toLocaleDateString('tr-TR', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-  })
-
   return (
     <article className="min-h-screen bg-[#08090C] pb-24">
       <script
@@ -150,10 +143,7 @@ export default async function BlogPost(
 
         <div className="max-w-[900px] mx-auto px-4 sm:px-6 relative z-10 pt-20 pb-12">
           
-          <Link href="/blog" className="inline-flex items-center gap-2 text-sm font-medium text-gray-400 hover:text-white transition-colors mb-12 group p-2 -ml-2 rounded-lg hover:bg-white/5">
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            Blog'a Dön
-          </Link>
+          <BackToBlog />
 
           {/* Tags */}
           {post.tags && post.tags.length > 0 && (
@@ -186,14 +176,7 @@ export default async function BlogPost(
 
             <div className="w-px h-8 bg-white/10 hidden md:block" />
 
-            <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-[#4F8BFF]/80" />
-              <span>{dateFormatted}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-[#4F8BFF]/80" />
-              <span>{post.readingTime}</span>
-            </div>
+            <PostMetaLine date={post.date} minutes={post.readingMinutes} />
           </div>
         </div>
       </div>
@@ -215,21 +198,15 @@ export default async function BlogPost(
           </div>
         )}
 
+        <TurkishOnlyNotice />
+
         <div className="prose-blog prose-lg w-full max-w-none">
           <MDXRemote source={post.content} components={components} />
         </div>
-        
+
         {/* Bottom Call to Action */}
         <div className="mt-20 pt-10 border-t border-white/10">
-          <div className="bg-gradient-to-br from-white/5 to-transparent border border-white/10 rounded-3xl p-8 md:p-12 text-center relative overflow-hidden">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[100px] bg-[#4F8BFF]/10 blur-[50px] pointer-events-none" />
-            <h4 className="text-2xl font-bold text-white mb-4 relative z-10">Kendi AI Sisteminizi Kurmaya Hazır mısınız?</h4>
-            {/* Eskiden bu buton ana sayfaya donuyordu: satis sorusu sorulup cevap
-                olarak ziyaretci basa gonderiliyordu. Artik hizmet sayfasina gidiyor. */}
-            <Link href="/cozumler/hizmetler" className="relative z-10 inline-flex items-center justify-center px-8 py-4 text-sm font-bold text-white bg-white/10 hover:bg-white/20 border border-white/20 rounded-2xl transition-all hover:scale-105 active:scale-95">
-              Hizmetleri İncele
-            </Link>
-          </div>
+          <PostCta />
         </div>
       </div>
     </article>

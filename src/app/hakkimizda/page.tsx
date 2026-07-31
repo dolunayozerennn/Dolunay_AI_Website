@@ -25,20 +25,21 @@ const scaleIn = {
 type MemberType = 'founder' | 'cofounder' | 'employee' | 'ai';
 type Member = { name: string; role: string; avatar: string; type: MemberType };
 
+// Metinler ceviri paketinden gelir (about.pillarNTag / pillarNTitle / pillarNDesc).
 const pillars: {
   id: string;
-  tag: string;
-  title: string;
-  desc: string;
+  tagKey: string;
+  titleKey: string;
+  descKey: string;
   href: string;
   icon: typeof Briefcase;
   members: Member[];
 }[] = [
   {
     id: 'b2b',
-    tag: 'B2B Otomasyon',
-    title: 'Kurumsal Hizmetler',
-    desc: 'İşletmelere özel yapay zeka otomasyonu ve danışmanlık. Süreçten kuruluma kadar üç ortakla yürüttüğümüz iş kolu.',
+    tagKey: 'about.pillar1Tag',
+    titleKey: 'about.pillar1Title',
+    descKey: 'about.pillar1Desc',
     href: '/cozumler/hizmetler',
     icon: Briefcase,
     members: [
@@ -49,9 +50,9 @@ const pillars: {
   },
   {
     id: 'partnerships',
-    tag: 'Sosyal Medya',
-    title: 'Marka İşbirlikleri',
-    desc: 'Sosyal medya içerik üretimi ve marka işbirlikleri. 250.000+ kişilik kitleye markaları taşıyoruz.',
+    tagKey: 'about.pillar2Tag',
+    titleKey: 'about.pillar2Title',
+    descKey: 'about.pillar2Desc',
     href: '/isbirlikleri',
     icon: Sparkles,
     members: [
@@ -62,9 +63,9 @@ const pillars: {
   },
   {
     id: 'ai-factory',
-    tag: 'AI Factory',
-    title: 'Eğitim & Topluluk',
-    desc: 'Girişimcilere yapay zekayı iş modeline çevirmeyi öğretiyoruz. Skool topluluğu ve hazır AI çözüm paketleri.',
+    tagKey: 'about.pillar3Tag',
+    titleKey: 'about.pillar3Title',
+    descKey: 'about.pillar3Desc',
     href: '/egitimler/ai-factory',
     icon: GraduationCap,
     members: [
@@ -127,10 +128,10 @@ export default function AboutV3() {
               <span className="halftone-arc" aria-hidden />{t('about.sectionTag')}
             </motion.span>
             <motion.h1 variants={fadeUp} custom={1} className="text-3xl md:text-5xl font-bold mb-5 tracking-tight">
-              Üç iş kolu, <span className="text-gradient-accent">üç farklı ekip</span>
+              {t('about.pageTitle')} <span className="text-gradient-accent">{t('about.pageTitleHighlight')}</span>
             </motion.h1>
             <motion.p variants={fadeUp} custom={2} className="text-gray-400 text-lg leading-relaxed">
-              İşletmelere yapay zeka otomasyonu, markalara işbirlikleri, girişimcilere eğitim. Üçünü de farklı bir ekiple yürütüyoruz.
+              {t('about.pageDesc')}
             </motion.p>
           </motion.div>
 
@@ -150,7 +151,7 @@ export default function AboutV3() {
                   href={`#${p.id}`}
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.03] hover:bg-amber-500/10 border border-white/10 hover:border-amber-500/30 text-gray-300 hover:text-amber-200 text-xs font-medium transition-all"
                 >
-                  <Icon className="w-3.5 h-3.5" /> {p.title}
+                  <Icon className="w-3.5 h-3.5" /> {t(p.titleKey)}
                 </a>
               );
             })}
@@ -178,15 +179,15 @@ export default function AboutV3() {
                       className={`lg:col-span-4 lg:sticky lg:top-32 ${reverse ? 'lg:order-2' : ''}`}
                     >
                       <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[11px] font-semibold tracking-wider uppercase mb-4">
-                        <Icon className="w-3.5 h-3.5" /> {pillar.tag}
+                        <Icon className="w-3.5 h-3.5" /> {t(pillar.tagKey)}
                       </div>
-                      <h3 className="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight">{pillar.title}</h3>
-                      <p className="text-gray-400 leading-relaxed mb-6">{pillar.desc}</p>
+                      <h3 className="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight">{t(pillar.titleKey)}</h3>
+                      <p className="text-gray-400 leading-relaxed mb-6">{t(pillar.descKey)}</p>
                       <Link
                         href={pillar.href}
                         className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-200 text-sm font-medium transition-colors"
                       >
-                        Detayı incele <ArrowRight className="w-4 h-4" />
+                        {t('about.detailBtn')} <ArrowRight className="w-4 h-4" />
                       </Link>
                     </motion.div>
 
@@ -213,11 +214,11 @@ export default function AboutV3() {
           >
             <motion.div variants={fadeUp} custom={0} className="text-center max-w-2xl mx-auto mb-10">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-300 text-xs font-semibold tracking-wider uppercase mb-3">
-                <Bot className="w-3.5 h-3.5" /> Yapay Zeka Personel
+                <Bot className="w-3.5 h-3.5" /> {t('about.aiStaffBadge')}
               </div>
-              <h3 className="text-2xl md:text-3xl font-bold text-white mb-3">7/24 çalışan AI ekibi</h3>
+              <h3 className="text-2xl md:text-3xl font-bold text-white mb-3">{t('about.aiTeamTitle')}</h3>
               <p className="text-gray-400 leading-relaxed">
-                Tasarım, içerik, geliştirme, müşteri desteği. Üç iş kolunun da arkasındaki operasyon ekibi.
+                {t('about.aiTeamDesc')}
               </p>
             </motion.div>
 

@@ -52,18 +52,6 @@ function BentoCard({ children, className = '', custom = 0 }: { children: React.R
 export default function SolutionsPage() {
   const { t } = useTranslation();
 
-  const readySolutions = [
-    {
-      title: t('solutions.readyItemTitle'),
-      description: t('solutions.readyItemDesc'),
-      features: [t('solutions.readyItemFeature1'), t('solutions.readyItemFeature2'), t('solutions.readyItemFeature3'), t('solutions.readyItemFeature4')],
-      href: '/cozumler/artifex-campus',
-      accentColor: '#4F8BFF',
-      icon: <Sparkles className="w-6 h-6" />,
-      external: false,
-    },
-  ];
-
   const customSolutions = [
     {
       title: t('solutions.customItemTitle'),
@@ -119,41 +107,7 @@ export default function SolutionsPage() {
             </motion.h1>
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} className="flex flex-col h-full">
-              <motion.h3 variants={fadeUp} custom={0} className="text-sm font-semibold text-gray-500 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
-                <div className="w-5 h-[1px] bg-[#4F8BFF]" />
-                {t('solutions.readyTitle')}
-              </motion.h3>
-              <div className="flex-1 flex flex-col gap-6">
-                {readySolutions.map((solution, i) => (
-                  <BentoCard key={solution.title} custom={i + 1} className="!rounded-3xl relative flex-1 flex flex-col group p-6 border border-white/5 bg-white/5 backdrop-blur-sm">
-                    <div className="absolute -top-px left-[15%] right-[15%] h-[1px] bg-gradient-to-r from-transparent via-[#4F8BFF]/50 to-transparent opacity-50 group-hover:opacity-100 transition-opacity" />
-                    <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[200px] h-[200px] rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" style={{ background: 'rgba(79, 139, 255, 0.08)' }} />
-                    <div className="relative z-10 flex flex-col h-full">
-                      <div className="flex-1">
-                        <div className="w-12 h-12 rounded-2xl bg-[#4F8BFF]/10 border border-[#4F8BFF]/20 flex items-center justify-center text-[#4F8BFF] mb-5 group-hover:scale-110 transition-transform duration-500">
-                          {solution.icon}
-                        </div>
-                        <h4 className="text-2xl font-bold text-white mb-3">{solution.title}</h4>
-                        <p className="text-gray-400 text-sm leading-relaxed mb-6">{solution.description}</p>
-                        <div className="flex flex-wrap gap-2 mb-6">
-                          {solution.features.map((f) => (
-                            <span key={f} className="px-3 py-1 rounded-lg text-xs font-medium bg-[#4F8BFF]/10 border border-[#4F8BFF]/20 text-[#4F8BFF]">{f}</span>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="mt-auto">
-                        <a href={solution.href} className="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-[#4F8BFF] transition-colors">
-                          {t('solutions.exploreBtn')} <ArrowUpRight className="w-4 h-4" />
-                        </a>
-                      </div>
-                    </div>
-                  </BentoCard>
-                ))}
-              </div>
-            </motion.div>
-
+          <div className="grid grid-cols-1 gap-8 items-stretch max-w-2xl mx-auto">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} className="flex flex-col h-full">
               <motion.h3 variants={fadeUp} custom={0} className="text-sm font-semibold text-gray-500 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
                 <div className="w-5 h-[1px] bg-[#4F8BFF]" />

@@ -12,9 +12,13 @@ export interface Post {
   coverImage?: string
   excerpt: string
   content: string
-  readingTime: string
+  /** Ham dakika. Ekranda "5 dk okuma" / "5 min read" olarak ziyaretcinin dilinde yazilir. */
+  readingMinutes: number
   tags?: string[]
 }
+
+/** Liste kartlari icin: yazinin tam govdesi tasinmadan basliklar. */
+export type PostMeta = Omit<Post, 'content'>
 
 // Get all posts, sorted by date
 export function getPosts(): Post[] {
@@ -49,7 +53,7 @@ export function getPosts(): Post[] {
         excerpt: matterResult.data.excerpt || '',
         tags: matterResult.data.tags || [],
         content: matterResult.content,
-        readingTime: Math.ceil(stats.minutes) + ' dk okuma',
+        readingMinutes: Math.ceil(stats.minutes),
       } as Post
     })
 
@@ -87,7 +91,7 @@ export function getPostBySlug(slug: string): Post | null {
       excerpt: matterResult.data.excerpt || '',
       tags: matterResult.data.tags || [],
       content: matterResult.content,
-      readingTime: Math.ceil(stats.minutes) + ' dk okuma',
+      readingMinutes: Math.ceil(stats.minutes),
     } as Post
   } catch (e) {
     return null

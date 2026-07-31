@@ -12,7 +12,7 @@ const languages: { code: Language; name: string; flag: string }[] = [
 ];
 
 export function LanguageSwitcher({ mobile = false }: { mobile?: boolean }) {
-  const { language, setLanguage } = useTranslation();
+  const { language, setLanguage, t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -59,7 +59,7 @@ export function LanguageSwitcher({ mobile = false }: { mobile?: boolean }) {
       <div className="py-2">
         <div className="flex items-center gap-2 px-4 py-2 text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-1">
           <Globe className="w-3.5 h-3.5" />
-          <span>Language: {mounted.current ? currentLang.name : 'Türkçe'}</span>
+          <span>{t('nav.language')}: {mounted.current ? currentLang.name : 'Türkçe'}</span>
         </div>
         <div className="grid grid-cols-2 gap-2 px-3">
           {languages.map((lang) => (
@@ -94,7 +94,7 @@ export function LanguageSwitcher({ mobile = false }: { mobile?: boolean }) {
       <button
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
-        aria-label="Dil Değiştir (Change Language)"
+        aria-label={t('nav.changeLanguage')}
         className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white hover:bg-white/[0.04] transition-all duration-300"
       >
         <Globe className="w-4 h-4 opacity-70" />

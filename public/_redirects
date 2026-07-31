@@ -1,1 +1,5 @@
 /.well-known/security.txt  /security.txt  200
+
+# Artifex Campus urunu kapatildi (31 Tem 2026). Sayfa Google'da dizinliydi,
+# 404 vermek yerine Cozumler'e kalici yonlendiriliyor.
+/cozumler/artifex-campus  /cozumler  301

@@ -166,18 +166,6 @@ export function ProductsSection() {
       isPrimary: true,
     },
     {
-      headline: t('products.card1Headline'),
-      description: t('products.card1Desc'),
-      tag: t('products.card1Tag'),
-      buttonLabel: t('products.card1Button'),
-      href: '/cozumler/artifex-campus',
-      external: false,
-      accentColor: '#7AA8FF',
-      glowColor: 'rgba(122, 168, 255, 0.18)',
-      imageSrc: '/images/products/isletme_kobi_real2.webp',
-      isPrimary: false,
-    },
-    {
       headline: t('products.card4Headline'),
       description: t('products.card4Desc'),
       tag: t('products.card4Tag'),

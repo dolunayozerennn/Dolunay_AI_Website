@@ -54,28 +54,27 @@ export function Footer() {
               sayfada durur ve o sayfaları keşfedilebilir yapar. */}
           <div className="flex flex-col sm:flex-row gap-6 sm:gap-12 text-center sm:text-left text-sm text-gray-400">
             <div className="flex flex-col gap-3">
-              <span className="text-white font-semibold mb-1">Eğitimler</span>
+              <span className="text-white font-semibold mb-1">{t('footer.colTrainings')}</span>
 
               <Link href="/egitimler/ai-factory" className="hover:text-white transition-colors">AI Factory</Link>
-              <Link href="/egitimler/kurumsal-egitimler" className="hover:text-white transition-colors">Kurumsal Eğitimler</Link>
+              <Link href="/egitimler/kurumsal-egitimler" className="hover:text-white transition-colors">{t('nav.corporateTrainings')}</Link>
             </div>
 
             <div className="flex flex-col gap-3">
-              <span className="text-white font-semibold mb-1">Çözümler</span>
+              <span className="text-white font-semibold mb-1">{t('footer.colSolutions')}</span>
 
-              <Link href="/cozumler" className="hover:text-white transition-colors">Tüm Çözümler</Link>
-              <Link href="/cozumler/hizmetler" className="hover:text-white transition-colors">Hizmetler</Link>
-              <Link href="/cozumler/artifex-campus" className="hover:text-white transition-colors">Artifex Campus</Link>
-              <Link href="/isbirlikleri" className="hover:text-white transition-colors">İşbirlikleri</Link>
+              <Link href="/cozumler" className="hover:text-white transition-colors">{t('nav.allSolutions')}</Link>
+              <Link href="/cozumler/hizmetler" className="hover:text-white transition-colors">{t('nav.services')}</Link>
+              <Link href="/isbirlikleri" className="hover:text-white transition-colors">{t('nav.collaborations')}</Link>
             </div>
 
             <div className="flex flex-col gap-3">
-              <span className="text-white font-semibold mb-1">Kurumsal</span>
+              <span className="text-white font-semibold mb-1">{t('footer.colCorporate')}</span>
 
-              <Link href="/hakkimizda" className="hover:text-white transition-colors">Hakkımızda</Link>
-              <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>
-              <Link href="/sozlesmeler/mesafeli-satis" className="hover:text-white transition-colors">Mesafeli Satış Sözleşmesi</Link>
-              <Link href="/sozlesmeler/kvkk" className="hover:text-white transition-colors">Gizlilik ve KVKK Politikası</Link>
+              <Link href="/hakkimizda" className="hover:text-white transition-colors">{t('nav.about')}</Link>
+              <Link href="/blog" className="hover:text-white transition-colors">{t('nav.blog')}</Link>
+              <Link href="/sozlesmeler/mesafeli-satis" className="hover:text-white transition-colors">{t('footer.distanceSales')}</Link>
+              <Link href="/sozlesmeler/kvkk" className="hover:text-white transition-colors">{t('footer.privacy')}</Link>
             </div>
           </div>
 

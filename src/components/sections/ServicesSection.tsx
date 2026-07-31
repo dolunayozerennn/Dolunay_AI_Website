@@ -5,6 +5,7 @@ import { Search, Target, Settings, CheckCircle2, ArrowUpRight, Building2, Gradua
 import { useRef, useState } from 'react'
 import type { MouseEvent } from 'react'
 import Image from 'next/image'
+import { useTranslation } from '@/i18n/i18n'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 50, filter: 'blur(4px)' },
@@ -14,11 +15,13 @@ const fadeUp = {
   })
 }
 
+// Metinler ceviri paketinden gelir (services.step1Title / step1Desc ...); burada
+// yalnizca ikon ve sira numarasi durur.
 const steps = [
-  { icon: <Search className="w-6 h-6" />, title: "Keşif & Analiz", desc: "Mevcut iş akışlarınızı birlikte dinliyor, AI ile optimize edilebilecek darboğazları tespit ediyoruz.", num: "01" },
-  { icon: <Target className="w-6 h-6" />, title: "Sistem Tasarımı", desc: "İhtiyaçlarınıza en uygun yapay zeka araçlarını ve otomasyon senaryolarını birlikte haritalandırıyoruz.", num: "02" },
-  { icon: <Settings className="w-6 h-6" />, title: "Kurulum & Entegrasyon", desc: "Sistemleri kuruyor, API bağlantılarını yapıyor ve birlikte test ediyoruz.", num: "03" },
-  { icon: <CheckCircle2 className="w-6 h-6" />, title: "Eğitim & Teslim", desc: "Ekibinize sistemin nasıl kullanılacağını öğretiyor ve anahtar teslim bırakıyoruz.", num: "04" },
+  { icon: <Search className="w-6 h-6" />, num: "01" },
+  { icon: <Target className="w-6 h-6" />, num: "02" },
+  { icon: <Settings className="w-6 h-6" />, num: "03" },
+  { icon: <CheckCircle2 className="w-6 h-6" />, num: "04" },
 ]
 
 // ─── Hizmet Müşterileri (Logo Marquee) ─────────────────────────────────────────
@@ -39,17 +42,18 @@ const serviceClients = [
 
 type ServiceClient = {
   name: string;
-  desc: string;
+  descKey: string;
   gradient: string;
   bgGlow: string;
   logoDomain?: string;
   logo?: string;
 };
 
+// Marka adlari cevrilmez; aciklamalar ceviri paketinden gelir (services.clientNDesc).
 const educationClients: ServiceClient[] = [
   {
     name: 'Çam Hotel Termal Resort',
-    desc: 'Instagram, WhatsApp ve Messenger mesajları yapay zeka tarafından 7/24 her dilde tam otomatik cevaplanmaktadır.',
+    descKey: 'services.client1Desc',
     gradient: 'from-blue-500 to-blue-600',
     bgGlow: 'rgba(52, 211, 153, 0.12)',
     logoDomain: 'camhotel.com',
@@ -57,7 +61,7 @@ const educationClients: ServiceClient[] = [
   },
   {
     name: 'Forbest',
-    desc: '17 farklı mağazanın stok sistemi yapay zeka tarafından tam otomatik takip edilmekte; satın alım departmanına akıllı analizler üretip raporlanmaktadır.',
+    descKey: 'services.client2Desc',
     gradient: 'from-slate-400 to-slate-600',
     bgGlow: 'rgba(148, 163, 184, 0.12)',
     logoDomain: 'forbest.com.tr',
@@ -65,7 +69,7 @@ const educationClients: ServiceClient[] = [
   },
   {
     name: 'Voyant AI',
-    desc: 'Haftalık performans raporları NETN otomasyonuyla tam otomatik hale getirildi.',
+    descKey: 'services.client3Desc',
     gradient: 'from-blue-500 to-blue-700',
     bgGlow: 'rgba(139, 92, 246, 0.12)',
     logoDomain: 'voyant.ai',
@@ -73,7 +77,7 @@ const educationClients: ServiceClient[] = [
   },
   {
     name: 'Vartur',
-    desc: 'WhatsApp otomasyonu sayesinde binlerce müşteriye her gün düzenli kontrol ettikleri kanaldan (WhatsApp\'tan) 50\'nin üzerinde reklam kampanyası düzenlendi.',
+    descKey: 'services.client4Desc',
     gradient: 'from-stone-500 to-stone-600',
     bgGlow: 'rgba(249, 115, 22, 0.12)',
     logoDomain: 'vartur.com',
@@ -81,7 +85,7 @@ const educationClients: ServiceClient[] = [
   },
   {
     name: 'WeBee',
-    desc: 'Otellerin sosyal medya mesajlarının tam otomatik cevaplandırıldığı yapay zeka ürünü, WeBee Insta adıyla yayınlandı.',
+    descKey: 'services.client5Desc',
     gradient: 'from-blue-500 to-blue-600',
     bgGlow: 'rgba(6, 182, 212, 0.12)',
     logoDomain: 'webee.com',
@@ -89,14 +93,15 @@ const educationClients: ServiceClient[] = [
   },
   {
     name: 'Sweatcoin App',
-    desc: 'Influencer iletişim süreçlerinde Google Sheet, Notion ve Gmail entegrasyonlarıyla bütün iletişim süreçleri tam otomatikleştirildi.',
+    descKey: 'services.client6Desc',
     gradient: 'from-stone-600 to-stone-500',
     bgGlow: 'rgba(234, 88, 12, 0.12)',
     logoDomain: 'sweatco.in'
   },
 ]
 
-function RefCard({ client, index }: { client: typeof educationClients[0]; index: number }) {
+function RefCard({ client, index }: { client: ServiceClient; index: number }) {
+  const { t } = useTranslation()
   const cardRef = useRef<HTMLDivElement>(null)
     const [imgError, setImgError] = useState(false)
 
@@ -149,7 +154,7 @@ function RefCard({ client, index }: { client: typeof educationClients[0]; index:
           )}
         </div>
         <h4 className="text-lg font-bold text-white mb-2">{client.name}</h4>
-        <p className="text-gray-500 text-sm leading-relaxed">{client.desc}</p>
+        <p className="text-gray-500 text-sm leading-relaxed">{t(client.descKey)}</p>
       </div>
     </motion.div>
   )
@@ -160,6 +165,7 @@ function RefCard({ client, index }: { client: typeof educationClients[0]; index:
 // başlığıdır, h2 kalır. Görsel olarak ikisi de aynı.
 export function ServicesSection({ asHeading = 'h2' }: { asHeading?: 'h1' | 'h2' } = {}) {
   const Heading = motion[asHeading];
+  const { t } = useTranslation();
   return (
     <section id="services" className="py-32 relative">
       <div className="halftone-divider max-w-5xl mx-auto mb-32" />
@@ -172,14 +178,13 @@ export function ServicesSection({ asHeading = 'h2' }: { asHeading?: 'h1' | 'h2' 
           viewport={{ once: true, amount: 0.3 }}
           className="text-center max-w-3xl mx-auto mb-24"
         >
-          <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 text-[#4F8BFF] text-sm font-semibold tracking-[0.2em] uppercase mb-4"><span className="halftone-arc" aria-hidden />Hizmetler</motion.span>
+          <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 text-[#4F8BFF] text-sm font-semibold tracking-[0.2em] uppercase mb-4"><span className="halftone-arc" aria-hidden />{t('services.sectionTag')}</motion.span>
           <Heading variants={fadeUp} custom={1} className="text-4xl md:text-6xl font-bold mb-6 tracking-tight text-white">
-            Danışmanlık &{' '}
-            <span className="text-gradient-accent">Otomasyon</span>
+            {t('services.sectionTitle')}{' '}
+            <span className="text-gradient-accent">{t('services.sectionTitleHighlight')}</span>
           </Heading>
           <motion.p variants={fadeUp} custom={2} className="text-gray-400 text-lg leading-relaxed">
-            Sadece standart paketler değil, kurumsal firmalar ve hacimli operasyonlar 
-            için terzi işi yapay zeka altyapılarını birlikte kuruyoruz.
+            {t('services.sectionDesc')}
           </motion.p>
         </motion.div>
 
@@ -204,8 +209,8 @@ export function ServicesSection({ asHeading = 'h2' }: { asHeading?: 'h1' | 'h2' 
               <div className="w-12 h-12 rounded-2xl bg-[#4F8BFF]/10 border border-[#4F8BFF]/20 flex items-center justify-center mb-6 text-[#4F8BFF] group-hover:scale-110 transition-transform duration-500">
                 {step.icon}
               </div>
-              <h4 className="text-lg font-bold text-white mb-3">{step.title}</h4>
-              <p className="text-gray-500 text-sm leading-relaxed">{step.desc}</p>
+              <h4 className="text-lg font-bold text-white mb-3">{t(`services.step${i + 1}Title`)}</h4>
+              <p className="text-gray-500 text-sm leading-relaxed">{t(`services.step${i + 1}Desc`)}</p>
             </motion.div>
           ))}
         </motion.div>
@@ -219,7 +224,7 @@ export function ServicesSection({ asHeading = 'h2' }: { asHeading?: 'h1' | 'h2' 
         >
           <motion.div variants={fadeUp} custom={0} className="flex items-center gap-3 justify-center mb-10">
             <Building2 className="w-4 h-4 text-[#4F8BFF]" />
-            <span className="text-sm font-semibold text-gray-500 uppercase tracking-[0.2em]">Hizmet Verdiğimiz Markalar</span>
+            <span className="text-sm font-semibold text-gray-500 uppercase tracking-[0.2em]">{t('services.clientsTitle')}</span>
           </motion.div>
 
           <motion.div
@@ -264,14 +269,14 @@ export function ServicesSection({ asHeading = 'h2' }: { asHeading?: 'h1' | 'h2' 
           <motion.div variants={fadeUp} custom={0} className="text-center max-w-3xl mx-auto mb-14">
             <div className="flex items-center gap-3 justify-center mb-4">
               <Building2 className="w-4 h-4 text-[#4F8BFF]" />
-              <span className="text-sm font-semibold text-gray-500 uppercase tracking-[0.2em]">Çözüm Ortaklarımız</span>
+              <span className="text-sm font-semibold text-gray-500 uppercase tracking-[0.2em]">{t('services.partnersTag')}</span>
             </div>
             <motion.h3 variants={fadeUp} custom={1} className="text-2xl md:text-4xl font-bold tracking-tight mb-4 text-white">
-              Birlikte çalıştığımız{' '}
-              <span className="text-gradient-accent">kurumlar</span>
+              {t('services.partnersTitle')}{' '}
+              <span className="text-gradient-accent">{t('services.partnersTitleHighlight')}</span>
             </motion.h3>
             <motion.p variants={fadeUp} custom={2} className="text-gray-400 leading-relaxed">
-              Birlikte çalıştığımız markalar için geliştirdiğimiz yapay zeka çözümleri.
+              {t('services.partnersDesc')}
             </motion.p>
           </motion.div>
 
@@ -300,11 +305,10 @@ export function ServicesSection({ asHeading = 'h2' }: { asHeading?: 'h1' | 'h2' 
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-[#4F8BFF]/5 blur-[100px] rounded-full pointer-events-none" />
           
           <h3 className="text-3xl md:text-4xl font-bold text-white mb-5 tracking-tight relative z-10">
-            Projeyi Birlikte İnşa Edelim
+            {t('services.ctaTitle')}
           </h3>
           <p className="text-gray-400 mb-10 max-w-xl mx-auto relative z-10 leading-relaxed">
-            Hizmetlerimiz, danışmanlık talepleriniz veya marka işbirlikleri için 
-            bizimle doğrudan iletişime geçebilirsiniz.
+            {t('services.ctaDesc')}
           </p>
           <a href="mailto:dolunay@dolunay.ai" className="group relative inline-flex items-center gap-2 px-10 py-4 rounded-2xl font-bold text-lg bg-gradient-to-r from-[#4F8BFF]/20 to-[#4F8BFF]/20 border border-[#4F8BFF]/30 hover:border-[#4F8BFF]/60 transition-all duration-500 hover:shadow-[0_0_50px_rgba(79, 139, 255, 0.2)] z-10 text-white">
             dolunay@dolunay.ai
