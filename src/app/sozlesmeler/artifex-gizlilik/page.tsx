@@ -269,10 +269,10 @@ export default function ArtifexGizlilikPolitikasiPage() {
             olabilir.
           </p>
           <p>
-            Bu durumda izin almak ve izni İleti Yönetim Sistemi&apos;ne kaydetmek müşteri
-            işletmenin yükümlülüğüdür. Artifex, gönderimi başlatan taraf olarak, tanıtım içeren
-            gönderim öncesinde işletmeden izin beyanı ister. Kişinin işletmeye ilk mesajı yazmış
-            olması tek başına izin yerine geçmez. Tanıtım iletisi almak istemezseniz aynı
+            Bu durumda gereken izni almak ve mevzuatın aradığı kayıtları tutmak, gönderimin
+            yapıldığı hesabın sahibi olan müşteri işletmenin yükümlülüğüdür. Artifex bu izni
+            işletme adına almaz ve iznin varlığından işletme sorumludur. Tanıtım iletisi
+            almak istemezseniz aynı
             kanaldan bize yazmanız yeterlidir; ücret alınmaz, gerekçe sorulmaz ve gönderim en
             geç üç iş günü içinde durdurulur. Bu, veri silme talebinden ayrı bir haktır.
           </p>

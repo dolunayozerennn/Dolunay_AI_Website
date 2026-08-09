@@ -15,8 +15,12 @@ export default function MesafeliSatisSozlesmesiPage() {
           <h2 className="text-xl font-semibold text-white mt-8">1. Taraflar</h2>
           <p>
             <strong className="text-white">Satıcı:</strong><br />
-            Ticari Unvan: dolunay.ai<br />
+            Unvan: ARTİFEX YAPAY ZEKA ÇÖZÜMLERİ LİMİTED ŞİRKETİ<br />
+            Adres: Barbaros Mah. Şebboy Sk. No:4/1 İç Kapı No:2, Ataşehir / İstanbul<br />
+            Vergi kimlik numarası: 0851465973 (Kozyatağı Vergi Dairesi)<br />
+            MERSİS: 0085146597300001<br />
             E-posta: dolunay@dolunay.ai<br />
+            KEP: artifexyapayzeka@hs01.kep.tr<br />
             Web: https://dolunay.ai
           </p>
           <p>

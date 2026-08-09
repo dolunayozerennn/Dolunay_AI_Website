@@ -15,9 +15,12 @@ export default function KVKKPolitikasiPage() {
           <h2 className="text-xl font-semibold text-white mt-8">1. Veri Sorumlusu</h2>
           <p>
             6698 sayılı Kişisel Verilerin Korunması Kanunu (&quot;KVKK&quot;) kapsamında,
-            veri sorumlusu sıfatıyla <strong className="text-white">dolunay.ai</strong> olarak
-            kişisel verilerinizi aşağıda açıklanan amaçlar çerçevesinde ve mevzuata uygun
-            şekilde işlemekteyiz.
+            veri sorumlusu sıfatıyla{' '}
+            <strong className="text-white">ARTİFEX YAPAY ZEKA ÇÖZÜMLERİ LİMİTED ŞİRKETİ</strong>{' '}
+            (dolunay.ai) olarak kişisel verilerinizi aşağıda açıklanan amaçlar çerçevesinde ve
+            mevzuata uygun şekilde işlemekteyiz. Vergi kimlik numarası: 0851465973 (Kozyatağı
+            Vergi Dairesi). MERSİS: 0085146597300001. Adres: Barbaros Mah. Şebboy Sk. No:4/1
+            İç Kapı No:2, Ataşehir / İstanbul. KEP: artifexyapayzeka@hs01.kep.tr.
           </p>
 
           <h2 className="text-xl font-semibold text-white mt-8">2. Toplanan Kişisel Veriler</h2>
