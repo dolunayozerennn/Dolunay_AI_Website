@@ -37,8 +37,7 @@ Yeni ve bos bir `icerik-firsat-radari` klasoru olustur. En az su dosyalar olsun:
 `baslat.py` ilk kosuda `.venv` ve paketleri kursun. Requirements hash'i degismediyse
 kurulumu atlasin. Urunu `.venv` Python ile acsin. Kullaniciya `pip install` yaptirma.
 
-Python 3.10 veya ustu gerekli. `baslat.py` surumu dogrulasin; dusuk surumde net uyariyla
-dursun.
+Python 3.10 veya ustu gerekli. `baslat.py` surumu dogrulasin; dusukte net uyariyla dursun.
 
 CLI sozlesmesi birebir su olsun:
 
@@ -79,9 +78,10 @@ kez kurmasin. Gercek
 seklinde normalize et. Nesneyi oldugu gibi gecmek veya yalniz `obj.data`yi alip
 `page_type/source`u kaybetmek yasak. SDK hata `status_code`unu koru. `main` girdi -> anahtar
 -> canli transport -> `run_radar` -> atomik cikti yolunu cagirir; offline erken-cikis yoktur.
-`main(kok=None, client_cls=None)` imzasi zorunlu: `kok` verilirse `runs/`, `son_kosu.json`,
-`son_rapor.html` ve `.env` dahil TUM ciktilar o klasorun altina yazilsin; `client_cls`
-verilirse transportlar o sinifla kurulsun. Testler mainí bos gecici klasorde boyle cagirir.
+`main(argv=None, kok=None, client_cls=None)` imzasi zorunlu; ilk sira arguman listesidir.
+`kok` verilirse `runs/`, `son_kosu.json`, `son_rapor.html` ve `.env` dahil TUM ciktilar o
+klasorun altina yazilsin; `client_cls` verilirse transportlar o sinifla kurulsun. Testler
+main'i bos gecici klasorde boyle cagirir.
 
 Birincil yol `su.get_parsed(url)`. TikTok profilinde `username/followers/following/likes/videos`;
 videoda `video_id/description/plays/likes/comments/shares/saves/reposts/posted_at/duration_s/
@@ -122,10 +122,10 @@ Modlar kodda sabit olsun:
 | Derin | 20 | 2 | 4 | 5 | 160 |
 
 Her SDK denemesi butceye girsin. Cache hit girmesin. Retry yeni denemedir. Butce dolunca
-kismi veriyi koru. Hesaplari round-robin isle. Eszamanlilik `1` olsun.
+kismi veriyi koru. Hesaplari round-robin isle. Eszamanlilik `1`.
 
 Her parsed, raw ve SERP cevabini URL + istek turu hash'iyle `cache/` altina koy. Cache
-alti saat gecerli olsun. `--yenile` cache'i atlasin. Cache dosyalarinda anahtar bulunmasin.
+alti saat gecerli. `--yenile` cache'i atlasin. Cache dosyalarinda anahtar bulunmasin.
 
 ## Hata sozlesmesi
 
@@ -223,7 +223,7 @@ Fixture tabanli testler gercek API'yi cagirmasin. En az sunlari kanitla:
     fake `ParsedPage`in `page_type/source/data` alanlari exact wrapperda korunur, parser
     kabul eder, sonra `run_radar` + cikti yazimi kanitlanir.
 
-Tum testleri calistir; hata varsa acma. Fixture raporunun ilk ekranini ve manifestini kontrol et.
+Tum testleri calistir; hata varsa acma. Fixture raporunu ve manifestini kontrol et.
 
-Son cevapta su dort seyi kisa yaz: bulunan uc firsat, taranan hesap sayisi, basarili 2xx
+Son cevapta sunlari kisa yaz: bulunan uc firsat, taranan hesap sayisi, basarili 2xx
 sayisi ve raporun yolu. API anahtarini hic tekrar etme.

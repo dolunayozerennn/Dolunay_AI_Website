@@ -9,7 +9,7 @@ butceme uyan hangi sehirlere gidebilirim?" sorusunu cevaplayan lokal bir urun ya
 
 Urun bir ucus listesi degil karar ekranidir. Ilk ekranda butceye uyan rotalari, kisi basi
 fiyati, tarihleri, aktarmayi, sureyi, havayolunu, bagaji ve kaynak baglantisini
-gostersin. Bagaj cevapta yoksa acikca `bilinmiyor` yazsin.
+gostersin. Bagaj cevapta yoksa `bilinmiyor` yazsin.
 
 Tum ag verisi yalniz ScrapeUnblocker uzerinden gelsin. Baska ucus, otel, doviz veya arama
 API'si kullanma. Veri gelmezse tahmin etme ve ornek fiyat uydurma.
@@ -19,13 +19,12 @@ API'si kullanma. Veri gelmezse tahmin etme ve ornek fiyat uydurma.
 Python 3.11 veya ustunu dogrula. Proje icinde `.venv` olustur. `requirements.txt` dosyasina
 tam olarak `scrapeunblocker==0.1.8` yaz ve bu resmi SDK surumunu sanal ortama kur; calisirken
 kurulu surum 0.1.8 degilse anlasilir hata ver. `.gitignore` icine `.env`, `.venv/`, `cache/`,
-ham cevaplar, kosu durumu ve yetenek kaniti dosyalarini ekle.
+ham cevaplar, kosu durumu ve yetenek kaniti ekle.
 
 API anahtarini sohbet icinde isteme. Ortamda `SCRAPEUNBLOCKER_KEY` yoksa Python `getpass` ile
 gizli terminal girdisi al. `getpass` YALNIZ argumansiz interaktif kosuda calisir; `--help`,
 `--fixture-demo` ve `--plan` etkilesimsizdir, anahtari yalniz ortamdan ya da `.env`den okur ve
-anahtar yoksa `getpass`e girmeden anlasilir mesajla sifirdan farkli kodla ciker. Anahtari
-proje icindeki `.env` dosyasina yaz ve dosya iznini `0600` yap. Anahtar HTML, JSON, log, komut satiri argumani, test fixture'i veya ekrana hicbir zaman
+anahtar yoksa `getpass`e girmeden anlasilir mesajla sifirdan farkli kodla ciker. Anahtari proje icindeki `.env`e yaz ve iznini `0600` yap. Anahtar HTML, JSON, log, komut satiri argumani, test fixture'i veya ekrana hicbir zaman
 girmesin.
 
 ## Kullanici girdisi
@@ -62,7 +61,7 @@ herhangi bir dosya yazimi olmadan `exit 0` donsun. SDK'yi modul seviyesinde impo
 | Hizli (varsayilan) | 8 | 1 | 8 | 24 |
 | Derin | 20 | 2 | 40 | 120 |
 
-Bu tavanlar kodda zorunlu olsun; plan dosyasindaki buyuk deger bunlari asamasin. Istekler sirali kossun, eszamanlilik 1.
+Bu tavanlar kodda zorunlu olsun; plandaki buyuk deger bunlari asamasin. Istekler sirali kossun, eszamanlilik 1.
 
 ## ScrapeUnblocker kullanimi
 
@@ -81,7 +80,8 @@ bu adlari oku: kok `itineraries`, sonuc listesi `itineraries.results`, durum
 ve rezervasyon baglantisi `pricingOptions[0].items[0].url` (bagil gelirse basina
 `https://www.skyscanner.net` ekle). Baska alan uydurma; fiyati bos olan sonucu fiyat sayma.
 
-Hem `origin` hem `dest` icin her rota ve penceredeki ilk istekte plandaki IATA kodunu kullan.
+Her rota ve penceredeki ilk istekte `origin` ve `dest` icin plandaki IATA kodunu kullan; her
+istekte tek bir IATA kodu gonder, virgulle birlestirilmis liste gonderme.
 Donen ilk bacagin kalkis ve varis havaalanlarini beklenen IATA listeleriyle dogrula. Yanlis sehre
 cozulmus bir cevap fiyat sonucu sayilmasin.
 
@@ -95,8 +95,7 @@ asmasin: `origin_city_fallback_attempts`, `dest_city_fallback_attempts`.
 - `origin_sehir_adi/dest_sehir_adi`, ic ice aday dongusu, ayni parametre tekrari ve sayaci tukenen
   tarafin sonraki rota/pencerede yeniden sehir yedegi yasaktir.
 
-`2 destinasyon x 2 pencere` fixture testi gercek SDK argumanlarinin tam
-sirasini kanitlasin: belirsiz hatada ilk rota `IATA/IATA`, `IATA/dest_sehir_adi`,
+`2 destinasyon x 2 pencere` fixture testi SDK argumanlarinin tam sirasini kanitlasin: belirsiz hatada ilk rota `IATA/IATA`, `IATA/dest_sehir_adi`,
 `origin_sehir_adi/dest_IATA`; kalanlar yalniz `IATA/IATA`. Iki sayac da `<=1` kalmali.
 
 Kodda tek karar kapisi olan isimli `FALLBACK_TRIGGER_MATRIX` sabiti bulunmali. `ALLOW`: yalniz
@@ -121,13 +120,13 @@ gercek sebebi goster ve hic fiyat uydurma.
 - `403`: kaynak engelidir. Ayni istegi tekrar etme.
 - `404`: uc veya sonuc bulunamadi. Ayni istegi tekrar etme. Yalniz yukaridaki kosu-geneli,
   taraf-basina tek sehir adi durum makinesi devreye girebilir.
-- `429`, ag zaman asimi, `500`, `502`, `503`, `504`: en fazla uc toplam deneme yap. Birinci
+- `429`, ag zaman asimi, `500`, `502`, `503`, `504`: en fazla uc deneme yap. Birinci
   hatadan sonra 1 saniye, ikinciden sonra 2 saniye bekle.
 - HTTP `200` govdesinde captcha, access denied veya insan dogrulamasi varsa basari sayma.
 - Bilinmeyen hata icin veri uydurma. Satiri sebebiyle birlikte eksik goster.
 
 Yalniz kullanilabilir `2xx` cevaplari basarili ve faturalandirilabilir say. Toplam deneme, basarili
-2xx ve cache isabetini ayri tut. Kalan kredi sayisini tahmin etme.
+2xx ve cache isabetini ayri tut. Kalan krediyi tahmin etme.
 
 ## Fiyat guvenligi
 
@@ -149,8 +148,7 @@ veri kaynaklari, uyari listesi ve rapor yolu.
 
 Fiyat gecmisini ayri JSON dosyasinda tut. Ayni kalkis, tarihler, gezi suresi, para, aktarma
 ve sure sinirlariyla gelen yeni kosuyu eski fiyatla kiyasla; yeni, dustu, artti ve ayni
-durumlarini goster. Yuzde 1'in altindaki degisimi buyuk alarm gibi one cikarma. En az son
-yedi kosunun zaman damgasini sakla.
+durumlarini goster. Yuzde 1'in altindaki degisimi buyuk alarm gibi one cikarma. Son yedi kosunun zaman damgasini sakla.
 
 ## Otel kapisi
 
