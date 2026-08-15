@@ -1,0 +1,235 @@
+Asagidaki urunu bu bilgisayarda sifirdan kur. Benden terminal komutu isteme. Komutlari sen
+calistir, dosyalari sen olustur ve testleri sen kos. Herhangi bir depoyu klonlama. Bos bir
+`seyahat-butce-radari` klasoru ac ve urunun tamamini orada insa et.
+
+## Sonuc
+
+Kullanici hedef sehir soylemeden su soruyu cevaplayan lokal bir urun yap:
+
+"Belirledigim tarihlerde, kalkis noktamdan, kisi basi butceme uyan hangi sehirlere
+gidebilirim?"
+
+Urun bir ucus listesi degil, karar ekranidir. Ilk ekranda butceye uyan rotalari, kisi basi
+fiyati, tarihleri, aktarmayi, sureyi, havayolunu, bagaj bilgisini ve kaynaga giden baglantiyi
+gostersin. Bagaj bilgisi cevapta yoksa acikca `bilinmiyor` yazsin. Sonraki kosularda fiyat
+degisimini onceki kayitla kiyaslasin.
+
+Tum ag verisi yalniz ScrapeUnblocker uzerinden gelsin. Baska ucus, otel, doviz veya arama API'si
+kullanma. Veri gelmezse tahmin etme ve ornek fiyat uydurma.
+
+## Kurulum
+
+1. Python 3.11 veya ustunu dogrula.
+2. Proje icinde `.venv` olustur.
+3. `requirements.txt` dosyasina tam olarak `scrapeunblocker==0.1.8` yaz.
+4. Sanal ortama bu resmi SDK surumunu kur.
+5. Calisirken kurulu surum 0.1.8 degilse anlasilir hata ver.
+6. `.gitignore` icine `.env`, `.venv/`, `cache/`, ham cevaplar, kosu durumu ve yetenek
+   kaniti dosyalarini ekle.
+
+API anahtarini sohbet icinde isteme. Ortamda `SCRAPEUNBLOCKER_KEY` yoksa Python `getpass` ile
+gizli terminal girdisi al. Anahtari proje icindeki `.env` dosyasina yaz ve dosya iznini `0600`
+yap. Anahtar HTML, JSON, log, komut satiri argumani, test fixture'i veya ekrana hicbir zaman
+girmesin.
+
+## Kullanici girdisi
+
+Tek seferde, urun dilinde su bilgileri al:
+
+- kalkis sehri veya havaalani,
+- bir ya da iki gidis-donus tarih penceresi,
+- gezi suresi,
+- kisi basi butce ve para birimi,
+- en fazla aktarma sayisi,
+- tek yon icin en uzun kabul edilen ucus suresi,
+- ozellikle dahil edilmesi istenen yerler,
+- haric tutulacak yerler,
+- Hizli veya Derin mod.
+
+Teknik alan adi sorma. Bu cevaplardan `plan.json` dosyasini kendin yaz. Kalkis kaydinda ve her
+hedefte gorunen ad, aramada kullanilacak sade sehir adi ve bir ya da daha cok IATA kodu bulunsun.
+Hedef listesini kendi genel bilginle olustur. API'yi hedef uretmek icin harcama. Kullanici izin
+listesi verdiyse yalniz o yerleri sec. Haric listesindeki yerleri her durumda ele.
+
+## Kanonik CLI sozlesmesi
+
+Kokte tek giris `app.py` olsun; baska giris olusturma. Arayuz tam olarak:
+
+- `python app.py --help` -> kullanim ve `exit 0`.
+- `python app.py --fixture-demo` -> anahtarsiz yerel demo.
+- `python app.py --plan PLAN_JSON` -> etkilesimsiz canli ucus kosusu.
+- `python app.py --plan PLAN_JSON --hotel-canary` -> acikca istenen otel kanaryasi.
+- Argumansiz `python app.py` -> yalniz bu durumda tek seferlik interaktif girdi ve kosu.
+
+`--fixture-demo` ile `--plan` birlikte kullanilmasin; `--hotel-canary` `--plan` istesin. Gecersiz
+birlesim girdi almadan `exit 2` donsun. `--help`; stdin/`input`, `getpass`, SDK/ag ve herhangi bir
+dosya yazimi olmadan `exit 0` donsun. Subprocess `unittest`i cikisi, metni, sifir girdi/cagriyi ve
+degismeyen dosya agacini kanitlasin.
+
+## Iki kesin mod
+
+`Hizli` varsayilandir:
+
+- en fazla 8 destinasyon,
+- yalniz 1 tarih penceresi,
+- en fazla 8 basarili ucus cevabi,
+- tekrarlar dahil en fazla 24 ag denemesi.
+
+`Derin`:
+
+- en fazla 20 destinasyon,
+- en fazla 2 tarih penceresi,
+- en fazla 40 basarili ucus cevabi,
+- tekrarlar dahil en fazla 120 ag denemesi.
+
+Bu tavanlar kodda zorunlu olsun. Plan dosyasindaki buyuk bir deger bunlari asamasin. Her istek
+siralı calissin. Eszamanlilik varsayilani 1 olsun.
+
+## ScrapeUnblocker kullanimi
+
+Resmi SDK ile `Client(..., max_retries=0)` ac. Tekrar kararini uygulama versin. Ucus icin
+`client.skyscanner.flights(...)` kullan. Gerekli alanlar:
+
+- `origin`, `dest`, `depart_date`, `return_date`,
+- `adults`, `cabin`, `market`, `locale`, `currency`, `max_polls`.
+
+Hem `origin` hem `dest` icin her rota ve penceredeki ilk istekte plandaki IATA kodunu kullan.
+Donen ilk bacagin kalkis ve varis havaalanlarini beklenen IATA listeleriyle dogrula. Yanlis sehre
+cozulmus bir cevap fiyat sonucu sayilmasin.
+
+Sehir yedegi kartezyen degil, kosu-geneli durum makinesi olsun. Iki sayac `0` baslasin ve asla `1`i
+asmasin: `origin_city_fallback_attempts`, `dest_city_fallback_attempts`.
+
+- Normal istek: `origin_IATA/dest_IATA`.
+- Yalniz dest yanlissa ve dest sayaci `0`sa bir kez `origin_IATA/dest_sehir_adi`.
+- Yalniz origin yanlissa ve origin sayaci `0`sa bir kez `origin_sehir_adi/dest_IATA`.
+- `404`, bos veya belirsiz cevapta kullanilmamis dest yedegini, sonra origin yedegini dene.
+- `origin_sehir_adi/dest_sehir_adi`, ic ice aday dongusu, ayni parametre tekrari ve sayaci tukenen
+  tarafin sonraki rota/pencerede yeniden sehir yedegi yasaktir.
+
+Sayaclari manifeste yaz. `2 destinasyon x 2 pencere` fixture testi gercek SDK argumanlarinin tam
+sirasini kanitlasin: belirsiz hatada ilk rota `IATA/IATA`, `IATA/dest_sehir_adi`,
+`origin_sehir_adi/dest_IATA`; kalanlar yalniz `IATA/IATA`. Iki sayac da `<=1` kalmali.
+
+Kodda tek karar kapisi olan isimli `FALLBACK_TRIGGER_MATRIX` sabiti bulunmali:
+
+- `ALLOW`: yalniz `not_found_404`, kullanilabilir `2xx_empty`, `origin_wrong`, `dest_wrong`,
+  `route_ambiguous`.
+- `DENY`: `400/401/402/403/422`, `429/500/502/503/504/timeout_exhausted`, `200_block_page` ve
+  `unknown_error`.
+
+Scanner fallback'e yalniz bu matrisin `ALLOW` sonucu ile girebilir; genel `except`/genel basarisizlik
+yolu fallback baslatamaz. `test_fallback_trigger_matrix_at_scanner_boundary` adli tablo-testinde
+fake SDK'yi gercek route-scanner sinirindan cagir. Her `DENY` satirinda cagri logu tam bir
+`IATA/IATA`, iki fallback sayaci `0`, sehir adi sorgusu yok olsun. `not_found_404` satiri ise yukaridaki
+izinli kesin sirayi kanitlasin. Yalniz gateway/HTTP siniflandiricisini test etmek yeterli degildir.
+
+Uzun taramadan once ilk rota ve ilk pencereyle baslangic kanaryasi yap. Kanarya API hatasi verirse,
+yanlis sehre giderse, bos donerse veya kullanicinin aktarma ve sure sinirlarina uyan secenek
+bulamazsa taramayi baslatma. Koyu bir `rapor_son.html` uret. Raporda `Tarama baslatilmadi` yaz,
+gercek sebebi goster ve hic fiyat uydurma.
+
+## Hata ve tekrar sozlesmesi
+
+- `401` ve `402`: anahtar, plan veya kullanim hakki sorunudur. Hemen dur.
+- `400` ve `422`: parametre hatasidir. Tekrar etme, hemen dur.
+- `403`: kaynak engelidir. Ayni istegi tekrar etme.
+- `404`: uc veya sonuc bulunamadi. Ayni istegi tekrar etme. Yalniz yukaridaki kosu-geneli,
+  taraf-basina tek sehir adi durum makinesi devreye girebilir.
+- `429`, ag zaman asimi, `500`, `502`, `503`, `504`: en fazla uc toplam deneme yap. Birinci
+  hatadan sonra 1 saniye, ikinciden sonra 2 saniye bekle.
+- HTTP `200` govdesinde captcha, access denied veya insan dogrulamasi varsa basari sayma.
+- Bilinmeyen hata icin veri uydurma. Satiri sebebiyle birlikte eksik goster.
+
+Yalniz kullanilabilir `2xx` cevaplari basarili ve faturalandirilabilir say. Toplam deneme, basarili
+2xx ve cache isabetini ayri tut. Kalan kredi sayisini tahmin etme.
+
+## Fiyat guvenligi
+
+`adults` grup toplami dogrulanmamistir: fiyat daima `kisi basi`; iki+ kiside carpma yapma ve
+`Grup toplami dogrulanmadi` yaz. Eksik bagaji dahil sayma. Butceyi yalniz istenen para biriminde
+kiyasla; farkli parayi cevirme veya butce-ici sayma, uyari ver. Satin alma fiyat degisimi uyarisini
+rapora ekle.
+
+## Cache, gecmis ve ilerleme
+
+Ayni uc, rota ve parametrelerin basarili cevabini anahtar icermeyen SHA-256 anahtariyla gzip
+cache'e yaz. Cache omru 6 saat olsun. Cache cevabi ag istegi veya basarili 2xx sayacini artirmasin.
+
+Her arama tamamlandiginda `rapor_son.html` ve `run_manifest.json` dosyalarini hemen yenile. Kullanici
+uzun tarama surerken bulunan ilk firsatlari gorebilsin. Manifest en az su alanlari tasisin:
+
+- prompt ve SDK surumu,
+- kosu kimligi, UTC baslangic ve bitis zamani,
+- mod ve sert butceler,
+- durum: starting, canary, calisiyor, tamamlandi, kismi veya blocked,
+- tamamlanan ve planlanan arama,
+- toplam deneme, basarili 2xx, cache isabeti,
+- `origin_city_fallback_attempts` ve `dest_city_fallback_attempts`,
+- veri kaynaklari, uyari listesi ve rapor yolu.
+
+Fiyat gecmisini ayri JSON dosyasinda tut. Ayni kalkis, tarihler, gezi suresi, para, aktarma ve sure
+sinirlariyla yeni kosu geldiginde eski fiyatla kiyasla. Yeni, dustu, artti ve ayni durumlarini
+goster. Yuzde 1'in altindaki degisimi buyuk alarm gibi one cikarma. En az son yedi kosunun zaman
+damgasini sakla.
+
+## Otel kapisi
+
+Otel varsayilan kapali olsun. Yalniz acik `--hotel-canary` secenegi
+`client.skyscanner.hotels(...)` ile `destination`, `checkin`, `checkout`, `adults`, `rooms`,
+`market`, `locale`, `currency`, `max_results` gondersin. Gercek ad + sayisal toplam + para birimi
+varsa kosu kimligini kaydet; iki farkli canli kosu kaniti olmadan otel vaat/arama. Kapi acilsa da
+acik kullanici istegi ve en fazla uc butce-ici rota gerekir. Para birimleri farkliysa toplama;
+birden cok kiside ucus grup toplami dogrulanmadigi icin birlesik seyahat toplami gosterme.
+
+## HTML raporu
+
+Tek dosyalik, mobil uyumlu ve tamamen offline bir HTML uret. Tema koyu olsun:
+
+- zemin `#0b1120`, panel `#1e293b`, kenar `#334155`,
+- baslik `#f1f5f9`, govde `#e2e8f0`, soluk metin `#94a3b8`.
+
+Harici font, stil, script, gorsel veya analitik istegi olmasin. CSP ile `default-src 'none'`
+uygula. Rezervasyon baglantilari yalniz kullanicinin tikladigi normal linkler olabilir. Ilk ekranda
+mod, tarama durumu, butceye uyan rota sayisi, en ucuz rota ve fiyat degisimi yer alsin. Kartlarda
+kaynak tarihi ve kisi basi etiketi gorunsun. Basarisiz yerler sebebiyle ayri tabloda dursun.
+
+## Fixture demo ve teslim kaniti
+
+`python app.py --fixture-demo`; anahtar/`.env`/`getpass`/SDK/ag olmadan kokte gercek
+`rapor_son.html` ve `run_manifest.json` yazip her kosuda yenilesin. HTML ilk ekranda
+`DEMO / FIXTURE — canlı fiyat değildir` gostersin. Manifest `data_mode: "fixture_demo"`,
+`status: "demo"`, ayni uyariyi ve sifir ag/2xx sayacini tasisin.
+
+Finalden hemen once temiz subprocess demo kos; iki dosyada varlik + sifirdan buyuk boyut,
+HTMLParser, `json.load` ve DEMO/FIXTURE uyarisini dogrula. `--help`, unittest, derleme ve bu kapi
+ayni son turda gecmezse `hazir/tamamlandi`, dosya veya test basarisi beyan etme; duzeltip tum kapiyi
+yeniden kos. Her final beyanini taze komut ve gercek dosyayla kanitla.
+
+## Testsiz teslim etme
+
+Gercek API kullanmayan `unittest` testleri ve kucuk JSON fixture'lari yaz. En az sunlari kanitla:
+
+1. Hizli 8x1 ve Derin 20x2 tavanlari.
+2. Allow ve exclude filtreleri.
+3. Dogru kalkis ve varis eslestirmesi.
+4. Aktarma ve sure filtresi.
+5. `400/401/402/403/404/422/429/500/502/503/504` ve timeout matrisi.
+6. `200` icindeki engel sayfasinin basari sayilmamasi.
+7. Cache'in ikinci ag cagrisini engellemesi.
+8. Basarili istek ve toplam deneme tavanlari.
+9. Birden cok kiside grup toplami uydurulmamasi.
+10. Otel kapisinin iki farkli canli kosu kaniti istemesi.
+11. HTML'in harici kaynak kullanmamasi ve koyu tema tasimasi.
+12. `app.py --help` komutunun girdi, `getpass`, SDK, ag ve dosya yazimi olmadan `0` donmesi.
+13. Anahtarsiz `--fixture-demo` kosusunun iki gercek, sifirdan buyuk ve acilabilir DEMO ciktisi
+    uretmesi; manifest ag sayaclarinin sifir olmasi.
+14. Iki destinasyon x iki pencere senaryosunda origin/dest sehir yedeklerinin kosu genelinde
+    taraf basina en fazla bir kez kullanilmasi, kartezyen tekrar olmamasi ve kesin cagri sirasi.
+
+Tum testleri calistir. Python dosyalarini derle. Sonra anahtara dokunmadan kanonik
+`python app.py --fixture-demo` komutuyla gercek HTML ve manifesti uret; yukaridaki teslim kanitini
+aynen kos. Yalniz bu kontroller gectikten sonra kurulumu tamamlandi say.
+
+Finalde teknik gunluk verme; yalniz hazirlik, iki mod, test sonucu ve acilacak dosyayi soyle. Sonra
+seyahat bilgilerimi tek seferde sorup ilk canli Hizli kosuyu kendin baslat.

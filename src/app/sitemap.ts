@@ -19,6 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticUrls = [
     '',
     '/blog',
+    '/kaynaklar/scrapeunblocker',
     '/cozumler',
     // '/cozumler/hizmetler' bilerek YOK: govdesi /cozumler'in kopyasi, canonical oraya bakiyor.
     '/egitimler/ai-factory',

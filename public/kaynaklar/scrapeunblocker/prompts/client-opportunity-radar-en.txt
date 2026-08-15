@@ -1,0 +1,229 @@
+Claude Code, build a working mini-product in this folder. Call it **Local Customer
+Opportunity Radar**. Do not ask me technical questions. Create the required files,
+run the tests, and prepare the product. Choose safe defaults when details are missing.
+
+## Product outcome
+
+I will provide a region, an industry, and the service I sell. Example: `Kadikoy`,
+`dental clinic`, and `website design`.
+
+Before writing code, ask one message containing only: region, industry, service sold,
+and `quick` or `deep` mode. Read my answer back as one execution plan. Do not include
+the API key in these questions.
+
+The product must find local businesses and inspect each one. Do not return a plain
+directory. Answer these two questions:
+
+1. Which businesses should I contact first today?
+2. What verified evidence can I use in each opening message?
+
+The first viewport must show the five strongest opportunities. Each row must include
+the business name, opportunity score, confidence score, primary reason, and short
+message. Detailed evidence cards must follow.
+
+## Technology and setup
+
+- Use Python 3.10 or newer.
+- Use the official `scrapeunblocker==0.1.8` package.
+- Pin `httpx==0.28.1`.
+- Put exact versions in `requirements.txt`.
+- Create `start.py` to create `.venv` on first use.
+- That file must install dependencies and launch the application automatically.
+- Git-ignore `.venv`, `.env`, `.cache`, and `cikti`.
+- Use no data provider other than ScrapeUnblocker.
+- Do not use direct `requests`, `curl`, `urlopen`, or browser automation.
+- Route every network request through the official ScrapeUnblocker client.
+
+Use one exact CLI contract. Do not invent aliases:
+
+```text
+python3 start.py --region "Kadikoy" --industry "dental clinic" --service "website design" --mode quick
+```
+
+The required names are `--region` and `--industry`; the other product arguments are
+`--service`, `--mode {quick,deep}`, `--count`, `--query-variants`, `--output`,
+`--cache-hours`, `--no-cache`, and `--rebuild-report`. `start.py` must pass every
+argument through unchanged. `--help` must exit zero without input, `getpass`, package
+installation, SDK/network access, or file writes. If region or industry is absent,
+show help and exit `2` before asking for a key.
+
+Never ask for the API key in chat. Do not accept it as a command-line argument.
+Check `SCRAPEUNBLOCKER_KEY`, then the local `.env` file. If neither exists, use
+Python `getpass` for hidden terminal input. Save it locally with file mode `0600`.
+Never write the key to HTML, JSON, CSV, logs, shell history, or error messages.
+
+## Two execution modes
+
+The default mode is `quick`.
+
+- `quick`: At most 10 businesses and 30 API attempts.
+- `deep`: At most 20 businesses and 70 API attempts.
+
+Failed calls and retries count toward the attempt budget. Stop making requests when
+the budget is exhausted. Preserve collected data and write a partial report with
+`partial=true`. Never exceed a mode limit when the user asks for a larger number.
+
+Cache valid responses locally for 12 hours. Derive cache keys from the endpoint and
+parameters. Never put the API key into a cache key. Record cache hits in the manifest.
+
+## ScrapeUnblocker routing
+
+The first network call must be one Google Local health canary:
+
+```python
+su.google_local(keyword, proxy_country="TR", hl="tr", gl="tr")
+```
+
+Attempt this endpoint exactly once and do not retry it. When the response has a
+non-empty, valid `results` array, use it as the primary discovery source. Safely read
+`name`, `rating`, `reviews`, `category`, `address`, `phone`, `website`, `hours`,
+`position`, and `sponsored`. Never infer a missing field.
+
+If Google Local returns `403`, malformed JSON, or no usable results, open the fallback:
+
+1. Use `su.serp(...)` for organic verification.
+2. Use `su.get_page_source(google_search_url)` when a local pack is required.
+
+Only process the SERP `organic` array. A valid empty array is a normal result. Fall
+back to page source on malformed data, `403`, or a persistent endpoint failure. Reject
+Google consent pages, traffic challenges, and bot interstitials even when HTTP is `200`.
+
+Make the retry matrix explicit and testable:
+
+- `401` and `402`: Stop immediately. Never retry.
+- `400`, `403`, `404`, `415`, and `422`: Do not retry the same endpoint.
+- `408`, `429`, `500`, `502`, `503`, and `504`: At most three total attempts.
+- Connection failures and local timeouts: At most three total attempts.
+- Backoff: Short exponential delays, capped at four seconds.
+
+Open the official client with `max_retries=0`. Our code must own retry decisions so
+the budget and manifest show the real number of attempts. Count every successful
+`2xx` as a potentially billable request. Track rejected `2xx` challenge pages separately.
+
+## Entity resolution
+
+Never merge businesses using the name alone. Normalize these signals:
+
+- Domain: Remove `www` and ports. Exclude directories and social domains.
+- Phone: Accept only real phone patterns. Normalize Turkey's country code.
+- Address: Remove punctuation and generic address words. Compare complete token sets.
+- Name: Remove generic industry terms. Compare meaningful words.
+
+An identical domain or phone is strong identity evidence. An identical address alone
+is insufficient because unrelated companies may share a building. Require meaningful
+name overlap alongside address similarity. Never treat years, prices, review counts,
+or arbitrary long numbers as a phone or identity signal.
+
+Store entity-resolution reasons. Calculate an opportunity score and a separate
+confidence score. Opportunity measures potential value. Confidence measures evidence
+coverage. Never present a low-confidence lead as if it were strongly verified.
+
+## Inspection and evidence
+
+Measure these facts when possible:
+
+- Does the Google listing link to the business's own website?
+- Does a verified domain appear on page one for the business-name search?
+- Does the business appear in the main region-industry local or organic results?
+- Can ScrapeUnblocker reach the website?
+- Does the fetched page show a phone, form, WhatsApp link, and mobile viewport?
+- Does the listed website use HTTPS?
+
+"I did not see it" is not the same as "it does not exist." If a site cannot be
+fetched, record "not measured" and make no quality claim. If viewport is absent, say
+"mobile viewport was not observed," not "the site is not mobile-friendly." Do not use
+the newest year printed on a page as a freshness signal. Do not parse review or price
+numbers as telephone numbers.
+
+Store each evidence record in this shape:
+
+```json
+{
+  "code": "name_search",
+  "claim": "The business-name search completed",
+  "source_type": "serpApi",
+  "source": "query or URL",
+  "observed": {},
+  "confidence": 90,
+  "supported": true
+}
+```
+
+## Outreach truth gates
+
+Generate a message only when at least one supported opportunity finding exists. Do
+not generate generic sales copy. Keep the message to three short sentences. Start
+with the actual query where the listing was found.
+
+Mechanically block these contradictions:
+
+- If the business was absent from the main query, do not say it was found there.
+- If a website or plausible verified domain exists, do not say "you have no website."
+- Do not claim duplicate listings from a shared address alone.
+- If the name search failed, make no search-visibility claim.
+- If the site fetch failed, make no definite site-quality claim.
+
+If a gate fails, leave the message empty and record the reason in `blocked_reasons`.
+No message is better than a fabricated one.
+
+## Output contract
+
+Create a timestamped folder for every run. These five files are mandatory:
+
+1. `rapor.html`: Dark, single-file, offline report.
+2. `leads.csv`: Rank, name, scores, reason, phone, site, address, and message.
+3. `evidence.json`: Evidence, findings, and outreach gate per business.
+4. `run_manifest.json`: Versions, mode, budgets, counters, endpoints, and warnings.
+5. `bulgular.json`: Complete clean data needed to redraw the report.
+
+The HTML must make no automatic request to a CDN, font, image, script, or remote host.
+Add a strict CSP. External URLs may open only after a user click. The first viewport
+must show the top five names, reasons, messages, and both scores. Put evidence directly
+under each detailed finding. The copy-message button must work offline.
+
+Separate manifest counters for API attempts, successful `2xx`, rejected `2xx`, cache
+hits, and businesses. Store the Google Local canary result separately. Never estimate
+the account's remaining credits.
+
+## Test and acceptance gate
+
+Write offline `unittest` fixture tests. They must never call the real API. Use a fake
+official client. Verify at least these scenarios:
+
+- Healthy Google Local canary with exactly one call.
+- No retry after Google Local `403`.
+- Each of `401` and `402` stops after one attempt in its own table-driven `subTest`.
+- Each of `400`, `403`, `404`, `415`, and `422` is proven non-retryable in its own
+  table-driven `subTest`.
+- Each of `408`, `429`, `500`, `502`, `503`, and `504` is proven to make no more than
+  three total attempts in its own `subTest`; test timeout and network failure separately.
+- Hard 30 and 70 attempt budgets.
+- Unrelated businesses at one address remain separate.
+- Identical phone or domain is strong identity evidence.
+- No "no website" finding when a site was found.
+- No contradiction between "not visible" and "I found you there."
+- All five output files and an offline CSP.
+- No direct network client in the application code.
+- `--help` exits zero with no input, key, SDK, network, install, or write side effect.
+- In a clean copy with no `.venv`, use a fresh supported Python 3.10+ interpreter.
+  No arguments, only `--bolge`, and only `--sektor` must each show help, exit `2`
+  without a `Traceback`, and write no file.
+- The test writes all five outputs to a temporary directory, then proves each exists,
+  is non-empty, and can be parsed. The HTML must visibly say
+  `DEMO/FIXTURE — not live API output`; never present fixture output as live data.
+
+Non-empty `README.md` and `KANIT.md` files are mandatory at the delivery root. Also
+leave a permanent, parseable fixture copy of all five required files in `ornek_cikti/`.
+Files created only inside the test's temporary directory do not count as delivery.
+
+Explain both modes in README. In KANIT.md, state exactly which behaviors fixture tests
+proved. Explicitly say when no live API call was made. Run the full tests first. Then
+open the HTML in a browser and verify the top-five block and copy button. Scan all
+outputs for API-key values, `.env` contents, and secret-like strings.
+
+Immediately before the final response, re-check every output path you plan to claim.
+If a file is missing or empty, HTML cannot open, or JSON cannot parse, do not say it
+was produced.
+
+When complete, report only the created folder, test result, output files, and whether
+you made live API calls. Never repeat the API key in your response.

@@ -3,3 +3,6 @@
 # Artifex Campus urunu kapatildi (31 Tem 2026). Sayfa Google'da dizinliydi,
 # 404 vermek yerine Cozumler'e kalici yonlendiriliyor.
 /cozumler/artifex-campus  /cozumler  301
+
+# YouTube aciklamasindaki adres sabit kalir; Rokas takipli adres verirse yalniz hedef degisir.
+/go/scrapeunblocker  https://scrapeunblocker.com  302

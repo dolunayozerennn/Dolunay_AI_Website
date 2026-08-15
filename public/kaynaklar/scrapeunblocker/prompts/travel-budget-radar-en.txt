@@ -1,0 +1,232 @@
+Build this product from scratch. Run every command, file creation, and test yourself; ask me for no
+terminal work and clone no repository. Build it in a clean `travel-budget-radar` folder.
+
+## Outcome
+
+Create a local product that answers this question without requiring a destination:
+
+"Given my departure point, dates, and per-person budget, where can I travel?"
+
+Make a decision screen, not a flight dump. First show in-budget routes, per-person price, dates,
+stops, duration, airline, baggage, and source link. Missing baggage is `unknown`. Compare later
+runs with timestamped history.
+
+All network data must come through ScrapeUnblocker. Do not use another data API. Never invent a
+fare when data is unavailable.
+
+## Installation
+
+1. Verify Python 3.11 or newer.
+2. Create `.venv` inside the project.
+3. Put exactly `scrapeunblocker==0.1.8` in `requirements.txt`.
+4. Install that official SDK version in the virtual environment.
+5. Fail with a clear message if the runtime version is not 0.1.8.
+6. Add `.env`, `.venv/`, cache, raw responses, run state, and capability evidence to `.gitignore`.
+
+Never request the API key in chat. If `SCRAPEUNBLOCKER_KEY` is missing from the environment, use
+Python `getpass` to collect it through hidden terminal input. Save it to the project's `.env` with
+`0600` permissions. The key must never appear in HTML, JSON, logs, command-line arguments, fixtures,
+or terminal output.
+
+## User input
+
+Collect the following product-level answers once:
+
+- departure city or airport,
+- one or two outbound/return date windows,
+- trip length,
+- per-person budget and currency,
+- maximum stops,
+- maximum acceptable duration for one direction,
+- places that must be allowed,
+- places that must be excluded,
+- Quick or Deep mode.
+
+Turn the answers into `plan.json` yourself. The departure record and every candidate need a name,
+plain search name, and one or more IATA codes. Create candidates from general knowledge, without
+API calls. Apply allow and exclude lists exactly.
+
+## Canonical CLI contract
+
+The only root entry point is `app.py`; create no alternative. Its exact interface is:
+
+- `python app.py --help` -> usage and `exit 0`.
+- `python app.py --fixture-demo` -> keyless local demo.
+- `python app.py --plan PLAN_JSON` -> non-interactive live flight run.
+- `python app.py --plan PLAN_JSON --hotel-canary` -> explicit hotel canary.
+- Argument-free `python app.py` -> the only interactive mode; collect answers once and run.
+
+`--fixture-demo` and `--plan` are exclusive; `--hotel-canary` requires `--plan`. Invalid combinations
+exit `2` without input. `--help` exits `0` without stdin/`input`, `getpass`, SDK/network, or any file
+write. A subprocess `unittest` must prove the code/text, zero input/calls, and unchanged file tree.
+
+## Two exact modes
+
+`Quick` is the default:
+
+- at most 8 destinations,
+- exactly 1 date window,
+- at most 8 successful flight responses,
+- at most 24 network attempts including retries.
+
+`Deep`:
+
+- at most 20 destinations,
+- at most 2 date windows,
+- at most 40 successful flight responses,
+- at most 120 network attempts including retries.
+
+Enforce these ceilings in code. A larger value in `plan.json` must not override them. Run requests
+sequentially, with concurrency fixed to 1.
+
+## ScrapeUnblocker integration
+
+Open the official SDK with `Client(..., max_retries=0)` so the application owns the retry policy.
+Use `client.skyscanner.flights(...)` for flights. Supply:
+
+- `origin`, `dest`, `depart_date`, `return_date`,
+- `adults`, `cabin`, `market`, `locale`, `currency`, `max_polls`.
+
+For every route and window, use the planned IATA code in the first request for both `origin` and
+`dest`. Validate the first-leg origin and destination airports against the expected IATA sets. A
+response resolved to a different city must never become a price result.
+
+Plain-city fallback is a run-wide state machine, never Cartesian. Start
+`origin_city_fallback_attempts` and `dest_city_fallback_attempts` at `0`; neither may exceed `1`.
+
+- Normal: `origin_IATA/dest_IATA`.
+- Destination alone wrong and its counter `0`: once `origin_IATA/dest_plain_city`.
+- Origin alone wrong and its counter `0`: once `origin_plain_city/dest_IATA`.
+- For `404`, empty, or ambiguous output, try the unused destination fallback, then origin fallback.
+- Forbid `origin_plain_city/dest_plain_city`, nested candidate loops, identical retries, and any
+  later city fallback on a side whose counter was consumed.
+
+Put both counters in the manifest. A `2 destinations x 2 windows` fixture test must prove the exact
+SDK call order for an ambiguous failure: first route `IATA/IATA`, `IATA/dest_plain_city`,
+`origin_plain_city/dest_IATA`; all remaining calls only `IATA/IATA`. Assert both counters stay `<=1`.
+
+Code must contain one named decision gate, the `FALLBACK_TRIGGER_MATRIX` constant:
+
+- `ALLOW`: only `not_found_404`, usable `2xx_empty`, `origin_wrong`, `dest_wrong`, and
+  `route_ambiguous`.
+- `DENY`: `400/401/402/403/422`, `429/500/502/503/504/timeout_exhausted`, `200_block_page`, and
+  `unknown_error`.
+
+Only an `ALLOW` result may enter scanner fallback; a generic exception/failure path may not. Add a
+table test named `test_fallback_trigger_matrix_at_scanner_boundary` that drives the fake SDK through
+the real route-scanner boundary. Every `DENY` row must log exactly one `IATA/IATA` call, keep both
+fallback counters at `0`, and contain no city query. `not_found_404` must prove the allowed exact
+sequence above. Testing only the gateway/HTTP classifier is insufficient.
+
+Before the full scan, run one startup canary using the first route and first window. If the canary
+returns an API error, resolves to the wrong city, returns no result, or has no option matching the
+user's stop and duration limits, do not begin the scan. Produce a dark `rapor_son.html` that
+says `Scan not started`, shows the actual reason, and contains no sample fare.
+
+## Error and retry contract
+
+- `401` and `402`: authentication, plan, or quota problem. Stop immediately.
+- `400` and `422`: invalid parameters. Do not retry; stop immediately.
+- `403`: source block. Do not repeat the same request.
+- `404`: endpoint or result unavailable. Do not repeat the same request. Only the run-wide,
+  one-per-side plain-city state machine above may run.
+- `429`, network timeout, `500`, `502`, `503`, and `504`: allow three attempts in total. Wait one
+  second after the first failure and two seconds after the second.
+- If an HTTP `200` body contains a captcha, access-denied page, or human verification, do not count
+  it as success.
+- For an unknown failure, preserve the reason and mark the row incomplete. Never synthesize data.
+
+Count only usable `2xx` responses as successful and billable. Track network attempts, successful
+2xx responses, and cache hits separately. Never estimate the account's remaining credits.
+
+## Fare safety
+
+`adults` group totals are unverified: label fares `per person`; for two+ travelers never multiply
+and say `Group total not verified`. Never infer missing baggage. Compare budget only in the requested
+currency; do not convert or count other currencies as in-budget, and warn. State fares can change.
+
+## Cache, history, and incremental output
+
+Cache every successful route response as gzipped JSON. Build the cache key with SHA-256 from the
+endpoint and parameters, never from the API key. Use a six-hour TTL. A cache hit must not increase
+the network-attempt or successful-2xx counters.
+
+After every completed search, immediately rewrite `rapor_son.html` and `run_manifest.json` so
+the user can see the first opportunities while a long scan continues. The manifest must contain:
+
+- prompt and SDK versions,
+- run ID plus UTC start and finish times,
+- mode and hard budgets,
+- status: starting, canary, running, completed, partial, or blocked,
+- completed and planned searches,
+- network attempts, successful 2xx responses, and cache hits,
+- `origin_city_fallback_attempts` and `dest_city_fallback_attempts`,
+- data sources, warnings, and output path.
+
+Keep price history in a separate JSON file. Compare only runs with the same origin, windows, trip
+length, currency, stop limit, and duration limit. Mark routes as new, down, up, or unchanged. Do
+not feature changes below one percent as a major alert. Retain timestamps for at least seven runs.
+
+## Hotel capability gate
+
+Hotels are off by default. Only explicit `--hotel-canary` may call
+`client.skyscanner.hotels(...)` with `destination`, `checkin`, `checkout`, `adults`, `rooms`,
+`market`, `locale`, `currency`, `max_results`. Record a run ID only for a real name, numeric total,
+and currency. Do not promise/search hotels before two distinct live run proofs; afterward require
+explicit choice and scan at most three in-budget routes. Never add different currencies or show a
+multi-traveler combined total; a one-person total requires matching currencies.
+
+## HTML report
+
+Generate one mobile-friendly, fully offline HTML file. Use this dark palette:
+
+- background `#0b1120`, panel `#1e293b`, border `#334155`,
+- heading `#f1f5f9`, body `#e2e8f0`, muted text `#94a3b8`.
+
+Do not load external fonts, styles, scripts, images, or analytics. Enforce a CSP with
+`default-src 'none'`. Booking URLs may be normal links that navigate only after the user clicks.
+Above the fold, show mode, scan status, number of routes inside the budget, cheapest route, and
+price movement. Every card must show data time and the per-person label. Put unsuccessful routes
+and their actual reasons in a separate table.
+
+## Fixture demo and delivery proof
+
+`python app.py --fixture-demo` must rewrite real root `rapor_son.html` and `run_manifest.json`
+without key/`.env`/`getpass`/SDK/network. Above the fold, show
+`DEMO / FIXTURE — not a live fare`. The manifest must include `data_mode: "fixture_demo"`,
+`status: "demo"`, the same warning, and zero network/2xx counters.
+
+Immediately before the final response, run a clean subprocess demo. Verify both exact paths exist,
+are non-empty, HTML parses with `HTMLParser`, JSON with `json.load`, and both contain DEMO/FIXTURE.
+Unless `--help`, tests, compilation, and this gate pass in one final round, do not claim ready,
+complete, a path, or passing tests; fix and rerun all. Back every final claim with fresh output and
+real files.
+
+## Do not deliver without tests
+
+Write `unittest` tests and small JSON fixtures that never contact the live API. Prove at least:
+
+1. Quick 8x1 and Deep 20x2 ceilings.
+2. Allow and exclude filtering.
+3. Correct origin and destination matching.
+4. Stop and duration filtering.
+5. The `400/401/402/403/404/422/429/500/502/503/504` and timeout matrix.
+6. A block page inside HTTP 200 is not successful.
+7. Cache prevents the second network request.
+8. Successful-request and total-attempt budgets cannot be exceeded.
+9. Multiple travelers never produce an invented group total.
+10. The hotel gate requires two different successful live run IDs.
+11. The HTML uses the dark theme and no external assets.
+12. `app.py --help` exits `0` without input, `getpass`, SDK, network, or file writes.
+13. The keyless `--fixture-demo` creates two real, non-empty, parseable DEMO outputs and keeps the
+    manifest network counters at zero.
+14. In a two-destination by two-window scenario, origin and destination plain-city fallbacks occur
+    at most once per side for the whole run, never form a Cartesian retry pattern, and follow the
+    exact required call order.
+
+Run the full tests and compile every Python file. Then, without touching the API key, use the
+canonical `python app.py --fixture-demo` command to create the real HTML and manifest and run the
+delivery proof above exactly. The build is complete only after all these checks pass.
+
+In the final, give no technical log: only readiness, both modes, test result, and file to open. Then
+ask all travel preferences once and run the first live Quick scan yourself.

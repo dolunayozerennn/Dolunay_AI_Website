@@ -1,0 +1,50 @@
+{
+  "version": "2.0.0",
+  "products": [
+    {
+      "id": "01_sosyal_rontgen",
+      "files": {
+        "tr": {
+          "name": "icerik-firsat-radari-tr.txt",
+          "sha256": "311b6f0fb1fe299c494d0fc70edcc5444e6032dda09ab320daab3352b006cfca",
+          "characters": 11419
+        },
+        "en": {
+          "name": "content-opportunity-radar-en.txt",
+          "sha256": "b42cef687b17bd20f8c36d0c319260acb04c8eaa35a649a109dcd87d26a06992",
+          "characters": 11356
+        }
+      }
+    },
+    {
+      "id": "02_yerel_avci",
+      "files": {
+        "tr": {
+          "name": "musteri-firsat-radari-tr.txt",
+          "sha256": "a28c6af28d80a34da3d2681a06fff29671b996ddb23d9429abf16c126f21f764",
+          "characters": 10735
+        },
+        "en": {
+          "name": "client-opportunity-radar-en.txt",
+          "sha256": "612202a6b536f464cc944f89ec52e74d31619f23b2c76f0f4cd57fcf97b6c81a",
+          "characters": 10936
+        }
+      }
+    },
+    {
+      "id": "03_bilet_avcisi",
+      "files": {
+        "tr": {
+          "name": "seyahat-butce-radari-tr.txt",
+          "sha256": "6e28b6e474864523cc1b0e2d48e672f954669888e1cbf1f36ce3d6b9b91115b5",
+          "characters": 11799
+        },
+        "en": {
+          "name": "travel-budget-radar-en.txt",
+          "sha256": "0797f07aee58c0f965cc604543bbbd02ac4a6fa3d8291d2955b5f13405bb012d",
+          "characters": 11871
+        }
+      }
+    }
+  ]
+}

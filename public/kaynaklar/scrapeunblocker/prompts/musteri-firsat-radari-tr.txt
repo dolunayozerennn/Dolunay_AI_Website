@@ -1,0 +1,229 @@
+Claude Code, bu klasörde çalışan bir mini ürün kurmanı istiyorum. Ürünün adı
+**Müşteri Fırsat Radarı** olsun. Bana teknik soru sorma. Gerekli dosyaları oluştur,
+testleri çalıştır ve ürünü hazırla. Eksik bilgi varsa güvenli varsayılanı seç.
+
+## Ürünün sonucu
+
+Bir bölge ve sektör yazacağım. Ayrıca hangi hizmeti sattığımı belirteceğim.
+Örnek: `Kadıköy`, `diş kliniği`, `web sitesi`.
+
+Kod yazmadan önce tek mesajda yalnız bölgeyi, sektörü, sattığım hizmeti ve `hizli`
+veya `derin` modu sor. Cevabımı tek bir çalışma planı olarak geri oku. API anahtarını
+bu sorulara katma.
+
+Ürün yerel işletmeleri bulsun. Her işletmeyi ayrı ayrı incelesin. Sonuçta bana
+yalnız bir isim listesi vermesin. Şu iki soruyu cevaplasın:
+
+1. Bugün önce hangi işletmeye ulaşmalıyım?
+2. O işletmeye hangi doğrulanmış kanıtla yazabilirim?
+
+İlk ekranda en güçlü beş fırsat görünsün. Her satırda işletme adı, fırsat puanı,
+güven puanı, ana neden ve kısa mesaj bulunsun. Ardından ayrıntılı kartlar gelsin.
+
+## Teknoloji ve kurulum
+
+- Python 3.10 veya üstünü kullan.
+- Resmi `scrapeunblocker==0.1.8` paketini kullan.
+- `httpx==0.28.1` sürümünü sabitle.
+- `requirements.txt` içinde sürümler tam yazılsın.
+- `baslat.py` ilk çalışmada `.venv` oluştursun.
+- Aynı dosya paketleri otomatik kursun ve uygulamayı başlatsın.
+- `.venv`, `.env`, `.cache` ve `cikti` git tarafından yok sayılsın.
+- ScrapeUnblocker dışındaki hiçbir servis veya veri API'si kullanılmasın.
+- Doğrudan `requests`, `curl`, `urlopen` veya tarayıcı otomasyonu kullanma.
+- Bütün ağ çağrıları resmi ScrapeUnblocker istemcisinden geçsin.
+
+Tek komut satırı sözleşmesi kullan. Alternatif argüman adları üretme:
+
+```text
+python3 baslat.py --bolge "Kadıköy" --sektor "diş kliniği" --satis "web sitesi" --mod hizli
+```
+
+Zorunlu adlar `--bolge` ve `--sektor`; diğer ürün argümanları `--satis`,
+`--mod {hizli,derin}`, `--sayi`, `--varyantlar`, `--cikti`, `--cache-saat`,
+`--cache-yok` ve `--rapor-yenile` olsun. `baslat.py` argümanları değiştirmeden
+uygulamaya iletsin. `--help`, kullanıcı girdisi, `getpass`, paket kurulumu, SDK/ağ
+çağrısı veya dosya yazımı yapmadan sıfır koduyla çıksın. Bölge ya da sektör eksikse
+anahtar istemeden yardım gösterip kod `2` ile çıksın.
+
+API anahtarını benden sohbet içinde isteme. Komut satırı argümanı da ekleme.
+Önce `SCRAPEUNBLOCKER_KEY` ortam değişkenine bak. Sonra yerel `.env` dosyasına bak.
+Anahtar yoksa Python `getpass` ile gizli terminal girdisi iste. Anahtarı `.env`
+içinde saklarken dosya iznini `0600` yap. Anahtarı HTML, JSON, CSV, log, shell
+history veya hata metnine asla yazma.
+
+## İki kullanım modu
+
+Varsayılan mod `hizli` olsun.
+
+- `hizli`: En fazla 10 işletme ve 30 API denemesi.
+- `derin`: En fazla 20 işletme ve 70 API denemesi.
+
+Başarısız çağrılar ve tekrarlar da deneme bütçesine dahil olsun. Bütçe dolunca
+yeni çağrı yapma. Toplanan veriyi kaybetme. `partial=true` ile kısmi rapor üret.
+Kullanıcı daha büyük bir sayı yazsa bile mod sınırını aşma.
+
+Başarılı cevapları 12 saat yerel cache'de tut. Cache anahtarı endpoint ve
+parametrelerden oluşsun. Cache'e API anahtarı girme. Manifest içinde cache isabeti
+sayısını ayrıca göster.
+
+## ScrapeUnblocker yolu
+
+İlk ağ çağrısı bir Google Local sağlık kanaryası olsun:
+
+```python
+su.google_local(keyword, proxy_country="TR", hl="tr", gl="tr")
+```
+
+Bu uç yalnız bir kez denensin. Otomatik retry uygulanmasın. Cevapta dolu ve geçerli
+bir `results` listesi varsa ana keşif kaynağı olarak kullan. Her kayıtta `name`,
+`rating`, `reviews`, `category`, `address`, `phone`, `website`, `hours`, `position`
+ve `sponsored` alanlarını güvenli biçimde oku. Eksik alan için değer uydurma.
+
+Google Local `403` verirse, bozuk JSON döndürürse veya sonuç vermezse fallback aç.
+Fallback iki resmi yoldan oluşsun:
+
+1. Organik doğrulamalar için `su.serp(...)` kullan.
+2. Yerel paket gerekirse `su.get_page_source(google_search_url)` kullan.
+
+SERP cevabında yalnız `organic` listesini işle. Sonuç yoksa bunu normal durum say.
+Bozuk cevap, `403` veya kalıcı hata olursa `get_page_source` yoluna geç. Gelen
+Google sayfasında robot kontrolü veya çerez duvarı varsa veri olarak kullanma.
+HTTP `200` olsa bile engel sayfasını reddet.
+
+Retry matrisi açık ve test edilebilir olsun:
+
+- `401` ve `402`: Anında dur. Tekrar yapma.
+- `400`, `403`, `404`, `415`, `422`: Aynı endpoint'i tekrar etme.
+- `408`, `429`, `500`, `502`, `503`, `504`: En fazla üç toplam deneme.
+- Ağ bağlantısı ve yerel timeout: En fazla üç toplam deneme.
+- Bekleme: Kısa üstel geri çekilme. En fazla dört saniye.
+
+Resmi istemciyi `max_retries=0` ile aç. Retry kararını bizim kodumuz versin.
+Böylece bütçe ve manifest gerçek deneme sayısını göstersin. Başarılı her `2xx`
+çağrıyı olası faturalanan çağrı olarak say. Kullanılmayan engel sayfasını ayrıca say.
+
+## İşletme kimliği
+
+Aynı işletmeyi yalnız adına bakarak birleştirme. Şu sinyalleri normalize et:
+
+- Alan adı: `www` ve portu kaldır. Rehber veya sosyal alanları şirket sitesi sayma.
+- Telefon: Yalnız gerçek telefon kalıbını kabul et. Türkiye ülke kodunu normalize et.
+- Adres: Noktalama ve genel adres kelimelerini temizle. Tam token benzerliği ölç.
+- İşletme adı: Sektörün genel kelimelerini çıkar. Anlamlı kelime benzerliğini ölç.
+
+Aynı alan adı veya aynı telefon güçlü kimlik kanıtıdır. Aynı adres tek başına yeterli
+değildir. Aynı plazada iki farklı şirket olabilir. Adres eşleşmesine ek olarak anlamlı
+ad benzerliği iste. Yıl, fiyat, yorum sayısı veya rastgele uzun rakamı telefon ya da
+kimlik kanıtı sayma.
+
+Her işletmede kimlik eşleştirme nedenlerini sakla. Fırsat puanı ve güven puanı ayrı
+hesaplansın. Fırsat puanı satış fırsatının büyüklüğünü göstersin. Güven puanı ise
+kanıt kapsamını göstersin. Düşük güvenli büyük fırsat, yüksek güvenli fırsat gibi
+sunulmasın.
+
+## Denetim ve kanıt
+
+Her işletme için mümkünse şu ölçümleri yap:
+
+- Google kaydında kendi web sitesi var mı?
+- İşletme kendi adıyla arandığında doğrulanmış alan adı ilk sayfada mı?
+- Ana bölge ve sektör aramasında yerel veya organik sonuçta görünüyor mu?
+- Sitesine ScrapeUnblocker ile erişilebiliyor mu?
+- Alınan sayfada telefon, form, WhatsApp ve mobil viewport ayarı görünüyor mu?
+- Site adresi HTTPS kullanıyor mu?
+
+"Göremedim" ile "yok" aynı şey değildir. Site alınamadıysa eksik yazma. "Ölçemedim"
+de. Mobil viewport yoksa "mobil ayarı göremedim" de. "Mobil uyumsuz" deme. Bir
+sayfadaki en yeni yılı güncellik kanıtı sayma. Yorum veya fiyat metnini telefon sanma.
+
+Her kanıt şu alanlarla saklansın:
+
+```json
+{
+  "kod": "name_search",
+  "iddia": "İşletmenin kendi adı araması tamamlandı",
+  "kaynak_turu": "serpApi",
+  "kaynak": "arama ifadesi veya URL",
+  "gozlenen": {},
+  "guven": 90,
+  "destekleniyor": true
+}
+```
+
+## Mesaj doğruluk kapıları
+
+Mesaj yalnız desteklenen bir fırsat bulgusu varsa üretilecek. Genel satış mesajı
+üretme. Mesaj en fazla üç kısa cümle olsun. Bulunduğu gerçek arama ifadesiyle başlasın.
+
+Şu çelişkileri mekanik olarak engelle:
+
+- İşletme ana aramada görünmüyorsa "sizi o aramada gördüm" deme.
+- Site veya ada benzeyen doğrulanabilir alan bulunduysa "siteniz yok" deme.
+- Yalnız aynı adres görüldü diye "iki kaydınız var" deme.
+- Kendi adı araması başarısızsa görünürlük iddiası kurma.
+- Kaynak alınamadıysa site kalitesi hakkında kesin konuşma.
+
+Kapı geçilmezse mesaj alanını boş bırak. Sebebi `blocked_reasons` içinde yaz.
+Kullanıcıya uydurulmuş mesaj vermek, mesaj vermemekten daha kötüdür.
+
+## Çıktı sözleşmesi
+
+Her koşu zaman damgalı bir klasör oluştursun. Şu beş dosya zorunlu:
+
+1. `rapor.html`: Koyu temalı, tek dosya ve çevrimdışı rapor.
+2. `leads.csv`: Sıra, ad, puanlar, ana neden, telefon, site, adres ve mesaj.
+3. `evidence.json`: Her işletmenin kanıtları, bulguları ve mesaj kapısı.
+4. `run_manifest.json`: Sürüm, mod, bütçe, sayaç, endpoint ve uyarılar.
+5. `bulgular.json`: Raporu tekrar çizecek tam temiz veri.
+
+HTML hiçbir CDN, font, görsel, script veya dış otomatik istek kullanmasın. Sıkı CSP
+ekle. Dış URL yalnız kullanıcı tıklarsa açılabilsin. İlk görünümde beş fırsat, neden,
+kısa mesaj ve iki puan birlikte görünsün. Ayrıntı kartlarında kanıt cümlesi bulgunun
+hemen altında yer alsın. Mesaj kopyalama düğmesi çevrimdışı da çalışsın.
+
+Manifest şu sayaçları ayırsın: API denemesi, başarılı `2xx`, reddedilen `2xx`, cache
+isabeti ve işletme sayısı. Google Local kanaryasının sonucu ayrıca kaydedilsin.
+Kalan kredi miktarını tahmin etme.
+
+## Test ve teslim kapısı
+
+`unittest` ile ağsız fixture testleri yaz. Testler gerçek API çağrısı yapmasın. Sahte
+resmi istemci kullan. En az şu durumları doğrula:
+
+- Sağlıklı Google Local kanaryası ve yalnız bir çağrı.
+- Google Local `403` sonrası retry yapılmaması.
+- `401` ve `402` kodlarının her birinin ayrı `subTest` içinde tek denemede duruşu.
+- `400`, `403`, `404`, `415` ve `422` kodlarının her birinin ayrı `subTest` içinde
+  tekrar edilmemesi.
+- `408`, `429`, `500`, `502`, `503` ve `504` kodlarının her birinin ayrı `subTest`
+  içinde en fazla üç toplam deneme yapması; timeout ve ağ hatası da ayrıca sınansın.
+- 30 ve 70 deneme sınırlarının aşılamaması.
+- Aynı adresli farklı işletmelerin birleşmemesi.
+- Aynı telefon veya alan adının güçlü eşleşmesi.
+- Site bulunduğunda "site yok" bulgusu çıkmaması.
+- "Görünmüyor" ile "sizi gördüm" çelişkisinin engellenmesi.
+- Beş zorunlu çıktı ve çevrimdışı CSP.
+- Kodda doğrudan ağ istemcisi bulunmaması.
+- `--help` çağrısının hiçbir input, key, SDK, ağ veya yazım yan etkisi olmadan sıfır dönmesi.
+- `.venv` bulunmayan temiz bir proje kopyasında, taze Python 3.10+ ile argümansız,
+  yalnız `--bolge` ve yalnız `--sektor` çağrılarının yardım metnini göstermesi;
+  `Traceback` üretmeden kod `2` ile çıkması ve hiçbir dosya yazmaması.
+- Beş çıktı testte geçici klasöre gerçekten yazıldıktan sonra her dosyanın var, boş olmayan
+  ve parse edilebilir olması; HTML içinde görünür `DEMO/FIXTURE — canlı API çıktısı değildir`
+  etiketi bulunması. Geçici fixture çıktısı canlı veri diye sunulmasın.
+
+Teslim kökünde boş olmayan `README.md` ve `KANIT.md` zorunludur. Ayrıca
+`ornek_cikti/` içinde beş zorunlu dosyanın kalıcı, parse edilebilir fixture kopyasını
+bırak. Yalnız testin geçici klasöründe üretilen dosyalar teslim sayılmaz.
+
+README'de hızlı ve derin modu anlat. KANIT.md içinde hangi davranışın fixture ile
+kanıtlandığını yaz. Canlı API çalıştırmadıysan açıkça söyle. Önce tüm testleri çalıştır.
+Sonra HTML'i tarayıcıda açıp ilk beş bölümünü ve kopyalama düğmesini doğrula. Anahtar
+kelimesi, `.env` değeri veya secret benzeri metin çıktı dosyalarında bulunmamalı.
+
+Son mesajı yazmadan hemen önce beyan edeceğin her çıktı yolunu yeniden kontrol et. Dosya
+yoksa, sıfır baytsa, HTML açılamıyorsa veya JSON parse edilemiyorsa “üretildi” deme.
+
+İş bitince bana yalnız şunları söyle: oluşturulan klasör, test sonucu, çıktı dosyaları
+ve canlı çağrı yapılıp yapılmadığı. API anahtarını cevabında tekrar etme.

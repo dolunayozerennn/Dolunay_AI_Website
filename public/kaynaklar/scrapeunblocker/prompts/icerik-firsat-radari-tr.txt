@@ -1,0 +1,223 @@
+Yerel bir **Icerik Firsat Radari** kur. TikTok hesabimi rakiplerle karsilastirsin.
+Instagram'i istege bagli eklesin. Tek dosyalik koyu HTML rapor uretsin.
+
+Urünü kur, test et, veriyi topla ve raporu ac. Bana terminal isi birakma.
+
+## Once yalniz bunlari sor
+
+Tek mesajda su bilgileri iste:
+
+1. Yaptigim is, tek cumle.
+2. Kendi TikTok kullanici adim.
+3. Bir ile dort rakip TikTok kullanici adi.
+4. Varsa TikTok ve Instagram kullanici adi eslesmeleri.
+5. Hizli mi, Derin mi tarama istedigim.
+
+API anahtarini **sohbette isteme**. Dosyalari kurduktan sonra uygulamayi etkilesimli
+terminalde ac. Uygulama anahtari `getpass` ile gizli alsin. Anahtar komut satirina,
+Claude mesajina, loga, HTML'e, JSON'a veya git'e girmesin.
+
+Baslamadan once hedefi geri oku. Ornek: "@ben hesabini @a, @b ve @c ile Hizli modda
+karsilastiracagim." Kullanici adlarinda `@` ve tam profil adresini kabul et.
+
+Zorunlu veri yolu `business_context -> run_radar -> data.json -> adapt_brief` olsun.
+`adapt_brief(business_context, evidence)` her uc brief icin cagrilsin; her `adaptation`
+normalize edilmis is cumlesini birebir icersin ve raporda **Isine uyarlama** diye gorunsun.
+Sabit `DEFAULT_ADAPTATIONS` listesi, is cumlesini yalniz yazdirmak veya sadece `data.json`a
+koymak kabul edilmez. Kanit ayni kalirken is cumlesi degisince uc adaptation da degismeli.
+
+## Kuracagin dosyalar
+
+Yeni ve bos bir `icerik-firsat-radari` klasoru olustur. En az su dosyalar olsun:
+
+- `sosyal_rontgen.py`: urun ve rapor.
+- `baslat.py`: otomatik kurulum.
+- `requirements.txt`: `scrapeunblocker==0.1.8` ve `httpx==0.28.1`.
+- `.gitignore`: `.env`, `.venv/`, `cache/`, `runs/`, `son_kosu.json`, `son_rapor.html`.
+- `tests/fixtures/`: TikTok, Instagram ve SERP cevaplari.
+- `tests/test_social_radar.py`: agsiz `unittest` paketi.
+- `README.md`: kullanim ve sinirlar.
+
+`baslat.py` ilk kosuda `.venv` ve paketleri kursun. Requirements hash'i degismediyse
+kurulumu atlasin. Urunu `.venv` Python ile acsin. Kullaniciya `pip install` yaptirma.
+
+CLI sozlesmesi birebir su olsun:
+
+```text
+--is METIN
+--ben KULLANICI
+--rakip KULLANICI       # 1-4 kez tekrarlanabilir
+--eslesme TIKTOK:INSTAGRAM  # tekrarlanabilir
+--mod {hizli,derin}
+--yenile
+```
+
+`--hesap`, `--instagram`, `--ig-eslesme`, `--refresh`, `--key` veya baska alias uretme.
+Argumansiz calistirildiginda API anahtari disindaki girdileri etkilesimli sor. `--help`
+hicbir kurulum veya ag islemi yapmadan yardimi basip `0` ile ciksin. `baslat.py`, kendi
+kurulumundan sonra ayni arguman listesini adlarini veya degerlerini degistirmeden urune
+iletsin; `baslat.py --help` de urun yardimini kurulum yapmadan `0` ile gostersin.
+
+## ScrapeUnblocker veri yolu
+
+Tek web veri saglayicisi ScrapeUnblocker olsun. Resmi Python SDK'sini kullan:
+
+```python
+from scrapeunblocker import Client
+su = Client(api_key=anahtar, timeout=180.0, max_retries=0)
+```
+
+SDK tekrarlarini kapat. Tekrar, butce ve sayac kontrolu urunde olsun. Boylece gercek
+deneme sayisi manifestte dogru kalir.
+
+`main` stub olamaz. `build_live_transports(api_key, client_cls=None)` yoksa `Client`i tembel
+import edip yukaridaki argumanlarla kursun; uc SDK adapterini dondursun. Gercek
+`get_parsed()` bir `ParsedPage(page_type, source, data, raw)` nesnesi dondurur: bunu mutlaka
+`{"status_code":200,"data":{"page_type":obj.page_type,"source":obj.source,"data":obj.data}}`
+seklinde normalize et. Nesneyi oldugu gibi gecmek veya yalniz `obj.data`yi alip
+`page_type/source`u kaybetmek yasak. SDK hata `status_code`unu koru. `main` girdi -> anahtar
+-> canli transport -> `run_radar` -> atomik cikti yolunu cagirir; offline erken-cikis yoktur.
+
+Birincil yol `su.get_parsed(url)`. TikTok profilinde `username/followers/following/likes/videos`;
+videoda `video_id/description/plays/likes/comments/shares/saves/reposts/posted_at/duration_s/
+cover_url/hashtags/music/author`; Instagram profilinde `username/followers/recent_posts`;
+gonderide `shortcode/caption/likes/comments/posted_at/media_type/counts_hidden` alanlarini koru.
+
+Resmi cevap genelde `{data:{page_type,source,data}}` bicimindedir. Gecici `data`, `result`,
+`parsed_data`, `payload` sarmallarini dolas. Alan uydurma. Temel sayilar yoksa reddet.
+
+TikTok video adreslerini ham Google HTML'inden arama. Resmi `su.serp()` metodunu kullan:
+
+```python
+su.serp("site:tiktok.com/@KULLANICI/video", pages_to_check=SAYFA)
+```
+
+Cevaptaki tum metin alanlarinda yalniz su kesin deseni kabul et:
+`https://www.tiktok.com/@KULLANICI/video/15-25_HANELI_KIMLIK`. Kullanici adi tam
+eslesmeli. Tekrarlari ele.
+
+Ham HTML birincil veri kaynagi degildir. Yalniz su iki durumda `get_page_source` kullan:
+
+1. En iyi videolarda altyazi ve kapak eksigini tamamlamak.
+2. `parsed_data` taninmayan bir sema dondururse kontrollu TikTok fallback yapmak.
+
+Fallback'i manifest ve rapora yaz; yalniz `__UNIVERSAL_DATA_FOR_REHYDRATION__` JSON'unu
+oku. API'nin verdigi ASR/VTT'de ilk 3 saniyeyi acilis say, gec baslangici isaretle. Kapagi
+parsed URL'den, yalniz en iyi videolar icin ve en fazla 180 KB indirip `data:` URI gom.
+
+## Iki mod ve sert butce
+
+Modlar kodda sabit olsun:
+
+| Mod | Video / hesap | SERP sayfasi | Ham zenginlestirme / hesap | Instagram postu | Deneme butcesi |
+|---|---:|---:|---:|---:|---:|
+| Hizli | 6 | 1 | 2 | 2 | 56 |
+| Derin | 20 | 2 | 4 | 5 | 160 |
+
+Her SDK denemesi butceye girsin. Cache hit girmesin. Retry yeni denemedir. Butce dolunca
+kismi veriyi koru. Hesaplari round-robin isle. Eszamanlilik `1` olsun.
+
+Her parsed, raw ve SERP cevabini URL + istek turu hash'iyle `cache/` altina koy. Cache
+alti saat gecerli olsun. `--yenile` cache'i atlasin. Cache dosyalarinda anahtar bulunmasin.
+
+## Hata sozlesmesi
+
+- `400`, `401`, `402`: tekrar yok. Kosu hemen dursun. Sade ve guvenli mesaj ver.
+- `403`, `404`, `415`, `422`: tekrar yok. Hedefi uyar, diger hesaplara devam et.
+- Politika fonksiyonu `sleep_fn=time.sleep` enjekte alsin; dogrudan `time.sleep` cagirmasin.
+  `408`, `429`, `502`, `503`, `504` ve ag hatasinda `sleep_fn`i sirayla gercek `1`, `2`,
+  `4` ile cagirip en fazla uc tekrar yapsin. Her retry butceden dussun; `0` ile uyumak yasak.
+- HTTP `200` tek basina basari degildir. Bos govde, robot kontrolu, `recaptcha`,
+  `unusual traffic`, `consent.google.com` veya taninmayan sosyal sema varsa veriyi kabul
+  etme. Buna ragmen bu bir `2xx` oldugu icin `billable_2xx` sayacina girsin.
+- Hic kesin video verisi gelmediyse bos rapor uretme. Onceki iyi kosuyu ezme.
+
+## Kosu, gecmis ve manifest
+
+Her kosu benzersiz UTC zaman damgali klasore yazilsin:
+`runs/YYYYMMDDTHHMMSSffffffZ-MOD-RANDOM/`.
+
+Klasorde `data.json`, `report.html`, `run_manifest.json` olsun. Tamamlaninca
+`son_kosu.json` yalniz goreli kosu yolunu tutsun. `son_rapor.html` son raporun kopyasi
+olsun. Yazimlar gecici dosya + atomik replace ile yapilsin.
+
+Manifest alanlari: `prompt_version=social-radar-v2.0.0`, `started_at`, `ended_at`, `mode`,
+`budget`, `attempts`, `billable_2xx`, `cache_hits`, `asset_gets`, `sources`,
+`source_counts`, `warnings`, `status=success|failed`.
+
+Onceki basarili `data.json` dosyasini bul. Ayni video kimliginde izlenme farkini hesapla.
+Yeni videolari ayri listele. Ilk kosuda karsilastirma olmadigini acikca yaz.
+
+## Analiz ve rapor
+
+Her videoda kesin etkilesimleri koru. Oranlari izlenmeye bol. Ortalama ve ortancayi
+goster. Eksik sayiyi sifir diye sunma.
+
+Raporun ilk gorunen ekraninda **Simdi cekebilecegin uc video** bulunacak. Uc brief su
+farkli kanittan gelsin: en cok izlenen, en yuksek kaydetme orani, en yuksek paylasim
+orani. Her briefte konu tohumu, acilis yapisi, cekim karari, kesin sayili kanit ve kaynak
+video adresi olsun. Neden-sonuc iddiasi kurma. Rakip verisini kanit, is tanimini uyarlama
+baglami olarak kullan.
+
+Devaminda su bolumler olsun: bu kosuda degisenler, veri uyarilari, hesap panoramasi,
+kazanan acilislar, tum kanit tablosu, varsa kesin Instagram gonderi sayilari, ham konu
+sinyalleri ve cagri gercegi.
+
+Rapor tek HTML olsun. Koyu tema kullan. CSS, favicon ve kapaklar dosyaya gomulsun.
+JavaScript, font CDN'i veya otomatik dis kaynak istegi olmasin. Su CSP'yi ekle:
+
+```html
+default-src 'none'; img-src data:; style-src 'unsafe-inline';
+base-uri 'none'; form-action 'none'
+```
+
+Kota metni aynen dogru olsun: "Kayitla birlikte bir defalik 500 ucretsiz istek verilir.
+Aylik yenilenmez." Basarisiz cevaplar hakkinda resmi veride kanitlanmayan maliyet tahmini
+yapma. Yalniz `attempts`, `billable_2xx` ve `cache_hits` sayilarini goster.
+
+## Anahtar guvenligi
+
+Ortam degiskeni veya klasordeki `.env` varsa onu kullan. Yoksa `getpass` ile gizli sor.
+Anahtar hangi kaynaktan gelirse gelsin, gercek degeri ilk SDK `2xx` cevabina kadar ayni
+degiskende tut. Ilk `2xx` dondugu anda `persist_key_once(key)` benzeri tek bir yol uzerinden
+`.env` dosyasina **tam bir kez** yaz ve izni `0600` yap. Sonraki `2xx` cevaplari tekrar
+yazmasin. `400/401/402` veya hic `2xx` olmayan kosu `.env` olusturmasin; gecersiz anahtari
+saklama. Anahtar degiskenini ancak bu kalicilastirma karari verildikten sonra temizle.
+`--anahtar` veya `--key` argumani olmasin. Istisna govdesini loglama.
+
+## Agsiz kabul testleri
+
+Fixture tabanli testler gercek API'yi cagirmasin. En az sunlari kanitla:
+
+1. TikTok ve Instagram resmi semalari ile sarmalli semalar okunuyor.
+2. Bilinmeyen sema reddediliyor ve fallback uyarisi olusuyor.
+3. Tablo gudumlu testte `400`, `401`, `402` kodlarinin **her biri** ayri `subTest` olarak
+   tam 1 deneme, `[]` bekleme ve hard-stop uretiyor.
+4. Tablo gudumlu testte `403`, `404`, `415`, `422` kodlarinin **her biri** ayri `subTest`
+   olarak tam 1 deneme, `[]` bekleme ve yalniz hedef atlama uretiyor.
+5. Tablo gudumlu testte `408`, `429`, `502`, `503`, `504` kodlarinin **her biri** ayri
+   `subTest` olarak toplam 4 deneme uretiyor; `sleep_fn=sleeps.append` verilip gercek cagri
+   listesi birebir `[1, 2, 4]` assert ediliyor. Ag hatasi da ayri testte aynisini kanitliyor.
+   Sabit bir retry listesini assert etmek veya kumeden tek temsilci test etmek yeterli degil.
+6. Sert butce retry ortasinda bile asilamiyor.
+7. `200` engel sayfasi basari sayilmiyor, fakat `billable_2xx` artiyor.
+8. Ikinci ayni istek cache'den geliyor ve deneme harcamiyor.
+9. Manifest sozlesmesinin tum alanlari var.
+10. Rapor uc brief ile aciliyor. Harici `src=http` ve `<script>` icermiyor.
+11. Kota metni bir defalik 500 diyor. Aylik ucretsiz plan demiyor.
+12. Anahtar `.env` disindaki hicbir dosyada bulunmuyor. `.env` izni `0600`.
+13. Iki kosu farkli klasor aciyor. Ikinci kosu gecmis karsilastirmasi uretiyor.
+14. Ayni fixture iki farkli `business_context` ile calisiyor: kanit ayni; uc adaptationin
+    her biri degisiyor ve kendi normalize is cumlesini iceriyor.
+15. Tum yasak aliaslar tabloyla reddediliyor; argumansiz akis input/getpass mock'lariyla
+    olculuyor. `--help` kapilari `0`; bootstrap process mock'unda argv birebir ayni.
+16. `main` fake getpass + coklu fake `2xx`: olay sirasi ilk cevapta
+    `sdk_2xx -> persist -> sonraki_sdk`, persist tam 1, `.env` `0600`. Fake `401`: 0/dosya yok.
+17. `test_main_runs_live_pipeline`: fake `Client` constructorunu ve uc adapteri ayri cagirir.
+    Fake `ParsedPage` nesnesinde `page_type/source/data`nin exact wrapperda korundugunu ve
+    parserin bunu kabul ettigini; sonra `run_radar` + cikti yazimini kanitlar.
+
+Tum testleri calistir; hata varsa acma. Fixture raporunun ilk ekranini ve manifestini kontrol et.
+
+Son cevapta su dort seyi kisa yaz: bulunan uc firsat, taranan hesap sayisi, basarili 2xx
+sayisi ve raporun yolu. API anahtarini hic tekrar etme.

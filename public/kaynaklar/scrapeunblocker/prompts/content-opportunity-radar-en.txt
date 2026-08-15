@@ -1,0 +1,226 @@
+Build a local **Content Opportunity Radar**. Compare my TikTok account with competitors,
+optionally add Instagram, and produce one dark self-contained HTML report.
+
+Build, test, collect the data, and open the report. Leave no terminal work to me.
+
+## Ask only these questions first
+
+Ask for everything in one message:
+
+1. What I do, in one sentence.
+2. My TikTok username.
+3. One to four competitor TikTok usernames.
+4. Optional TikTok-to-Instagram username mappings.
+5. Whether I want Quick or Deep mode.
+
+Do **not** ask for the API key in chat. Build the files, then launch the app in an
+interactive terminal. The app must collect the key with `getpass`. The key must never
+appear in an argument, Claude message, log, HTML, JSON, or git.
+
+Read the target back before starting. Example: "I will compare @me with @a, @b and @c in
+Quick mode." Accept `@username` and complete profile URLs.
+
+The mandatory data path is `business_context -> run_radar -> data.json -> adapt_brief`.
+Call `adapt_brief(business_context, evidence)` for all three briefs. Every `adaptation`
+must contain the normalized job sentence verbatim and appear as **Adaptation for your
+business**. A fixed `DEFAULT_ADAPTATIONS` list, merely printing the sentence, or only storing
+it in JSON is forbidden. With identical evidence, changing the sentence changes all three.
+
+## Files to build
+
+Create a new, empty `content-opportunity-radar` directory containing at least:
+
+- `social_radar.py`: product and report.
+- `start.py`: automatic bootstrapper.
+- `requirements.txt`: `scrapeunblocker==0.1.8` and `httpx==0.28.1`.
+- `.gitignore`: `.env`, `.venv/`, `cache/`, `runs/`, `latest_run.json`, `latest_report.html`.
+- `tests/fixtures/`: TikTok, Instagram, and SERP fixtures.
+- `tests/test_social_radar.py`: network-free tests.
+- `README.md`: usage and limits.
+
+On first use, `start.py` creates `.venv` and installs pinned packages. Store the requirements
+hash and skip unchanged installs. Run through the virtual environment. Never ask for manual
+`pip install`.
+
+The CLI contract must be exactly:
+
+```text
+--is TEXT
+--ben USERNAME
+--rakip USERNAME       # repeatable 1-4 times
+--eslesme TIKTOK:INSTAGRAM  # repeatable
+--mod {hizli,derin}
+--yenile
+```
+
+Do not create `--hesap`, `--instagram`, `--ig-eslesme`, `--refresh`, `--key`, or any other
+alias. With no arguments, ask interactively for every non-secret input. `--help` must print
+help and exit `0` without installing anything or accessing the network. After bootstrapping,
+`start.py` must pass the same argument vector to the product without renaming or changing
+values; `start.py --help` must also show product help and exit `0` without installation.
+
+## ScrapeUnblocker data path
+
+ScrapeUnblocker is the only web data provider. Use the official Python SDK:
+
+```python
+from scrapeunblocker import Client
+su = Client(api_key=key, timeout=180.0, max_retries=0)
+```
+
+Disable SDK retries. The product must own retries, budget, and counters. This keeps every
+attempt visible in the manifest.
+
+`main` cannot be a stub. `build_live_transports(api_key, client_cls=None)` lazily imports
+`Client` when absent, uses the arguments above, and returns all three SDK adapters. Real
+`get_parsed()` returns `ParsedPage(page_type, source, data, raw)`: normalize it exactly as
+`{"status_code":200,"data":{"page_type":obj.page_type,"source":obj.source,"data":obj.data}}`.
+Passing the object through or keeping only `obj.data` loses required metadata and is
+forbidden. Preserve SDK error `status_code`. `main` executes input -> key -> live transports
+-> `run_radar` -> atomic output; it has no offline early exit.
+
+Use `su.get_parsed(url)` first. Preserve TikTok profile `username/followers/following/likes/
+videos`; post `video_id/description/plays/likes/comments/shares/saves/reposts/posted_at/
+duration_s/cover_url/hashtags/music/author`; Instagram profile `username/followers/
+recent_posts`; and post `shortcode/caption/likes/comments/posted_at/media_type/counts_hidden`.
+
+The response is normally `{data:{page_type,source,data}}`. Walk temporary `data`, `result`,
+`parsed_data`, and `payload` wrappers. Never invent fields. Reject absent core metrics.
+
+Do not parse raw Google HTML for TikTok URLs. Use the official SERP method:
+
+```python
+su.serp("site:tiktok.com/@USERNAME/video", pages_to_check=PAGES)
+```
+
+Recursively inspect response strings. Accept only an exact URL matching
+`https://www.tiktok.com/@USERNAME/video/15_TO_25_DIGIT_ID`. Require the exact username and
+deduplicate results.
+
+Raw HTML is not a primary metrics source. Use `get_page_source` only to:
+
+1. Add a missing transcript or cover to top videos.
+2. Perform a controlled TikTok fallback when parsed data has an unknown shape.
+
+Record fallback in the manifest/report and read only the
+`__UNIVERSAL_DATA_FOR_REHYDRATION__` JSON. In API-provided ASR/VTT, the first three seconds
+are the opening; mark late speech. Download parsed cover URLs only for top videos, cap at
+180 KB, and embed as `data:` URIs.
+
+## Two modes and hard budgets
+
+Hard-code these modes:
+
+| Mode | Videos/account | SERP pages | Raw enrich/account | Instagram posts | Attempt budget |
+|---|---:|---:|---:|---:|---:|
+| Quick | 6 | 1 | 2 | 2 | 56 |
+| Deep | 20 | 2 | 4 | 5 | 160 |
+
+Every SDK attempt consumes budget. Cache hits do not. A retry is another attempt. Keep
+partial data at the limit. Process accounts round-robin. Concurrency is `1`.
+
+Cache every parsed, raw, and SERP response under a hash of URL plus request type. Cache is
+valid for six hours. `--yenile` bypasses it. Cache files must never contain the key.
+
+## Failure contract
+
+- `400`, `401`, `402`: no retry. Stop immediately with a safe plain-language message.
+- `403`, `404`, `415`, `422`: no retry. Warn for that target and continue other accounts.
+- The policy function accepts injected `sleep_fn=time.sleep` and never calls `time.sleep`
+  directly. For `408`, `429`, `502`, `503`, `504`, and network errors, call `sleep_fn` with
+  real `1`, `2`, `4`, retry at most three times, and charge every retry. Sleeping `0` fails.
+- HTTP `200` alone is not success. Reject empty content, robot checks, `recaptcha`,
+  `unusual traffic`, `consent.google.com`, or an unknown social schema. It is still a `2xx`,
+  so increment `billable_2xx`.
+- If no exact video metrics arrive, do not create an empty report. Preserve the previous
+  good run.
+
+## Runs, history, and manifest
+
+Create one unique UTC directory per run:
+`runs/YYYYMMDDTHHMMSSffffffZ-MODE-RANDOM/`.
+
+It contains `data.json`, `report.html`, and `run_manifest.json`. On success,
+`latest_run.json` stores only the relative run path. Copy the latest report to
+`latest_report.html`. Use temporary files followed by atomic replace.
+
+Manifest fields: `prompt_version=social-radar-v2.0.0`, `started_at`, `ended_at`, `mode`,
+`budget`, `attempts`, `billable_2xx`, `cache_hits`, `asset_gets`, `sources`,
+`source_counts`, `warnings`, and `status=success|failed`.
+
+Load the previous successful `data.json`. Compare the same video IDs and calculate view
+deltas. List newly found videos separately. State clearly when this is the first run.
+
+## Analysis and report
+
+Keep exact engagement per video. Calculate rates against views. Show median beside average.
+Never present a missing number as zero.
+
+The first viewport must be titled **Three videos you can make now**. Create three briefs
+from three separate evidence rankings: highest views, highest save rate, highest share
+rate. Every brief contains a topic seed, opening structure, shooting decision, exact metric
+evidence, and source URL. Do not make causation claims. Competitor data is evidence; the
+user's business sentence is adaptation context.
+
+Continue with: changes since the prior run, data warnings, account panorama, winning
+openings, full evidence table, exact Instagram post counts when available, raw topic
+signals, and call truth.
+
+Produce one dark HTML file. Embed CSS, favicon, and covers. Do not use JavaScript, a font
+CDN, or an automatic external resource request. Add this CSP:
+
+```html
+default-src 'none'; img-src data:; style-src 'unsafe-inline';
+base-uri 'none'; form-action 'none'
+```
+
+The quota sentence must be accurate: "Signup includes 500 free requests once. They do not
+renew monthly." Do not guess billing for failed responses. Show only `attempts`,
+`billable_2xx`, and `cache_hits`.
+
+## Key security
+
+Use the environment or local `.env` when present. Otherwise use hidden `getpass` input.
+Regardless of its source, keep the exact key in the same variable until the first SDK `2xx`
+response. At that moment, use one path such as `persist_key_once(key)` to write `.env`
+**exactly once** and set mode `0600`; later `2xx` responses must not write again. A run that
+receives `400/401/402`, or no `2xx`, must not create `.env`. Never save an invalid key. Clear
+the in-memory key only after this persistence decision. Do not implement `--anahtar` or
+`--key`. Do not log exception bodies.
+
+## Network-free acceptance tests
+
+Use fixtures and never call the real API in tests. Prove at least:
+
+1. Official and wrapped TikTok/Instagram shapes normalize correctly.
+2. Unknown schemas are rejected and trigger a fallback warning.
+3. In a table-driven test, **each** of `400`, `401`, and `402` is a separate `subTest` that
+   proves exactly 1 attempt, an empty `[]` sleep sequence, and a hard stop.
+4. In a table-driven test, **each** of `403`, `404`, `415`, and `422` is a separate `subTest`
+   that proves exactly 1 attempt, an empty `[]` sleep sequence, and target-only skipping.
+5. In a table-driven test, **each** of `408`, `429`, `502`, `503`, and `504` is a separate
+   `subTest` with 4 total attempts; inject `sleep_fn=sleeps.append` and assert its actual call
+   list equals `[1, 2, 4]`. A separate network-error test proves the same. Asserting a retry
+   constant or testing one representative status is insufficient.
+6. The hard budget cannot be crossed, even during a retry.
+7. A blocked `200` is rejected but increments `billable_2xx`.
+8. A repeated request uses cache without a new attempt.
+9. Every manifest contract field exists.
+10. The report opens with three briefs and has no `<script>` or external `src=http`.
+11. Quota copy says one-time 500, never a monthly free plan.
+12. The key exists nowhere outside `.env`, whose mode is `0600`.
+13. Two runs create distinct directories and the second contains history comparison.
+14. One fixture uses two `business_context` values: evidence stays equal; all three
+    adaptations change and each contains its own normalized job sentence.
+15. Reject every forbidden alias in a table; measure no-argument input/getpass with mocks.
+    Both help gates return `0`; a process mock proves bootstrap argv is byte-for-byte equal.
+16. Through `main`, fake getpass plus multiple fake `2xx` has event order
+    `sdk_2xx -> persist -> next_sdk`, one persist, and mode-`0600` `.env`; fake `401` has none.
+17. `test_main_runs_live_pipeline` separately calls all three fake-client adapters. A fake
+    `ParsedPage` proves `page_type/source/data` survive in the exact wrapper and parse; then
+    the test proves `run_radar` and output writing.
+
+Run every test; do not launch after failure. Inspect the fixture report viewport and manifest.
+
+In the final response, state only: the three opportunities, number of accounts, successful
+`2xx` count, and report path. Never repeat the API key.
