@@ -5,20 +5,16 @@ Build, test, collect the data, and open the report. Leave no terminal work to me
 
 ## Ask only these questions first
 
-Ask for everything in one message:
-
-1. What I do, in one sentence.
-2. My TikTok username.
-3. One to four competitor TikTok usernames.
-4. Optional TikTok-to-Instagram username mappings.
-5. Whether I want Quick or Deep mode.
+Ask for everything in one message: what I do (one sentence), my TikTok username, one to four
+competitor TikTok usernames, optional TikTok-to-Instagram username mappings, and whether I
+want Quick or Deep mode.
 
 Do **not** ask for the API key in chat. Build the files, then launch the app in an
-interactive terminal. The app must collect the key with `getpass`. The key must never
-appear in an argument, Claude message, log, HTML, JSON, or git.
+interactive terminal; the app must collect the key with `getpass`. The key must never appear
+in an argument, Claude message, log, HTML, JSON, or git.
 
-Read the target back before starting. Example: "I will compare @me with @a, @b and @c in
-Quick mode." Accept `@username` and complete profile URLs.
+Read the target back before starting. Example: "I will compare @me with @a and @b in Quick
+mode." Accept `@username` and complete profile URLs.
 
 The mandatory data path is `business_context -> run_radar -> data.json -> adapt_brief`.
 Call `adapt_brief(business_context, evidence)` for all three briefs. Every `adaptation`
@@ -40,9 +36,7 @@ Create a new, empty `content-opportunity-radar` directory containing at least:
 
 On first use, `start.py` creates `.venv` and installs pinned packages. Store the requirements
 hash and skip unchanged installs. Run through the virtual environment. Never ask for manual
-`pip install`.
-
-Python 3.10 or newer is required. `start.py` verifies the interpreter and stops with a
+`pip install`. Python 3.10 or newer is required; `start.py` verifies it and stops with a
 clear warning on older versions.
 
 The CLI contract must be exactly:
@@ -59,8 +53,8 @@ The CLI contract must be exactly:
 Do not create `--hesap`, `--instagram`, `--ig-eslesme`, `--refresh`, `--key`, or any other
 alias. With no arguments, ask interactively for every non-secret input. `--help` must print
 help and exit `0` without installing anything or accessing the network. After bootstrapping,
-`start.py` must pass the same argument vector to the product without renaming or changing
-values; `start.py --help` must also show product help and exit `0` without installation.
+`start.py` must pass the same argument vector to the product unchanged; `start.py --help`
+must also show product help and exit `0` without installation.
 
 ## ScrapeUnblocker data path
 
@@ -71,11 +65,14 @@ from scrapeunblocker import Client
 su = Client(api_key=key, timeout=180.0, max_retries=0)
 ```
 
-Disable SDK retries. The product must own retries, budget, and counters. This keeps every
-attempt visible in the manifest.
+Disable SDK retries. The product owns retries, budget, and counters, so the manifest attempt
+count stays accurate.
 
 `main` cannot be a stub. `build_live_transports(api_key, client_cls=None)` lazily imports
-`Client` when absent, uses the arguments above, and returns all three SDK adapters. Real
+`Client` when absent, uses the arguments above, and returns all three SDK adapters as the
+dictionary `{"get_parsed": ..., "serp": ..., "get_page_source": ...}`. Every value must be
+directly callable, never a class. `main` must use that dictionary and must not build the
+transports a second time. Real
 `get_parsed()` returns `ParsedPage(page_type, source, data, raw)`: normalize it exactly as
 `{"status_code":200,"data":{"page_type":obj.page_type,"source":obj.source,"data":obj.data}}`.
 Passing the object through or keeping only `obj.data` loses required metadata and is
@@ -90,22 +87,26 @@ recent_posts`; and post `shortcode/caption/likes/comments/posted_at/media_type/c
 The response is normally `{data:{page_type,source,data}}`. Walk temporary `data`, `result`,
 `parsed_data`, and `payload` wrappers. Never invent fields. Reject absent core metrics.
 
+Never invent `page_type` values. A live measurement on 14 August 2026 returned only two:
+`social_profile` for profiles (TikTok and Instagram alike) and `social_post` for posts and
+videos. Platform-flavoured values such as `tiktok_video` DO NOT exist; a validator that
+expects them rejects every live response. Tell the platforms apart from the URL, not from
+`page_type`. Anything else counts as an unrecognised schema and triggers the controlled raw
+fallback.
+
 Do not parse raw Google HTML for TikTok URLs. Use the official SERP method:
 
 ```python
 su.serp("site:tiktok.com/@USERNAME/video", pages_to_check=PAGES)
 ```
 
-Recursively inspect response strings. Accept only an exact URL matching
+Anywhere in the response text, accept only exact URLs matching
 `https://www.tiktok.com/@USERNAME/video/15_TO_25_DIGIT_ID`. Require the exact username and
-deduplicate results.
+deduplicate.
 
-Raw HTML is not a primary metrics source. Use `get_page_source` only to:
-
-1. Add a missing transcript or cover to top videos.
-2. Perform a controlled TikTok fallback when parsed data has an unknown shape.
-
-Record fallback in the manifest/report and read only the
+Raw HTML is not a primary metrics source. Use `get_page_source` only to add a missing
+transcript or cover to top videos, or to run a controlled TikTok fallback when parsed data
+has an unknown shape. Record fallback in the manifest/report and read only the
 `__UNIVERSAL_DATA_FOR_REHYDRATION__` JSON. In API-provided ASR/VTT, the first three seconds
 are the opening; mark late speech. Download parsed cover URLs only for top videos, cap at
 180 KB, and embed as `data:` URIs.
@@ -123,7 +124,7 @@ Every SDK attempt consumes budget. Cache hits do not. A retry is another attempt
 partial data at the limit. Process accounts round-robin. Concurrency is `1`.
 
 Cache every parsed, raw, and SERP response under a hash of URL plus request type. Cache is
-valid for six hours. `--yenile` bypasses it. Cache files must never contain the key.
+valid six hours. `--yenile` bypasses it. Cache files must never contain the key.
 
 ## Failure contract
 
@@ -177,7 +178,7 @@ default-src 'none'; img-src data:; style-src 'unsafe-inline';
 base-uri 'none'; form-action 'none'
 ```
 
-The quota sentence must be accurate: "Signup includes 500 free requests once. They do not
+The quota sentence must be exact: "Signup includes 500 free requests once. They do not
 renew monthly." Do not guess billing for failed responses. Show only `attempts`,
 `billable_2xx`, and `cache_hits`.
 
@@ -187,7 +188,7 @@ Use the environment or local `.env` when present. Otherwise use hidden `getpass`
 Regardless of its source, keep the exact key in the same variable until the first SDK `2xx`
 response. At that moment, use one path such as `persist_key_once(key)` to write `.env`
 **exactly once** and set mode `0600`; later `2xx` responses must not write again. A run that
-receives `400/401/402`, or no `2xx`, must not create `.env`. Never save an invalid key. Clear
+with `400/401/402` or no `2xx` must not create `.env`; never save an invalid key. Clear
 the in-memory key only after this persistence decision. Do not implement `--anahtar` or
 `--key`. Do not log exception bodies.
 
@@ -199,11 +200,11 @@ Use fixtures and never call the real API in tests. Prove at least:
 2. Unknown schemas are rejected and trigger a fallback warning.
 3. In a table-driven test, **each** of `400`, `401`, and `402` is a separate `subTest` that
    proves exactly 1 attempt, an empty `[]` sleep sequence, and a hard stop.
-4. In a table-driven test, **each** of `403`, `404`, `415`, and `422` is a separate `subTest`
-   that proves exactly 1 attempt, an empty `[]` sleep sequence, and target-only skipping.
+4. In the same table, each of `403`, `404`, `415`, and `422` proves exactly 1 attempt, an
+   empty `[]` sleep sequence, and target-only skipping.
 5. In a table-driven test, **each** of `408`, `429`, `502`, `503`, and `504` is a separate
    `subTest` with 4 total attempts; inject `sleep_fn=sleeps.append` and assert its actual call
-   list equals `[1, 2, 4]`. A separate network-error test proves the same. Asserting a retry
+   list equals `[1, 2, 4]`. A separate network-error test proves the same. Asserting a
    constant or testing one representative status is insufficient.
 6. The hard budget cannot be crossed, even during a retry.
 7. A blocked `200` is rejected but increments `billable_2xx`.
@@ -225,5 +226,5 @@ Use fixtures and never call the real API in tests. Prove at least:
 
 Run every test; do not launch after failure. Inspect the fixture report viewport and manifest.
 
-In the final response, state only: the three opportunities, number of accounts, successful
+In the final response state only: the three opportunities, account count, successful
 `2xx` count, and report path. Never repeat the API key.

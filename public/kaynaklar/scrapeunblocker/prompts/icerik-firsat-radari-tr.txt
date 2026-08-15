@@ -5,20 +5,16 @@ Urünü kur, test et, veriyi topla ve raporu ac. Bana terminal isi birakma.
 
 ## Once yalniz bunlari sor
 
-Tek mesajda su bilgileri iste:
-
-1. Yaptigim is, tek cumle.
-2. Kendi TikTok kullanici adim.
-3. Bir ile dort rakip TikTok kullanici adi.
-4. Varsa TikTok ve Instagram kullanici adi eslesmeleri.
-5. Hizli mi, Derin mi tarama istedigim.
+Tek mesajda su bilgileri iste: yaptigim is (tek cumle), kendi TikTok kullanici adim, bir ile
+dort rakip TikTok kullanici adi, varsa TikTok-Instagram kullanici adi eslesmeleri, Hizli mi
+Derin mi tarama istedigim.
 
 API anahtarini **sohbette isteme**. Dosyalari kurduktan sonra uygulamayi etkilesimli
-terminalde ac. Uygulama anahtari `getpass` ile gizli alsin. Anahtar komut satirina,
-Claude mesajina, loga, HTML'e, JSON'a veya git'e girmesin.
+terminalde ac; anahtari `getpass` ile gizli alsin. Anahtar komut satirina, Claude mesajina,
+loga, HTML'e, JSON'a veya git'e girmesin.
 
-Baslamadan once hedefi geri oku. Ornek: "@ben hesabini @a, @b ve @c ile Hizli modda
-karsilastiracagim." Kullanici adlarinda `@` ve tam profil adresini kabul et.
+Baslamadan once hedefi geri oku (ornek: "@ben hesabini @a ve @b ile Hizli modda
+karsilastiracagim"). Kullanici adlarinda `@` ve tam profil adresini kabul et.
 
 Zorunlu veri yolu `business_context -> run_radar -> data.json -> adapt_brief` olsun.
 `adapt_brief(business_context, evidence)` her uc brief icin cagrilsin; her `adaptation`
@@ -58,8 +54,7 @@ CLI sozlesmesi birebir su olsun:
 `--hesap`, `--instagram`, `--ig-eslesme`, `--refresh`, `--key` veya baska alias uretme.
 Argumansiz calistirildiginda API anahtari disindaki girdileri etkilesimli sor. `--help`
 hicbir kurulum veya ag islemi yapmadan yardimi basip `0` ile ciksin. `baslat.py`, kendi
-kurulumundan sonra ayni arguman listesini adlarini veya degerlerini degistirmeden urune
-iletsin; `baslat.py --help` de urun yardimini kurulum yapmadan `0` ile gostersin.
+kurulumundan sonra ayni arguman listesini degistirmeden urune iletsin; `baslat.py --help` de urun yardimini kurulum yapmadan `0` ile gostersin.
 
 ## ScrapeUnblocker veri yolu
 
@@ -70,11 +65,14 @@ from scrapeunblocker import Client
 su = Client(api_key=anahtar, timeout=180.0, max_retries=0)
 ```
 
-SDK tekrarlarini kapat. Tekrar, butce ve sayac kontrolu urunde olsun. Boylece gercek
-deneme sayisi manifestte dogru kalir.
+SDK tekrarlarini kapat. Tekrar, butce ve sayac kontrolu urunde olsun; boylece manifestteki
+deneme sayisi dogru kalir.
 
 `main` stub olamaz. `build_live_transports(api_key, client_cls=None)` yoksa `Client`i tembel
-import edip yukaridaki argumanlarla kursun; uc SDK adapterini dondursun. Gercek
+import edip yukaridaki argumanlarla kursun; uc SDK adapterini
+`{"get_parsed": ..., "serp": ..., "get_page_source": ...}` sozluguyle dondursun. Degerler
+dogrudan cagrilabilir olsun, sinif olmasin. `main` bu sozlugu kullansin, transportu ikinci
+kez kurmasin. Gercek
 `get_parsed()` bir `ParsedPage(page_type, source, data, raw)` nesnesi dondurur: bunu mutlaka
 `{"status_code":200,"data":{"page_type":obj.page_type,"source":obj.source,"data":obj.data}}`
 seklinde normalize et. Nesneyi oldugu gibi gecmek veya yalniz `obj.data`yi alip
@@ -89,6 +87,12 @@ gonderide `shortcode/caption/likes/comments/posted_at/media_type/counts_hidden` 
 Resmi cevap genelde `{data:{page_type,source,data}}` bicimindedir. Gecici `data`, `result`,
 `parsed_data`, `payload` sarmallarini dolas. Alan uydurma. Temel sayilar yoksa reddet.
 
+`page_type` degerini UYDURMA. 14 Agustos 2026 canli olcumunde API yalniz iki deger dondurdu:
+profillerde (TikTok ve Instagram) `social_profile`, gonderi/videolarda `social_post`. Platform
+adi tasiyan `tiktok_video` gibi degerler YOKTUR; onlari bekleyen dogrulayici canli veriyi
+topluca reddeder. Platformu `page_type`den degil adresten ayirt et. Baska deger gelirse sema
+taninmamis sayilir ve kontrollu ham fallback devreye girer.
+
 TikTok video adreslerini ham Google HTML'inden arama. Resmi `su.serp()` metodunu kullan:
 
 ```python
@@ -99,12 +103,9 @@ Cevaptaki tum metin alanlarinda yalniz su kesin deseni kabul et:
 `https://www.tiktok.com/@KULLANICI/video/15-25_HANELI_KIMLIK`. Kullanici adi tam
 eslesmeli. Tekrarlari ele.
 
-Ham HTML birincil veri kaynagi degildir. Yalniz su iki durumda `get_page_source` kullan:
-
-1. En iyi videolarda altyazi ve kapak eksigini tamamlamak.
-2. `parsed_data` taninmayan bir sema dondururse kontrollu TikTok fallback yapmak.
-
-Fallback'i manifest ve rapora yaz; yalniz `__UNIVERSAL_DATA_FOR_REHYDRATION__` JSON'unu
+Ham HTML birincil veri kaynagi degildir. `get_page_source` yalniz iki durumda kullanilir: en
+iyi videolarda altyazi ve kapak eksigini tamamlamak, `parsed_data` taninmayan bir sema
+dondururse kontrollu TikTok fallback yapmak. Fallback'i manifest ve rapora yaz; yalniz `__UNIVERSAL_DATA_FOR_REHYDRATION__` JSON'unu
 oku. API'nin verdigi ASR/VTT'de ilk 3 saniyeyi acilis say, gec baslangici isaretle. Kapagi
 parsed URL'den, yalniz en iyi videolar icin ve en fazla 180 KB indirip `data:` URI gom.
 
@@ -185,8 +186,7 @@ Anahtar hangi kaynaktan gelirse gelsin, gercek degeri ilk SDK `2xx` cevabina kad
 degiskende tut. Ilk `2xx` dondugu anda `persist_key_once(key)` benzeri tek bir yol uzerinden
 `.env` dosyasina **tam bir kez** yaz ve izni `0600` yap. Sonraki `2xx` cevaplari tekrar
 yazmasin. `400/401/402` veya hic `2xx` olmayan kosu `.env` olusturmasin; gecersiz anahtari
-saklama. Anahtar degiskenini ancak bu kalicilastirma karari verildikten sonra temizle.
-`--anahtar` veya `--key` argumani olmasin. Istisna govdesini loglama.
+saklama. Degiskeni ancak bu karardan sonra temizle. `--anahtar` veya `--key` argumani olmasin. Istisna govdesini loglama.
 
 ## Agsiz kabul testleri
 
@@ -196,12 +196,12 @@ Fixture tabanli testler gercek API'yi cagirmasin. En az sunlari kanitla:
 2. Bilinmeyen sema reddediliyor ve fallback uyarisi olusuyor.
 3. Tablo gudumlu testte `400`, `401`, `402` kodlarinin **her biri** ayri `subTest` olarak
    tam 1 deneme, `[]` bekleme ve hard-stop uretiyor.
-4. Tablo gudumlu testte `403`, `404`, `415`, `422` kodlarinin **her biri** ayri `subTest`
-   olarak tam 1 deneme, `[]` bekleme ve yalniz hedef atlama uretiyor.
+4. Ayni tabloda `403`, `404`, `415`, `422` kodlarinin her biri tam 1 deneme, `[]` bekleme ve
+   yalniz hedef atlama uretiyor.
 5. Tablo gudumlu testte `408`, `429`, `502`, `503`, `504` kodlarinin **her biri** ayri
    `subTest` olarak toplam 4 deneme uretiyor; `sleep_fn=sleeps.append` verilip gercek cagri
    listesi birebir `[1, 2, 4]` assert ediliyor. Ag hatasi da ayri testte aynisini kanitliyor.
-   Sabit bir retry listesini assert etmek veya kumeden tek temsilci test etmek yeterli degil.
+   Sabit liste assert etmek veya kumeden tek temsilci test etmek yeterli degil.
 6. Sert butce retry ortasinda bile asilamiyor.
 7. `200` engel sayfasi basari sayilmiyor, fakat `billable_2xx` artiyor.
 8. Ikinci ayni istek cache'den geliyor ve deneme harcamiyor.
@@ -216,9 +216,9 @@ Fixture tabanli testler gercek API'yi cagirmasin. En az sunlari kanitla:
     olculuyor. `--help` kapilari `0`; bootstrap process mock'unda argv birebir ayni.
 16. `main` fake getpass + coklu fake `2xx`: olay sirasi ilk cevapta
     `sdk_2xx -> persist -> sonraki_sdk`, persist tam 1, `.env` `0600`. Fake `401`: 0/dosya yok.
-17. `test_main_runs_live_pipeline`: fake `Client` constructorunu ve uc adapteri ayri cagirir.
-    Fake `ParsedPage` nesnesinde `page_type/source/data`nin exact wrapperda korundugunu ve
-    parserin bunu kabul ettigini; sonra `run_radar` + cikti yazimini kanitlar.
+17. `test_main_runs_live_pipeline`: fake `Client` constructoru ve uc adapter ayri cagrilir;
+    fake `ParsedPage`in `page_type/source/data` alanlari exact wrapperda korunur, parser
+    kabul eder, sonra `run_radar` + cikti yazimi kanitlanir.
 
 Tum testleri calistir; hata varsa acma. Fixture raporunun ilk ekranini ve manifestini kontrol et.
 
