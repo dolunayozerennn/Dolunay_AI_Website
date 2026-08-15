@@ -41,6 +41,9 @@ Yeni ve bos bir `icerik-firsat-radari` klasoru olustur. En az su dosyalar olsun:
 `baslat.py` ilk kosuda `.venv` ve paketleri kursun. Requirements hash'i degismediyse
 kurulumu atlasin. Urunu `.venv` Python ile acsin. Kullaniciya `pip install` yaptirma.
 
+Python 3.10 veya ustu gerekli. `baslat.py` surumu dogrulasin; dusuk surumde net uyariyla
+dursun.
+
 CLI sozlesmesi birebir su olsun:
 
 ```text

@@ -6,13 +6,13 @@
       "files": {
         "tr": {
           "name": "icerik-firsat-radari-tr.txt",
-          "sha256": "311b6f0fb1fe299c494d0fc70edcc5444e6032dda09ab320daab3352b006cfca",
-          "characters": 11419
+          "sha256": "4341913f279def8cb33962d94923350dccb0305c52b4910a486c7fe43cb37238",
+          "characters": 11517
         },
         "en": {
           "name": "content-opportunity-radar-en.txt",
-          "sha256": "b42cef687b17bd20f8c36d0c319260acb04c8eaa35a649a109dcd87d26a06992",
-          "characters": 11356
+          "sha256": "9424983a5b428a3db26bf8402b038017c0eaf0e2d20956fdfd8851ed3d7e8612",
+          "characters": 11477
         }
       }
     },

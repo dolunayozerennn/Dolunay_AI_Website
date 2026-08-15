@@ -42,6 +42,9 @@ On first use, `start.py` creates `.venv` and installs pinned packages. Store the
 hash and skip unchanged installs. Run through the virtual environment. Never ask for manual
 `pip install`.
 
+Python 3.10 or newer is required. `start.py` verifies the interpreter and stops with a
+clear warning on older versions.
+
 The CLI contract must be exactly:
 
 ```text
