@@ -1,4 +1,4 @@
-Build this product from scratch. Run every command, file creation, and test yourself; ask me for no
+Build this product from scratch. Run every command, file creation and test yourself; ask for no
 terminal work and clone no repository. Build it in a clean `travel-budget-radar` folder.
 
 ## Outcome
@@ -9,15 +9,14 @@ departure point, dates, and per-person budget, where can I travel?"
 Make a decision screen, not a flight dump. First show in-budget routes, per-person price, dates,
 stops, duration, airline, baggage, and source link. Missing baggage is `unknown`.
 
-All network data must come through ScrapeUnblocker. Do not use another data API. Never invent a
-fare when data is unavailable.
+All network data must come through ScrapeUnblocker. Do not use another data API. Never invent a fare when data is missing.
 
 ## Installation
 
 Verify Python 3.11 or newer. Create `.venv` inside the project. Put exactly
 `scrapeunblocker==0.1.8` in `requirements.txt` and install that official SDK version in the
 virtual environment; fail with a clear message if the runtime version is not 0.1.8. Add `.env`,
-`.venv/`, cache, raw responses, run state, and capability evidence to `.gitignore`.
+`.venv/`, cache, raw responses, run state and capability evidence to `.gitignore`.
 
 Never request the API key in chat. If `SCRAPEUNBLOCKER_KEY` is absent from the environment,
 collect it with Python `getpass` as hidden terminal input. `getpass` runs only in the
@@ -30,11 +29,10 @@ or terminal output.
 ## User input
 
 Collect these product-level answers once: departure city or airport, one or two outbound/return
-date windows, trip length, per-person budget and currency, maximum stops, longest acceptable
-one-way flight time, places that must be allowed, places that must be excluded, and Quick or
+date windows, trip length, per-person budget and currency, maximum stops, longest acceptable one-way time, places that must be allowed, places that must be excluded, and Quick or
 Deep mode.
 
-Ask for no technical field names. Turn the answers into `plan.json` yourself. The departure record
+Ask no technical field names. Turn the answers into `plan.json` yourself. The departure record
 and every candidate need a name, plain search name, and one or more IATA codes. Create candidates
 from general knowledge, without API calls. Apply allow and exclude lists exactly.
 
@@ -50,7 +48,8 @@ The only root entry point is `app.py`; create no alternative. Its exact interfac
 
 `--fixture-demo` and `--plan` are exclusive; `--hotel-canary` requires `--plan`. Invalid combinations
 exit `2` without input. `--help` exits `0` without stdin/`input`, `getpass`, SDK/network, or any file
-write.
+write. Do not import the SDK at module level; import `scrapeunblocker` lazily inside the
+function that makes the live call.
 
 ## Two exact modes
 
@@ -59,12 +58,11 @@ write.
 | Quick (default) | 8 | 1 | 8 | 24 |
 | Deep | 20 | 2 | 40 | 120 |
 
-Enforce these ceilings in code; a larger value in `plan.json` must not override them. Run requests
-sequentially, concurrency fixed to 1.
+Enforce these ceilings in code; a larger `plan.json` value must not override them. Run requests sequentially, concurrency 1.
 
 ## ScrapeUnblocker integration
 
-Open the official SDK with `Client(..., max_retries=0)`; the application owns the retry policy.
+Open the official SDK with `Client(..., max_retries=0)`; the app owns the retry policy.
 Use `client.skyscanner.flights(...)` for flights. Supply:
 
 - `origin`, `dest`, `depart_date`, `return_date`,
@@ -124,8 +122,8 @@ the actual reason, and contains no sample fare.
 - An HTTP `200` body with a captcha, access-denied page, or human verification is not success.
 - For an unknown failure, never synthesize data; show the row incomplete with its reason.
 
-Count only usable `2xx` responses as successful and billable. Track attempts, successful 2xx, and
-cache hits separately. Never estimate the account's remaining credits.
+Count only usable `2xx` responses as successful and billable. Track attempts, successful 2xx and cache hits
+separately. Never estimate remaining credits.
 
 ## Fare safety
 
@@ -137,7 +135,7 @@ currency; never convert or count other currencies as in-budget, and warn. State 
 
 Cache every successful route response as gzipped JSON, keyed by SHA-256 of the endpoint and
 parameters and never containing the API key. TTL is six hours. A cache hit must not increase the
-network-attempt or successful-2xx counters.
+network-attempt or 2xx counters.
 
 After every completed search, immediately rewrite `rapor_son.html` and `run_manifest.json` so
 the user can see the first opportunities while a long scan continues. The manifest must carry at
@@ -148,7 +146,7 @@ network attempts, successful 2xx responses and cache hits; `origin_city_fallback
 
 Keep price history in a separate JSON file. Compare only runs with the same origin, windows, trip
 length, currency, stop limit, and duration limit. Mark routes as new, down, up, or unchanged.
-Never headline a sub-one-percent change as a major alert. Keep timestamps for at least seven runs.
+Never headline a sub-one-percent change as a major alert. Keep timestamps for seven runs.
 
 ## Hotel capability gate
 
@@ -163,10 +161,9 @@ show a combined trip total, because flight group totals are unverified.
 Generate one mobile-friendly, fully offline HTML file. Use this dark palette: background
 `#0b1120`, panel `#1e293b`, border `#334155`, heading `#f1f5f9`, body `#e2e8f0`, muted text
 `#94a3b8`. Do not load external fonts, styles, scripts, images, or analytics. Enforce a CSP with
-`default-src 'none'`. Booking URLs may be normal links that navigate only on a user click.
+`default-src 'none'`. Booking URLs may be normal links that open only on a click.
 Above the fold, show mode, scan status, in-budget route count, cheapest route, and price
-movement. Every card must show data time and the per-person label. Put unsuccessful routes
-and their reasons in a separate table.
+movement. Every card must show data time and the per-person label. Put failed routes and their reasons in a separate table.
 
 ## Fixture demo and delivery proof
 
@@ -177,12 +174,12 @@ without key/`.env`/`getpass`/SDK/network. Above the fold, show
 
 Immediately before the final response, run a clean subprocess demo; verify both paths exist and
 are non-empty, that `HTMLParser` and `json.load` parse them, and that both carry the DEMO/FIXTURE
-warning. Unless `--help`, tests, compilation, and this gate pass in one final round, claim no
-success; fix it and rerun the whole gate.
+warning. Unless `--help`, tests, compilation and this gate pass in one final round, claim no success;
+fix and rerun the whole gate.
 
 ## Do not deliver without tests
 
-Write `unittest` tests and small JSON fixtures that never contact the live API. Prove at least:
+Write `unittest` tests and small JSON fixtures that never touch the live API. Prove at least:
 
 1. Quick 8x1 and Deep 20x2 ceilings.
 2. Allow and exclude filtering.
@@ -203,7 +200,7 @@ Write `unittest` tests and small JSON fixtures that never contact the live API. 
 
 Run all tests, compile every Python file, then without touching the API key run the canonical
 `python app.py --fixture-demo` to produce the real HTML and manifest and repeat the delivery proof
-above exactly. The build is complete only after these checks pass.
+above exactly. The build is complete only after these pass.
 
 In the final, give no technical log: only readiness, both modes, test result, and file to open. Then
 ask all travel preferences once and run the first live Quick scan yourself.

@@ -1,6 +1,6 @@
 Asagidaki urunu bu bilgisayarda sifirdan kur. Benden terminal komutu isteme; komutlari sen
 calistir, dosyalari sen olustur, testleri sen kos. Depo klonlama. Bos bir
-`seyahat-butce-radari` klasoru ac ve urunun tamamini orada insa et.
+`seyahat-butce-radari` klasorunde insa et.
 
 ## Sonuc
 
@@ -8,8 +8,8 @@ Kullanici hedef sehir soylemeden "Belirledigim tarihlerde, kalkis noktamdan, kis
 butceme uyan hangi sehirlere gidebilirim?" sorusunu cevaplayan lokal bir urun yap.
 
 Urun bir ucus listesi degil karar ekranidir. Ilk ekranda butceye uyan rotalari, kisi basi
-fiyati, tarihleri, aktarmayi, sureyi, havayolunu, bagaj bilgisini ve kaynaga giden baglantiyi
-gostersin. Bagaj bilgisi cevapta yoksa acikca `bilinmiyor` yazsin.
+fiyati, tarihleri, aktarmayi, sureyi, havayolunu, bagaji ve kaynak baglantisini
+gostersin. Bagaj cevapta yoksa acikca `bilinmiyor` yazsin.
 
 Tum ag verisi yalniz ScrapeUnblocker uzerinden gelsin. Baska ucus, otel, doviz veya arama
 API'si kullanma. Veri gelmezse tahmin etme ve ornek fiyat uydurma.
@@ -37,8 +37,8 @@ yerler, haric tutulacak yerler, Hizli veya Derin mod.
 
 Teknik alan adi sorma. Bu cevaplardan `plan.json` dosyasini kendin yaz. Kalkis kaydinda ve her
 hedefte gorunen ad, aramada kullanilacak sade sehir adi ve bir ya da daha cok IATA kodu bulunsun.
-Hedef listesini kendi genel bilginle olustur. API'yi hedef uretmek icin harcama. Kullanici izin
-listesi verdiyse yalniz o yerleri sec. Haric listesindeki yerleri her durumda ele.
+Hedef listesini kendi genel bilginle olustur; API'yi hedef uretmek icin harcama. Izin listesi
+verdiyse yalniz o yerleri sec. Haric listesindekileri her durumda ele.
 
 ## Kanonik CLI sozlesmesi
 
@@ -52,7 +52,8 @@ Kokte tek giris `app.py` olsun; baska giris olusturma. Arayuz tam olarak:
 
 `--fixture-demo` ile `--plan` birlikte kullanilmasin; `--hotel-canary` `--plan` istesin. Gecersiz
 birlesim girdi almadan `exit 2` donsun. `--help`; stdin/`input`, `getpass`, SDK/ag ve
-herhangi bir dosya yazimi olmadan `exit 0` donsun.
+herhangi bir dosya yazimi olmadan `exit 0` donsun. SDK'yi modul seviyesinde import etme;
+`scrapeunblocker` importu canli cagri fonksiyonunun icinde tembel olsun.
 
 ## Iki kesin mod
 
@@ -61,8 +62,7 @@ herhangi bir dosya yazimi olmadan `exit 0` donsun.
 | Hizli (varsayilan) | 8 | 1 | 8 | 24 |
 | Derin | 20 | 2 | 40 | 120 |
 
-Bu tavanlar kodda zorunlu olsun; plan dosyasindaki buyuk deger bunlari asamasin. Istekler
-sirali kossun, eszamanlilik 1 olsun.
+Bu tavanlar kodda zorunlu olsun; plan dosyasindaki buyuk deger bunlari asamasin. Istekler sirali kossun, eszamanlilik 1.
 
 ## ScrapeUnblocker kullanimi
 
@@ -133,8 +133,7 @@ Yalniz kullanilabilir `2xx` cevaplari basarili ve faturalandirilabilir say. Topl
 
 `adults` grup toplami dogrulanmamistir: fiyat daima `kisi basi`; iki+ kiside carpma yapma ve
 `Grup toplami dogrulanmadi` yaz. Eksik bagaji dahil sayma. Butceyi yalniz istenen para biriminde
-kiyasla; farkli parayi cevirme veya butce-ici sayma, uyari ver. Satin alma fiyat degisimi uyarisini
-rapora ekle.
+kiyasla; farkli parayi cevirme veya butce-ici sayma, uyari ver. Fiyat degisebilir uyarisini rapora ekle.
 
 ## Cache, gecmis ve ilerleme
 
@@ -166,7 +165,7 @@ birimlerini toplama; ucus grup toplami dogrulanmadigi icin birlesik seyahat topl
 Tek dosyalik, mobil uyumlu ve tamamen offline bir HTML uret. Tema koyu olsun: zemin `#0b1120`,
 panel `#1e293b`, kenar `#334155`, baslik `#f1f5f9`, govde `#e2e8f0`, soluk metin `#94a3b8`.
 Harici font, stil, script, gorsel veya analitik istegi olmasin. CSP ile `default-src 'none'`
-uygula. Rezervasyon baglantilari yalniz kullanicinin tikladigi normal linkler olabilir. Ilk ekranda
+uygula. Rezervasyon baglantilari yalniz tiklamayla acilan normal linkler olabilir. Ilk ekranda
 mod, tarama durumu, butceye uyan rota sayisi, en ucuz rota ve fiyat degisimi yer alsin. Kartlarda
 kaynak tarihi ve kisi basi etiketi gorunsun. Basarisiz yerler sebebiyle ayri tabloda dursun.
 

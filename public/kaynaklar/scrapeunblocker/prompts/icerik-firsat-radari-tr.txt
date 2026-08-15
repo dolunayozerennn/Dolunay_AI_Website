@@ -54,7 +54,8 @@ CLI sozlesmesi birebir su olsun:
 `--hesap`, `--instagram`, `--ig-eslesme`, `--refresh`, `--key` veya baska alias uretme.
 Argumansiz calistirildiginda API anahtari disindaki girdileri etkilesimli sor. `--help`
 hicbir kurulum veya ag islemi yapmadan yardimi basip `0` ile ciksin. `baslat.py`, kendi
-kurulumundan sonra ayni arguman listesini degistirmeden urune iletsin; `baslat.py --help` de urun yardimini kurulum yapmadan `0` ile gostersin.
+kurulumundan sonra ayni arguman listesini degistirmeden urune iletsin; `baslat.py --help` de
+yardimi kurulumsuz `0` ile gostersin.
 
 ## ScrapeUnblocker veri yolu
 
@@ -78,6 +79,9 @@ kez kurmasin. Gercek
 seklinde normalize et. Nesneyi oldugu gibi gecmek veya yalniz `obj.data`yi alip
 `page_type/source`u kaybetmek yasak. SDK hata `status_code`unu koru. `main` girdi -> anahtar
 -> canli transport -> `run_radar` -> atomik cikti yolunu cagirir; offline erken-cikis yoktur.
+`main(kok=None, client_cls=None)` imzasi zorunlu: `kok` verilirse `runs/`, `son_kosu.json`,
+`son_rapor.html` ve `.env` dahil TUM ciktilar o klasorun altina yazilsin; `client_cls`
+verilirse transportlar o sinifla kurulsun. Testler mainí bos gecici klasorde boyle cagirir.
 
 Birincil yol `su.get_parsed(url)`. TikTok profilinde `username/followers/following/likes/videos`;
 videoda `video_id/description/plays/likes/comments/shares/saves/reposts/posted_at/duration_s/
@@ -87,11 +91,10 @@ gonderide `shortcode/caption/likes/comments/posted_at/media_type/counts_hidden` 
 Resmi cevap genelde `{data:{page_type,source,data}}` bicimindedir. Gecici `data`, `result`,
 `parsed_data`, `payload` sarmallarini dolas. Alan uydurma. Temel sayilar yoksa reddet.
 
-`page_type` degerini UYDURMA. 14 Agustos 2026 canli olcumunde API yalniz iki deger dondurdu:
-profillerde (TikTok ve Instagram) `social_profile`, gonderi/videolarda `social_post`. Platform
-adi tasiyan `tiktok_video` gibi degerler YOKTUR; onlari bekleyen dogrulayici canli veriyi
-topluca reddeder. Platformu `page_type`den degil adresten ayirt et. Baska deger gelirse sema
-taninmamis sayilir ve kontrollu ham fallback devreye girer.
+`page_type` uydurma. 14 Agustos 2026 canli olcumunde yalniz iki deger dondu: profilde (TikTok
+ve Instagram) `social_profile`, gonderi/videoda `social_post`. `tiktok_video` gibi platform adli
+degerler YOKTUR; onlari bekleyen dogrulayici canli veriyi topluca reddeder. Platformu adresten
+ayirt et. Baska deger taninmamis semadir, kontrollu ham fallback devreye girer.
 
 TikTok video adreslerini ham Google HTML'inden arama. Resmi `su.serp()` metodunu kullan:
 
@@ -99,14 +102,14 @@ TikTok video adreslerini ham Google HTML'inden arama. Resmi `su.serp()` metodunu
 su.serp("site:tiktok.com/@KULLANICI/video", pages_to_check=SAYFA)
 ```
 
-Cevaptaki tum metin alanlarinda yalniz su kesin deseni kabul et:
+Cevabin her yerinde yalniz su deseni kabul et:
 `https://www.tiktok.com/@KULLANICI/video/15-25_HANELI_KIMLIK`. Kullanici adi tam
 eslesmeli. Tekrarlari ele.
 
-Ham HTML birincil veri kaynagi degildir. `get_page_source` yalniz iki durumda kullanilir: en
-iyi videolarda altyazi ve kapak eksigini tamamlamak, `parsed_data` taninmayan bir sema
-dondururse kontrollu TikTok fallback yapmak. Fallback'i manifest ve rapora yaz; yalniz `__UNIVERSAL_DATA_FOR_REHYDRATION__` JSON'unu
-oku. API'nin verdigi ASR/VTT'de ilk 3 saniyeyi acilis say, gec baslangici isaretle. Kapagi
+Ham HTML birincil kaynak degildir. `get_page_source` yalniz iki durumda kullanilir: en iyi
+videolarda altyazi/kapak eksigini tamamlamak, `parsed_data` taninmayan sema dondururse
+kontrollu TikTok fallback yapmak. Fallback'i manifest ve rapora yaz; yalniz `__UNIVERSAL_DATA_FOR_REHYDRATION__` JSON'unu
+oku. ASR/VTT'de ilk 3 saniye acilistir; gec baslangici isaretle. Kapagi
 parsed URL'den, yalniz en iyi videolar icin ve en fazla 180 KB indirip `data:` URI gom.
 
 ## Iki mod ve sert butce
@@ -133,7 +136,7 @@ alti saat gecerli olsun. `--yenile` cache'i atlasin. Cache dosyalarinda anahtar 
   `4` ile cagirip en fazla uc tekrar yapsin. Her retry butceden dussun; `0` ile uyumak yasak.
 - HTTP `200` tek basina basari degildir. Bos govde, robot kontrolu, `recaptcha`,
   `unusual traffic`, `consent.google.com` veya taninmayan sosyal sema varsa veriyi kabul
-  etme. Buna ragmen bu bir `2xx` oldugu icin `billable_2xx` sayacina girsin.
+  etme. Yine de `2xx` oldugu icin `billable_2xx` sayacina girsin.
 - Hic kesin video verisi gelmediyse bos rapor uretme. Onceki iyi kosuyu ezme.
 
 ## Kosu, gecmis ve manifest
@@ -141,21 +144,21 @@ alti saat gecerli olsun. `--yenile` cache'i atlasin. Cache dosyalarinda anahtar 
 Her kosu benzersiz UTC zaman damgali klasore yazilsin:
 `runs/YYYYMMDDTHHMMSSffffffZ-MOD-RANDOM/`.
 
-Klasorde `data.json`, `report.html`, `run_manifest.json` olsun. Tamamlaninca
-`son_kosu.json` yalniz goreli kosu yolunu tutsun. `son_rapor.html` son raporun kopyasi
-olsun. Yazimlar gecici dosya + atomik replace ile yapilsin.
+Klasorde `data.json`, `report.html`, `run_manifest.json` olsun. Basarida `son_kosu.json`
+yalniz goreli kosu yolunu, `son_rapor.html` son raporun kopyasini tutsun. Yazimlar gecici
+dosya + atomik replace olsun.
 
 Manifest alanlari: `prompt_version=social-radar-v2.0.0`, `started_at`, `ended_at`, `mode`,
 `budget`, `attempts`, `billable_2xx`, `cache_hits`, `asset_gets`, `sources`,
 `source_counts`, `warnings`, `status=success|failed`.
 
-Onceki basarili `data.json` dosyasini bul. Ayni video kimliginde izlenme farkini hesapla.
-Yeni videolari ayri listele. Ilk kosuda karsilastirma olmadigini acikca yaz.
+Onceki basarili `data.json`i bul. Ayni video kimliginde izlenme farkini hesapla. Yeni
+videolari ayri listele. Ilk kosuda karsilastirma olmadigini yaz.
 
 ## Analiz ve rapor
 
-Her videoda kesin etkilesimleri koru. Oranlari izlenmeye bol. Ortalama ve ortancayi
-goster. Eksik sayiyi sifir diye sunma.
+Her videoda kesin etkilesimleri koru; oranlari izlenmeye bol. Ortalama ve ortancayi goster.
+Eksik sayiyi sifir sunma.
 
 Raporun ilk gorunen ekraninda **Simdi cekebilecegin uc video** bulunacak. Uc brief su
 farkli kanittan gelsin: en cok izlenen, en yuksek kaydetme orani, en yuksek paylasim
@@ -163,11 +166,11 @@ orani. Her briefte konu tohumu, acilis yapisi, cekim karari, kesin sayili kanit 
 video adresi olsun. Neden-sonuc iddiasi kurma. Rakip verisini kanit, is tanimini uyarlama
 baglami olarak kullan.
 
-Devaminda su bolumler olsun: bu kosuda degisenler, veri uyarilari, hesap panoramasi,
+Devaminda: bu kosuda degisenler, veri uyarilari, hesap panoramasi,
 kazanan acilislar, tum kanit tablosu, varsa kesin Instagram gonderi sayilari, ham konu
 sinyalleri ve cagri gercegi.
 
-Rapor tek HTML olsun. Koyu tema kullan. CSS, favicon ve kapaklar dosyaya gomulsun.
+Rapor tek koyu temali HTML olsun; CSS, favicon ve kapaklar gomulsun.
 JavaScript, font CDN'i veya otomatik dis kaynak istegi olmasin. Su CSP'yi ekle:
 
 ```html
@@ -176,8 +179,8 @@ base-uri 'none'; form-action 'none'
 ```
 
 Kota metni aynen dogru olsun: "Kayitla birlikte bir defalik 500 ucretsiz istek verilir.
-Aylik yenilenmez." Basarisiz cevaplar hakkinda resmi veride kanitlanmayan maliyet tahmini
-yapma. Yalniz `attempts`, `billable_2xx` ve `cache_hits` sayilarini goster.
+Aylik yenilenmez." Basarisiz cevaplarin maliyetini tahmin etme. Yalniz `attempts`,
+`billable_2xx` ve `cache_hits` sayilarini goster.
 
 ## Anahtar guvenligi
 

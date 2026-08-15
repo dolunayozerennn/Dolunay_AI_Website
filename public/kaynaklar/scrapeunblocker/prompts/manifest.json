@@ -6,13 +6,13 @@
       "files": {
         "tr": {
           "name": "icerik-firsat-radari-tr.txt",
-          "sha256": "948fc0fc1a134fc18b9a31eb0ba4e8f35467ab56984f7df375576193114c2f2c",
-          "characters": 11959
+          "sha256": "08973a32ace9e09364ce79b2ecb11613f34a2f058be3cd0102b092c02caff77c",
+          "characters": 11990
         },
         "en": {
           "name": "content-opportunity-radar-en.txt",
-          "sha256": "625b2d0f4c22895a3d3bd0bb6fbd685ccb2fde2e5633ef39c6bbe868e752f2c0",
-          "characters": 11997
+          "sha256": "f088da21799b8a57e7137ece40bd108e0e29c42c8710456bc795bfd13c479318",
+          "characters": 11998
         }
       }
     },
@@ -36,13 +36,13 @@
       "files": {
         "tr": {
           "name": "seyahat-butce-radari-tr.txt",
-          "sha256": "495786de7e79db326e9adf73d4c0f2a5d004e0afb06d5818da5e4978d45c0db9",
-          "characters": 11959
+          "sha256": "a5450129eedf6cddcbd3f5ddb25fab8c2d97218c57b9b76630a221322259a0a9",
+          "characters": 11990
         },
         "en": {
           "name": "travel-budget-radar-en.txt",
-          "sha256": "a124b9cd19898bff17d52e0d6bb5fa00cbab231197864627380dedefd119f116",
-          "characters": 11984
+          "sha256": "8ea41b1bba6df70aba3350964aa7beb4e0a382fe355519fa6559e337c81653fa",
+          "characters": 11998
         }
       }
     }
