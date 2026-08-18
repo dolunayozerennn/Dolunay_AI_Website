@@ -1,3 +1,22 @@
+## INPUT — fill in this block only
+
+```text
+ScrapeUnblocker API key: PASTE_HERE
+Departure: HERE
+Date range: HERE
+Trip length: HERE_DAYS
+Budget per person: HERE
+Include/exclude places: (optional, may stay empty)
+Scan: Fast
+```
+
+Your input is this block. Do not ask me questions in chat, fill missing fields with
+reasonable assumptions and continue. If the key line is empty or still says PASTE_HERE, do
+NOT start live collection: build the product, run the tests, produce the offline example
+output, and at the end state in one line that the key is missing. Departure can be a city
+name or airport code. If I did not write a currency in the budget, assume TL. Read the target
+back in one line before starting.
+
 Build this product from scratch. Run every command, file creation and test yourself; ask for no
 terminal work and clone no repository. Build it in a clean `travel-budget-radar` folder.
 
@@ -18,21 +37,26 @@ Verify Python 3.11+. Create `.venv` inside the project. Put exactly
 virtual environment; fail with a clear message if the runtime version is not 0.1.8. Add `.env`,
 `.venv/`, cache, raw responses, run state and capability evidence to `.gitignore`.
 
-Never request the API key in chat. If `SCRAPEUNBLOCKER_KEY` is absent from the environment,
-collect it with Python `getpass` as hidden terminal input. `getpass` runs only in the
-argument-free interactive run: `--help`, `--fixture-demo`, and `--plan` are non-interactive and
-read the key only from the environment or `.env`; when it is missing, exit non-zero with a clear
-message and never reach `getpass`. Save it to the project's `.env` with
-`0600` permissions. The key must never appear in HTML, JSON, logs, command-line arguments, fixtures,
-or terminal output.
+Take the key from the input block above. Your first step is to write it to the project's `.env`
+in one shot and set its permission to `0600`, then always read it from there. Do not ask for it in
+chat either. If `SCRAPEUNBLOCKER_KEY` or an existing `.env` is present, use that instead of the
+block; if neither exists, collect it with Python `getpass` as hidden terminal input. `getpass` runs
+only in the argument-free interactive run: `--help`, `--fixture-demo`, and `--plan` are
+non-interactive and read the key only from the environment or `.env`; when it is missing, exit
+non-zero with a clear message and never reach `getpass`. The key must never appear in HTML, JSON,
+logs, command-line arguments, fixtures, or terminal output.
 
 ## User input
 
-Collect these answers once: departure city or airport, one or two outbound/return
-date windows, trip length, per-person budget and currency, maximum stops, longest acceptable one-way time, places that must be allowed, places that must be excluded, and Quick or
-Deep mode.
+Your input is the block up top, do not ask it again in chat. Fill fields absent from the block
+with reasonable assumptions and read the assumptions back as one line in the execution plan:
+maximum stops 1, longest acceptable one-way time 8 hours, include/exclude list empty, mode Fast.
+Derive the outbound/return date window from the "Date range" line and trip length from the "Trip
+length" line; if length is not written, treat the window as one single full range.
 
-Ask no technical field names. Turn the answers into `plan.json` yourself. The departure record
+Ask no technical field names. YOU write `plan.json` during setup and leave it at the build root
+as a REAL file; it is not a user-supplied input and not a schema sample. The test is that
+`python app.py --plan plan.json` runs with no editing at all. The departure record
 and every candidate need a name, plain search name and one or more IATA codes. Create candidates
 from general knowledge, without API calls. Apply allow and exclude lists exactly.
 
@@ -48,7 +72,10 @@ The only root entry point is `app.py`; create no alternative. Its exact interfac
 
 `--fixture-demo` and `--plan` are exclusive; `--hotel-canary` requires `--plan`. Invalid combinations
 exit `2` without input. `--help` exits `0` without stdin/`input`, `getpass`, SDK/network or any file write. Do not import the SDK at module level; import `scrapeunblocker` lazily inside the
-function that makes the live call.
+function that makes the live call. This rule binds EVERY module, not just one file: even a
+`manifest` helper that only reads the version may not carry `from scrapeunblocker...` in its
+module body, because `--fixture-demo` must run with the SDK not installed at all (measured:
+that exact line is what broke a build).
 
 ## Two exact modes
 
@@ -62,7 +89,8 @@ Enforce these ceilings in code; a larger `plan.json` value must not override the
 ## ScrapeUnblocker integration
 
 Open the official SDK with `Client(..., max_retries=0)`; the app owns the retry policy.
-Use `client.skyscanner.flights(...)` for flights. Supply:
+Use `client.skyscanner.flights(...)` for flights. The SDK has NO other call for this product:
+never invent a method name, a parameter, or a field like `rules_hint`; fallbacks use the same two calls. Supply:
 
 - `origin`, `dest`, `depart_date`, `return_date`,
 - `adults`, `cabin`, `market`, `locale`, `currency`, `max_polls`.
@@ -83,11 +111,15 @@ a different city is not a price result.
 
 Plain-city fallback is a run-wide state machine, never Cartesian. Start
 `origin_city_fallback_attempts` and `dest_city_fallback_attempts` at `0`; neither may exceed `1`.
+INCREMENT the matching counter every time you use a fallback, and drive both the decision and the
+repeat guard off that counter. The value reaching the manifest must reflect what actually happened;
+a counter left at zero turns the report into a lie.
 
 - Normal: `origin_IATA/dest_IATA`.
 - Destination alone wrong and its counter `0`: once `origin_IATA/dest_plain_city`.
 - Origin alone wrong and its counter `0`: once `origin_plain_city/dest_IATA`.
 - For `404`, empty or ambiguous output, try the unused destination fallback, then origin fallback.
+  The order is FIXED: loosen the destination side first, the origin second. Reversed is a bug.
 - Forbid `origin_plain_city/dest_plain_city`, nested candidate loops, identical retries and any
   later city fallback on a spent side.
 
@@ -110,6 +142,15 @@ limits, do not begin the scan. Produce a dark `rapor_son.html` that says `Scan n
 the actual reason, and contains no sample fare.
 
 ## Error and retry contract
+
+The SDK does NOT return these codes, it RAISES. Every one is a `ScrapeUnblockerError`;
+the `APIError` branch carries `status_code` (measured on 0.1.8: `BlockedError`,
+`NotFoundError`, `RateLimitError`, `AuthenticationError`, `ServerError` and siblings).
+Apply the matrix below by catching those exceptions and reading `status_code`. No SDK
+exception may reach the user: the run ends with one readable warning line and a report,
+never a traceback. Measured, three separate builds died right here: one never caught
+`BlockedError`, one called a method the SDK does not have and got `AttributeError`, one
+serialized a `set` on the error path and got `TypeError`.
 
 - `400`, `401`, `402`, `422`: key, plan or parameter error. Do not retry; stop immediately.
 - `403`: source block. Do not repeat the same request.
@@ -135,9 +176,16 @@ Cache every successful route response as gzipped JSON, keyed by SHA-256 of the e
 parameters and never containing the API key. TTL is six hours. A cache hit must not increase the
 network-attempt or 2xx counters.
 
+Every dict that gets written to JSON or turned into a cache key must stay JSON-serializable.
+A build that put a `set` into its request parameters crashed with
+`TypeError: Object of type set is not JSON serializable` the moment `json.dumps` ran on the
+error path (measured): a run that hit `403` printed a traceback instead of a calm warning.
+Convert sets to sorted lists before putting them in a dict; the same rule covers manifest,
+history and report data.
+
 After every completed search, immediately rewrite `rapor_son.html` and `run_manifest.json` so
 the user can see the first opportunities while a long scan continues. The manifest must carry at
-least: prompt and SDK versions; run ID plus UTC start and finish times; mode and hard budgets;
+least: prompt (`prompt_version=2.0.0`) and SDK versions; run ID plus UTC start and finish times; mode and hard budgets;
 status (starting, canary, running, completed, partial, blocked); completed and planned searches;
 network attempts, successful 2xx responses and cache hits; `origin_city_fallback_attempts` and
 `dest_city_fallback_attempts`; data sources, warnings and output path.
@@ -161,12 +209,42 @@ Generate one mobile-friendly, offline HTML file. Use this dark palette: backgrou
 `default-src 'none'`. Booking URLs may be normal links that open only on a click.
 Above the fold, show mode, scan status, in-budget route count, cheapest route and price movement. Every card must show data time and the per-person label. Put failed routes and their reasons in a separate table.
 
+There is ONE renderer path for the report. Don't add a second draw path, a label variant, or
+a punctuation change just to move a measurement count (tried: `<p class="sehir">` ->
+`<div>` was done purely to lower a measurement count, reverted, the test pinning it was
+deleted). A measurement change is only made when it genuinely improves the SCREEN.
+
+Images from outside ScrapeUnblocker, like airline logos, are also converted to data-URI and
+embedded; the report stays complete offline, no image is fetched from an external host.
+
+The price map (cheap-to-expensive bar, budget line in yellow, over-budget in red) and the
+three stat cards above it are the report's MAIN visual; they are drawn, not described in text.
+
+### The report's look is part of the product
+
+This report gets shown on screen; a working but plain page does not sell the product. This
+skeleton is MANDATORY:
+
+- A one-sentence VERDICT bar at the very top, with a four-box number strip below it
+  (`display:grid`).
+- The first-screen routes render as side-by-side CARDS (`grid-template-columns` + `minmax`,
+  stacking on narrow screens); each card carries a rank number, the route, the price, the
+  date window, the per-person label and the source date.
+- Bind the colours above to CSS variables (`--bg`, `--panel`, `--border`, `--heading`,
+  `--text`, `--muted`); always read colours from them, never repeat the hex in every rule.
+- Do not ship default-looking tables: header row on its own background, thin row dividers,
+  numeric cells right-aligned.
+- Body width at most 1100px, line-height at least 1.5, section spacing at least 32px.
+- The embedded CSS must be at least 3,000 characters. That is a floor, not decoration: every
+  attempt below it rendered as plain default browser output on screen (measured).
+
 ## Fixture demo and delivery proof
 
 `python app.py --fixture-demo` must rewrite real root `rapor_son.html` and `run_manifest.json`
 without key/`.env`/`getpass`/SDK/network. Above the fold, show
 `DEMO / FIXTURE — not a live fare`. The manifest must include `data_mode: "fixture_demo"`,
-`status: "demo"`, the same warning and zero network/2xx counters.
+`status: "demo"`, zero network/2xx counters, and inside `warnings` the BYTE-IDENTICAL text
+from the report. Shortening it, changing the dash, or rewording it is not acceptable.
 
 Just before the final response, run a clean subprocess demo; verify both paths exist and
 are non-empty, that `HTMLParser` and `json.load` parse them, and that both carry the DEMO/FIXTURE
@@ -181,7 +259,9 @@ Write `unittest` tests and small JSON fixtures that never touch the live API. Pr
 2. Allow and exclude filtering.
 3. Correct origin and destination matching.
 4. Stop and duration filtering.
-5. The `400/401/402/403/404/422/429/500/502/503/504` and timeout matrix.
+5. The `400/401/402/403/404/422/429/500/502/503/504` and timeout matrix. Drive it with a
+   fake SDK that RAISES; the `403` run must finish without a traceback, write its report
+   and manifest, and every dict produced on that path must survive `json.dumps`.
 6. A block page inside HTTP 200 is not successful.
 7. Cache prevents the second network request.
 8. Successful-request and total-attempt budgets cannot be exceeded.
@@ -191,8 +271,16 @@ Write `unittest` tests and small JSON fixtures that never touch the live API. Pr
 12. `app.py --help` exits `0` without input, `getpass`, SDK, network or file writes.
 13. The keyless `--fixture-demo` creates two real, non-empty, parseable DEMO outputs and keeps
     manifest network counters at zero.
-14. In a two-destination by two-window scenario, origin/dest plain-city fallbacks run at most once
+14. A `plan.json` exists at the root, opens with `json.load`, and `--plan plan.json` is accepted
+    with no editing.
+15. In a two-destination by two-window scenario, origin/dest plain-city fallbacks run at most once
     per side for the whole run, form no Cartesian retry pattern and follow the exact call order.
+    The test must also assert the FIRST fallback happens on the DESTINATION side and go red when
+    the origin side loosens first. Measured: one build tried the origin side first.
+16. The price map renders in the HTML with over-budget places marked by a distinct class;
+    airline logos come out as embedded data-URIs, no external `src=http`.
+17. The `.env` file is written once with `0600` permissions, and the key is never printed to the
+    screen, a log or the report. Measured: one build skipped the permission step.
 
 Run all tests, compile every Python file, then without touching the API key run the canonical
 `python app.py --fixture-demo` to produce the real HTML and manifest and repeat the delivery proof

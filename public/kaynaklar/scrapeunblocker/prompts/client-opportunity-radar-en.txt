@@ -1,15 +1,24 @@
+## INPUT — fill in this block only
+
+```text
+ScrapeUnblocker API key: PASTE_HERE
+Area: HERE
+Industry: HERE
+Service I sell: HERE
+Scan: Fast
+```
+
+Your input is this block. Do not ask me questions in chat, fill missing fields with
+reasonable assumptions and continue. If the key line is empty or still says PASTE_HERE, do
+NOT start live collection: build the product, run the tests, produce the offline example
+output, and at the end state in one line that the key is missing. Area can be a district,
+city, or neighborhood. Read the target back in one line before starting.
+
 Claude Code, build a working mini-product in this folder. Call it **Local Customer
 Opportunity Radar**. Do not ask me technical questions. Create the required files,
 run the tests, and prepare the product. Choose safe defaults when details are missing.
 
 ## Product outcome
-
-I will provide a region, an industry, and the service I sell. Example: `Kadikoy`,
-`dental clinic`, and `website design`.
-
-Before writing code, ask one message containing only: region, industry, service sold,
-and `quick` or `deep` mode. Read my answer back as one execution plan. Do not include
-the API key in these questions.
 
 The product must find local businesses and inspect each one. Do not return a plain
 directory. Answer these two questions:
@@ -31,8 +40,14 @@ message. Detailed evidence cards must follow.
 - That file must install dependencies and launch the application automatically.
 - Git-ignore `.venv`, `.env`, `.cache`, and `cikti`.
 - Use no data provider other than ScrapeUnblocker.
-- Do not use direct `requests`, `curl`, `urlopen`, or browser automation.
-- Route every network request through the official ScrapeUnblocker client.
+- Route every page, search, and data request through the official ScrapeUnblocker client.
+  Do not fetch pages with `requests`, `selenium`, `playwright`, `aiohttp`, `pycurl`, or `curl`.
+- The single exception is the raw bytes of a cover image: an image whose address was found
+  through ScrapeUnblocker may be downloaded directly in one helper function with a size cap.
+  That helper must fall back to the ScrapeUnblocker image endpoint when it fails. Measured:
+  covers coming from the image endpoint are ~527 KB PNGs and push the report to 27 MB, while
+  the same image is a 47 KB JPEG from its own address. Do not write a second direct download,
+  and never use it to fetch a page or JSON.
 
 Use one exact CLI contract. Do not invent aliases:
 
@@ -44,13 +59,19 @@ The required names are `--region` and `--industry`; the other product arguments 
 `--service`, `--mode {quick,deep}`, `--count`, `--query-variants`, `--output`,
 `--cache-hours`, `--no-cache`, and `--rebuild-report`. `start.py` must pass every
 argument through unchanged. `--help` must exit zero without input, `getpass`, package
-installation, SDK/network access, or file writes. If region or industry is absent,
-show help and exit `2` before asking for a key.
+installation, SDK/network access, or file writes. Order matters: `baslat.py` must inspect
+the arguments BEFORE creating the virtualenv, so `--help` and the missing-argument paths
+are answered without touching setup at all. A launcher that bootstraps unconditionally
+breaks this silently. If region or industry is absent, show help and exit `2` before
+asking for a key.
 
-Never ask for the API key in chat. Do not accept it as a command-line argument.
-Check `SCRAPEUNBLOCKER_KEY`, then the local `.env` file. If neither exists, use
-Python `getpass` for hidden terminal input. Save it locally with file mode `0600`.
-Never write the key to HTML, JSON, CSV, logs, shell history, or error messages.
+Take the key from the input block above. Your first step is to write it to `.env` in
+one shot and set its permission to `0600`, then always read it from there. Do not ask
+for it in chat either, and do not accept it as a command-line argument. If
+`SCRAPEUNBLOCKER_KEY` or an existing `.env` is present, use that instead of the block;
+if neither exists and the block is also empty, use Python `getpass` for hidden
+terminal input as a last resort. Never write the key to HTML, JSON, CSV, logs, cache,
+shell history, or error messages; never echo it back in chat or print it to the terminal.
 
 ## Two execution modes
 
@@ -71,10 +92,17 @@ parameters. Never put the API key into a cache key. Record cache hits in the man
 The first network call must be one Google Local health canary:
 
 ```python
-su.google_local(keyword, proxy_country="TR", hl="tr", gl="tr")
+su.google_local(keyword, hl="tr", gl="tr")
 ```
 
-Attempt this endpoint exactly once and do not retry it. When the response has a
+Never send `proxy_country` on any call. The account has no Turkish proxy pool:
+`proxy_country="TR"` makes `get_page_source` return `400 No proxies found for country
+'TR'`, and it pushes the Google endpoints into a CAPTCHA wall. Locale comes from `hl`
+and `gl` only. This holds for all three routes: `google_local`, `serp`, and
+`get_page_source`.
+
+Call this endpoint exactly once for the WHOLE run. Never call it a second time, not for
+pagination, a second query, or re-verification. Do not retry it either. When the response has a
 non-empty, valid `results` array, use it as the primary discovery source. Safely read
 `name`, `rating`, `reviews`, `category`, `address`, `phone`, `website`, `hours`,
 `position`, and `sponsored`. Never infer a missing field.
@@ -91,14 +119,37 @@ Google consent pages, traffic challenges, and bot interstitials even when HTTP i
 Make the retry matrix explicit and testable:
 
 - `401` and `402`: Stop immediately. Never retry.
-- `400`, `403`, `404`, `415`, and `422`: Do not retry the same endpoint.
+- `400`, `403`, `404`, `415`, and `422`: Do not retry the same endpoint. Not retrying is
+  not giving up: after a `403` the run CONTINUES down the official fallback path above.
+  Measured: one build stopped dead on a Google Local `403`, never tried `serp`, and
+  emitted an empty report; read alone, the matrix makes stopping look compliant.
+- Google Local's `403` is the single exception. There a `403` is not a permanent ban but
+  Google's probabilistic robot check: measured, two of six attempts returned results. Make
+  at most eight attempts for the same query, then continue the run down the official
+  fallback path. Never exceed eight and never carry this exception to another endpoint. A
+  build that falls back on the first `403` reads local packs out of HTML when structured
+  data was still within reach.
 - `408`, `429`, `500`, `502`, `503`, and `504`: At most three total attempts.
 - Connection failures and local timeouts: At most three total attempts.
 - Backoff: Short exponential delays, capped at four seconds.
 
-Open the official client with `max_retries=0`. Our code must own retry decisions so
+Open the official client with exactly this line, do not rename the class:
+
+```python
+from scrapeunblocker import Client
+su = Client(api_key=key, timeout=180.0, max_retries=0)
+```
+
+Our code must own retry decisions so
 the budget and manifest show the real number of attempts. Count every successful
 `2xx` as a potentially billable request. Track rejected `2xx` challenge pages separately.
+
+Do not assume the SDK's return shape, it was measured: `google_local` and `serp` return
+parsed JSON directly (a `dict`), while `get_page_source` returns plain HTML text (a `str`).
+There is NO response object carrying `.ok`, `.status_code`, `.json()` or `.text`; a build
+that wrote `resp.ok` crashed with `AttributeError`. Errors do not arrive as return values
+either, they arrive as EXCEPTIONS: exceptions in the `ScrapeUnblockerError` family carry
+`status_code`. Implement the retry matrix above with `try/except`, never `if resp.ok`.
 
 ## Entity resolution
 
@@ -173,7 +224,7 @@ Create a timestamped folder for every run. These five files are mandatory:
 1. `rapor.html`: Dark, single-file, offline report.
 2. `leads.csv`: Rank, name, scores, reason, phone, site, address, and message.
 3. `evidence.json`: Evidence, findings, and outreach gate per business.
-4. `run_manifest.json`: Versions, mode, budgets, counters, endpoints, and warnings.
+4. `run_manifest.json`: Versions (`prompt_version=2026-08-17-v3`), mode, budgets, counters, endpoints, and warnings.
 5. `bulgular.json`: Complete clean data needed to redraw the report.
 
 The HTML must make no automatic request to a CDN, font, image, script, or remote host.
@@ -185,16 +236,63 @@ Separate manifest counters for API attempts, successful `2xx`, rejected `2xx`, c
 hits, and businesses. Store the Google Local canary result separately. Never estimate
 the account's remaining credits.
 
+## Cover images, embedded video, and scan layout
+
+Build the screen to be scanned, not read. Do not write long plain paragraphs. Keep the
+evidence sentence behind a closed expandable section; only the heading stays always
+visible. The first viewport must contain a real image, not text alone.
+
+The Instagram post box with a downloaded cover must open by default as soon as the page
+loads. Whether it opens or stays closed must depend only on whether there is at least
+one card to show, never on download success. A wrong design does the opposite: it closes
+the box when every cover downloaded and opens it only when one failed. That hides the
+product's strongest content and surfaces only the failure. Never build that logic.
+
+Never render a bare or empty embedded player for a post whose cover failed to download.
+Show a compact, single-line "Open on Instagram" link badge instead. When more than one
+post lacks a cover, group them into a single badge that states the count; never print a
+separate badge for each one.
+
+Record how many covers were attempted, how many downloaded, and why the rest failed in
+both `run_manifest.json` and the run notes. Silent cover failure is forbidden. Store
+every downloaded cover as an embedded data URI, never as an external image link, so the
+report opens fully offline.
+
+Show at most a few posts per business: one post from the name search if present,
+otherwise up to five posts harvested from the Instagram profile. The copy-message
+button must show "Copied" on click; if the browser blocks it, show "Could not copy,
+select manually" and revert after a short delay.
+
+### The report's look is part of the product
+
+This report gets shown on screen; a working but plain page does not sell the product. This
+skeleton is MANDATORY:
+
+- A one-sentence VERDICT bar at the very top, with a four-box number strip below it
+  (`display:grid`).
+- The five first-screen opportunities render as side-by-side CARDS (`grid-template-columns`
+  + `minmax`, stacking on narrow screens); each card carries a rank number, the business
+  name, short blocks labelled `WHY`/`MESSAGE`/`SCORE`, and evidence inside `<details>`.
+- Define the palette as CSS variables (`--bg`, `--panel`, `--border`, `--text`, `--muted`,
+  `--accent`) and always read colours from them.
+- Do not ship default-looking tables: header row on its own background, thin row dividers,
+  numeric cells right-aligned.
+- Body width at most 1100px, line-height at least 1.5, section spacing at least 32px.
+- The embedded CSS must be at least 3,000 characters. That is a floor, not decoration: every
+  attempt below it rendered as plain default browser output on screen (measured).
+
 ## Test and acceptance gate
 
 Write offline `unittest` fixture tests. They must never call the real API. Use a fake
 official client. Verify at least these scenarios:
 
 - Healthy Google Local canary with exactly one call.
-- No retry after Google Local `403`.
+- Google Local `403` attempts never exceed eight for the same query.
+- The same `403` run continues via `serp` or `get_page_source`: in the fake client's call
+  log the fallback appears at least once and the run does not end with an empty report.
 - Each of `401` and `402` stops after one attempt in its own table-driven `subTest`.
-- Each of `400`, `403`, `404`, `415`, and `422` is proven non-retryable in its own
-  table-driven `subTest`.
+- Each of `400`, `404`, `415`, and `422` is proven non-retryable in its own table-driven
+  `subTest`; `403` is proven the same way on every endpoint except Google Local.
 - Each of `408`, `429`, `500`, `502`, `503`, and `504` is proven to make no more than
   three total attempts in its own `subTest`; test timeout and network failure separately.
 - Hard 30 and 70 attempt budgets.
@@ -203,7 +301,8 @@ official client. Verify at least these scenarios:
 - No "no website" finding when a site was found.
 - No contradiction between "not visible" and "I found you there."
 - All five output files and an offline CSP.
-- No direct network client in the application code.
+- No direct network client on the page and data path: no second direct HTTP call beyond the
+  cover downloader, and the fixture run must make no real network connection at all.
 - `--help` exits zero with no input, key, SDK, network, install, or write side effect.
 - In a clean copy with no `.venv`, use a fresh supported Python 3.10+ interpreter.
   No arguments, only `--bolge`, and only `--sektor` must each show help, exit `2`

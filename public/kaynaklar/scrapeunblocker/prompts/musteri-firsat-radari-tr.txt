@@ -1,15 +1,23 @@
+## GİRDİ — yalnız bu bloğu doldur
+
+```text
+ScrapeUnblocker API anahtarım: BURAYA_YAPIŞTIR
+Bölge: BURAYA
+Sektör: BURAYA
+Sattığım hizmet: BURAYA
+Tarama: Hızlı
+```
+
+Girdin bu bloktur. Sohbette bana soru sorma, eksik alanı makul varsayımla doldurup devam
+et. Anahtar satırı boş ya da hala `BURAYA_YAPIŞTIR` ise canlı veri toplamaya HİÇ girme:
+ürünü kur, testleri koş, ağsız örnek çıktıyı üret ve sonunda tek satırla anahtarın eksik
+olduğunu söyle. Bölge ilçe, şehir ya da mahalle olabilir. Başlamadan önce hedefi tek satır geri oku.
+
 Claude Code, bu klasörde çalışan bir mini ürün kurmanı istiyorum. Ürünün adı
 **Müşteri Fırsat Radarı** olsun. Bana teknik soru sorma. Gerekli dosyaları oluştur,
 testleri çalıştır ve ürünü hazırla. Eksik bilgi varsa güvenli varsayılanı seç.
 
 ## Ürünün sonucu
-
-Bir bölge ve sektör yazacağım. Ayrıca hangi hizmeti sattığımı belirteceğim.
-Örnek: `Kadıköy`, `diş kliniği`, `web sitesi`.
-
-Kod yazmadan önce tek mesajda yalnız bölgeyi, sektörü, sattığım hizmeti ve `hizli`
-veya `derin` modu sor. Cevabımı tek bir çalışma planı olarak geri oku. API anahtarını
-bu sorulara katma.
 
 Ürün yerel işletmeleri bulsun. Her işletmeyi ayrı ayrı incelesin. Sonuçta bana
 yalnız bir isim listesi vermesin. Şu iki soruyu cevaplasın:
@@ -30,8 +38,13 @@ güven puanı, ana neden ve kısa mesaj bulunsun. Ardından ayrıntılı kartlar
 - Aynı dosya paketleri otomatik kursun ve uygulamayı başlatsın.
 - `.venv`, `.env`, `.cache` ve `cikti` git tarafından yok sayılsın.
 - ScrapeUnblocker dışındaki hiçbir servis veya veri API'si kullanılmasın.
-- Doğrudan `requests`, `curl`, `urlopen` veya tarayıcı otomasyonu kullanma.
-- Bütün ağ çağrıları resmi ScrapeUnblocker istemcisinden geçsin.
+- Sayfa, arama ve veri getiren bütün çağrılar resmi ScrapeUnblocker istemcisinden geçsin.
+  `requests`, `selenium`, `playwright`, `aiohttp`, `pycurl` ya da `curl` ile sayfa çekme.
+- Tek istisna kapak görselinin ham baytıdır: adresi ScrapeUnblocker ile bulunmuş bir görsel,
+  tek bir yardımcı fonksiyonda, boyut sınırıyla doğrudan indirilebilir. O fonksiyon başarısız
+  olursa ScrapeUnblocker'ın görsel ucuna düşsün. Ölçüldü: görsel ucundan gelen kapaklar
+  ~527 KB PNG oluyor ve rapor 27 MB'a çıkıyor, aynı görsel kendi adresinden 47 KB JPEG geliyor.
+  İkinci bir doğrudan indirme yazma; sayfa ya da JSON çekmek için asla kullanma.
 
 Tek komut satırı sözleşmesi kullan. Alternatif argüman adları üretme:
 
@@ -43,14 +56,18 @@ Zorunlu adlar `--bolge` ve `--sektor`; diğer ürün argümanları `--satis`,
 `--mod {hizli,derin}`, `--sayi`, `--varyantlar`, `--cikti`, `--cache-saat`,
 `--cache-yok` ve `--rapor-yenile` olsun. `baslat.py` argümanları değiştirmeden
 uygulamaya iletsin. `--help`, kullanıcı girdisi, `getpass`, paket kurulumu, SDK/ağ
-çağrısı veya dosya yazımı yapmadan sıfır koduyla çıksın. Bölge ya da sektör eksikse
+çağrısı veya dosya yazımı yapmadan sıfır koduyla çıksın. Sıra önemli: `baslat.py`
+sanal ortamı kurmadan ÖNCE argümanlara baksın, `--help` ve eksik argüman yolları
+kurulumdan hiç geçmeden cevaplansın. Kuruluma koşulsuz başlayan bir başlatıcı bu
+şartı sessizce çiğner. Bölge ya da sektör eksikse
 anahtar istemeden yardım gösterip kod `2` ile çıksın.
 
-API anahtarını benden sohbet içinde isteme. Komut satırı argümanı da ekleme.
-Önce `SCRAPEUNBLOCKER_KEY` ortam değişkenine bak. Sonra yerel `.env` dosyasına bak.
-Anahtar yoksa Python `getpass` ile gizli terminal girdisi iste. Anahtarı `.env`
-içinde saklarken dosya iznini `0600` yap. Anahtarı HTML, JSON, CSV, log, shell
-history veya hata metnine asla yazma.
+Anahtarı yukarıdaki girdi bloğundan al. İlk işin onu `.env` dosyasına tek seferde yazıp
+iznini `0600` yapmak olsun, sonra hep oradan oku. Sohbette ayrıca anahtar isteme, komut
+satırı argümanı ekleme. Ortam değişkeni `SCRAPEUNBLOCKER_KEY` ya da mevcut bir `.env`
+varsa blok yerine onu kullan; ikisi de yoksa ve blok da boşsa Python `getpass` ile gizli
+terminal girdisi iste. Anahtarı HTML, JSON, CSV, log, cache, shell history veya hata
+metnine asla yazma; sohbete geri yazma ve terminale bastırma.
 
 ## İki kullanım modu
 
@@ -72,10 +89,16 @@ sayısını ayrıca göster.
 İlk ağ çağrısı bir Google Local sağlık kanaryası olsun:
 
 ```python
-su.google_local(keyword, proxy_country="TR", hl="tr", gl="tr")
+su.google_local(keyword, hl="tr", gl="tr")
 ```
 
-Bu uç yalnız bir kez denensin. Otomatik retry uygulanmasın. Cevapta dolu ve geçerli
+Hiçbir çağrıda `proxy_country` gönderme. Hesabın Türkiye vekil havuzu boş:
+`proxy_country="TR"` verildiğinde `get_page_source` `400 No proxies found for country
+'TR'` döner, Google uçları da captcha duvarına düşer. Yerellik yalnız `hl` ve `gl`
+ile sağlanır. Bu üç yol için de geçerlidir: `google_local`, `serp`, `get_page_source`.
+
+Bu uç tüm koşuda TOPLAM bir kez çağrılsın. Sayfalama, ikinci sorgu ya da yeniden
+doğrulama için bile ikinci kez çağırma. Otomatik retry de uygulanmasın. Cevapta dolu ve geçerli
 bir `results` listesi varsa ana keşif kaynağı olarak kullan. Her kayıtta `name`,
 `rating`, `reviews`, `category`, `address`, `phone`, `website`, `hours`, `position`
 ve `sponsored` alanlarını güvenli biçimde oku. Eksik alan için değer uydurma.
@@ -94,14 +117,37 @@ HTTP `200` olsa bile engel sayfasını reddet.
 Retry matrisi açık ve test edilebilir olsun:
 
 - `401` ve `402`: Anında dur. Tekrar yapma.
-- `400`, `403`, `404`, `415`, `422`: Aynı endpoint'i tekrar etme.
+- `400`, `403`, `404`, `415`, `422`: Aynı endpoint'i tekrar etme. Tekrar etmemek
+  vazgeçmek değildir: `403` sonrası koşu yukarıdaki resmi fallback yoluyla DEVAM eder.
+  Ölçüldü, bir kurulum Google Local `403` alınca hiç `serp` denemeden durdu ve boş rapor
+  üretti; matris tek başına okununca "durmak" da kurallı görünüyor.
+- Tek istisna Google Local'in `403`üdür. Orada `403` kalıcı yasak değil, Google'ın
+  olasılıksal robot kontrolüdür: ölçüldü, altı denemenin ikisi sonuç verdi. Aynı sorgu
+  için en fazla sekiz deneme yap, denemeler tükenince koşuyu resmi fallback yoluyla
+  sürdür. Sekizi aşma ve bu istisnayı başka hiçbir uca taşıma. Tek `403`te fallback'e
+  düşen kurulum, yapılandırılmış yerel paketi elde edebilecekken HTML'den okumak
+  zorunda kalıyor.
 - `408`, `429`, `500`, `502`, `503`, `504`: En fazla üç toplam deneme.
 - Ağ bağlantısı ve yerel timeout: En fazla üç toplam deneme.
 - Bekleme: Kısa üstel geri çekilme. En fazla dört saniye.
 
-Resmi istemciyi `max_retries=0` ile aç. Retry kararını bizim kodumuz versin.
+Resmi istemciyi şu satırla aç, sınıf adını değiştirme:
+
+```python
+from scrapeunblocker import Client
+su = Client(api_key=anahtar, timeout=180.0, max_retries=0)
+```
+
+Retry kararını bizim kodumuz versin.
 Böylece bütçe ve manifest gerçek deneme sayısını göstersin. Başarılı her `2xx`
 çağrıyı olası faturalanan çağrı olarak say. Kullanılmayan engel sayfasını ayrıca say.
+
+SDK'nın dönüş biçimini varsayma, ölçüldü: `google_local` ve `serp` doğrudan çözümlenmiş
+JSON döndürür (`dict`), `get_page_source` ise düz HTML metni döndürür (`str`). `.ok`,
+`.status_code`, `.json()` ya da `.text` alanı olan bir yanıt nesnesi YOKTUR; `cevap.ok`
+yazan kurulum `AttributeError` ile düştü. Hata da dönüş değeriyle gelmez, İSTİSNA ile
+gelir: `ScrapeUnblockerError` soyundan istisnalar `status_code` taşır. Yukarıdaki retry
+matrisini `if cevap.ok` ile değil `try/except` ile kur.
 
 ## İşletme kimliği
 
@@ -174,7 +220,7 @@ Her koşu zaman damgalı bir klasör oluştursun. Şu beş dosya zorunlu:
 1. `rapor.html`: Koyu temalı, tek dosya ve çevrimdışı rapor.
 2. `leads.csv`: Sıra, ad, puanlar, ana neden, telefon, site, adres ve mesaj.
 3. `evidence.json`: Her işletmenin kanıtları, bulguları ve mesaj kapısı.
-4. `run_manifest.json`: Sürüm, mod, bütçe, sayaç, endpoint ve uyarılar.
+4. `run_manifest.json`: Sürüm (`prompt_version=2026-08-17-v3`), mod, bütçe, sayaç, endpoint ve uyarılar.
 5. `bulgular.json`: Raporu tekrar çizecek tam temiz veri.
 
 HTML hiçbir CDN, font, görsel, script veya dış otomatik istek kullanmasın. Sıkı CSP
@@ -186,16 +232,60 @@ Manifest şu sayaçları ayırsın: API denemesi, başarılı `2xx`, reddedilen 
 isabeti ve işletme sayısı. Google Local kanaryasının sonucu ayrıca kaydedilsin.
 Kalan kredi miktarını tahmin etme.
 
+## Kapak, gömülü video ve tarama düzeni
+
+Ekran okunmak için değil taranmak için kurulsun. Uzun düz paragraf yazma. Kanıt cümlesi
+kapalı bir açılır bölümün arkasında dursun, yalnız başlık her zaman görünsün. İlk ekranda
+gerçek bir görsel bulunsun, yalnız metin olmasın.
+
+Kapaklı Instagram gönderisi kutusu sayfa açılır açılmaz açık dursun. Açık ya da kapalı
+doğması indirme başarısına göre değil, gösterilecek en az bir kart olup olmadığına göre
+kararlaşsın. Yanlış tasarım tam tersini yapar: bütün kapaklar indiyse kutuyu kapatır,
+yalnız biri düşerse açar. Bu, ürünün en güçlü içeriğini gizler, yalnız başarısızlığı öne
+çıkarır. Böyle bir mantık kurma.
+
+Kapağı inmeyen gönderi için çıplak veya boş bir gömülü oynatıcı basma. Yerine kompakt,
+tek satırlık bir "Instagram'da aç" bağlantı rozeti koy. Birden fazla kapaksız gönderi
+varsa hepsini tek rozette topla, kaç tane olduğunu söyle; her biri için ayrı rozet basma.
+
+Kaç kapak denendiği, kaçının indiği ve düşenlerin nedeni `run_manifest.json`'a ve koşu
+notlarına yazılsın. Sessiz kapak başarısızlığı yasak. İndirilen her kapak gömülü veri
+adresi (data-URI) olarak saklansın, dış görsel bağlantısı olarak değil; rapor tamamen
+çevrimdışı açılabilsin.
+
+Bir işletmede en fazla birkaç gönderi göster: kendi adı aramasından çıkan bir gönderi,
+yoksa Instagram profilinden toplanan en fazla beş gönderi. Mesaj kopyalama düğmesi
+tıklanınca "Kopyalandı" yazsın; tarayıcı izin vermezse "Kopyalanamadı, elle seçin" yazıp
+kısa süre sonra eski haline dönsün.
+
+### Raporun görünümü de ürünün parçasıdır
+
+Bu rapor ekranda gösterilir; çalışan ama düz bir sayfa ürünü satmaz. Şu iskelet ZORUNLU:
+
+- En üste tek cümlelik KARAR şeridi, altına dört kutuluk sayı şeridi (`display:grid`).
+- İlk ekrandaki beş fırsat yan yana KART olsun (`grid-template-columns` + `minmax`, dar
+  ekranda alt alta); her kartta sıra numarası, işletme adı, `NEDEN`/`MESAJ`/`PUAN` etiketli
+  kısa bloklar ve `<details>` içinde kanıt.
+- Paleti CSS değişkeniyle tanımla (`--zemin`, `--panel`, `--kenar`, `--metin`, `--soluk`,
+  `--vurgu`); rengi hep değişkenden oku.
+- Tabloyu varsayılan görünümde bırakma: başlık satırı ayrı zeminde, ince satır ayracı, sayı
+  hücreleri sağa yaslı.
+- Gövde en fazla 1100px, satır yüksekliği en az 1.5, bölüm aralığı en az 32px.
+- Gömülü CSS en az 3.000 karakter olsun. Bu süs değil taban: bu sınırın altında kalan her
+  deneme ekranda varsayılan tarayıcı görünümüne düştü (ölçüldü).
+
 ## Test ve teslim kapısı
 
 `unittest` ile ağsız fixture testleri yaz. Testler gerçek API çağrısı yapmasın. Sahte
 resmi istemci kullan. En az şu durumları doğrula:
 
 - Sağlıklı Google Local kanaryası ve yalnız bir çağrı.
-- Google Local `403` sonrası retry yapılmaması.
+- Google Local `403` denemelerinin aynı sorgu için sekizi aşmaması.
+- Aynı `403` koşusunun `serp` ya da `get_page_source` çağrısıyla devam etmesi: sahte
+  istemcinin çağrı kaydında fallback en az bir kez görünsün, koşu boş raporla bitmesin.
 - `401` ve `402` kodlarının her birinin ayrı `subTest` içinde tek denemede duruşu.
-- `400`, `403`, `404`, `415` ve `422` kodlarının her birinin ayrı `subTest` içinde
-  tekrar edilmemesi.
+- `400`, `404`, `415` ve `422` kodlarının her birinin ayrı `subTest` içinde tekrar
+  edilmemesi; `403` Google Local dışındaki uçlarda aynı şekilde sınansın.
 - `408`, `429`, `500`, `502`, `503` ve `504` kodlarının her birinin ayrı `subTest`
   içinde en fazla üç toplam deneme yapması; timeout ve ağ hatası da ayrıca sınansın.
 - 30 ve 70 deneme sınırlarının aşılamaması.
@@ -204,7 +294,8 @@ resmi istemci kullan. En az şu durumları doğrula:
 - Site bulunduğunda "site yok" bulgusu çıkmaması.
 - "Görünmüyor" ile "sizi gördüm" çelişkisinin engellenmesi.
 - Beş zorunlu çıktı ve çevrimdışı CSP.
-- Kodda doğrudan ağ istemcisi bulunmaması.
+- Sayfa ve veri yolunda doğrudan ağ istemcisi bulunmaması: kapak indirici dışında ikinci bir
+  doğrudan HTTP çağrısı olmaması ve fixture koşusunun gerçek ağa hiç çıkmaması.
 - `--help` çağrısının hiçbir input, key, SDK, ağ veya yazım yan etkisi olmadan sıfır dönmesi.
 - `.venv` bulunmayan temiz bir proje kopyasında, taze Python 3.10+ ile argümansız,
   yalnız `--bolge` ve yalnız `--sektor` çağrılarının yardım metnini göstermesi;

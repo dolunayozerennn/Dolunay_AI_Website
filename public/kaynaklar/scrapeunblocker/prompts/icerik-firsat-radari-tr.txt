@@ -1,229 +1,365 @@
-Yerel bir **Icerik Firsat Radari** kur. TikTok hesabimi rakiplerle karsilastirsin.
-Instagram'i istege bagli eklesin. Tek dosyalik koyu HTML rapor uretsin.
+## GIRDI — yalniz bu blogu doldur
 
-Urünü kur, test et, veriyi topla ve raporu ac. Bana terminal isi birakma.
+```text
+ScrapeUnblocker API anahtarim: BURAYA_YAPISTIR
+Yaptigim is: BURAYA_TEK_CUMLE
+Kendi Instagram hesabim: @BURAYA
+Rakip Instagram hesaplari: @BURAYA, @BURAYA
+Rakip TikTok hesaplari: (istege bagli, bos kalabilir)
+Tarama: Hizli
+```
 
-## Once yalniz bunlari sor
+Girdin bu bloktur. Sohbette bana soru sorma, eksik alani makul varsayimla doldurup devam
+et. Anahtar satiri bos ya da hala `BURAYA_YAPISTIR` ise canli veri toplamaya HIC girme:
+urunu kur, testleri kos, agsiz ornek ciktiyi uret ve sonunda tek satirla anahtarin eksik
+oldugunu soyle. `@` isareti ve tam profil adresi de
+kabul. Tek satira virgul, noktali virgul ya da "ve" ile birden cok hesap yazilabilir;
+hepsini ayri hesap say. Baslamadan once hedefi tek satir geri oku.
 
-Tek mesajda su bilgileri iste: yaptigim is (tek cumle), kendi TikTok kullanici adim, bir ile
-dort rakip TikTok kullanici adi, varsa TikTok-Instagram kullanici adi eslesmeleri, Hizli mi
-Derin mi tarama istedigim.
+Yerel bir **Icerik Firsat Radari** kur: Instagram hesabimi rakiplerle karsilastirsin,
+TikTok verildiyse ikincil kaynak olarak eklesin, tek dosyalik koyu HTML rapor uretsin.
+Urunu kur, test et, veriyi topla, raporu ac. Bana terminal isi birakma.
 
-API anahtarini **sohbette isteme**. Dosyalari kurduktan sonra uygulamayi etkilesimli
-terminalde ac; anahtari `getpass` ile gizli alsin. Anahtar komut satirina, Claude mesajina,
-loga, HTML'e, JSON'a veya git'e girmesin.
-
-Baslamadan once hedefi geri oku (ornek: "@ben hesabini @a ve @b ile Hizli modda
-karsilastiracagim"). Kullanici adlarinda `@` ve tam profil adresini kabul et.
-
-Zorunlu veri yolu `business_context -> run_radar -> data.json -> adapt_brief` olsun.
-`adapt_brief(business_context, evidence)` her uc brief icin cagrilsin; her `adaptation`
-normalize edilmis is cumlesini birebir icersin ve raporda **Isine uyarlama** diye gorunsun.
-Sabit `DEFAULT_ADAPTATIONS` listesi, is cumlesini yalniz yazdirmak veya sadece `data.json`a
-koymak kabul edilmez. Kanit ayni kalirken is cumlesi degisince uc adaptation da degismeli.
+Zorunlu veri yolu `business_context -> run_radar -> data.json -> adapt_brief`.
+Normalize is cumlesi `data.json` dosyasinin ICINDE de yazili dursun; anahtar adi serbest.
+`adapt_brief(business_context, evidence)` UC KEZ cagrilsin; her cagri tek kanit alip tek
+brief dondursun, toplu donus yasak. Her `adaptation` normalize is cumlesini birebir icersin
+ve raporda **Isine uyarlama** diye gorunsun. Sabit `DEFAULT_ADAPTATIONS` kabul edilmez:
+kanit ayni kalirken is cumlesi degisince uc adaptation da degismeli.
 
 ## Kuracagin dosyalar
 
-Yeni ve bos bir `icerik-firsat-radari` klasoru olustur. En az su dosyalar olsun:
+Yeni ve bos bir `icerik-firsat-radari` klasoru ac. En az: `sosyal_rontgen.py` (urun ve
+rapor), `baslat.py` (otomatik kurulum), `requirements.txt` (`scrapeunblocker==0.1.8`,
+`httpx==0.28.1`), `.gitignore` (`.env`, `.venv/`, `cache/`, `runs/`, `son_kosu.json`,
+`son_rapor.html`), `tests/fixtures/` (Instagram profil + gonderi, TikTok, SERP cevaplari),
+`tests/test_social_radar.py` (agsiz `unittest`), `README.md`.
 
-- `sosyal_rontgen.py`: urun ve rapor.
-- `baslat.py`: otomatik kurulum.
-- `requirements.txt`: `scrapeunblocker==0.1.8` ve `httpx==0.28.1`.
-- `.gitignore`: `.env`, `.venv/`, `cache/`, `runs/`, `son_kosu.json`, `son_rapor.html`.
-- `tests/fixtures/`: TikTok, Instagram ve SERP cevaplari.
-- `tests/test_social_radar.py`: agsiz `unittest` paketi.
-- `README.md`: kullanim ve sinirlar.
+`baslat.py` ilk kosuda `.venv` ve paketleri kursun; requirements hash'i degismediyse
+kurulumu atlayip urunu `.venv` Python ile acsin. Kullaniciya `pip install` yaptirma. Python
+3.10+ gerekli; surumu dogrula, dusukse net uyariyla dur.
 
-`baslat.py` ilk kosuda `.venv` ve paketleri kursun. Requirements hash'i degismediyse
-kurulumu atlasin. Urunu `.venv` Python ile acsin. Kullaniciya `pip install` yaptirma.
-
-Python 3.10 veya ustu gerekli. `baslat.py` surumu dogrulasin; dusukte net uyariyla dursun.
-
-CLI sozlesmesi birebir su olsun:
+Ilk kosuyu yukaridaki bloktan okudugun degerlerle sen baslat. Urun sonraki kosular icin su
+CLI'yi birebir tasisin:
 
 ```text
 --is METIN
---ben KULLANICI
---rakip KULLANICI       # 1-4 kez tekrarlanabilir
---eslesme TIKTOK:INSTAGRAM  # tekrarlanabilir
+--ben KULLANICI          # Instagram kullanici adi
+--rakip KULLANICI        # 1-4 kez tekrarlanabilir, Instagram
+--tiktok KULLANICI       # istege bagli, tekrarlanabilir
 --mod {hizli,derin}
 --yenile
 ```
 
-`--hesap`, `--instagram`, `--ig-eslesme`, `--refresh`, `--key` veya baska alias uretme.
-Argumansiz calistirildiginda API anahtari disindaki girdileri etkilesimli sor. `--help`
-hicbir kurulum veya ag islemi yapmadan yardimi basip `0` ile ciksin. `baslat.py`, kendi
-kurulumundan sonra ayni arguman listesini degistirmeden urune iletsin; `baslat.py --help` de
-yardimi kurulumsuz `0` ile gostersin.
+Tek `--rakip` degerinin icine virgulle birden cok hesap yazilabilsin; ayrilmazsa "@a,@b"
+tek ve sahte bir hesap olur, iki rakip birden sessizce kaybolur. `--hesap`,
+`--instagram`, `--refresh`, `--key` veya baska alias uretme. `--help` hicbir kurulum ya da
+ag islemi yapmadan yardimi basip `0` ile ciksin. `baslat.py` kendi kurulumundan sonra ayni
+arguman listesini degistirmeden urune iletsin; `baslat.py --help` de kurulumsuz `0` donsun.
 
 ## ScrapeUnblocker veri yolu
 
-Tek web veri saglayicisi ScrapeUnblocker olsun. Resmi Python SDK'sini kullan:
+Tek web veri saglayicisi ScrapeUnblocker. Resmi Python SDK:
 
 ```python
 from scrapeunblocker import Client
 su = Client(api_key=anahtar, timeout=180.0, max_retries=0)
 ```
 
-SDK tekrarlarini kapat. Tekrar, butce ve sayac kontrolu urunde olsun; boylece manifestteki
+SDK tekrarlarini kapat; tekrar, butce ve sayac kontrolu urunde olsun, boylece manifestteki
 deneme sayisi dogru kalir.
 
-`main` stub olamaz. `build_live_transports(api_key, client_cls=None)` yoksa `Client`i tembel
-import edip yukaridaki argumanlarla kursun; uc SDK adapterini
-`{"get_parsed": ..., "serp": ..., "get_page_source": ...}` sozluguyle dondursun. Degerler
-dogrudan cagrilabilir olsun, sinif olmasin. `main` bu sozlugu kullansin, transportu ikinci
-kez kurmasin. Gercek
-`get_parsed()` bir `ParsedPage(page_type, source, data, raw)` nesnesi dondurur: bunu mutlaka
+`main` stub olamaz. `build_live_transports(api_key, client_cls=None)` `Client`i tembel
+import edip yukaridaki argumanlarla kursun ve uc adapteri
+`{"get_parsed": ..., "serp": ..., "get_page_source": ...}` sozluguyle dondursun; degerler
+dogrudan cagrilabilir olsun. Gercek `get_parsed()` bir `ParsedPage(page_type, source, data,
+raw)` nesnesi dondurur; mutlaka
 `{"status_code":200,"data":{"page_type":obj.page_type,"source":obj.source,"data":obj.data}}`
-seklinde normalize et. Nesneyi oldugu gibi gecmek veya yalniz `obj.data`yi alip
-`page_type/source`u kaybetmek yasak. SDK hata `status_code`unu koru. `main` girdi -> anahtar
--> canli transport -> `run_radar` -> atomik cikti yolunu cagirir; offline erken-cikis yoktur.
-`main(argv=None, kok=None, client_cls=None)` imzasi zorunlu; ilk sira arguman listesidir.
-`kok` verilirse `runs/`, `son_kosu.json`, `son_rapor.html` ve `.env` dahil TUM ciktilar o
-klasorun altina yazilsin; `client_cls` verilirse transportlar o sinifla kurulsun. Testler
-main'i bos gecici klasorde boyle cagirir.
+diye normalize et. Nesneyi oldugu gibi gecmek ya da yalniz `obj.data`yi alip
+`page_type/source`u kaybetmek yasak. SDK hatayi ISTISNA atarak bildirir
+(`ScrapeUnblockerError` soyu, `status_code` tasir), sozluk dondurmez. Uc adapterin UCUNUN
+de govdesi `try/except` icinde olsun ve istisnayi politikana cevirsin; ham SDK istisnasi
+adapterin disina cikmasin, kullaniciya traceback dusmesin. `main` girdi ->
+anahtar -> canli transport -> `run_radar` -> atomik cikti yolunu izler, offline erken-cikis
+yoktur. `main(argv=None, kok=None, client_cls=None)` imzasi zorunlu; `kok` verilirse
+`runs/`, `son_kosu.json`, `son_rapor.html` ve `.env` dahil TUM ciktilar oraya yazilsin,
+`client_cls` verilirse transportlar o sinifla kurulsun.
 
-Birincil yol `su.get_parsed(url)`. TikTok profilinde `username/followers/following/likes/videos`;
-videoda `video_id/description/plays/likes/comments/shares/saves/reposts/posted_at/duration_s/
-cover_url/hashtags/music/author`; Instagram profilinde `username/followers/recent_posts`;
-gonderide `shortcode/caption/likes/comments/posted_at/media_type/counts_hidden` alanlarini koru.
+Resmi cevap genelde `{data:{page_type,source,data}}` bicimindedir; gecici `data`, `result`,
+`parsed_data`, `payload` sarmallarini dolas. Alan uydurma, temel sayilar yoksa reddet.
 
-Resmi cevap genelde `{data:{page_type,source,data}}` bicimindedir. Gecici `data`, `result`,
-`parsed_data`, `payload` sarmallarini dolas. Alan uydurma. Temel sayilar yoksa reddet.
+`page_type` uydurma: canli olcumde yalniz iki deger dondu, profilde `social_profile`,
+gonderi/videoda `social_post`. `instagram_post` gibi platform adli deger YOKTUR. Platformu
+adresten ayirt et. Baska deger taninmamis semadir, kontrollu ham fallback devreye girer.
 
-`page_type` uydurma. 14 Agustos 2026 canli olcumunde yalniz iki deger dondu: profilde (TikTok
-ve Instagram) `social_profile`, gonderi/videoda `social_post`. `tiktok_video` gibi platform adli
-degerler YOKTUR; onlari bekleyen dogrulayici canli veriyi topluca reddeder. Platformu adresten
-ayirt et. Baska deger taninmamis semadir, kontrollu ham fallback devreye girer.
+### Instagram birincil yoldur
 
-TikTok video adreslerini ham Google HTML'inden arama. Resmi `su.serp()` metodunu kullan:
+Profil, hesap basina tek istek: `su.get_parsed(f"https://www.instagram.com/{kullanici}/")`.
+Alanlar: `username`, `full_name`, `verified`, `private`, `biography`, `followers`,
+`following`, `external_urls`, `avatar_url`, `recent_posts`. `posts_count` cogu zaman `None`
+doner, kullanma.
 
-```python
-su.serp("site:tiktok.com/@KULLANICI/video", pages_to_check=SAYFA)
-```
+`recent_posts` 12 gonderi tasir: `shortcode`, `url`, `caption`, `thumbnail_url`,
+`media_type`, `product_type`. Bu liste gonderi adreslerini BEDAVA verir; Instagram gonderisi
+bulmak icin SERP kullanma. Icindeki `likes`, `comments`, `counts_hidden` 12/12 kayitta
+`None` geldi; profilden etkilesim sayisi BEKLEME.
 
-Cevabin her yerinde yalniz su deseni kabul et:
-`https://www.tiktok.com/@KULLANICI/video/15-25_HANELI_KIMLIK`. Kullanici adi tam
-eslesmeli. Tekrarlari ele.
+Sayilar yalniz gonderi adresinden gelir, gonderi basina bir istek:
+`su.get_parsed(gonderi_adresi)`. Alanlar: `likes`, `comments`, `counts_hidden`, `posted_at`,
+`posted_timestamp`, `post_id`, `media_type`, `product_type`, `carousel_count`, `caption`,
+`thumbnail_url`, `video_url`, `location`, `hashtags`, `author`.
 
-Ham HTML birincil kaynak degildir. `get_page_source` yalniz iki durumda kullanilir: en iyi
-videolarda altyazi/kapak eksigini tamamlamak, `parsed_data` taninmayan sema dondururse
-kontrollu TikTok fallback yapmak. Fallback'i manifest ve rapora yaz; yalniz `__UNIVERSAL_DATA_FOR_REHYDRATION__` JSON'unu
-oku. ASR/VTT'de ilk 3 saniye acilistir; gec baslangici isaretle. Kapagi
-parsed URL'den, yalniz en iyi videolar icin ve en fazla 180 KB indirip `data:` URI gom.
+**`counts_hidden: true` gelen gonderinin begeni sayisi SAHTEDIR**; Instagram begeniyi
+gizleyince `likes` alanina 3 gibi kucuk bir sayi koyar. Bu gonderi ortancaya, ortalamaya,
+brief aday havuzuna, "kazanan acilislar" listesine ve ekrandaki "kesin olcum" sayacina HIC
+girmesin; kanit tablosunda begeni hucresi sayi degil "gizli" yazsin, yorum sayisi gorunsun.
+Filtre `counts_hidden` alanina baksin; yalniz "sayac `None` mi" kontrolu gizlileri
+sizdirip dusuk yorumlu bir gonderiyi brief kazanan yapmisti.
+
+`author` bir Mapping'dir ve `username` icerir, fakat bu **taranan hesap degildir**: ortak
+(collab) paylasimda Instagram oraya obur yazari koyar. Her gonderiyi tarandigi hesabin
+adiyla etiketle; kanit cumlesinde etiket taranan hesaptir, `author` farkliysa "(@X ile
+ortak)" eklenir. Aksi halde kanit cumlesi baska hesabin ortancasina atifta bulunup kendi
+icinde yalan olur.
+
+Instagram'da izlenme, oynatma, paylasim, kaydetme ve altyazi sayaci **HIC YOKTUR**; isteme,
+tahmin etme, sifir yazma. `product_type` uc deger alir: `clips` (Reels),
+`carousel_container`, `feed`. `recent_posts` sirasi tarih sirasi DEGILDIR; sirayi
+`posted_at` ile kendin kur.
+
+### TikTok ikincil ve istege baglidir
+
+TikTok hesabi verilmediyse bu bolumu hic calistirma ve raporda "TikTok verilmedi" yaz.
+Verildiyse Instagram isi bittikten SONRA, kalan butceyle calistir.
+
+Video adreslerini ham Google HTML'inden arama, resmi metodu kullan:
+`su.serp("site:tiktok.com/@KULLANICI/video", pages_to_check=SAYFA)`. Cevabin her yerinde
+yalniz `https://www.tiktok.com/@KULLANICI/video/15-25_HANELI_KIMLIK` desenini kabul et,
+kullanici adi tam eslessin, tekrarlari ele. `su.serp()` HAZIR sozluk dondurur; icinde
+AYRICA `data` sarmali arama, `cevap.get("data")` gibi bir soyma payload'i bosaltir.
+Normalize etme zorunlulugu yalniz `get_parsed` icindir.
+
+Kanonik video adresi metrik DONDURMUYOR, 567 baytlik "Site Maintenance" sayfasi geliyor.
+Metrigi embed'den al: `su.get_page_source(f"https://www.tiktok.com/embed/v2/{kimlik}")`.
+Sayilar `<script id="__FRONTITY_CONNECT_STATE__" type="application/json">` blogunda,
+`durum["source"]["data"][f"/embed/v2/{kimlik}"]["videoData"]` yolunda; bu zincirdeki `data`
+katmani GERCEKTIR, atlama. `itemInfos` altinda `playCount`, `diggCount`, `commentCount`,
+`shareCount`, `createTime`, `text`. `collectCount` ve `subtitleInfos` embed cevabinda
+YOKTUR. HTML satir satir bicimlendigi icin regex'te `>` ile `{` arasina `\s*` koy.
 
 ## Iki mod ve sert butce
 
-Modlar kodda sabit olsun:
+| Mod | Instagram gonderi / hesap | TikTok video / hesap | SERP sayfasi | Deneme butcesi |
+|---|---:|---:|---:|---:|
+| Hizli | 8 | 3 | 1 | 70 |
+| Derin | 12 | 8 | 2 | 170 |
 
-| Mod | Video / hesap | SERP sayfasi | Ham zenginlestirme / hesap | Instagram postu | Deneme butcesi |
-|---|---:|---:|---:|---:|---:|
-| Hizli | 6 | 1 | 2 | 2 | 56 |
-| Derin | 20 | 2 | 4 | 5 | 160 |
+Butce sirasi sabit: once TUM hesaplarin Instagram profili, sonra Instagram gonderileri
+round-robin, en son TikTok. Her SDK denemesi
+butceye girsin, cache hit girmesin, retry yeni denemedir. Butce dolunca kismi veriyi koru.
 
-Her SDK denemesi butceye girsin. Cache hit girmesin. Retry yeni denemedir. Butce dolunca
-kismi veriyi koru. Hesaplari round-robin isle. Eszamanlilik `1`.
+**Eszamanlilik `1`**, asla paralel istek atma (olculdu, `429` dondu).
 
-Her parsed, raw ve SERP cevabini URL + istek turu hash'iyle `cache/` altina koy. Cache
-alti saat gecerli. `--yenile` cache'i atlasin. Cache dosyalarinda anahtar bulunmasin.
+Her parsed, raw ve SERP cevabini URL + istek turu hash'iyle `cache/` altina koy; cache alti
+saat gecerli, `--yenile` atlasin, cache dosyalarinda anahtar bulunmasin.
 
 ## Hata sozlesmesi
 
-- `400`, `401`, `402`: tekrar yok. Kosu hemen dursun. Sade ve guvenli mesaj ver.
-- `403`, `404`, `415`, `422`: tekrar yok. Hedefi uyar, diger hesaplara devam et.
-- Politika fonksiyonu `sleep_fn=time.sleep` enjekte alsin; dogrudan `time.sleep` cagirmasin.
-  `408`, `429`, `502`, `503`, `504` ve ag hatasinda `sleep_fn`i sirayla gercek `1`, `2`,
-  `4` ile cagirip en fazla uc tekrar yapsin. Her retry butceden dussun; `0` ile uyumak yasak.
-- HTTP `200` tek basina basari degildir. Bos govde, robot kontrolu, `recaptcha`,
-  `unusual traffic`, `consent.google.com` veya taninmayan sosyal sema varsa veriyi kabul
-  etme. Yine de `2xx` oldugu icin `billable_2xx` sayacina girsin.
-- Hic kesin video verisi gelmediyse bos rapor uretme. Onceki iyi kosuyu ezme.
+- `400`, `401`, `402`: tekrar yok, kosu hemen dursun, sade ve guvenli mesaj ver. Bunlar
+  kurtarilabilir degil: `main` sifirdan farkli kodla ciksin, kosuyu basarili gostermesin.
+- `403`, `404`, `415`, `422`: tekrar yok, hedefi uyar, diger hesaplara devam et.
+- Politika fonksiyonu `sleep_fn=time.sleep` enjekte alsin, dogrudan `time.sleep`
+  cagirmasin. `408`, `429`, `502`, `503`, `504` ve ag hatasinda `sleep_fn`i sirayla gercek
+  `1`, `2`, `4` ile cagirip en fazla uc tekrar yapsin. Her retry butceden dussun, `0` ile
+  uyumak yasak.
+- HTTP `200` tek basina basari degildir: bos govde, robot kontrolu, `recaptcha`, `unusual
+  traffic`, `consent.google.com` ya da taninmayan sosyal semada veriyi kabul etme; yine de
+  `2xx` oldugu icin `billable_2xx` sayacina girsin.
+- Hic kesin gonderi verisi gelmediyse bos rapor uretme, onceki iyi kosuyu ezme.
 
 ## Kosu, gecmis ve manifest
 
-Her kosu benzersiz UTC zaman damgali klasore yazilsin:
-`runs/YYYYMMDDTHHMMSSffffffZ-MOD-RANDOM/`.
+Her kosu benzersiz UTC klasore yazilsin: `runs/YYYYMMDDTHHMMSSffffffZ-MOD-RANDOM/`; icinde
+`data.json`, `report.html`, `run_manifest.json`. Basarida `son_kosu.json` yalniz goreli
+kosu yolunu, `son_rapor.html` son raporun kopyasini tutsun. Yazimlar gecici dosya + atomik
+replace olsun.
 
-Klasorde `data.json`, `report.html`, `run_manifest.json` olsun. Basarida `son_kosu.json`
-yalniz goreli kosu yolunu, `son_rapor.html` son raporun kopyasini tutsun. Yazimlar gecici
-dosya + atomik replace olsun.
-
-Manifest alanlari: `prompt_version=social-radar-v2.0.0`, `started_at`, `ended_at`, `mode`,
+Manifest alanlari: `prompt_version=social-radar-v3.1.0`, `started_at`, `ended_at`, `mode`,
 `budget`, `attempts`, `billable_2xx`, `cache_hits`, `asset_gets`, `sources`,
 `source_counts`, `warnings`, `status=success|failed`.
 
-Onceki basarili `data.json`i bul. Ayni video kimliginde izlenme farkini hesapla. Yeni
-videolari ayri listele. Ilk kosuda karsilastirma olmadigini yaz.
+Onceki basarili `data.json`i bul, ayni gonderi kimliginde begeni farkini hesapla, yeni
+gonderileri ayri listele. Ilk kosuda karsilastirma olmadigini yaz. Degisen yoksa "degisen
+gonderi yok" de; sifirlari tek tek sayan liste basma. Ayni hesap ve ayni degisim metni
+(isaret+delta+sayac) birden cok gonderide tekrarlanirsa TEK rozette toplanir
+(`@hesap · N gonderide +1 begeni`); tek gonderide sade kalir.
 
 ## Analiz ve rapor
 
-Her videoda kesin etkilesimleri koru; oranlari izlenmeye bol. Ortalama ve ortancayi goster.
-Eksik sayiyi sifir sunma.
+Ekran METIN icin degil TARAMA icin kurulur: duz paragraf yerine madde/rozet agirlikli, kanit
+`<details>` arkasinda, ilk ekranda gercek gonderi kapaklari.
 
-Raporun ilk gorunen ekraninda **Simdi cekebilecegin uc video** bulunacak. Uc brief su
-farkli kanittan gelsin: en cok izlenen, en yuksek kaydetme orani, en yuksek paylasim
-orani. Her briefte konu tohumu, acilis yapisi, cekim karari, kesin sayili kanit ve kaynak
-video adresi olsun. Neden-sonuc iddiasi kurma. Rakip verisini kanit, is tanimini uyarlama
-baglami olarak kullan.
+Instagram'da izlenme olmadigi icin siralama uc OLCULEN sinyalle kurulur:
 
-Devaminda: bu kosuda degisenler, veri uyarilari, hesap panoramasi,
-kazanan acilislar, tum kanit tablosu, varsa kesin Instagram gonderi sayilari, ham konu
-sinyalleri ve cagri gercegi.
+1. **Hesap ici sicrama** = gonderinin begenisi / o hesabin olculen gonderilerinin ortancasi.
+2. **Yorum / begeni orani** = konusturma gucu.
+3. **Begeni / takipci orani** = hesap olceginden bagimsiz karsilastirma.
 
-Rapor tek koyu temali HTML olsun; CSS, favicon ve kapaklar gomulsun.
-JavaScript, font CDN'i veya otomatik dis kaynak istegi olmasin. Su CSP'yi ekle:
+Bir oranin paydasina yalniz o sayacin gercekten olculdugu gonderiler girer; hic
+olculmemisse oran `None` kalir ve ekranda `—` yazar. Eksik sayiyi sifir sunma. Ortalama ve
+ortancayi goster.
+
+Paylasim temposunu TUM gonderilerin tarih araligindan hesaplama; `recent_posts` kronolojik
+degildir, araya giren tek eski gonderi tempoyu yalanlar (olculdu). Tempoyu en yeni gonderiden geriye
+60 gunluk pencerede olc ve penceredeki
+gonderi sayisini da yaz.
+
+Raporun ilk gorunen ekraninda **Simdi cekebilecegin uc video** bulunacak. Uc brief uc FARKLI
+kanittan gelsin: en yuksek hesap ici sicrama, en yuksek yorum/begeni orani, en yuksek
+begeni/takipci orani.
+
+Oran tek basina siralama yapamaz, kucuk sayilarin orani buyuk gorunur. Her oran siralamasi
+once bir HACIM TABANINDAN gecsin: aday havuzunun kendi ortancasinin altinda kalan gonderi o
+siralamaya giremez (havuz dortten kucukse taban uygulanmaz, filtre havuzu bosaltirsa havuz
+aynen kalir), tabansiz "en cok konusturan gonderi" 124 ve 86 yorumlu gonderiler dururken
+17 yorumluyu kazanmisti (olculdu).
+
+Aday havuzu son 12 aya daralsin; daraltinca uc adaydan az kaliyorsa daraltma (olculdu).
+Kanit cumlesinde tarihin yaninda yasi da yaz
+("3 ay once", "1 yil once").
+
+Kanit havuzu once rakip hesaplardir; rakiplerden hic olculmus gonderi gelmediyse kendi
+hesabina dus, uc brief'i bos birakma. Her briefte konu tohumu, acilis yapisi, cekim karari,
+kesin sayili kanit ve kaynak gonderi adresi olsun. Neden-sonuc iddiasi kurma.
+
+Bes kural daha, besi de ekranda olculdu:
+
+- **Konu tohumu** ham caption dilimi olamaz. Caption'in ILK SATIRINI al; @etiket ile
+  pesindeki Turkce eki, #hashtag, emoji, URL ve tek basina duran nokta ayrac satirlarini
+  temizle. Ilk satir iki kelimeden azsa metnin ilk cumlesine dus.
+- **Acilis yapisi** konu tohumunu TEKRARLAMASIN; ne cekilecegini degil ilk uc saniyede ne
+  YAPILACAGINI yazsin. Bu promptun ornek cumlelerini rapora birebir yazma.
+- **Uc brief birbirinin kopyasi olamaz.** Hicbir cumle iki kartta ayni gecmesin; konu adini
+  degistirip ayni kalibi tekrarlamak farkli SAYILMAZ. Her madde 25 kelimeyi asmayan bir
+  emirdir (paragraf degil) ve kendi kanitindan cikan AYRI bir karar soyler; `UYARLAMA` is
+  cumlesini bir kez gecirir, `ACILIS` satirini tekrarlamaz. Uc cagri birbirini GORSUN: her
+  cagriya onceki kartlarin cumleleri verilsin, ayni cumle donerse yeniden uretilsin.
+  Olculdu: tekrar `CEKIM`ten `UYARLAMA`ya, oradan promptun kendi ornegine kaydi.
+- **Kat sayisi 1'in altindaysa** ovgu cumlesi kurma; "0,77 kati" yerine "begenisi kendi
+  ortancasinin altinda" de. Yuzdeye Turkce ek getirme ("takipcisinin %0,73'i" sesli
+  uyumundan yanlis), "takipci basina begeni %0,73" gibi eksiz yaz.
+- **Madde bolme** yalniz `.`/`!`/`?` + BUYUK harf sinirindan yapilir; noktali virgulden
+  bolme YASAK, Turkce'de `;` bagimli cumleyi bagliyor ve kucuk harfle baslayan anlamsiz
+  yarim madde uretiyor (denendi, geri alindi).
+
+Devaminda: bu kosuda degisenler, veri uyarilari, hesap panoramasi, **format
+karsilastirmasi** (`clips`, `carousel_container`, `feed` icin ortanca begeni ve gonderi
+sayisi), **kazanan acilislar** (en iyi gonderilerin caption ilk satiri), paylasim tempo, tum
+kanit tablosu, varsa TikTok bolumu, ham konu sinyalleri ve cagri gercegi.
+
+Ham konu sinyalleri kelimeyi TEKRAR sayisiyla degil kac ayri GONDERIDE gectigiyle olcsun;
+@etiket ve #hashtag kelime bulutuna girmesin (ikisi kendi listelerinde durur). Mumkunse duz
+frekans yerine ayirt edici olcumu goster: yalniz kendi ortancasini asan gonderilerde gecen,
+altinda kalanlarin hicbirinde gecmeyen kelimeler; beraberligi alfabetik degil kelimenin
+gectigi gonderilerin sicrama toplamiyla coz. Genel Turkce dolguyu (zamirler, baglaclar,
+"harika", "guzel", "tesekkur", cagri kaliplari) eleyen bir liste tut (olculdu).
+
+Ayni girdiyle ayni kosu ayni raporu uretmeli. Her siralamada esitlik bozucu SABIT ve veriden
+gelen bir alan olsun (kelime sayaci icin kelimenin kendisi); sozluk veya kume gezinme sirasina
+guvenilmesin, PYTHONHASHSEED'e gore degisebilir.
+
+Rapor tek koyu temali HTML olsun; CSS, favicon ve kapaklar gomulsun; JavaScript, font CDN'i
+veya otomatik dis kaynak istegi olmasin. Su CSP'yi ekle:
 
 ```html
 default-src 'none'; img-src data:; style-src 'unsafe-inline';
+frame-src https://www.instagram.com https://www.tiktok.com;
 base-uri 'none'; form-action 'none'
 ```
 
+Rapor internetsiz de tam okunur olmali. Butun metin, veri ve kapak gorselleri gomulu olsun
+(kapaklar data-URI). Kapak inmemis gonderide ciplak/bos oynatici basilmaz, `kapak inmedi`
+kutusu basilir. Dis dunyaya acilan TEK yuzey, gercekten cekilmis gonderilerin embed
+iframe'idir. CDN, font, script barindiran host, dis gorsel hala yasak. Kapak gomulu oldugu icin
+internet yokken de kart gorsel kalir, yalniz oynatici gelmez.
+
 Kota metni aynen dogru olsun: "Kayitla birlikte bir defalik 500 ucretsiz istek verilir.
-Aylik yenilenmez." Basarisiz cevaplarin maliyetini tahmin etme. Yalniz `attempts`,
-`billable_2xx` ve `cache_hits` sayilarini goster.
+Aylik yenilenmez." Basarisiz cevaplarin maliyetini tahmin etme; yalniz `attempts`,
+`billable_2xx` ve `cache_hits` goster.
+
+### Raporun gorunumu de urunun parcasidir
+
+Bu rapor ekranda gosterilir; calisan ama duz bir sayfa urunu satmaz. Su iskelet ZORUNLU:
+
+- En uste tek cumlelik KARAR seridi, altina dort kutuluk sayi seridi (`display:grid`).
+- Ilk ekrandaki uc oneri yan yana KART olsun (`grid-template-columns` + `minmax`, dar ekranda
+  alt alta); her kartta sira numarasi, baslik, `ACILIS`/`CEKIM`/`UYARLAMA` etiketli kisa madde
+  bloklari ve `<details>` icinde kanit.
+- Paleti CSS degiskeniyle tanimla (`--zemin`, `--panel`, `--kenar`, `--metin`, `--soluk`,
+  `--vurgu`); rengi hep degiskenden oku.
+- Tabloyu varsayilan gorunumde birakma: baslik satiri ayri zeminde, ince satir ayraci, sayi
+  hucreleri saga yasli.
+- Govde en fazla 1100px, satir yuksekligi en az 1.5, bolum araligi en az 32px.
+- Gomulu CSS en az 3.000 karakter olsun. Bu sus degil taban: bu sinirin altinda kalan her
+  deneme ekranda varsayilan tarayici gorunumune dustu (olculdu).
 
 ## Anahtar guvenligi
 
-Ortam degiskeni veya klasordeki `.env` varsa onu kullan. Yoksa `getpass` ile gizli sor.
-Anahtar hangi kaynaktan gelirse gelsin, gercek degeri ilk SDK `2xx` cevabina kadar ayni
-degiskende tut. Ilk `2xx` dondugu anda `persist_key_once(key)` benzeri tek bir yol uzerinden
-`.env` dosyasina **tam bir kez** yaz ve izni `0600` yap. Sonraki `2xx` cevaplari tekrar
-yazmasin. `400/401/402` veya hic `2xx` olmayan kosu `.env` olusturmasin; gecersiz anahtari
-saklama. Degiskeni ancak bu karardan sonra temizle. `--anahtar` veya `--key` argumani olmasin. Istisna govdesini loglama.
+Anahtari yukaridaki girdi blogundan al. Ilk isin onu `.env` dosyasina tek seferde yazip
+iznini `0600` yapmak olsun, sonra hep oradan oku. Anahtari sohbete, terminale, komut
+satirina, log/HTML/JSON/cache/git'e sokma. `.env`
+`.gitignore` icinde olsun. `--anahtar` ya da `--key` argumani olmasin. Istisna govdesini
+loglama. Ortam degiskeni veya mevcut `.env` varsa blok yerine onu kullan.
 
 ## Agsiz kabul testleri
 
-Fixture tabanli testler gercek API'yi cagirmasin. En az sunlari kanitla:
+Fixture tabanli, gercek API cagirmayan testler. En az bunlari kanitla:
 
-1. TikTok ve Instagram resmi semalari ile sarmalli semalar okunuyor.
-2. Bilinmeyen sema reddediliyor ve fallback uyarisi olusuyor.
-3. Tablo gudumlu testte `400`, `401`, `402` kodlarinin **her biri** ayri `subTest` olarak
-   tam 1 deneme, `[]` bekleme ve hard-stop uretiyor.
-4. Ayni tabloda `403`, `404`, `415`, `422` kodlarinin her biri tam 1 deneme, `[]` bekleme ve
-   yalniz hedef atlama uretiyor.
-5. Tablo gudumlu testte `408`, `429`, `502`, `503`, `504` kodlarinin **her biri** ayri
-   `subTest` olarak toplam 4 deneme uretiyor; `sleep_fn=sleeps.append` verilip gercek cagri
-   listesi birebir `[1, 2, 4]` assert ediliyor. Ag hatasi da ayri testte aynisini kanitliyor.
-   Sabit liste assert etmek veya kumeden tek temsilci test etmek yeterli degil.
-6. Sert butce retry ortasinda bile asilamiyor.
-7. `200` engel sayfasi basari sayilmiyor, fakat `billable_2xx` artiyor.
-8. Ikinci ayni istek cache'den geliyor ve deneme harcamiyor.
-9. Manifest sozlesmesinin tum alanlari var.
-10. Rapor uc brief ile aciliyor. Harici `src=http` ve `<script>` icermiyor.
-11. Kota metni bir defalik 500 diyor. Aylik ucretsiz plan demiyor.
-12. Anahtar `.env` disindaki hicbir dosyada bulunmuyor. `.env` izni `0600`.
-13. Iki kosu farkli klasor aciyor. Ikinci kosu gecmis karsilastirmasi uretiyor.
-14. Ayni fixture iki farkli `business_context` ile calisiyor: kanit ayni; uc adaptationin
-    her biri degisiyor ve kendi normalize is cumlesini iceriyor.
-15. Tum yasak aliaslar tabloyla reddediliyor; argumansiz akis input/getpass mock'lariyla
-    olculuyor. `--help` kapilari `0`; bootstrap process mock'unda argv birebir ayni.
-16. `main` fake getpass + coklu fake `2xx`: olay sirasi ilk cevapta
-    `sdk_2xx -> persist -> sonraki_sdk`, persist tam 1, `.env` `0600`. Fake `401`: 0/dosya yok.
-17. `test_main_runs_live_pipeline`: fake `Client` constructoru ve uc adapter ayri cagrilir;
-    fake `ParsedPage`in `page_type/source/data` alanlari exact wrapperda korunur, parser
-    kabul eder, sonra `run_radar` + cikti yazimi kanitlanir.
+1. Profil semasi: `recent_posts` icindeki `None` begeni sifira cevrilmiyor, adresler
+   cikariliyor, bilinmeyen sema reddedilip fallback uyarisi uretiyor.
+2. Gonderi semasi: `likes`, `comments`, `posted_at`, `product_type` okunuyor; izlenme
+   UYDURULMUYOR, rapora `—` giriyor.
+3. Sicrama ortancaya bolunuyor; tek gonderili hesapta oran `None`; hic olculmemis
+   sayacta payda bos kaliyor.
+4. `counts_hidden: true` gonderi ortancaya, ortalamaya, uc siralamaya VE brief havuzuna
+   girmiyor: fixture'dan cikinca ortanca degisiyor, havuza sokulunca dusuk yorumlu bir
+   gonderi brief kazaniyor, sokulmayinca kazanmiyor, kanit hucresi "gizli" yaziyor.
+5. Tempo penceresi: iki yil oncesine ait gonderi eklenince haftalik tempo DEGISMIYOR.
+6. Hacim tabani: ortanca alti gonderi oran siralamasini kazanamiyor; dortten kucuk
+   havuzda taban uygulanmiyor; taban havuzu bosaltirsa havuz aynen kaliyor.
+7. Guncellik penceresi iki halde: uc taze aday varken eski eleniyor, yokken elenmiyor.
+   `simdi` enjekte ediliyor, gercek saate bagli test yok.
+8. Gonderi etiketi taranan hesap; `author` farkliyken kanitta "(@X ile ortak)" gorunuyor;
+   kat 1'in altinda ovgu kalibi kurulmuyor.
+9. `konu_temizle` ilk satiri cikariyor; acilis metni konu tohumunu birebir tekrarlamiyor.
+10. Tablo gudumlu, her kod ayri `subTest`: `400/401/402` tam 1 deneme + `[]` bekleme +
+    hard-stop; `403/404/415/422` tam 1 deneme + `[]` bekleme + yalniz hedef atlama;
+    `408/429/502/503/504` toplam 4 deneme ve `sleep_fn=sleeps.append` ile cagri listesi
+    birebir `[1, 2, 4]`. Ag hatasi ayri testte aynisini kanitliyor. Kumeden tek temsilci
+    YETMEZ. Sahte SDK kodu gercegi gibi ISTISNA atarak versin.
+11. Sert butce retry ortasinda bile asilmiyor; Instagram bitmeden TikTok'a butce
+    ayrilmiyor; ikinci ayni istek cache'den geliyor ve deneme harcamiyor; `200` engel
+    sayfasi basari sayilmiyor ama `billable_2xx` artiyor.
+12. Manifest sozlesmesinin tum alanlari var; iki kosu farkli klasor aciyor, ikincisi
+    gecmis karsilastirmasi uretiyor.
+13. Rapor uc brief ile aciliyor ve ucu uc FARKLI gonderiden geliyor; rakipler bos donunce
+    briefler kendi hesabindan kuruluyor ve sayilar sifir olmuyor; harici `src=http` ve
+    `<script>` yok; kota metni bir defalik 500 diyor; anahtar `.env` disinda hicbir
+    dosyada yok.
+14. Ayni fixture iki farkli isle kosuluyor: kanit ayni kaliyor, uc adaptasyonun her biri
+    degisiyor ve kendi normalize is cumlesini iceriyor. Ayni kosuda uc brief hicbir cumleyi
+    paylasmiyor ve hicbir madde 25 kelimeyi asmiyor.
+15. Yasak aliaslar tabloyla reddediliyor; tek `--rakip` degerine virgulle yazilan iki
+    hesap iki hesap oluyor; `--help` kapilari `0`; bootstrap process mock'unda argv
+    birebir ayni; TikTok verilmeyen kosu sifir TikTok istegi atiyor.
+16. Canli boru hatti testi: fake `Client` constructoru ve uc adapter ayri cagrilir; fake
+    `ParsedPage`in `page_type/source/data` alanlari exact wrapperda korunur, parser kabul
+    eder, sonra `run_radar` + cikti yazimi kanitlanir.
+17. Ayni fixture'la iki kez uretilen rapor bayt bayt ayni.
+18. Sahte istemci `get_parsed`te SDK istisnasi atinca `main` sifirdan farkli doner ama
+    traceback dusmez; hata sade tek satir olur.
 
-Tum testleri calistir; hata varsa acma. Fixture raporunu ve manifestini kontrol et.
+Tum testleri calistir, hata varsa acma, kac test kostugunu ciktida gor.
 
-Son cevapta sunlari kisa yaz: bulunan uc firsat, taranan hesap sayisi, basarili 2xx
-sayisi ve raporun yolu. API anahtarini hic tekrar etme.
+Son cevapta kisa yaz: bulunan uc firsat, taranan hesap sayisi, basarili `2xx` sayisi ve
+raporun yolu. API anahtarini hic tekrar etme.

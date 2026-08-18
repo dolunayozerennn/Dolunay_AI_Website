@@ -6,13 +6,13 @@
       "files": {
         "tr": {
           "name": "icerik-firsat-radari-tr.txt",
-          "sha256": "eccadcde73e4b5c2cc642d5965fccf1400340a41502b56990934b4881a595a34",
-          "characters": 11994
+          "sha256": "a9d64cfa7f738f9e6708a9852a7031f36ac8f57d1c30582bb8238d91190d1480",
+          "characters": 21009
         },
         "en": {
           "name": "content-opportunity-radar-en.txt",
-          "sha256": "e7027931d61f7136cda64e7dfe3bbaa4478e43820fd6afcfb28153e706232dbe",
-          "characters": 11997
+          "sha256": "7da251e3ce35f780c0544b667a3f443060dcf36d871031fc3bfc9d367425c5e6",
+          "characters": 21193
         }
       }
     },
@@ -21,13 +21,13 @@
       "files": {
         "tr": {
           "name": "musteri-firsat-radari-tr.txt",
-          "sha256": "a28c6af28d80a34da3d2681a06fff29671b996ddb23d9429abf16c126f21f764",
-          "characters": 10735
+          "sha256": "50c5853760e24f732c7d7c8877ac51ac4c054d205e3242b66592b22bd802955b",
+          "characters": 16348
         },
         "en": {
           "name": "client-opportunity-radar-en.txt",
-          "sha256": "612202a6b536f464cc944f89ec52e74d31619f23b2c76f0f4cd57fcf97b6c81a",
-          "characters": 10936
+          "sha256": "7d688eb19cd1fe6f5c74b4a31180a31230308246ab3681b89ef9aa6e2249ad13",
+          "characters": 17164
         }
       }
     },
@@ -36,13 +36,13 @@
       "files": {
         "tr": {
           "name": "seyahat-butce-radari-tr.txt",
-          "sha256": "dd059d0a0fa355c8405d838ae50c4b7214ec1b9950e161112206195419d9b65f",
-          "characters": 11993
+          "sha256": "b0634ffb1ede64c23c5e346bfd6e56f7a2b91787ebbda9d004f9710b74e5ea1e",
+          "characters": 17947
         },
         "en": {
           "name": "travel-budget-radar-en.txt",
-          "sha256": "ba503356822a5a095be8e894df5aa1b31dcb9795773ab316493f71b24f118c39",
-          "characters": 11991
+          "sha256": "a954091a71006dd99d5a4a65bb51f00652a09adc40f7772725259c3cb10e73c9",
+          "characters": 17877
         }
       }
     }
