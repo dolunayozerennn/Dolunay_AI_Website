@@ -356,7 +356,7 @@ export function PromptExperience() {
         body: t.stepOneBody,
         links: [
           { label: 'Claude Code', href: 'https://claude.com/product/claude-code', sponsored: false },
-          { label: 'Codex', href: 'https://developers.openai.com/codex/cli', sponsored: false },
+          { label: 'Codex', href: 'https://chatgpt.com/tr-TR/download/', sponsored: false },
         ],
       },
       {
