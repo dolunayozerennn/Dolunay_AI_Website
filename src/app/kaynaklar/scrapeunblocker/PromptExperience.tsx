@@ -129,7 +129,7 @@ const copy: Record<Language, Record<string, string>> = {
     heroBody:
       'Tek bir API anahtarıyla rakip içerikleri çöz, satış fırsatlarını sırala ve bütçene uyan rotaları takip et. Kod bilmene gerek yok; ürünü kullandığın kodlama aracı kuruyor.',
     jump: 'Ürünleri ve promptları gör',
-    signup: '500 başlangıç isteğini al',
+    signup: 'Ücretsiz 500 kredi kazan',
     proofOne: 'mini ürün',
     proofTwo: 'Türkçe + İngilizce prompt',
     proofThree: 'tek seferlik başlangıç isteği',
@@ -180,7 +180,7 @@ const copy: Record<Language, Record<string, string>> = {
     heroBody:
       'Use one API key to decode competitor content, rank sales opportunities, and track routes that fit your budget. Your coding agent builds the product for you.',
     jump: 'See the products and prompts',
-    signup: 'Claim 500 starter requests',
+    signup: 'Get 500 free credits',
     proofOne: 'micro products',
     proofTwo: 'Turkish + English prompts',
     proofThree: 'one-time starter requests',
@@ -442,9 +442,9 @@ export function PromptExperience() {
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
             className="relative max-w-5xl"
           >
-            <h1 className="text-[clamp(3rem,7.8vw,7.2rem)] font-semibold leading-[0.94] tracking-[-0.055em]">
+            <h1 className="text-[clamp(3rem,7.8vw,7.2rem)] font-semibold leading-[1.04] tracking-[-0.055em]">
               <span className="block text-[#F4F2EC]">{t.heroLead}</span>
-              <span className="mt-2 block bg-gradient-to-r from-[#7AA8FF] via-[#B8CBFF] to-[#7B61FF] bg-clip-text text-transparent">
+              <span className="mt-1 block bg-gradient-to-r from-[#7AA8FF] via-[#B8CBFF] to-[#7B61FF] bg-clip-text pb-[0.14em] text-transparent">
                 {t.heroDrama}
               </span>
             </h1>
