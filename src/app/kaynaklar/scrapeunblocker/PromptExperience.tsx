@@ -10,6 +10,7 @@ import {
   Clock3,
   Code2,
   ExternalLink,
+  Eye,
   FileText,
   Gauge,
   Languages,
@@ -37,6 +38,7 @@ type Product = {
   quick: Record<Language, string>
   deep: Record<Language, string>
   promptUrl: Record<Language, string>
+  exampleUrl: string
   highlights: Record<Language, string[]>
 }
 
@@ -62,6 +64,7 @@ const products: Product[] = [
       tr: '/kaynaklar/scrapeunblocker/prompts/icerik-firsat-radari-tr.txt',
       en: '/kaynaklar/scrapeunblocker/prompts/content-opportunity-radar-en.txt',
     },
+    exampleUrl: '/kaynaklar/scrapeunblocker/ornekler/icerik-firsat-radari.html',
     highlights: {
       tr: ['TikTok + Instagram kesin metrikleri', 'Yeni video cache’i', 'Kanıta bağlı 3 brief'],
       en: ['Exact TikTok + Instagram metrics', 'New-video cache', '3 evidence-bound briefs'],
@@ -88,6 +91,7 @@ const products: Product[] = [
       tr: '/kaynaklar/scrapeunblocker/prompts/musteri-firsat-radari-tr.txt',
       en: '/kaynaklar/scrapeunblocker/prompts/client-opportunity-radar-en.txt',
     },
+    exampleUrl: '/kaynaklar/scrapeunblocker/ornekler/musteri-firsat-radari.html',
     highlights: {
       tr: ['Kanıt + güven puanı', 'Mesaj çelişki kapısı', 'CSV + kanıt dosyası'],
       en: ['Evidence + confidence score', 'Outreach contradiction gate', 'CSV + evidence file'],
@@ -114,6 +118,7 @@ const products: Product[] = [
       tr: '/kaynaklar/scrapeunblocker/prompts/seyahat-butce-radari-tr.txt',
       en: '/kaynaklar/scrapeunblocker/prompts/travel-budget-radar-en.txt',
     },
+    exampleUrl: '/kaynaklar/scrapeunblocker/ornekler/seyahat-butce-radari.html',
     highlights: {
       tr: ['Kişi başı fiyatı açık etiketler', 'Fiyat geçmişi + fark', 'Bozuk uçta veri uydurmaz'],
       en: ['Explicit per-person pricing', 'Price history + delta', 'Never fabricates on endpoint failure'],
@@ -142,6 +147,7 @@ const copy: Record<Language, Record<string, string>> = {
     copied: "Kopyalandı — aracına yapıştır",
     copyError: 'Kopyalama olmadı · metni aç',
     readPrompt: 'Prompt metnini aç / indir',
+    viewExample: 'Örneği gör',
     whatYouGet: 'Çıktı',
     howEyebrow: '3 ADIM',
     howTitle: 'Sıfırdan çalışan ürüne, üç adımda.',
@@ -193,6 +199,7 @@ const copy: Record<Language, Record<string, string>> = {
     copied: 'Copied — paste into your agent',
     copyError: 'Copy failed · open the text',
     readPrompt: 'Open / download the prompt',
+    viewExample: 'See a real example',
     whatYouGet: 'Output',
     howEyebrow: '3 STEPS',
     howTitle: 'From zero to a working product, in three steps.',
@@ -325,6 +332,14 @@ function PromptCard({
             className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/10 px-5 text-sm font-medium text-[#C9CCD4] transition duration-300 hover:-translate-y-0.5 hover:border-white/25 hover:text-white"
           >
             <FileText className="h-4 w-4" /> {t.readPrompt}
+          </a>
+          <a
+            href={product.exampleUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/10 px-5 text-sm font-medium text-[#C9CCD4] transition duration-300 hover:-translate-y-0.5 hover:border-white/25 hover:text-white"
+          >
+            <Eye className="h-4 w-4" /> {t.viewExample}
           </a>
         </div>
       </div>
