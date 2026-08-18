@@ -504,7 +504,13 @@ export function PromptExperience() {
                         }
                         className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-medium text-white transition duration-300 hover:border-[#4F8BFF]/40 hover:bg-[#4F8BFF]/10"
                       >
-                        {link.label} <ExternalLink className="h-3.5 w-3.5" />
+                        {link.label}{
+                          link.href.startsWith('#') ? (
+                            <ChevronDown className="h-3.5 w-3.5" />
+                          ) : (
+                            <ExternalLink className="h-3.5 w-3.5" />
+                          )
+                        }
                       </a>
                     ))}
                   </div>
