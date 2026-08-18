@@ -21,13 +21,13 @@
       "files": {
         "tr": {
           "name": "musteri-firsat-radari-tr.txt",
-          "sha256": "50c5853760e24f732c7d7c8877ac51ac4c054d205e3242b66592b22bd802955b",
-          "characters": 16348
+          "sha256": "259218cbf697ddc94f5ca4a64714837721c083a04837868d5594d8e251c640a9",
+          "characters": 16335
         },
         "en": {
           "name": "client-opportunity-radar-en.txt",
-          "sha256": "7d688eb19cd1fe6f5c74b4a31180a31230308246ab3681b89ef9aa6e2249ad13",
-          "characters": 17164
+          "sha256": "bace6097a8d3d076fcf6097e6d8fb4e65ad78ff928bb4ff2ae821e4da8430ec8",
+          "characters": 17151
         }
       }
     },

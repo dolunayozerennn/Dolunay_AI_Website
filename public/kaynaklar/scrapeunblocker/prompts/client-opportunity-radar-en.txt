@@ -14,7 +14,7 @@ NOT start live collection: build the product, run the tests, produce the offline
 output, and at the end state in one line that the key is missing. Area can be a district,
 city, or neighborhood. Read the target back in one line before starting.
 
-Claude Code, build a working mini-product in this folder. Call it **Local Customer
+Build a working mini-product in this folder. Call it **Local Customer
 Opportunity Radar**. Do not ask me technical questions. Create the required files,
 run the tests, and prepare the product. Choose safe defaults when details are missing.
 

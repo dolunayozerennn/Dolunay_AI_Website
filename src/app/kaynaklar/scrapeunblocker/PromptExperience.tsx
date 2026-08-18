@@ -124,10 +124,10 @@ const products: Product[] = [
 const copy: Record<Language, Record<string, string>> = {
   tr: {
     badge: 'SCRAPEUNBLOCKER × DOLUNAY.AI',
-    heroLead: 'Claude Code’a interneti ver.',
+    heroLead: 'Yapay zekaya interneti ver.',
     heroDrama: 'Üç gerçek ürün çıkar.',
     heroBody:
-      'Tek bir API anahtarıyla rakip içerikleri çöz, satış fırsatlarını sırala ve bütçene uyan rotaları takip et. Kod bilmene gerek yok; ürünü Claude Code kuruyor.',
+      'Tek bir API anahtarıyla rakip içerikleri çöz, satış fırsatlarını sırala ve bütçene uyan rotaları takip et. Kod bilmene gerek yok; ürünü kullandığın kodlama aracı kuruyor.',
     jump: 'Ürünleri ve promptları gör',
     signup: '500 başlangıç isteğini al',
     proofOne: 'mini ürün',
@@ -139,25 +139,26 @@ const copy: Record<Language, Record<string, string>> = {
       'Her ürün Hızlı modda düşük bütçeyle ilk değeri gösterir; Derin modda geçmişi ve değişimi açar.',
     copyPrompt: "Master Prompt'u kopyala",
     copying: 'Prompt yükleniyor…',
-    copied: "Kopyalandı — Claude Code'a yapıştır",
+    copied: "Kopyalandı — aracına yapıştır",
     copyError: 'Kopyalama olmadı · metni aç',
     readPrompt: 'Prompt metnini aç / indir',
     whatYouGet: 'Çıktı',
     howEyebrow: '3 ADIM',
-    howTitle: 'Teknik kurulum sana kalmıyor.',
-    stepOne: 'Promptu seç',
-    stepOneBody: 'Türkçe veya İngilizce sürümü tek tıkla kopyala.',
-    stepTwo: "Claude Code'a yapıştır",
-    stepTwoBody: 'Claude izole klasörü, sanal ortamı, testleri ve uygulamayı kendisi kurar.',
-    stepThree: 'Anahtarını güvenli gir',
-    stepThreeBody: 'Anahtar sohbete yazılmaz; uygulamanın gizli terminal alanında bir kez girilir.',
+    howTitle: 'Sıfırdan çalışan ürüne, üç adımda.',
+    stepOne: 'Kodlama aracını kur',
+    stepOneBody: 'Claude Code ya da Codex, hangisini istersen. İkisi de terminalden çalışır ve kurulumu birkaç dakika sürer.',
+    stepTwo: "ScrapeUnblocker'a ücretsiz üye ol",
+    stepTwoBody: 'Kayıt olunca 500 istek bir defaya mahsus hesabına düşer. Panelden API anahtarını kopyala.',
+    stepThree: 'Promptu kopyala, aracına yapıştır',
+    stepThreeBody: 'Aşağıdaki üç üründen beğendiğini seç. Klasörü, sanal ortamı, testleri ve raporu aracın kendisi kurar. Anahtarı sohbete yazma; ürün onu gizli terminal alanında bir kez sorar.',
     truthEyebrow: 'ŞEFFAF KULLANIM',
     truthTitle: '“Bedava” derken neyi kastettiğimiz net.',
     truthBody:
       'Kayıtta 500 istek bir defa verilir; aylık yenilenen ücretsiz plan değildir. Her rapor deneme, başarılı 2xx ve cache sayılarını ayrı gösterir. Kalan bakiyeyi tahmin etmez.',
+    pluginEyebrow: 'EKLENTİ VE SDK',
     pluginTitle: 'Eklenti araştırma yüzeyi. SDK ürün motoru.',
     pluginBody:
-      'Resmî Claude Code eklentisi hızlı sayfa okuma anı için harika. Kalıcı yerel ve seyahat ürünleri özel uçlara ihtiyaç duyduğu için resmî Python SDK’sıyla kurulur.',
+      'Claude Code kullanıyorsan resmi eklenti hızlı sayfa okuma anı için harika. Buradaki üç ürün ise hangi aracı kullanırsan kullan resmi Python SDK ile kurulur; özel uçlara ve tekrar çalıştırmaya ihtiyaç duyarlar.',
     faqTitle: 'Kısa cevaplar',
     faqOneQ: 'Üçünü birden kurmak zorunda mıyım?',
     faqOneA: 'Hayır. Her Master Prompt bağımsızdır; yalnız ihtiyacın olan ürünü kurabilirsin.',
@@ -168,16 +169,16 @@ const copy: Record<Language, Record<string, string>> = {
     faqThreeA:
       'Ürün kısmi veya bloklu rapor verir. Uçuş, işletme ya da sosyal sayı uydurmaz; hatayı ve hangi ucun çalışmadığını görünür bırakır.',
     finalTitle: 'İlk çalışan ürününü şimdi kur.',
-    finalBody: 'Bir prompt seç. Claude Code geri kalanını kursun.',
+    finalBody: 'Bir prompt seç. Gerisini aracın kursun.',
     disclosure: 'Bu kaynak ScrapeUnblocker iş birliği kapsamında hazırlanmıştır.',
     language: 'English',
   },
   en: {
     badge: 'SCRAPEUNBLOCKER × DOLUNAY.AI',
-    heroLead: 'Give Claude Code the web.',
+    heroLead: 'Give your AI the web.',
     heroDrama: 'Get three real products.',
     heroBody:
-      'Use one API key to decode competitor content, rank sales opportunities, and track routes that fit your budget. Claude Code builds the product for you.',
+      'Use one API key to decode competitor content, rank sales opportunities, and track routes that fit your budget. Your coding agent builds the product for you.',
     jump: 'See the products and prompts',
     signup: 'Claim 500 starter requests',
     proofOne: 'micro products',
@@ -189,25 +190,26 @@ const copy: Record<Language, Record<string, string>> = {
       'Quick mode proves value with a small budget. Deep mode unlocks history and change tracking.',
     copyPrompt: 'Copy the Master Prompt',
     copying: 'Loading prompt…',
-    copied: 'Copied — paste into Claude Code',
+    copied: 'Copied — paste into your agent',
     copyError: 'Copy failed · open the text',
     readPrompt: 'Open / download the prompt',
     whatYouGet: 'Output',
     howEyebrow: '3 STEPS',
-    howTitle: 'The technical setup is not left to you.',
-    stepOne: 'Choose a prompt',
-    stepOneBody: 'Copy the Turkish or English version with one click.',
-    stepTwo: 'Paste into Claude Code',
-    stepTwoBody: 'Claude creates the isolated folder, environment, tests, and application.',
-    stepThree: 'Enter your key safely',
-    stepThreeBody: 'The key never goes into chat; enter it once in the app’s hidden terminal field.',
+    howTitle: 'From zero to a working product, in three steps.',
+    stepOne: 'Install a coding agent',
+    stepOneBody: 'Claude Code or Codex, whichever you prefer. Both run in the terminal and install in minutes.',
+    stepTwo: 'Create a free ScrapeUnblocker account',
+    stepTwoBody: 'Signup drops 500 one-time requests into your account. Copy the API key from the dashboard.',
+    stepThree: 'Copy a prompt, paste it into your agent',
+    stepThreeBody: 'Pick one of the three products below. Your agent creates the folder, environment, tests, and report. The key never goes into chat; the product asks for it once in a hidden terminal field.',
     truthEyebrow: 'HONEST USAGE',
     truthTitle: '“Free” means one specific thing.',
     truthBody:
       'Signup includes 500 requests once; this is not a monthly free plan. Every report separates attempts, successful 2xx calls, and cache hits. It never guesses your remaining balance.',
+    pluginEyebrow: 'PLUGIN AND SDK',
     pluginTitle: 'Plugin for research. SDK for persistent products.',
     pluginBody:
-      'The official Claude Code plugin is ideal for a fast page-reading moment. Persistent local and travel products need specialist endpoints, so they use the official Python SDK.',
+      'If you use Claude Code, the official plugin is ideal for a fast page-reading moment. The three products here use the official Python SDK whatever agent you run, because they need specialist endpoints and repeat runs.',
     faqTitle: 'Short answers',
     faqOneQ: 'Do I have to install all three?',
     faqOneA: 'No. Every Master Prompt is independent; install only the product you need.',
@@ -218,7 +220,7 @@ const copy: Record<Language, Record<string, string>> = {
     faqThreeA:
       'The product returns a partial or blocked report. It never invents a flight, business, or social metric; the failing endpoint stays visible.',
     finalTitle: 'Build your first working product now.',
-    finalBody: 'Choose one prompt. Let Claude Code build the rest.',
+    finalBody: 'Choose one prompt. Let your agent build the rest.',
     disclosure: 'This resource was created in partnership with ScrapeUnblocker.',
     language: 'Türkçe',
   },
@@ -345,6 +347,36 @@ export function PromptExperience() {
     [t],
   )
 
+  const steps = useMemo(
+    () => [
+      {
+        icon: TerminalSquare,
+        index: '01',
+        title: t.stepOne,
+        body: t.stepOneBody,
+        links: [
+          { label: 'Claude Code', href: 'https://claude.com/product/claude-code', sponsored: false },
+          { label: 'Codex', href: 'https://developers.openai.com/codex/', sponsored: false },
+        ],
+      },
+      {
+        icon: ShieldCheck,
+        index: '02',
+        title: t.stepTwo,
+        body: t.stepTwoBody,
+        links: [{ label: t.signup, href: '/go/scrapeunblocker', sponsored: true }],
+      },
+      {
+        icon: Clipboard,
+        index: '03',
+        title: t.stepThree,
+        body: t.stepThreeBody,
+        links: [{ label: t.jump, href: '#products', sponsored: false }],
+      },
+    ],
+    [t],
+  )
+
   useEffect(() => {
     document.documentElement.lang = language
     return () => {
@@ -443,6 +475,46 @@ export function PromptExperience() {
         </div>
       </section>
 
+      <section className="relative z-10 px-5 py-24 sm:px-8 lg:px-12">
+        <div className="mx-auto max-w-7xl rounded-[2.5rem] border border-white/[0.08] bg-[#0E0F14] p-7 sm:p-12">
+          <p className="mono-label text-[#7AA8FF]">{t.howEyebrow}</p>
+          <h2 className="mt-4 max-w-3xl text-4xl font-semibold text-white sm:text-5xl">{t.howTitle}</h2>
+          <div className="mt-12 grid gap-4 md:grid-cols-3">
+            {steps.map(({ icon: StepIcon, index, title, body, links }) => (
+              <div key={index} className="flex flex-col rounded-[2rem] border border-white/[0.07] bg-white/[0.025] p-6">
+                <div className="mb-7 flex items-center justify-between">
+                  <StepIcon className="h-5 w-5 text-[#7AA8FF]" />
+                  <span className="font-mono text-xs text-[#8A8E99]">{index}</span>
+                </div>
+                <h3 className="text-xl font-semibold text-white">{title}</h3>
+                <p className="mt-3 grow leading-7 text-[#8A8E99]">{body}</p>
+                {links.length > 0 && (
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    {links.map((link) => (
+                      <a
+                        key={link.href}
+                        href={link.href}
+                        target={link.href.startsWith('#') ? undefined : '_blank'}
+                        rel={
+                          link.href.startsWith('#')
+                            ? undefined
+                            : link.sponsored
+                              ? 'sponsored noopener noreferrer'
+                              : 'noopener noreferrer'
+                        }
+                        className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-medium text-white transition duration-300 hover:border-[#4F8BFF]/40 hover:bg-[#4F8BFF]/10"
+                      >
+                        {link.label} <ExternalLink className="h-3.5 w-3.5" />
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section id="products" className="relative z-10 px-5 py-24 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-7xl">
           <p className="mono-label text-[#7AA8FF]">{t.sectionEyebrow}</p>
@@ -466,32 +538,6 @@ export function PromptExperience() {
       </section>
 
       <section className="relative z-10 px-5 py-24 sm:px-8 lg:px-12">
-        <div className="mx-auto max-w-7xl rounded-[2.5rem] border border-white/[0.08] bg-[#0E0F14] p-7 sm:p-12">
-          <p className="mono-label text-[#7AA8FF]">{t.howEyebrow}</p>
-          <h2 className="mt-4 max-w-3xl text-4xl font-semibold text-white sm:text-5xl">{t.howTitle}</h2>
-          <div className="mt-12 grid gap-4 md:grid-cols-3">
-            {[
-              [Clipboard, '01', t.stepOne, t.stepOneBody],
-              [TerminalSquare, '02', t.stepTwo, t.stepTwoBody],
-              [ShieldCheck, '03', t.stepThree, t.stepThreeBody],
-            ].map(([Icon, index, title, body]) => {
-              const StepIcon = Icon as typeof Clipboard
-              return (
-                <div key={String(index)} className="rounded-[2rem] border border-white/[0.07] bg-white/[0.025] p-6">
-                  <div className="mb-7 flex items-center justify-between">
-                    <StepIcon className="h-5 w-5 text-[#7AA8FF]" />
-                    <span className="font-mono text-xs text-[#8A8E99]">{String(index)}</span>
-                  </div>
-                  <h3 className="text-xl font-semibold text-white">{String(title)}</h3>
-                  <p className="mt-3 leading-7 text-[#8A8E99]">{String(body)}</p>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      <section className="relative z-10 px-5 py-24 sm:px-8 lg:px-12">
         <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-2">
           <div className="rounded-[2.5rem] border border-[#45D6A8]/20 bg-[#45D6A8]/[0.055] p-7 sm:p-10">
             <p className="mono-label !text-[#45D6A8]">{t.truthEyebrow}</p>
@@ -502,11 +548,11 @@ export function PromptExperience() {
             </div>
           </div>
           <div className="rounded-[2.5rem] border border-[#7B61FF]/20 bg-[#7B61FF]/[0.055] p-7 sm:p-10">
-            <p className="mono-label !text-[#A99AFF]">CLAUDE CODE</p>
+            <p className="mono-label !text-[#A99AFF]">{t.pluginEyebrow}</p>
             <h2 className="mt-4 text-3xl font-semibold text-white sm:text-4xl">{t.pluginTitle}</h2>
             <p className="mt-6 text-lg leading-8 text-[#C9CCD4]">{t.pluginBody}</p>
             <div className="mt-8 flex items-center gap-3 text-sm text-[#8A8E99]">
-              <Code2 className="h-5 w-5 text-[#A99AFF]" /> plugin → araştır · SDK → tekrar çalıştır
+              <Code2 className="h-5 w-5 text-[#A99AFF]" /> eklenti → araştır · SDK → tekrar çalıştır
             </div>
           </div>
         </div>

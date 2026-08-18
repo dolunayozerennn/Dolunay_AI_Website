@@ -13,7 +13,7 @@ et. Anahtar satırı boş ya da hala `BURAYA_YAPIŞTIR` ise canlı veri toplamay
 ürünü kur, testleri koş, ağsız örnek çıktıyı üret ve sonunda tek satırla anahtarın eksik
 olduğunu söyle. Bölge ilçe, şehir ya da mahalle olabilir. Başlamadan önce hedefi tek satır geri oku.
 
-Claude Code, bu klasörde çalışan bir mini ürün kurmanı istiyorum. Ürünün adı
+Bu klasörde çalışan bir mini ürün kurmanı istiyorum. Ürünün adı
 **Müşteri Fırsat Radarı** olsun. Bana teknik soru sorma. Gerekli dosyaları oluştur,
 testleri çalıştır ve ürünü hazırla. Eksik bilgi varsa güvenli varsayılanı seç.
 
