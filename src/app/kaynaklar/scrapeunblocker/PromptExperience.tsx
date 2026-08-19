@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState, type CSSProperties } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
+import { useLanguage } from '@/i18n/i18n'
 import {
   ArrowRight,
   Check,
@@ -13,7 +14,6 @@ import {
   Eye,
   FileText,
   Gauge,
-  Languages,
   MapPinned,
   Radar,
   SearchCheck,
@@ -177,7 +177,6 @@ const copy: Record<Language, Record<string, string>> = {
     finalTitle: 'İlk çalışan ürününü şimdi kur.',
     finalBody: 'Bir prompt seç. Gerisini aracın kursun.',
     disclosure: 'Bu kaynak ScrapeUnblocker iş birliği kapsamında hazırlanmıştır.',
-    language: 'English',
   },
   en: {
     badge: 'SCRAPEUNBLOCKER × DOLUNAY.AI',
@@ -229,7 +228,6 @@ const copy: Record<Language, Record<string, string>> = {
     finalTitle: 'Build your first working product now.',
     finalBody: 'Choose one prompt. Let your agent build the rest.',
     disclosure: 'This resource was created in partnership with ScrapeUnblocker.',
-    language: 'Türkçe',
   },
 }
 
@@ -246,6 +244,19 @@ function PromptCard({
 }) {
   const Icon = product.icon
   const t = copy[language]
+
+  // İkincil düğmeler (prompt metni + örnek) kartın kendi vurgu rengiyle
+  // parlar; kart ikonundaki 55/14 alfa dili aynen sürer. Renkler CSS
+  // değişkeninden gelir, çünkü satır içi style hover sınıflarını ezer.
+  const secondaryAction = {
+    '--btn-border': `${product.accent}55`,
+    '--btn-bg': `${product.accent}14`,
+    '--btn-border-hover': `${product.accent}AA`,
+    '--btn-bg-hover': `${product.accent}26`,
+    '--btn-glow': `${product.accent}55`,
+  } as CSSProperties
+  const secondaryActionClass =
+    'inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-[var(--btn-border)] bg-[var(--btn-bg)] px-5 text-sm font-medium text-[#F4F2EC] transition duration-300 hover:-translate-y-0.5 hover:border-[var(--btn-border-hover)] hover:bg-[var(--btn-bg-hover)] hover:shadow-[0_0_26px_-8px_var(--btn-glow)]'
 
   return (
     <motion.article
@@ -329,17 +340,19 @@ function PromptCard({
             href={product.promptUrl[language]}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/10 px-5 text-sm font-medium text-[#C9CCD4] transition duration-300 hover:-translate-y-0.5 hover:border-white/25 hover:text-white"
+            style={secondaryAction}
+            className={secondaryActionClass}
           >
-            <FileText className="h-4 w-4" /> {t.readPrompt}
+            <FileText className="h-4 w-4" style={{ color: product.accent }} /> {t.readPrompt}
           </a>
           <a
             href={product.exampleUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/10 px-5 text-sm font-medium text-[#C9CCD4] transition duration-300 hover:-translate-y-0.5 hover:border-white/25 hover:text-white"
+            style={secondaryAction}
+            className={secondaryActionClass}
           >
-            <Eye className="h-4 w-4" /> {t.viewExample}
+            <Eye className="h-4 w-4" style={{ color: product.accent }} /> {t.viewExample}
           </a>
         </div>
       </div>
@@ -348,7 +361,12 @@ function PromptCard({
 }
 
 export function PromptExperience() {
-  const [language, setLanguage] = useState<Language>('tr')
+  // Dil sitenin KENDİ seçicisinden gelir (navbar). Bu sayfada eskiden ayrı bir
+  // TR/EN düğmesi vardı; navbar seçicisiyle aynı sağ hizaya, hemen altına
+  // düşüyor ve üst üste biniyordu. Tek dil kontrolü navbar'dakidir.
+  // Sayfa metni yalnız TR ve EN taşır, o yüzden zh/es İngilizceye düşer.
+  const { language: siteLanguage } = useLanguage()
+  const language: Language = siteLanguage === 'tr' ? 'tr' : 'en'
   const [copyStates, setCopyStates] = useState<Record<string, 'idle' | 'loading' | 'copied' | 'error'>>({})
   const reduceMotion = useReducedMotion()
   const t = copy[language]
@@ -392,12 +410,8 @@ export function PromptExperience() {
     [t],
   )
 
-  useEffect(() => {
-    document.documentElement.lang = language
-    return () => {
-      document.documentElement.lang = 'tr'
-    }
-  }, [language])
+  // <html lang> artık LanguageProvider'ın işi. Sayfa kendi yazsaydı zh-CN ve
+  // es'i sessizce 'en' yapardı; sayfadan çıkarken de dili 'tr'ye zorluyordu.
 
   async function copyPrompt(product: Product) {
     setCopyStates((current) => ({ ...current, [product.id]: 'loading' }))
@@ -438,17 +452,10 @@ export function PromptExperience() {
       <section className="relative z-10 flex min-h-[calc(100dvh-5rem)] items-center px-5 pb-20 pt-20 sm:px-8 lg:px-12">
         <div className="pointer-events-none absolute left-1/2 top-1/3 h-[520px] w-[720px] -translate-x-1/2 rounded-full bg-[#4F8BFF]/10 blur-[140px]" />
         <div className="mx-auto w-full max-w-7xl">
-          <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
+          <div className="mb-8 flex flex-wrap items-center gap-4">
             <span className="inline-flex items-center gap-2 rounded-full border border-[#4F8BFF]/25 bg-[#4F8BFF]/[0.08] px-4 py-2 font-mono text-[10px] tracking-[0.18em] text-[#7AA8FF]">
               <Sparkles className="h-3.5 w-3.5" /> {t.badge}
             </span>
-            <button
-              type="button"
-              onClick={() => setLanguage(language === 'tr' ? 'en' : 'tr')}
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-[#C9CCD4] transition duration-300 hover:border-white/25 hover:text-white"
-            >
-              <Languages className="h-4 w-4" /> {t.language}
-            </button>
           </div>
 
           <motion.div
