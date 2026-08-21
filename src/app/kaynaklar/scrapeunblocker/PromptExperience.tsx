@@ -397,7 +397,7 @@ export function PromptExperience() {
         index: '02',
         title: t.stepTwo,
         body: t.stepTwoBody,
-        links: [{ label: t.signup, href: '/go/scrapeunblocker-web', sponsored: true }],
+        links: [{ label: t.signup, href: 'https://www.scrapeunblocker.com/?via=2a04bdc75b&utm_source=dolunay&utm_medium=youtube&utm_campaign=3-products', sponsored: true }],
       },
       {
         icon: Clipboard,
@@ -476,7 +476,7 @@ export function PromptExperience() {
                 {t.jump} <ArrowRight className="h-4 w-4" />
               </a>
               <a
-                href="/go/scrapeunblocker-web"
+                href="https://www.scrapeunblocker.com/?via=2a04bdc75b&utm_source=dolunay&utm_medium=youtube&utm_campaign=3-products"
                 target="_blank"
                 rel="sponsored noopener noreferrer"
                 className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-7 text-sm font-medium text-white transition duration-300 hover:-translate-y-0.5 hover:border-[#4F8BFF]/40 hover:bg-[#4F8BFF]/10"
