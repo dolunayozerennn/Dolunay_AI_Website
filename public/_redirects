@@ -5,4 +5,8 @@
 /cozumler/artifex-campus  /cozumler  301
 
 # YouTube aciklamasindaki adres sabit kalir; Rokas takipli adres verirse yalniz hedef degisir.
-/go/scrapeunblocker  https://www.scrapeunblocker.com/?via=2a04bdc75b  302
+# 21 Agu 2026: Rokas UTM istedi. Referans (via=) bizim ortaklik kaydimiz, UTM onun analitigi;
+# ikisi birlikte gider. Yuzey ayrimi utm_medium ile yapilir, kaynak ve kampanya sabit.
+/go/scrapeunblocker        https://www.scrapeunblocker.com/?via=2a04bdc75b&utm_source=dolunay&utm_medium=youtube&utm_campaign=3-products  302
+/go/scrapeunblocker-web    https://www.scrapeunblocker.com/?via=2a04bdc75b&utm_source=dolunay&utm_medium=website&utm_campaign=3-products  302
+/go/scrapeunblocker-skool  https://www.scrapeunblocker.com/?via=2a04bdc75b&utm_source=dolunay&utm_medium=skool&utm_campaign=3-products  302
