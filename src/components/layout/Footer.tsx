@@ -82,6 +82,24 @@ export function Footer() {
 
         <div className="mt-16">
           <div className="halftone-divider max-w-md mx-auto mb-6" />
+
+          {/* Ödeme kuruluşu bandı. iyzico üye işyeri kriteri: "iyzico ile Öde",
+              Visa ve Mastercard logoları sitede görünür olmak zorunda. Görsel
+              iyzico'nun resmi logo paketinden geliyor (footer/White sürümü),
+              yeniden çizilmiş ya da renklendirilmiş değil. */}
+          <div className="flex flex-col items-center gap-3 mb-8">
+            <span className="text-[#8A8E99] text-xs uppercase tracking-[0.18em]">
+              {t('footer.securePayment')}
+            </span>
+            <Image
+              src="/odeme/iyzico-logo-band.svg"
+              alt="iyzico ile Öde · Mastercard · Visa · American Express · troy"
+              width={456}
+              height={32}
+              className="h-6 sm:h-8 w-auto max-w-full opacity-90"
+            />
+          </div>
+
           <div className="flex flex-col items-center justify-center text-[#8A8E99] text-sm">
             <p>© {currentYear} Dolunay.ai. {t('footer.rights')}</p>
           </div>
