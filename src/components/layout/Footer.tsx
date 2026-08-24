@@ -96,6 +96,10 @@ export function Footer() {
               alt="iyzico ile Öde · Mastercard · Visa · American Express · troy"
               width={456}
               height={32}
+              // Next varsayilan olarak tembel yukler. Bu gorsel bir suslemenin
+              // degil, iyzico kriterinin kaniti; ziyaretci ya da denetci ta
+              // asagi kaydirmadan da yuklensin diye tembellik kapatildi.
+              loading="eager"
               className="h-6 sm:h-8 w-auto max-w-full opacity-90"
             />
           </div>
