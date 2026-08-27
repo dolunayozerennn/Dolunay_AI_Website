@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { Check, CalendarClock, Mail, Package } from 'lucide-react'
+import { Check, CalendarClock, Mail, Package, Info } from 'lucide-react'
 import { AbonelikKosullari } from '@/components/AbonelikKosullari'
 import { abonelikler, abonelikBul } from '../_abonelikler'
 
@@ -40,6 +40,18 @@ export default async function AbonelikPage({
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-[#4F8BFF]/5 blur-[120px] rounded-[100%] pointer-events-none" />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
+        {/* Ornek uyarisi. Gercek musteri sayfasinda hic cikmaz. */}
+        {abonelik.ornek && (
+          <div className="flex items-start gap-3 rounded-2xl border border-amber-400/25 bg-amber-400/[0.06] p-5 mb-10">
+            <Info className="w-5 h-5 text-amber-300 shrink-0 mt-0.5" />
+            <p className="text-sm text-amber-100/90 leading-relaxed">
+              Bu sayfa örnektir, gerçek bir müşteriye ait değildir. Abonelik
+              başlattığımız her müşteri kendi adresinde kendi paketini, aylık
+              bedelini ve tahsilat gününü bu düzende görür.
+            </p>
+          </div>
+        )}
 
         {/* Baslik */}
         <div className="mb-12">

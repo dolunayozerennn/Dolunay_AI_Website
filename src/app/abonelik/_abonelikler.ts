@@ -14,30 +14,41 @@ export type Abonelik = {
   baslangic: string
   faturaNotu: string
   kapsam: string[]
+  // true ise sayfanin tepesinde "bu bir ornektir" uyarisi cikar. Uyari sayfanin
+  // KENDI icinde durur; kaynak yorumuna yazilsa disaridan bakan goremezdi.
+  ornek?: boolean
 }
 
+// GERCEK musteri kaydi yalnizca karttan otomatik tahsilati kabul edenler icin
+// acilir. Klasik fatura usulu calisan musteri buraya YAZILMAZ (Cam Termal
+// 2026-08-27'de bu sebeple cikarildi).
+//
+// Asagidaki tek kayit gercek musteri degil, ORNEKTIR. Iki isi var: odeme
+// saglayicisi (iyzico) abonelik ekranini gormek istiyor, ve Next.js
+// output:export dinamik rotayi bos parametre listesiyle derlemiyor. Gercek
+// musteri eklenince ornek silinebilir.
 export const abonelikler: Abonelik[] = [
   {
-    slug: 'cam-termal',
-    musteri: 'Öğültürk Turizm',
-    isletme: 'Çam Termal Resort',
+    slug: 'ornek',
+    musteri: 'Örnek Müşteri',
+    isletme: 'Örnek İşletme',
     paket: 'Yönetilen Otomasyon',
-    tutar: '1.000',
-    paraBirimi: 'USD',
+    tutar: '40.000',
+    paraBirimi: 'TL',
     periyot: 'ay',
-    tahsilatGunu: 3,
-    baslangic: '2026-08-03',
+    tahsilatGunu: 5,
+    baslangic: '2026-09-05',
     faturaNotu:
-      'Aylık fatura, tahsilat günündeki TL karşılığı üzerinden düzenlenir.',
+      'Aylık fatura, tahsilat gününde düzenlenir ve kayıtlı e-posta adresine gönderilir.',
     kapsam: [
       'Yapay zeka müşteri hizmetleri yazılımı',
       'Instagram, WhatsApp ve Messenger mesajlarının 7/24 otomatik cevaplanması',
       'Canlı fiyat ve müsaitlik sorgulama',
-      'Oda görseli gönderimi',
       'Sunucu, API ve yapay zeka kullanım bedeli dahil',
       'Haftalık performans raporu',
       'WhatsApp destek hattı',
     ],
+    ornek: true,
   },
 ]
 

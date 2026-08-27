@@ -37,3 +37,9 @@ __pycache__/
 
 # Portrait generation alternatives (large, not for production)
 public/portrait_alternatives/
+
+# Bu depo PUBLIC. Asagidakiler ic kayittir, disariya cikmaz:
+# filo.json          -> projenin ic filo karti (gizli sayfalar, sahiplik, maliyet notu)
+# _olcum_defteri.jsonl -> olcum defteri; musteri adi gecebiliyor
+filo.json
+_olcum_defteri.jsonl
