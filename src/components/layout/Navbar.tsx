@@ -143,10 +143,18 @@ export function Navbar() {
                     <Link
                       href="/cozumler/hizmetler"
                       onClick={() => setIsDropdownOpen(false)}
-                      className="flex flex-col px-5 py-3.5 hover:bg-white/[0.04] transition-all duration-300"
+                      className="flex flex-col px-5 py-3.5 hover:bg-white/[0.04] transition-all duration-300 border-b border-white/[0.04]"
                     >
                       <span className="text-sm font-medium text-white">{t('nav.services')}</span>
                       <span className="text-xs text-gray-500 mt-0.5">{t('nav.servicesDesc')}</span>
+                    </Link>
+                    <Link
+                      href="/cozumler/otomasyon-abonelik"
+                      onClick={() => setIsDropdownOpen(false)}
+                      className="flex flex-col px-5 py-3.5 hover:bg-white/[0.04] transition-all duration-300"
+                    >
+                      <span className="text-sm font-medium text-white">{t('nav.automationSubscription')}</span>
+                      <span className="text-xs text-gray-500 mt-0.5">{t('nav.automationSubscriptionDesc')}</span>
                     </Link>
                   </motion.div>
                 )}
@@ -265,6 +273,13 @@ export function Navbar() {
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {t('nav.services')}
+              </Link>
+              <Link 
+                href="/cozumler/otomasyon-abonelik"
+                className="text-gray-300 hover:text-white font-medium px-4 py-2.5 rounded-lg hover:bg-white/[0.04] transition-all"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {t('nav.automationSubscription')}
               </Link>
 
               <div className="h-px bg-white/[0.08] my-3 mx-2" />

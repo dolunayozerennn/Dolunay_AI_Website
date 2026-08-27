@@ -10,7 +10,7 @@ export default function MesafeliSatisSozlesmesiPage() {
         <h1 className="text-3xl md:text-4xl font-bold mb-8 text-white">Mesafeli Satış Sözleşmesi</h1>
         <div className="prose prose-invert prose-lg max-w-none space-y-6 text-gray-300 leading-relaxed">
 
-          <p className="text-gray-400 text-sm">Son güncelleme: 22 Mart 2026</p>
+          <p className="text-gray-400 text-sm">Son güncelleme: 27 Ağustos 2026</p>
 
           <h2 className="text-xl font-semibold text-white mt-8">1. Taraflar</h2>
           <p>
@@ -45,6 +45,7 @@ export default function MesafeliSatisSozlesmesiPage() {
           <ul className="list-disc list-inside space-y-2">
             <li>Yapay zeka eğitim paketleri (online kurs, workshop, webinar)</li>
             <li>AI otomasyon çözüm paketleri</li>
+            <li>Aylık yapay zeka otomasyon abonelikleri (bakım, yönetilen otomasyon, kurumsal)</li>
             <li>AI Factory topluluk üyelikleri</li>
             <li>Danışmanlık ve mentorluk hizmetleri</li>
           </ul>
@@ -72,14 +73,46 @@ export default function MesafeliSatisSozlesmesiPage() {
             hakkı kullanılabilir.
           </p>
 
-          <h2 className="text-xl font-semibold text-white mt-8">6. Genel Hükümler</h2>
+          <h2 className="text-xl font-semibold text-white mt-8">6. Abonelikler ve Yinelenen Ödemeler</h2>
+          <p>
+            Aylık yapay zeka otomasyon aboneliklerinde aşağıdaki hükümler uygulanır.
+          </p>
+          <ul className="list-disc list-inside space-y-2">
+            <li>
+              Abonelik bedeli, her ay aynı gün Alıcı&apos;nın kayıtlı kredi kartından iyzico
+              ödeme altyapısı üzerinden otomatik olarak tahsil edilir. Kart bilgileri Satıcı
+              tarafından saklanmaz.
+            </li>
+            <li>
+              Abonelik, Alıcı tarafından iptal edilmediği sürece her ay kendiliğinden yenilenir.
+            </li>
+            <li>
+              Aylık bedel, Alıcı&apos;ya sunulan teklifte ve sözleşmede belirlenir. En az 30 gün
+              önceden yazılı bildirim yapılmadan değiştirilemez.
+            </li>
+            <li>
+              Alıcı, dolunay@dolunay.ai adresine yazarak aboneliğini dilediği zaman iptal
+              edebilir. İptal talebi alındığında sonraki tahsilat durdurulur. Hizmet, ödemesi
+              yapılmış dönemin sonuna kadar devam eder ve bu dönem için iade yapılmaz.
+            </li>
+            <li>
+              Tahsilatın başarısız olması halinde ödeme üç iş günü içinde yeniden denenir.
+              Ödemenin alınamaması durumunda hizmet askıya alınabilir.
+            </li>
+            <li>
+              Aboneliğin kapsamı ve güncel aylık bedeli, Alıcı&apos;ya özel abonelik sayfasında
+              ve her ay düzenlenen faturada gösterilir.
+            </li>
+          </ul>
+
+          <h2 className="text-xl font-semibold text-white mt-8">7. Genel Hükümler</h2>
           <ul className="list-disc list-inside space-y-2">
             <li>Alıcı, sipariş onayı vererek işbu Sözleşme şartlarını kabul etmiş sayılır.</li>
             <li>Satıcı, mücbir sebep hallerinde yükümlülüklerini ifa etmekten kurtulur.</li>
             <li>İşbu Sözleşme&apos;den doğan uyuşmazlıklarda Tüketici Hakem Heyetleri ve Tüketici Mahkemeleri yetkilidir.</li>
           </ul>
 
-          <h2 className="text-xl font-semibold text-white mt-8">7. İletişim</h2>
+          <h2 className="text-xl font-semibold text-white mt-8">8. İletişim</h2>
           <p>
             Sözleşme ile ilgili her türlü soru ve talepleriniz için{' '}
             <a href="mailto:dolunay@dolunay.ai" className="text-[#4F8BFF] hover:underline">

@@ -21,7 +21,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/blog',
     '/kaynaklar/scrapeunblocker',
     '/cozumler',
+    '/cozumler/otomasyon-abonelik',
     // '/cozumler/hizmetler' bilerek YOK: govdesi /cozumler'in kopyasi, canonical oraya bakiyor.
+    // '/abonelik/<musteri>' bilerek YOK: musteriye ozel bedel iceriyor, noindex.
     '/egitimler/ai-factory',
     '/egitimler/kurumsal-egitimler',
     '/isbirlikleri',

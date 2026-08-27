@@ -7,6 +7,7 @@ import {
   Users, GraduationCap, ArrowUpRight, Sparkles, TrendingUp, ExternalLink
 } from 'lucide-react';
 import { ServicesSection } from '@/components/sections/ServicesSection';
+import { AbonelikSeridi } from '@/components/AbonelikSeridi';
 import { useTranslation } from '@/i18n/i18n';
 
 function SkoolIcon({ className }: { className?: string }) {
@@ -232,6 +233,9 @@ export default function SolutionsPage() {
 
       {/* HİZMETLER — Referanslar dahil */}
       <ServicesSection />
+
+      {/* ABONELIK — kurulan otomasyonun aylik surdurulmesi */}
+      <AbonelikSeridi />
     </div>
   );
 }

@@ -65,6 +65,7 @@ export function Footer() {
 
               <Link href="/cozumler" className="hover:text-white transition-colors">{t('nav.allSolutions')}</Link>
               <Link href="/cozumler/hizmetler" className="hover:text-white transition-colors">{t('nav.services')}</Link>
+              <Link href="/cozumler/otomasyon-abonelik" className="hover:text-white transition-colors">{t('nav.automationSubscription')}</Link>
               <Link href="/isbirlikleri" className="hover:text-white transition-colors">{t('nav.collaborations')}</Link>
             </div>
 

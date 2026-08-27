@@ -5,6 +5,7 @@
 // motoru ikisini tek sayfa sayar. Kendi basina siralanmasi isteniyorsa
 // once govde metninin /cozumler'den FARKLILASMASI gerekir.
 import { ServicesSection } from '@/components/sections/ServicesSection'
+import { AbonelikSeridi } from '@/components/AbonelikSeridi'
 import type { Metadata } from 'next'
 
 // Not: '/cozumler' layout'u kendi title'ini duz metin olarak tanimladigi icin
@@ -21,6 +22,7 @@ export default function ServicesPage() {
     <div className="min-h-screen bg-[#08090C]">
       {/* Sayfanın tek içeriği bu blok, o yüzden başlığı h1 olarak render edilir. */}
       <ServicesSection asHeading="h1" />
+      <AbonelikSeridi />
     </div>
   )
 }
