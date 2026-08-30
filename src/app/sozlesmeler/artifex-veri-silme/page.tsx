@@ -3,6 +3,11 @@
 import Link from 'next/link';
 import { TurkishOnlyDocument } from '@/components/LegalNotice';
 
+/**
+ * Metin avukat tarafindan revize edildi (24 Agustos 2026) ve ELLE yazilmaz.
+ * Kaynak: Projeler/Artifex_Hukuki_Sayfalar/kaynak/Artifex Veri Silme MG.docx
+ * Ureten: Projeler/Artifex_Hukuki_Sayfalar/uret_nextjs.py
+ */
 export default function ArtifexVeriSilmePage() {
   return (
     <div className="pt-32 pb-20 min-h-screen">
@@ -14,182 +19,120 @@ export default function ArtifexVeriSilmePage() {
         <p className="text-gray-500 text-sm mb-8">Data Deletion Instructions (English label for review purposes)</p>
         <div className="prose prose-invert prose-lg max-w-none space-y-6 text-gray-300 leading-relaxed">
 
-          <p className="text-gray-400 text-sm">Son güncelleme: 9 Ağustos 2026</p>
+          <p className="text-gray-400 text-sm">Son güncelleme: 24 Ağustos 2026</p>
 
-          <p>
-            Artifex, işletmelere Instagram, Facebook Messenger ve WhatsApp mesajlarını
-            otomatik cevaplama hizmeti verir. Bu sırada mesajlarınız saklanır. Bu sayfa,
-            saklanan verilerinizi nasıl sildireceğinizi anlatır. Hangi verinin tutulduğu{' '}
-            <Link href="/sozlesmeler/artifex-gizlilik" className="text-[#4F8BFF] hover:underline">
-              Artifex Mesaj Otomasyonu Gizlilik Politikası
-            </Link>{' '}
-            sayfasında yazılıdır.
-          </p>
-
-          <h2 className="text-xl font-semibold text-white mt-8">Kimler Talep Gönderebilir</h2>
+          <p>Bu Veri Silme, Yok Etme ve Anonimleştirme Politikası, Artifex AI tarafından sunulan yazılım hizmeti kapsamında işlenen kişisel verilerin ve hizmet kayıtlarının silinmesi, yok edilmesi veya anonim hâle getirilmesine ilişkin usul ve esasları açıklar.</p>
+          <p>Artifex AI; işletmelerin Instagram hesaplarına gelen doğrudan mesajları ve yorumları teknik olarak alabilir, saklayabilir, sınıflandırabilir, yapay zekâ hizmetleri aracılığıyla işleyebilir ve işletmenin talimatları doğrultusunda yanıt oluşturabilir.</p>
+          <p>Bu politika, aşağıdaki belgelerle birlikte değerlendirilir:</p>
           <ul className="list-disc list-inside space-y-2">
-            <li>Bir işletmenin Instagram, Messenger veya WhatsApp hesabına yazmış olan kişi</li>
-            <li>Hizmeti kullanan işletme, kendi hesabındaki tüm veriler için</li>
+            <li><Link href="/sozlesmeler/artifex-gizlilik" className="text-[#4F8BFF] hover:underline">Gizlilik Politikası</Link>,</li>
+            <li><Link href="/sozlesmeler/artifex-kvkk-aydinlatma" className="text-[#4F8BFF] hover:underline">KVKK Aydınlatma Metni</Link>,</li>
+            <li><Link href="/sozlesmeler/artifex-kosullar" className="text-[#4F8BFF] hover:underline">Kullanım Koşulları</Link>,</li>
+            <li><Link href="/sozlesmeler/artifex-acik-riza" className="text-[#4F8BFF] hover:underline">Açık Rıza Metni</Link></li>
+            <li>Varsa taraflar arasında imzalanmış özel sözleşme veya hizmet seviyesi sözleşmesi.</li>
           </ul>
-          <p>
-            Talebiniz, mesaj yazdığınız işletmeye ait veriyi ilgilendirir. Talebi alır,
-            gerekiyorsa ilgili işletmeyi bilgilendirir ve silme işlemini yürütürüz.
-          </p>
-
-          <h2 className="text-xl font-semibold text-white mt-8">Önce Kimlik Doğrulaması</h2>
-          <p>
-            Başkasının verisinin silinmesini ya da görülmesini önlemek için, talebi gönderen
-            kişinin gerçekten o hesabın sahibi olduğunu doğrulamamız gerekir. Bunun için sizden
-            hesabınızdan gönderilecek kısa bir teyit mesajı ya da benzeri basit bir doğrulama
-            adımı isteyebiliriz. Doğrulama yapılamazsa talebi karşılayamayız; sebebini size
-            yazılı olarak bildiririz.
-          </p>
-
-          <h2 className="text-xl font-semibold text-white mt-8">Yol 1: Bize Yazılı Başvurun</h2>
-          <p>Bu en hızlı yoldur. Üç adım vardır.</p>
-          <ol className="list-decimal list-inside space-y-3">
-            <li>
-              <strong className="text-white">Başvurunuzu gönderin.</strong> Şu yollardan biri
-              geçerlidir: KEP adresimize (artifexyapayzeka@hs01.kep.tr) yazmak, güvenli
-              elektronik imza veya mobil imza ile imzalayıp göndermek, ıslak imzalı dilekçeyi
-              adresimize posta ile yollamak, ya da daha önce bize bildirdiğiniz ve sistemimizde
-              kayıtlı olan e-posta adresinizden{' '}
-              <a href="mailto:dolunay@dolunay.ai?subject=Veri%20Silme%20Talebi" className="text-[#4F8BFF] hover:underline">
-                dolunay@dolunay.ai
-              </a>{' '}
-              adresine yazmak. Konu satırına <strong className="text-white">Veri Silme Talebi</strong> yazın.
-            </li>
-            <li>
-              <strong className="text-white">Kanunen bulunması gerekenleri yazın:</strong>
-              <ul className="list-disc list-inside ml-6 mt-2 space-y-1">
-                <li>Adınız ve soyadınız, başvuru yazılı ise imzanız</li>
-                <li>T.C. kimlik numaranız; yabancıysanız uyruğunuz ve pasaport numaranız</li>
-                <li>Tebligata esas yerleşim yeri veya iş yeri adresiniz</li>
-                <li>Varsa e-posta adresiniz ve telefon numaranız</li>
-                <li>Talebinizin konusu</li>
-              </ul>
-            </li>
-            <li>
-              <strong className="text-white">Sizi sistemde bulabilmemiz için şunları ekleyin:</strong>
-              <ul className="list-disc list-inside ml-6 mt-2 space-y-1">
-                <li>Kullandığınız platform: Instagram, Messenger veya WhatsApp</li>
-                <li>Kullanıcı adınız; arada değiştirdiyseniz eski adınızı da yazın. WhatsApp ise telefon numaranız</li>
-                <li>Yazdığınız işletmenin hesap adı</li>
-                <li>Yaklaşık tarih aralığı (biliyorsanız)</li>
-              </ul>
-            </li>
-          </ol>
-          <p>
-            Başvurunuzu Türkçe gönderin. Eksik bilgiyle gelen başvuruyu sonuçlandıramayız, ama
-            neyin eksik olduğunu size bildiririz.
-          </p>
-
-          <h2 className="text-xl font-semibold text-white mt-8">Yol 2: İzni Platform Üzerinden Geri Alın</h2>
-          <p>
-            Hizmeti kullanan işletmeyseniz, bağlantıyı kendi hesabınızdan kesebilirsiniz.
-            Hangi platformdan bağlandığınıza göre yol değişir.
-          </p>
-          <p><strong className="text-white">Instagram üzerinden bağlandıysanız:</strong></p>
-          <ol className="list-decimal list-inside space-y-2">
-            <li>Instagram uygulamasında Ayarlar bölümünü açın.</li>
-            <li>Uygulama ve medya başlığı altındaki internet sitesi izinleri bölümüne girin.</li>
-            <li>Uygulamalar ve internet siteleri bölümünde Aktif listesine bakın.</li>
-            <li>Uygulamamızı bulun ve kaldırın.</li>
-          </ol>
-          <p><strong className="text-white">Facebook sayfası veya WhatsApp üzerinden bağlandıysanız:</strong></p>
-          <ol className="list-decimal list-inside space-y-2">
-            <li>Facebook ayarlarında iş bağlantıları ya da iş birliği entegrasyonları bölümünü açın.</li>
-            <li>Listede uygulamamızı bulun ve kaldırın.</li>
-          </ol>
-          <p>
-            Ekranlar zamanla değişebilir. Uygulamayı listede bulamazsanız bize yazın, yol
-            gösterelim.
-          </p>
-          <p>
-            İzni kaldırdığınız anda erişim anahtarı Meta tarafında geçersiz olur ve sistemimiz
-            o hesaba erişemez. Aynı işlem, o hesaba ait sohbet ve yorum kayıtlarının silinmesini
-            de başlatır; silme en geç 30 gün içinde tamamlanır. Ayrıca e-posta göndermenize
-            gerek yoktur, ama isterseniz Yol 1 ile silme onayı talep edebilirsiniz.
-          </p>
-
-          <h2 className="text-xl font-semibold text-white mt-8">Ne Siliniyor</h2>
+          <p>Kişisel verilerin hangi amaçlarla ve hangi hukuki sebeplerle işlendiğine ilişkin ayrıntılar, ilgili kişi bakımından uygulanabilir olan <Link href="/sozlesmeler/artifex-kvkk-aydinlatma" className="text-[#4F8BFF] hover:underline">KVKK Aydınlatma Metni’nde</Link> açıklanır.</p>
+          <h2 className="text-xl font-semibold text-white mt-8">1. Veri silme talebinin kapsamı</h2>
+          <p>Bu politika, Artifex AI sistemlerinde aşağıdaki kayıtların silinmesi, yok edilmesi veya anonimleştirilmesi taleplerini kapsar:</p>
           <ul className="list-disc list-inside space-y-2">
-            <li>Mesajlarınızın ve yorumlarınızın metni</li>
-            <li>Size gönderilen otomatik cevapların kaydı</li>
-            <li>Hesabınıza ait platform kullanıcı numarası ve kullanıcı adı</li>
-            <li>Sohbete bağlı ek bilgiler ve zaman kayıtları</li>
-            <li>İşletme talebiyse ayrıca erişim anahtarı ve tüm bağlantı kaydı</li>
+            <li>Instagram üzerinden gönderilen doğrudan mesaj içerikleri,</li>
+            <li>Yorum içerikleri,</li>
+            <li>Mesaj ve yorum kimlikleri,</li>
+            <li>Instagram kullanıcı adı ve uygulamaya özgü hesap tanımlayıcıları,</li>
+            <li>Mesaj ve yorumların tarih ve saat bilgileri,</li>
+            <li>Gönderilen görsel, video veya diğer içeriklere ilişkin teknik bağlantılar,</li>
+            <li>Mesajlara verilen veya verilmek üzere oluşturulan yanıtlar,</li>
+            <li>Yanıt oluşturma sürecine ilişkin işlem kayıtları,</li>
+            <li>Mesajlarla bağlantılı teknik işlem ve hata kayıtları,</li>
+            <li>Müşteri hesabı ve işletme hesabı eşleştirme kayıtları,</li>
+            <li>İlgili kişi başvurularına ilişkin kayıtlar.</li>
+          </ul>
+          <p>Silme talebinin kapsamı, talepte belirtilen işletme hesabı, kullanıcı hesabı, iletişim dönemi ve kayıt türleriyle sınırlı olarak değerlendirilir.</p>
+          <p>Bir kişinin farklı işletmelerle veya farklı Instagram hesaplarıyla olan yazışmaları, her müşteri işletmenin veri seti ayrı tutulduğu için tek bir silme talebiyle otomatik olarak silinmez. Birden fazla işletme veya hesap bakımından silme talep ediliyorsa, her bir işletme veya hesap talepte açıkça belirtilmelidir.</p>
+          <h2 className="text-xl font-semibold text-white mt-8">2. Veri sorumlusu ve veri işleyen bakımından başvurunun yönlendirilmesi</h2>
+          <h3 className="text-lg font-semibold text-white mt-6">2.1. Artifex AI altyapısını kullanan bir işletmenin Instagram hesabına yazılması</h3>
+          <p>Bir işletmenin Instagram hesabına doğrudan mesaj gönderir veya yorum yazarsanız, söz konusu mesaj ve yorumların hangi amaçla işleneceğine, ne kadar süreyle saklanacağına ve ne zaman silineceğine kural olarak ilgili işletme karar verir.</p>
+          <p>Bu durumda ilgili işletme, müşteri hizmetleri, sipariş, rezervasyon, randevu, şikâyet veya bilgi taleplerinin yürütülmesi bakımından veri sorumlusu olabilir. Artifex AI ise ilgili işletmenin talimatları doğrultusunda teknik hizmet sunan veri işleyen sıfatıyla hareket edebilir.</p>
+          <p>Bu kapsamda Artifex AI’a ulaşan silme talepleri:</p>
+          <ul className="list-disc list-inside space-y-2">
+            <li>İlgili işletmeye iletilebilir,</li>
+            <li>İlgili işletmenin talimatı doğrultusunda işleme alınabilir,</li>
+            <li>Talep sahibinden ek bilgi istenerek doğru kayıtla eşleştirilebilir,</li>
+            <li>İlgili işletmenin veri sorumlusu olarak karar vermesi için işletmeye yönlendirilebilir.</li>
+          </ul>
+          <p>Artifex AI, ilgili işletmenin talimatı veya hukuki zorunluluk bulunmaksızın, işletmenin veri sorumlusu olduğu hizmet kayıtlarını kendi takdirine göre silmez. Talebinizi bize ilettiğinizde onu gecikmeksizin ilgili işletmeye aktarır ve işletmenin talimatı doğrultusunda gereğini yaparız. Dilerseniz talebinizi doğrudan ilgili işletmeye de iletebilirsiniz.</p>
+          <h3 className="text-lg font-semibold text-white mt-6">2.2. Doğrudan Artifex AI’ın kendi Instagram hesabına yazılması</h3>
+          <p>Doğrudan Artifex AI’ın kendi Instagram hesabına mesaj gönderir veya yorum yazarsanız, ilgili kayıtların Artifex AI tarafından kendi amaçları doğrultusunda işlenen kısmı bakımından Artifex AI veri sorumlusu olarak hareket edebilir.</p>
+          <p>Bu durumda silme talebi doğrudan Artifex AI tarafından değerlendirilir. Talebin kabul edilmesi hâlinde, hukuken saklanması zorunlu olan veya başka bir hukuki sebeple tutulması gereken kayıtlar dışında kalan kişisel veriler silinir, yok edilir veya anonim hâle getirilir.</p>
+          <h2 className="text-xl font-semibold text-white mt-8">3. Kimler veri silme talebinde bulunabilir</h2>
+          <p>Aşağıdaki kişiler veri silme, yok etme veya anonimleştirme talebinde bulunabilir:</p>
+          <ul className="list-disc list-inside space-y-2">
+            <li>Kişisel verisi işlenen ilgili kişi,</li>
+            <li>İlgili kişinin kanuni temsilcisi,</li>
+            <li>İlgili kişi tarafından usulüne uygun biçimde yetkilendirilmiş vekil veya temsilci,</li>
+            <li>Tüzel kişi veya işletme bakımından yetkili temsilci,</li>
+            <li>Artifex AI ile hizmet ilişkisi bulunan müşteri işletmenin yetkili temsilcisi.</li>
+          </ul>
+          <p>Kanuni temsilci veya vekil aracılığıyla yapılan başvurularda, temsil yetkisini gösteren belgenin sunulması istenebilir. Kimlik ve yetki doğrulaması için talep edilen belgeler, yalnızca başvurunun değerlendirilmesi için gerekli olduğu ölçüde işlenir ve başvuru süreci tamamlandıktan sonra uygulanabilir saklama kurallarına göre silinir veya imha edilir. Başvurunun başka bir kişi adına yapıldığı hâllerde Artifex AI, kişisel verilerin yetkisiz kişilere açıklanmasını önlemek amacıyla ek doğrulama talep edebilir.</p>
+          <h2 className="text-xl font-semibold text-white mt-8">4. Veri silme talebinin iletilmesi</h2>
+          <p>Şu anda talep almanın <strong className="text-white">tek yolu e-postadır</strong>:</p>
+          <p><strong className="text-white">dolunay@dolunay.ai</strong></p>
+          <p>Konu satırı: <strong className="text-white">Veri Silme Talebi</strong></p>
+          <p>E-postanızda mutlaka belirtin:</p>
+          <ul className="list-disc list-inside space-y-2">
+            <li>Instagram kullanıcı adınız</li>
+            <li>Hangi işletmenin Instagram hesabıyla yazıştığınız</li>
+          </ul>
+          <p>Bu iki bilgi olmadan kayıtlarınızı doğru şekilde bulup eşleştiremeyiz.</p>
+          <h2 className="text-xl font-semibold text-white mt-8">5. Kimlik ve hesap doğrulaması</h2>
+          <p>Artifex AI, silme talebinin gerçekten ilgili kişi veya yetkili temsilci tarafından yapıldığını doğrulamak için makul ve ölçülü güvenlik tedbirleri uygulayabilir. Instagram hesabından doğrulama mesajı gönderilmesinin istenmesi, yalnızca kimlik doğrulama amacı taşır. Bu yöntem, hesabın şifresinin veya erişim bilgilerinin Artifex AI’a verilmesini gerektirmez.</p>
+          <h2 className="text-xl font-semibold text-white mt-8">6. Talebin kapsamı</h2>
+          <p>Bir silme talebi, yalnızca talebin yapıldığı işletmeyle olan yazışmaları kapsar.</p>
+          <p>Aynı kişinin başka bir işletmeyle olan kayıtları bu talepten etkilenmez, çünkü kayıtlar işletme bazında ayrı tutulur.</p>
+          <p>Birden fazla işletmeyle yazıştıysanız ve hepsinin silinmesini istiyorsanız, bunu talebinizde ayrıca belirtmeniz gerekir.</p>
+          <h2 className="text-xl font-semibold text-white mt-8">7. Silinecek Veriler</h2>
+          <p>Aşağıdaki kayıtların her biri, yalnızca talebin yapıldığı işletme kapsamıyla sınırlı olarak silinir:</p>
+          <ul className="list-disc list-inside space-y-2">
+            <li>Mesaj içerikleriniz (metin, gönderdiğiniz görsel ve videoların bağlantıları, paylaştığınız gönderilere ilişkin bilgiler)</li>
+            <li>Yorum içerikleriniz</li>
+            <li>Mesaj ve yorum kimlikleriniz ile zaman damgaları</li>
+            <li>Uygulamaya özel Instagram hesap tanımlayıcınız ve kullanıcı adınız</li>
+            <li>Bu yazışmalara bağlı teknik işlem kayıtları</li>
+          </ul>
+          <h2 className="text-xl font-semibold text-white mt-8">8. Değerlendirme ve cevap süresi</h2>
+          <p>Başvurular, Artifex AI’a ulaştığı tarihten itibaren makul süre içinde incelenir ve talebinizi <strong className="text-white">en geç 30 gün</strong> içinde sonuçlandırırız.</p>
+          <p>Kayıtların yedeklerden tamamen düşmesi <strong className="text-white">ek 30 günü</strong> bulabilir. Yedekler yalnızca felaket kurtarma amacıyla tutulur; günlük işleyişte kullanılmaz.</p>
+          <p>Başvurunun ilgili müşteri işletmenin veri sorumlusu sıfatıyla karar vermesini gerektirmesi hâlinde, Artifex AI başvuruyu işletmeye iletir ve işletmenin talimatı doğrultusunda işlem yapar.</p>
+          <h2 className="text-xl font-semibold text-white mt-8">9. Silinemeyen kayıtlar</h2>
+          <ul className="list-disc list-inside space-y-2">
+            <li>Hukuken saklanması zorunlu olan kayıtlar, yasal süre boyunca saklanmaya devam eder</li>
+            <li>Kimliğinizle ilişkilendirilemeyecek şekilde anonim hâle getirilmiş istatistikler, artık kişisel veri olmadığı için silme kapsamı dışındadır</li>
+          </ul>
+          <h2 className="text-xl font-semibold text-white mt-8">10. Uygulamanın erişimini kaldırmak</h2>
+          <p>Instagram uygulamasında <strong className="text-white">Ayarlar → Web sitesi izinleri → Uygulamalar ve web siteleri</strong> yolundan uygulamanın hesabınıza erişimini dilediğiniz an kaldırabilirsiniz.</p>
+          <p><strong className="text-white">Bunun geçmiş kayıtları silmediğini</strong> unutmayın: erişimi kaldırmak yalnızca bundan sonrasını durdurur. Mevcut kayıtların silinmesi için yukarıdaki e-posta yoluyla ayrıca talepte bulunmanız gerekir.</p>
+          <h2 className="text-xl font-semibold text-white mt-8">11. Ayrıntılı bilgi</h2>
+          <p>Hangi verileri hangi amaçla işlediğimiz, saklama süreleri ve KVKK haklarınız için: <Link href="/sozlesmeler/artifex-gizlilik" className="text-[#4F8BFF] hover:underline">Gizlilik Politikası</Link>.</p>
+
+          <h2 className="text-xl font-semibold text-white mt-8">Ayrıca bakınız</h2>
+          <ul className="list-disc list-inside space-y-2">
+            <li><Link href="/sozlesmeler/artifex-gizlilik" className="text-[#4F8BFF] hover:underline">Gizlilik Politikası</Link></li>
+            <li><Link href="/sozlesmeler/artifex-kvkk-aydinlatma" className="text-[#4F8BFF] hover:underline">KVKK Aydınlatma Metni</Link></li>
+            <li><Link href="/sozlesmeler/artifex-acik-riza" className="text-[#4F8BFF] hover:underline">Açık Rıza Metni</Link></li>
+            <li><Link href="/sozlesmeler/artifex-kosullar" className="text-[#4F8BFF] hover:underline">Kullanım Koşulları</Link></li>
           </ul>
 
-          <h2 className="text-xl font-semibold text-white mt-8">Ne Silinemiyor</h2>
-          <p>
-            Aşağıdakiler genellikle silinemez. Yine de her talebi tek tek değerlendiririz. Bir
-            talebi reddedersek sebebini yazılı olarak ve otuz gün içinde bildiririz.
-          </p>
-          <ul className="list-disc list-inside space-y-2">
-            <li>
-              <strong className="text-white">Instagram, Messenger ve WhatsApp uygulamasındaki
-              mesajlarınızın kendisi.</strong> Onlar Meta&apos;nın sunucusundadır, bizim
-              elimizde değildir. Onları uygulamanın içinden silmeniz gerekir.
-            </li>
-            <li>
-              <strong className="text-white">Cevabı üreten yapay zeka sağlayıcılarında geçici
-              olarak kalan kopyalar.</strong> Bu servisler istemleri kötüye kullanım denetimi
-              için kısa bir süre saklayabilir ve kendi süreleri dolunca siler.
-            </li>
-            <li>
-              <strong className="text-white">Kanunen saklamak zorunda olduğumuz kayıtlar.</strong>{' '}
-              Fatura ve muhasebe belgeleri vergi mevzuatı gereği beş yıl, ticari defter ve
-              yazışmalar Türk Ticaret Kanunu gereği on yıl saklanır. Süreler kaydın oluştuğu
-              takvim yılının bitişiyle başlar. Bu kayıtlar mesaj içeriği taşımaz.
-            </li>
-            <li>
-              <strong className="text-white">Kimliğe bağlı olmayan sayısal özetler.</strong>{' '}
-              Kaç mesaj geldiği gibi toplam sayılar sizinle ilişkilendirilemez, bu yüzden silinmez.
-            </li>
-          </ul>
-
-          <h2 className="text-xl font-semibold text-white mt-8">Süreler</h2>
-          <ul className="list-disc list-inside space-y-2">
-            <li>Talebin alındığının teyidi: en kısa sürede</li>
-            <li>Silmenin tamamlanması: en kısa sürede ve her halde en geç 30 gün içinde, ücretsiz</li>
-            <li>Yedekler: silme sonrası veri canlı sistemden kalkar, otomatik yedeklerdeki kopyalar yedek döngüsü yenilendikçe kaybolur</li>
-          </ul>
-          <p>
-            İşlem bittiğinde size aynı yoldan dönüş yaparız. Cevabın kağıda basılıp gönderilmesi
-            gerekirse ilk on sayfa ücretsizdir, sonraki her sayfa için mevzuatta belirlenen
-            işlem ücreti alınabilir.
-          </p>
-
-          <h2 className="text-xl font-semibold text-white mt-8">Tanıtım İletisi Almak İstemiyorsanız</h2>
-          <p>
-            Bu, veri silme talebinden ayrı bir haktır. Tanıtım içeren ileti almak istemezseniz
-            aynı kanaldan bize yazmanız yeterlidir. Ücret alınmaz, gerekçe sorulmaz ve gönderim
-            en geç üç iş günü içinde durdurulur.
-          </p>
-
-          <h2 className="text-xl font-semibold text-white mt-8">Talebiniz Karşılanmazsa</h2>
-          <p>
-            Önce bize ya da mesaj yazdığınız işletmeye başvurmanız gerekir; kanun doğrudan
-            şikayete gidilmesine izin vermez. Başvurunuz reddedilirse, cevap yetersiz gelirse ya
-            da otuz gün içinde cevap alamazsanız, cevabı öğrendiğiniz tarihten itibaren otuz ve
-            her halde başvuru tarihinden itibaren altmış gün içinde Kişisel Verileri Koruma
-            Kurulu&apos;na şikayette bulunabilirsiniz. Kişilik haklarınız zarar gördüyse tazminat
-            hakkınız ayrıca saklıdır.
-          </p>
-
-          <h2 className="text-xl font-semibold text-white mt-8">İletişim Bilgileri</h2>
-          <p>
-            <strong className="text-white">Unvan:</strong> ARTİFEX YAPAY ZEKA ÇÖZÜMLERİ LİMİTED ŞİRKETİ<br />
-            <strong className="text-white">Adres:</strong> Barbaros Mah. Şebboy Sk. No:4/1 İç Kapı No:2, Ataşehir / İstanbul<br />
-            <strong className="text-white">Vergi kimlik numarası:</strong> 0851465973 (Kozyatağı Vergi Dairesi)<br />
-            <strong className="text-white">MERSİS:</strong> 0085146597300001<br />
-            <strong className="text-white">E-posta:</strong>{' '}
-            <a href="mailto:dolunay@dolunay.ai?subject=Veri%20Silme%20Talebi" className="text-[#4F8BFF] hover:underline">
-              dolunay@dolunay.ai
-            </a><br />
-            <strong className="text-white">KEP:</strong> artifexyapayzeka@hs01.kep.tr
-          </p>
+          <div className="rounded-xl bg-white/[0.03] border border-white/10 p-5 mt-8 text-sm">
+            <p>
+              <strong className="text-white">Unvan:</strong> ARTİFEX YAPAY ZEKA ÇÖZÜMLERİ LİMİTED ŞİRKETİ<br />
+              <strong className="text-white">Adres:</strong> Barbaros Mah. Şebboy Sk. No:4/1 İç Kapı No:2, Ataşehir / İstanbul<br />
+              <strong className="text-white">Vergi kimlik numarası:</strong> 0851465973 (Kozyatağı Vergi Dairesi)<br />
+              <strong className="text-white">MERSİS:</strong> 0085146597300001<br />
+              <strong className="text-white">E-posta:</strong>{' '}
+              <a href="mailto:dolunay@dolunay.ai" className="text-[#4F8BFF] hover:underline">dolunay@dolunay.ai</a><br />
+              <strong className="text-white">KEP:</strong> artifexyapayzeka@hs01.kep.tr
+            </p>
+          </div>
 
         </div>
       </div>
