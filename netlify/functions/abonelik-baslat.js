@@ -22,7 +22,7 @@ function govdeCoz(event) {
   const p = new URLSearchParams(ham)
   const o = {}
   for (const [k] of ALANLAR) o[k] = (p.get(k) || '').trim()
-  o.onay = (p.get('onay') || '').trim() !== ''
+  o.onay = ['on', '1', 'true', 'evet'].includes((p.get('onay') || '').trim().toLowerCase())
   return o
 }
 
