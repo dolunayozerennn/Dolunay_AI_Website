@@ -81,9 +81,15 @@ const CSP = [
   "img-src 'self' data: blob: https:",
   "font-src 'self' https://static.iyzipay.com https://cdn.iyzipay.com data:",
   "connect-src 'self' https://api.iyzipay.com https://merchant-gateway.iyzipay.com https://consumerapigw.iyzipay.com https://static.iyzipay.com https://cdn.iyzipay.com https://countly.iyzico.com https://o120955.ingest.tr.sentry.io",
-  // 3D Secure adimi musteriyi KENDI BANKASININ adresine goturur (her banka ayri
-  // alan adi, onceden listelenemez). Bu ikisi iyzipay ile sinirli kalirsa 3DS
-  // adimi sessizce bloklanir ve iyzico "genel bir hata olustu" der.
+  // DIKKAT: asagidaki iki satirdaki 'https:' joker izin BILINCLI gevsekliktir,
+  // kanitlanmis bir ihtiyac degil. Olculen: canli kart sayfamizda sifir <form>,
+  // sifir <iframe> var ve gecen tum alan adlari *.iyzipay.com; iyzico'nun checkout
+  // paketi de 3DS sayfasi cizmiyor. AMA o paket 3DS ucunu hic cagirmiyor, yani
+  // 3DS kodu calisma aninda ayri bir parcadan geliyor ve nereye cizdigini
+  // OLCEMEDIK. 3DS musterinin bankasina gidiyorsa (her banka ayri alan adi)
+  // daraltmak canli odemeyi sessizce kirar. Joker bu belirsizlik yuzunden duruyor:
+  // script-src kilitli ve tum girdi kacirildigi icin somut acik degil, derinlemesine
+  // savunma kaybi. Gercek 3DS akisi bir kez izlenince burasi daraltilmali.
   "frame-src 'self' https:",
   "frame-ancestors 'none'",
   "form-action 'self' https:",

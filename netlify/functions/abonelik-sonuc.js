@@ -69,7 +69,8 @@ exports.handler = async (event) => {
     `<div class="kart">
        <p class="etiket">Ne yapabilirsiniz</p>
        <ul>
-         <li>Size iletilen baglantidan tekrar deneyebilirsiniz.</li>
+         <li>Abonelik odemeleri yalnizca KREDI KARTI ile alinabiliyor. Banka karti (debit) kabul edilmiyor.</li>
+         <li>Bir kredi kartiyla, size iletilen baglantidan tekrar deneyebilirsiniz.</li>
          <li>Sorun devam ederse bize yazin, birlikte bakalim.</li>
        </ul>
      </div>`)

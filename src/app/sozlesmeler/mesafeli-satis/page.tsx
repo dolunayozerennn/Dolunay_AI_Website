@@ -53,6 +53,7 @@ export default function MesafeliSatisSozlesmesiPage() {
           <h2 className="text-xl font-semibold text-white mt-8">4. Ödeme ve Teslimat</h2>
           <ul className="list-disc list-inside space-y-2">
             <li>Ödemeler kredi kartı, banka kartı veya EFT/havale yoluyla gerçekleştirilir.</li>
+            <li>Aylık aboneliklerde ödeme yalnızca kredi kartı ile alınır; banka kartı (debit) abonelikte kabul edilmez.</li>
             <li>Dijital ürünler ve hizmetler, ödemenin onaylanmasının ardından elektronik ortamda teslim edilir.</li>
             <li>Erişim bilgileri, Alıcı&apos;nın kayıtlı e-posta adresine gönderilir.</li>
           </ul>
