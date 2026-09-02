@@ -132,6 +132,7 @@ function formSayfasi(slug, paket, deger, hata) {
             okudum ve aylik olarak kartimdan otomatik tahsilat yapilmasini kabul ediyorum.</span>
           </label>
 
+          <p class="kartuyari">Odeme yalnizca KREDI KARTI ile alinabilir. Banka karti (debit) abonelikte kabul edilmiyor.</p>
           <button type="submit">Kart bilgilerine gec</button>
         </div>
       </form>
@@ -244,6 +245,7 @@ exports.handler = async (event) => {
       <span class="rozet">Abonelik</span>
       <h1>Kart bilgileri</h1>
       <p class="alt">${kacir(paket.ad || '')} &middot; ${kacir(paket.tutar || '')} / ${kacir(paket.periyot || 'ay')}</p>
+      <p class="kartuyari">Yalnizca KREDI KARTI kabul ediliyor. Banka karti (debit) ile odeme tamamlanmaz.</p>
       <div class="kart">
         <div id="iyzipay-checkout-form" class="responsive"></div>
       </div>

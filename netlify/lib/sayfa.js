@@ -47,6 +47,8 @@ li:before{content:'';position:absolute;left:0;top:8px;width:8px;height:8px;borde
 .iyi{border:1px solid rgba(74,222,128,.30);background:rgba(74,222,128,.07);color:#86EFAC;
   border-radius:14px;padding:14px 16px;font-size:14px;margin-bottom:20px}
 .dip{color:#8A8E99;font-size:13px;text-align:center;margin-top:30px}
+.kartuyari{border:1px solid rgba(251,191,36,.32);background:rgba(251,191,36,.09);color:#FCD34D;
+  border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.5;margin:18px 0 0;font-weight:500}
 #iyzipay-checkout-form{margin-top:8px;color-scheme:light;color:#1a1a1a}
 #iyzipay-checkout-form input,#iyzipay-checkout-form select,#iyzipay-checkout-form textarea{color:#1a1a1a;-webkit-text-fill-color:#1a1a1a;caret-color:#1a1a1a}
 #iyzipay-checkout-form input::placeholder{color:#8A8E99;-webkit-text-fill-color:#8A8E99}
