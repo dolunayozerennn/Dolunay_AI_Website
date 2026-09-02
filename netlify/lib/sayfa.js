@@ -52,7 +52,7 @@ li:before{content:'';position:absolute;left:0;top:8px;width:8px;height:8px;borde
 #iyzipay-checkout-form{margin-top:8px;color-scheme:light;color:#1a1a1a}
 #iyzipay-checkout-form input,#iyzipay-checkout-form select,#iyzipay-checkout-form textarea{color:#1a1a1a;-webkit-text-fill-color:#1a1a1a;caret-color:#1a1a1a}
 #iyzipay-checkout-form input::placeholder{color:#8A8E99;-webkit-text-fill-color:#8A8E99}
-#iyzipay-checkout-form input:-webkit-autofill{-webkit-text-fill-color:#1a1a1a}
+#iyzipay-checkout-form input:-webkit-autofill,#iyzipay-checkout-form input:-webkit-autofill:focus{-webkit-box-shadow:0 0 0 1000px #fff inset;-webkit-text-fill-color:#1a1a1a;caret-color:#1a1a1a}
 `
 
 function sayfa({ baslik, govde }) {
