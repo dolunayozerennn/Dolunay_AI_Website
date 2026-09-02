@@ -78,7 +78,7 @@ const CSP = [
   "style-src 'self' 'unsafe-inline' https://static.iyzipay.com https://cdn.iyzipay.com",
   "img-src 'self' data: blob: https:",
   "font-src 'self' https://static.iyzipay.com https://cdn.iyzipay.com data:",
-  "connect-src 'self' https://api.iyzipay.com https://merchant-gateway.iyzipay.com https://consumerapigw.iyzipay.com https://static.iyzipay.com https://cdn.iyzipay.com https://countly.iyzico.com",
+  "connect-src 'self' https://api.iyzipay.com https://merchant-gateway.iyzipay.com https://consumerapigw.iyzipay.com https://static.iyzipay.com https://cdn.iyzipay.com https://countly.iyzico.com https://o120955.ingest.tr.sentry.io",
   // 3D Secure adimi musteriyi KENDI BANKASININ adresine goturur (her banka ayri
   // alan adi, onceden listelenemez). Bu ikisi iyzipay ile sinirli kalirsa 3DS
   // adimi sessizce bloklanir ve iyzico "genel bir hata olustu" der.
