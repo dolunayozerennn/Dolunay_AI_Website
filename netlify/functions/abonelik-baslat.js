@@ -109,7 +109,7 @@ function formSayfasi(slug, paket, deger, hata) {
         ${kapsam}
       </div>
 
-      <form method="POST" action="/odeme/${encodeURIComponent(slug)}">
+      <form class="kform" method="POST" action="/odeme/${encodeURIComponent(slug)}">
         <div class="kart">
           <div class="ikili">
             ${alan('ad', 'Ad', 'text')}
