@@ -37,7 +37,7 @@ li:before{content:'';position:absolute;left:0;top:8px;width:8px;height:8px;borde
 .kform textarea{resize:vertical;min-height:78px}
 .kform input:-webkit-autofill{-webkit-box-shadow:0 0 0 1000px #0b0e18 inset;-webkit-text-fill-color:#F4F2EC;caret-color:#F4F2EC}
 .ipucu{font-size:12px;color:#8A8E99;margin:6px 0 0}
-.onay{display:flex;gap:11px;align-items:flex-start;font-size:13px;color:#C9CCD4;margin:22px 0 6px}
+.onay,.kform .onay{display:flex;gap:11px;align-items:flex-start;font-size:13px;color:#C9CCD4;margin:22px 0 6px}
 .onay input{width:18px;height:18px;margin:2px 0 0;flex:0 0 auto;accent-color:#4F8BFF}
 .kform button{width:100%;padding:16px;border:0;border-radius:14px;background:#4F8BFF;color:#fff;
   font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:22px}
