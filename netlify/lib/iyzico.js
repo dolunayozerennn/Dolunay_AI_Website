@@ -67,7 +67,7 @@ function paketBul(slug) {
 // Ayni paket icin ayni musteriye ikinci abonelik acilmasini onlemek uzere
 // iyzico'daki mevcut abonelikleri okur. Sayfalama tavani bilerek dusuk:
 // bu bir raporlama degil, tekil bir mukerrer kontrolu.
-async function abonelikleriTara(bak, sayfaTavani = 5) {
+async function abonelikleriTara(bak, sayfaTavani = 20) {
   const YOL = '/v2/subscription/subscriptions'
   for (let sayfa = 1; sayfa <= sayfaTavani; sayfa += 1) {
     const cevap = await istek('GET', `${YOL}?page=${sayfa}&count=100`, undefined, YOL)

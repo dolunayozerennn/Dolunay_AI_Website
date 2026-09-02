@@ -40,6 +40,22 @@ function telefonDuzelt(ham) {
 
 // TC kimlik dogrulama hanesi. Yazim hatasi iyzico'ya gitmeden burada durur.
 // 99 ile baslayan yabanci kimlik numaralari bu hesabi saglamaz, muaf tutulur.
+// Bir kaydin butun metin yapraklarini kucuk harfe indirip kume olarak dondurur.
+// Karsilastirma alan adindan bagimsiz ama TAM esitlik uzerinden yapilir.
+function yapraklar(kok) {
+  const kume = new Set()
+  const yigin = [kok]
+  let adim = 0
+  while (yigin.length && adim < 5000) {
+    adim += 1
+    const d = yigin.pop()
+    if (typeof d === 'string') kume.add(d.trim().toLowerCase())
+    else if (Array.isArray(d)) for (const x of d) yigin.push(x)
+    else if (d && typeof d === 'object') for (const k of Object.keys(d)) yigin.push(d[k])
+  }
+  return kume
+}
+
 function tcknGecerli(ham) {
   if (!/^[1-9][0-9]{10}$/.test(ham)) return false
   if (ham.startsWith('99')) return true
@@ -175,11 +191,15 @@ exports.handler = async (event) => {
   // yanlis bir "zaten aboneliginiz var" ekrani odemeyi bloklamaktan iyidir.
   try {
     const epostaKucuk = v.eposta.toLowerCase()
+    const planKucuk = String(paket.plan).toLowerCase()
     const varOlan = await abonelikleriTara((kayit) => {
-      const metin = JSON.stringify(kayit || {}).toLowerCase()
-      return String(kayit && kayit.subscriptionStatus).toUpperCase() === 'ACTIVE' &&
-        metin.includes(String(paket.plan).toLowerCase()) &&
-        metin.includes(epostaKucuk)
+      // Alt dize araması yanlış pozitif üretir (bir e-posta baska bir alanin
+      // icinde gecebilir). Bu yuzden yalnizca TAM esitlik sayilir: kaydin
+      // metin yapraklarindan biri e-postanin, bir baskasi plan kodunun aynisi
+      // olmali. Yanlis "zaten aboneligin var" ekrani odemeyi bloklar, o yuzden
+      // olcut bilerek dar tutuldu.
+      if (String(kayit && kayit.subscriptionStatus).toUpperCase() !== 'ACTIVE') return false
+      return yapraklar(kayit).has(epostaKucuk) && yapraklar(kayit).has(planKucuk)
     })
     if (varOlan) {
       return html(409, formSayfasi(slug, paket, v, 'Bu e-posta icin bu pakette zaten aktif bir abonelik var. Ikinci kez tahsilat olmamasi icin yeni odeme baslatilmadi. Sorunuz varsa dolunay@dolunay.ai adresine yazin.'))
