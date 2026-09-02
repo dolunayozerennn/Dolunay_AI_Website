@@ -75,13 +75,16 @@ function sayfa({ baslik, govde }) {
 const CSP = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.iyzipay.com https://cdn.iyzipay.com",
-  "style-src 'self' 'unsafe-inline' https://static.iyzipay.com",
+  "style-src 'self' 'unsafe-inline' https://static.iyzipay.com https://cdn.iyzipay.com",
   "img-src 'self' data: blob: https:",
-  "font-src 'self' https://static.iyzipay.com data:",
-  "connect-src 'self' https://api.iyzipay.com https://merchant-gateway.iyzipay.com https://consumerapigw.iyzipay.com",
-  "frame-src 'self' https://*.iyzipay.com https://*.iyzico.com",
+  "font-src 'self' https://static.iyzipay.com https://cdn.iyzipay.com data:",
+  "connect-src 'self' https://api.iyzipay.com https://merchant-gateway.iyzipay.com https://consumerapigw.iyzipay.com https://static.iyzipay.com https://cdn.iyzipay.com https://countly.iyzico.com",
+  // 3D Secure adimi musteriyi KENDI BANKASININ adresine goturur (her banka ayri
+  // alan adi, onceden listelenemez). Bu ikisi iyzipay ile sinirli kalirsa 3DS
+  // adimi sessizce bloklanir ve iyzico "genel bir hata olustu" der.
+  "frame-src 'self' https:",
   "frame-ancestors 'none'",
-  "form-action 'self' https://*.iyzipay.com",
+  "form-action 'self' https:",
   "base-uri 'self'",
   "object-src 'none'",
   'upgrade-insecure-requests',
