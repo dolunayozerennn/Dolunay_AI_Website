@@ -109,13 +109,17 @@ function formSayfasi(slug, paket, deger, hata) {
 // durur. Bozuk yuzde-kodlama decodeURIComponent'i firlatir, ham deger kullanilir.
 function paketSlug(event) {
   const yol = event.path || event.rawUrl || ''
-  const m = yol.match(/\/odeme\/([^/?#]+)/)
-  if (m && m[1] !== 'sonuc') {
+  // Desen basa sabitli: /x/odeme/a gibi bir yol paket adi uretmemeli.
+  const m = yol.match(/^\/odeme\/([^/?#]+)/)
+  if (m) {
+    let ad
     try {
-      return decodeURIComponent(m[1])
+      ad = decodeURIComponent(m[1])
     } catch {
-      return m[1]
+      ad = m[1]
     }
+    // Istisna COZULMUS deger uzerinde bakilir; /odeme/%73onuc de 'sonuc' demektir.
+    if (ad !== 'sonuc') return ad
   }
   const q = (event.queryStringParameters && event.queryStringParameters.paket) || ''
   return q.trim()
