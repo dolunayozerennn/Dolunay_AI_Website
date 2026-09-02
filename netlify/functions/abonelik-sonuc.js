@@ -62,8 +62,10 @@ exports.handler = async (event) => {
        </div>`)
   }
 
+  // Saglayicinin ham hata metni musteriye gosterilmez; sunucu kaydinda kalir.
+  console.error('iyzico sonuc basarisiz', cevap && cevap.errorCode, cevap && cevap.errorMessage)
   return ciz(200, 'Odeme tamamlanmadi', 'uyari',
-    (cevap && cevap.errorMessage) || 'Odeme tamamlanmadi. Karttan herhangi bir tahsilat yapilmadi.',
+    'Odeme tamamlanmadi. Karttan herhangi bir tahsilat yapilmadi.',
     `<div class="kart">
        <p class="etiket">Ne yapabilirsiniz</p>
        <ul>

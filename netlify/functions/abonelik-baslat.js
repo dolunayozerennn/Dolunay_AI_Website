@@ -3,7 +3,7 @@
 // POST -> iyzico'dan TAZE odeme formu alir ve sayfaya gomer.
 // Token 30 dakikada gecersizlesir, bu yuzden onceden uretilmis sabit bir link
 // paylasilamaz; her ziyarette yeniden uretilir.
-const { formBaslat, paketBul } = require('../lib/iyzico')
+const { formBaslat, paketBul, abonelikleriTara } = require('../lib/iyzico')
 const { kacir, sayfa, html, hataSayfasi } = require('../lib/sayfa')
 
 const ALANLAR = [
@@ -26,20 +26,40 @@ function govdeCoz(event) {
   return o
 }
 
+// Alan uzunluklari: cok uzun degerin iyzico'nun ham hatasina donmesindense
+// burada anlasilir sekilde durmasi icin.
+const UZUNLUK = { ad: 50, soyad: 50, eposta: 100, sehir: 50, adres: 200, telefon: 20, tckn: 11 }
+
 function telefonDuzelt(ham) {
   const d = String(ham).replace(/\D/g, '')
   if (d.length === 10 && d[0] === '5') return '+90' + d
-  if (d.length === 11 && d[0] === '0') return '+90' + d.slice(1)
-  if (d.length === 12 && d.startsWith('90')) return '+' + d
+  if (d.length === 11 && d.startsWith('05')) return '+90' + d.slice(1)
+  if (d.length === 12 && d.startsWith('905')) return '+' + d
   return null
+}
+
+// TC kimlik dogrulama hanesi. Yazim hatasi iyzico'ya gitmeden burada durur.
+// 99 ile baslayan yabanci kimlik numaralari bu hesabi saglamaz, muaf tutulur.
+function tcknGecerli(ham) {
+  if (!/^[1-9][0-9]{10}$/.test(ham)) return false
+  if (ham.startsWith('99')) return true
+  const d = ham.split('').map(Number)
+  const tek = d[0] + d[2] + d[4] + d[6] + d[8]
+  const cift = d[1] + d[3] + d[5] + d[7]
+  if ((tek * 7 - cift + 100) % 10 !== d[9]) return false
+  const ilkOn = d.slice(0, 10).reduce((a, b) => a + b, 0)
+  return ilkOn % 10 === d[10]
 }
 
 function dogrula(v) {
   const eksik = ALANLAR.filter(([k]) => !v[k]).map(([, ad]) => ad)
   if (eksik.length) return 'Su alanlari doldurun: ' + eksik.join(', ') + '.'
+  const uzun = ALANLAR.find(([k]) => v[k].length > (UZUNLUK[k] || 200))
+  if (uzun) return `${uzun[1]} alani cok uzun, en fazla ${UZUNLUK[uzun[0]]} karakter olabilir.`
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.eposta)) return 'E-posta adresi gecerli gorunmuyor.'
   if (!telefonDuzelt(v.telefon)) return 'Cep telefonunu 05XX XXX XX XX bicminde yazin.'
   if (!/^[1-9][0-9]{10}$/.test(v.tckn)) return 'TC kimlik numarasi 11 haneli olmali.'
+  if (!tcknGecerli(v.tckn)) return 'TC kimlik numarasini kontrol edin, hatali gorunuyor.'
   if (!v.onay) return 'Devam etmek icin abonelik kosullarini onaylamaniz gerekiyor.'
   return null
 }
@@ -49,7 +69,7 @@ function formSayfasi(slug, paket, deger, hata) {
   const alan = (ad, etiket, tip, ipucu) => `
     <div class="satir">
       <label for="${ad}">${kacir(etiket)}</label>
-      <input id="${ad}" name="${ad}" type="${tip}" value="${kacir(d[ad] || '')}" required>
+      <input id="${ad}" name="${ad}" type="${tip}" value="${kacir(d[ad] || '')}" maxlength="${UZUNLUK[ad] || 200}" required>
       ${ipucu ? `<p class="ipucu">${kacir(ipucu)}</p>` : ''}
     </div>`
 
@@ -87,7 +107,7 @@ function formSayfasi(slug, paket, deger, hata) {
           ${alan('sehir', 'Sehir', 'text')}
           <div class="satir">
             <label for="adres">Fatura adresi</label>
-            <textarea id="adres" name="adres" required>${kacir(d.adres || '')}</textarea>
+            <textarea id="adres" name="adres" maxlength="${UZUNLUK.adres}" required>${kacir(d.adres || '')}</textarea>
           </div>
 
           <label class="onay">
@@ -148,6 +168,26 @@ exports.handler = async (event) => {
     address: v.adres,
   }
 
+  // Musteri odemeyi tamamladiktan sonra geri gelip formu tekrar doldurursa
+  // ikinci bir abonelik acilir ve karttan iki kez cekilir. iyzico'daki kayit
+  // tek gercektir; form uretilmeden once oraya bakilir.
+  // Kapi bilerek FAIL-OPEN: okuma basarisiz olursa akis normal devam eder,
+  // yanlis bir "zaten aboneliginiz var" ekrani odemeyi bloklamaktan iyidir.
+  try {
+    const epostaKucuk = v.eposta.toLowerCase()
+    const varOlan = await abonelikleriTara((kayit) => {
+      const metin = JSON.stringify(kayit || {}).toLowerCase()
+      return String(kayit && kayit.subscriptionStatus).toUpperCase() === 'ACTIVE' &&
+        metin.includes(String(paket.plan).toLowerCase()) &&
+        metin.includes(epostaKucuk)
+    })
+    if (varOlan) {
+      return html(409, formSayfasi(slug, paket, v, 'Bu e-posta icin bu pakette zaten aktif bir abonelik var. Ikinci kez tahsilat olmamasi icin yeni odeme baslatilmadi. Sorunuz varsa dolunay@dolunay.ai adresine yazin.'))
+    }
+  } catch (e) {
+    // yut: mukerrer kontrolu odemenin onunde duramaz
+  }
+
   let cevap
   try {
     cevap = await formBaslat({
@@ -173,7 +213,9 @@ exports.handler = async (event) => {
   }
 
   if (cevap.status !== 'success' || !cevap.checkoutFormContent) {
-    return html(400, formSayfasi(slug, paket, v, cevap.errorMessage || 'Odeme sayfasi acilamadi.'))
+    // Saglayicinin ham hata metni musteriye gosterilmez; sunucu kaydinda kalir.
+    console.error('iyzico initialize hatasi', cevap && cevap.errorCode, cevap && cevap.errorMessage)
+    return html(400, formSayfasi(slug, paket, v, 'Odeme sayfasi acilamadi. Bilgileri kontrol edip tekrar deneyin; sorun surerse dolunay@dolunay.ai adresine yazin.'))
   }
 
   return html(200, sayfa({

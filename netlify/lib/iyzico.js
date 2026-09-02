@@ -21,9 +21,11 @@ function yetki(uriPath, bodyStr) {
   return { auth: 'IYZWSv2 ' + Buffer.from(params).toString('base64'), rnd }
 }
 
-async function istek(method, uriPath, body) {
+// imzaYolu verilmezse uriPath imzalanir. iyzico sorgu dizesini IMZAYA KATMAZ;
+// query'li adreslerde adres query'li, imza query'siz yol ile kurulur (canlida olculdu).
+async function istek(method, uriPath, body, imzaYolu) {
   const bodyStr = body === undefined ? '' : JSON.stringify(body)
-  const { auth, rnd } = yetki(uriPath, bodyStr)
+  const { auth, rnd } = yetki(imzaYolu === undefined ? uriPath : imzaYolu, bodyStr)
   const cevap = await fetch(BASE + uriPath, {
     method,
     headers: {
@@ -62,4 +64,20 @@ function paketBul(slug) {
   return p && Object.prototype.hasOwnProperty.call(p, slug) ? p[slug] : null
 }
 
-module.exports = { formBaslat, formSonuc, paketBul }
+// Ayni paket icin ayni musteriye ikinci abonelik acilmasini onlemek uzere
+// iyzico'daki mevcut abonelikleri okur. Sayfalama tavani bilerek dusuk:
+// bu bir raporlama degil, tekil bir mukerrer kontrolu.
+async function abonelikleriTara(bak, sayfaTavani = 5) {
+  const YOL = '/v2/subscription/subscriptions'
+  for (let sayfa = 1; sayfa <= sayfaTavani; sayfa += 1) {
+    const cevap = await istek('GET', `${YOL}?page=${sayfa}&count=100`, undefined, YOL)
+    if (!cevap || cevap.status !== 'success') return null
+    const govde = cevap.data && typeof cevap.data === 'object' ? cevap.data : cevap
+    const kayitlar = Array.isArray(govde.items) ? govde.items : []
+    for (const kayit of kayitlar) if (bak(kayit)) return kayit
+    if (kayitlar.length < 100) return false
+  }
+  return false
+}
+
+module.exports = { formBaslat, formSonuc, paketBul, abonelikleriTara }
