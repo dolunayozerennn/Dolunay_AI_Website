@@ -64,10 +64,36 @@ function sayfa({ baslik, govde }) {
 </html>`
 }
 
+// netlify.toml basliklari fonksiyon cevaplarina uygulanmiyor (canlida olculdu),
+// bu yuzden odeme sayfasinin guvenlik basliklari burada kurulur. iyzico'nun gomulu
+// formu kendi alan adlarindan script, baglanti ve cerceve aciyor; gevsetme yalniz
+// bu sayfalarda, site genelinde degil.
+const CSP = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.iyzipay.com https://cdn.iyzipay.com",
+  "style-src 'self' 'unsafe-inline' https://static.iyzipay.com",
+  "img-src 'self' data: blob: https:",
+  "font-src 'self' https://static.iyzipay.com data:",
+  "connect-src 'self' https://api.iyzipay.com https://merchant-gateway.iyzipay.com https://consumerapigw.iyzipay.com",
+  "frame-src 'self' https://*.iyzipay.com https://*.iyzico.com",
+  "frame-ancestors 'none'",
+  "form-action 'self' https://*.iyzipay.com",
+  "base-uri 'self'",
+  "object-src 'none'",
+  'upgrade-insecure-requests',
+].join('; ')
+
 function html(kod, govde) {
   return {
     statusCode: kod,
-    headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' },
+    headers: {
+      'Content-Type': 'text/html; charset=utf-8',
+      'Cache-Control': 'no-store',
+      'Content-Security-Policy': CSP,
+      'X-Content-Type-Options': 'nosniff',
+      'Referrer-Policy': 'strict-origin-when-cross-origin',
+      'X-Frame-Options': 'DENY',
+    },
     body: govde,
   }
 }

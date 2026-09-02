@@ -15,7 +15,7 @@ function anahtarlar() {
 // Govde yeniden serilestirilirse imza tutmaz.
 function yetki(uriPath, bodyStr) {
   const { apiKey, secretKey } = anahtarlar()
-  const rnd = String(Date.now()) + String(Math.floor(100000 + Math.random() * 900000))
+  const rnd = String(Date.now()) + crypto.randomBytes(6).toString('hex')
   const imza = crypto.createHmac('sha256', secretKey).update(rnd + uriPath + bodyStr).digest('hex')
   const params = `apiKey:${apiKey}&randomKey:${rnd}&signature:${imza}`
   return { auth: 'IYZWSv2 ' + Buffer.from(params).toString('base64'), rnd }

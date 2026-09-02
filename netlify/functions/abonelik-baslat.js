@@ -104,8 +104,25 @@ function formSayfasi(slug, paket, deger, hata) {
   })
 }
 
+// Paket adi once adres yolundan okunur. Netlify yeniden yazma kuralinda hedefe
+// yazilan query fonksiyona gecmiyor (canlida olculdu); orijinal yol event.path'te
+// durur. Bozuk yuzde-kodlama decodeURIComponent'i firlatir, ham deger kullanilir.
+function paketSlug(event) {
+  const yol = event.path || event.rawUrl || ''
+  const m = yol.match(/\/odeme\/([^/?#]+)/)
+  if (m && m[1] !== 'sonuc') {
+    try {
+      return decodeURIComponent(m[1])
+    } catch {
+      return m[1]
+    }
+  }
+  const q = (event.queryStringParameters && event.queryStringParameters.paket) || ''
+  return q.trim()
+}
+
 exports.handler = async (event) => {
-  const slug = (event.queryStringParameters && event.queryStringParameters.paket) || ''
+  const slug = paketSlug(event)
   const paket = paketBul(slug)
 
   if (!paket || !paket.plan) {
