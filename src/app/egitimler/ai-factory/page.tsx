@@ -14,7 +14,7 @@ const SKOOL_URL = 'https://www.skool.com/yapay-zeka-factory/about?ref=044f39496d
 // Supabase Storage'a video yuklenmez). Kaynak dosya Drive'daki
 // "skool tanitim 13 agustos.mp4"; web icin 1080p30 / ~39 MB'a indirildi.
 const TANITIM_VIDEO = 'https://res.cloudinary.com/ddh9eoasc/video/upload/v1788604237/ai-factory/tanitim-2025-08.mp4'
-const TANITIM_KAPAK = 'https://res.cloudinary.com/ddh9eoasc/image/upload/v1788604241/ai-factory/tanitim-2025-08-kapak.jpg'
+const TANITIM_KAPAK = 'https://res.cloudinary.com/ddh9eoasc/image/upload/v1788604751/ai-factory/tanitim-2025-08-kapak-v2.jpg'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40, filter: 'blur(4px)' },
