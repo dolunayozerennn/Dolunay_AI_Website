@@ -1,13 +1,20 @@
 'use client'
 
+import { useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowUpRight, Check, X, Download, Users, Video, MessageCircle, Wrench, Send } from 'lucide-react'
+import { ArrowUpRight, Check, X, Download, Users, Video, MessageCircle, Wrench, Send, Play } from 'lucide-react'
 import { useTranslation } from '@/i18n/i18n'
 
 // İçerik kaynağı: Skool topluluk sayfasının kendi metni (skool.com/yapay-zeka-factory/about).
 // Buradaki hiçbir vaat uydurulmadı; sayısal bilgiler (fiyat, üye sayısı, yayın sıklığı)
 // oradan alındı. Skool'da değişirse burası da güncellenmeli.
 const SKOOL_URL = 'https://www.skool.com/yapay-zeka-factory/about?ref=044f39496d4f45fab11775bcefe4b7f4'
+
+// Tanitim videosu Cloudinary'de durur (repo karari: video barindirma Cloudinary,
+// Supabase Storage'a video yuklenmez). Kaynak dosya Drive'daki
+// "skool tanitim 13 agustos.mp4"; web icin 1080p30 / ~39 MB'a indirildi.
+const TANITIM_VIDEO = 'https://res.cloudinary.com/ddh9eoasc/video/upload/v1788604237/ai-factory/tanitim-2025-08.mp4'
+const TANITIM_KAPAK = 'https://res.cloudinary.com/ddh9eoasc/image/upload/v1788604241/ai-factory/tanitim-2025-08-kapak.jpg'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40, filter: 'blur(4px)' },
@@ -40,6 +47,8 @@ const sorular = ['1', '2', '3', '4', '5', '6']
 
 export default function AIFactoryPage() {
   const { t } = useTranslation();
+  const [videoOynadi, setVideoOynadi] = useState(false)
+  const videoRef = useRef<HTMLVideoElement>(null)
 
   return (
     <div className="relative">
@@ -60,6 +69,36 @@ export default function AIFactoryPage() {
             <p className="text-gray-400 text-lg md:text-xl leading-relaxed mb-8 max-w-2xl mx-auto">
               {t('aiFactory.desc')}
             </p>
+
+            {/* Tanitim videosu. Skool sayfasindaki gibi katilma butonundan ONCE durur.
+                preload="none": sayfa acilirken 39 MB inmez, once yalniz kapak gorunur. */}
+            <div className="max-w-3xl mx-auto mb-10">
+              <div className="relative aspect-video overflow-hidden rounded-2xl border border-white/10 bg-black shadow-2xl shadow-blue-500/10">
+                <video
+                  ref={videoRef}
+                  src={TANITIM_VIDEO}
+                  poster={TANITIM_KAPAK}
+                  preload="none"
+                  playsInline
+                  controls={videoOynadi}
+                  onPlay={() => setVideoOynadi(true)}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                {!videoOynadi && (
+                  <button
+                    type="button"
+                    onClick={() => { void videoRef.current?.play(); setVideoOynadi(true) }}
+                    aria-label={t('aiFactory.videoLabel')}
+                    className="group absolute inset-0 flex items-center justify-center bg-black/30 hover:bg-black/20 transition-colors duration-300"
+                  >
+                    <span className="flex items-center justify-center w-20 h-20 rounded-full bg-white/95 text-black shadow-xl transition-transform duration-300 group-hover:scale-110">
+                      <Play className="w-8 h-8 ml-1 fill-current" />
+                    </span>
+                  </button>
+                )}
+              </div>
+            </div>
+
             <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-gray-500 mb-10">
               <span>{t('aiFactory.factMembers')}</span>
               <span aria-hidden className="text-white/15">•</span>
