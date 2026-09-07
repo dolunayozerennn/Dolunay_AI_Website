@@ -147,3 +147,13 @@ gecici kopyalarda alti ayri yerden bilerek bozar ve sinavin kirmizi verip
 vermedigine bakar; gercek dosyalara dokunmaz. Bir mutasyon yesil kaliyorsa orasi
 sinavin KOR NOKTASIDIR ve script cikis 1 verir. Su an alti mutasyonun altisi da
 yakalaniyor.
+
+Olcen aletin kendisi de olculur: `bash netlify/sinav/mutasyon_kanarya.sh`.
+Sahte bir `node` ile "harness cokmus", "bozulmamis kod bile dusuyor", "mutasyon
+hayatta kalmis" ve "mutasyon deseni artik tutmuyor" hallerini kurup suitin
+GERCEKTEN kirmizi verdigini gosterir; 6 vaka, cikis 0 bekleniyor.
+Bu kanarya bir gercek kusurdan dogdu: ilk surumde kor-nokta esigi `15/15` diye
+SABIT yaziliydi, sinav 21 vakaya cikinca esik hicbir zaman tutmadi ve suit
+hayatta kalan bir mutasyonu isaretleyemez hale geldi; ustelik `node` hic
+calismadiginda bile "kor nokta yok" basip cikis 0 donuyordu. Esik artik temel
+kosudan OLCULUR, sabit yazilmaz.

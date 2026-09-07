@@ -1,15 +1,22 @@
 #!/bin/bash
 # Sinavin dekoratif olmadigini olcer: uygulama kodunu GECICI bir kopyada bilerek
 # bozar, sinavi kopyaya karsi kosar ve kirmizi verip vermedigine bakar.
-# Gercek dosyalara DOKUNMAZ. Bir mutasyon 15/15 kaliyorsa orasi sinavin KOR NOKTASIDIR.
+# Gercek dosyalara DOKUNMAZ.
 #
 #   bash netlify/sinav/mutasyon.sh
 #
-# Cikis 0 = her mutasyon yakalandi. Cikis 1 = en az bir kor nokta var.
+# Cikis 0 = TEMEL tam puan aldi VE her mutasyon yakalandi.
+# Cikis 1 = kor nokta, ariza ya da temel kosunun kendisi dustu.
+#
+# Tavan SABIT YAZILMAZ. Eski surumde "15/15" literali duruyordu; sinav 21 vakaya
+# cikinca kontrol sessizce korlesti ve hicbir mutasyon KOR NOKTA sayilamaz oldu.
+# Artik tavan TEMEL kosudan olculur ve temel tam puan almazsa hicbir hukum verilmez:
+# harness'in kendisi calismiyorken "kor nokta yok" demek en tehlikeli yesildir.
 set -u
+set -o pipefail
 KOK="$(cd "$(dirname "$0")/../.." && pwd)"
 SINAV="$KOK/netlify/sinav/odeme_sozlesmesi.js"
-GECICI="$(mktemp -d)"
+GECICI="$(mktemp -d)" || { echo "ARIZA: gecici dizin acilamadi"; exit 1; }
 trap 'rm -rf "$GECICI"' EXIT
 KOR=0
 
@@ -18,49 +25,76 @@ kos() {
     "$1/iyzico.js" "$1/abonelik-baslat.js" "$1/abonelik-sonuc.js" 2>&1
 }
 
+# Ciktidan `N/M` satirini ayiklar. Bulamazsa bos doner; bos skor ASLA basari sayilmaz.
+skoru_al() { echo "$1" | grep -oE '^[0-9]+/[0-9]+$' | tail -1; }
+
 hazirla() {
-  local d="$GECICI/$1"; mkdir -p "$d"
-  cp "$KOK/netlify/lib/iyzico.js" "$d/iyzico.js"
-  cp "$KOK/netlify/functions/abonelik-baslat.js" "$d/abonelik-baslat.js"
-  cp "$KOK/netlify/functions/abonelik-sonuc.js" "$d/abonelik-sonuc.js"
+  local d="$GECICI/$1"
+  mkdir -p "$d" || return 1
+  cp "$KOK/netlify/lib/iyzico.js" "$d/iyzico.js" || return 1
+  cp "$KOK/netlify/functions/abonelik-baslat.js" "$d/abonelik-baslat.js" || return 1
+  cp "$KOK/netlify/functions/abonelik-sonuc.js" "$d/abonelik-sonuc.js" || return 1
   # Kopyalar duz bir dizinde durdugu icin gorece require yollari duzeltilir.
-  perl -pi -e "s{require\('\.\./lib/sayfa'\)}{require('$KOK/netlify/lib/sayfa')}g" "$d"/*.js
-  perl -pi -e "s{require\('\.\./lib/iyzico'\)}{require('./iyzico')}g" "$d"/*.js
+  perl -pi -e "s{require\('\.\./lib/sayfa'\)}{require('$KOK/netlify/lib/sayfa')}g" "$d"/*.js || return 1
+  perl -pi -e "s{require\('\.\./lib/iyzico'\)}{require('./iyzico')}g" "$d"/*.js || return 1
   echo "$d"
+}
+
+# Mutasyonun GERCEKTEN uygulandigini dogrular. Uygulanmayan bir mutasyon
+# "yakalandi" diye okunamaz; desen eskimisse bunu bilmemiz gerekir.
+boz() {
+  local dosya="$1"; shift
+  local once; once="$(cat "$dosya")" || return 1
+  perl "$@" "$dosya" || return 1
+  [ "$once" != "$(cat "$dosya")" ]
 }
 
 olc() {
   local ad="$1" dizin="$2"
   local cikti; cikti="$(kos "$dizin")"
-  local skor; skor="$(echo "$cikti" | grep -oE '^[0-9]+/[0-9]+$' | tail -1)"
+  local skor; skor="$(skoru_al "$cikti")"
   local dusen; dusen="$(echo "$cikti" | awk '/^DUSTU /{printf "%s ", $2}')"
-  if [ "$skor" = "15/15" ]; then
+  if [ -z "$skor" ]; then
+    # Sinav hic skor basmadiysa cokmustur. Cokme "yakalandi" DEGILDIR.
+    echo "$ad ARIZA: sinav skor basmadi"; KOR=1
+  elif [ "$skor" = "$TAVAN" ]; then
     echo "$ad $skor KOR NOKTA"; KOR=1
   else
     echo "$ad $skor DUSEN: ${dusen:-?}"
   fi
 }
 
-TEMEL="$(hazirla temel)"
-echo "temel $(kos "$TEMEL" | tail -1)"
+# --- TEMEL: tavani buradan olcuyoruz, sabit yazmiyoruz ---
+TEMEL="$(hazirla temel)" || { echo "ARIZA: temel kopya hazirlanamadi"; exit 1; }
+TEMEL_CIKTI="$(kos "$TEMEL")"
+TAVAN="$(skoru_al "$TEMEL_CIKTI")"
+if [ -z "$TAVAN" ]; then
+  echo "TEMEL ARIZA: sinav skor basmadi, olcum yapilamaz"
+  echo "$TEMEL_CIKTI" | tail -5
+  exit 1
+fi
+echo "temel $TAVAN"
+if [ "${TAVAN%/*}" != "${TAVAN#*/}" ]; then
+  echo "TEMEL DUSTU: bozulmamis kod sinavi gecmiyor, mutasyon hukmu verilemez"
+  echo "$TEMEL_CIKTI" | awk '/^DUSTU /{print "  " $0}'
+  exit 1
+fi
 
-D="$(hazirla m1)"; perl -pi -e "s/hataTipi: 'baglanti'/hataTipi: 'x'/" "$D/iyzico.js"
-olc M1_isaret_adi "$D"
+mutasyon() {
+  local ad="$1" dosya="$2"; shift 2
+  local d; d="$(hazirla "$ad")" || { echo "$ad ARIZA: kopya hazirlanamadi"; KOR=1; return; }
+  if ! boz "$d/$dosya" "$@"; then
+    echo "$ad ARIZA: mutasyon deseni tutmadi (kod degismis olabilir)"; KOR=1; return
+  fi
+  olc "$ad" "$d"
+}
 
-D="$(hazirla m2)"; perl -0pi -e "s/    if \(!cevap\.ok\) \{\n.*?\n    \}\n//s" "$D/iyzico.js"
-olc M2_http_durum "$D"
-
-D="$(hazirla m3)"; perl -pi -e "s/signal: kesici\.signal,//; s/kesici\.abort\(\)/void 0/" "$D/iyzico.js"
-olc M3_timeout "$D"
-
-D="$(hazirla m4)"; perl -pi -e "s/if \(!cevap \|\| cevap\.hataTipi\) \{/if (false) {/" "$D/abonelik-sonuc.js"
-olc M4_belirsizlik "$D"
-
-D="$(hazirla m5)"; perl -pi -e "s/if \(varOlan === null\) \{/if (false) {/" "$D/abonelik-baslat.js"
-olc M5_mukerrer_freni "$D"
-
-D="$(hazirla m6)"; perl -pi -e "s/if \(cevap\.status !== 'failure'\) \{/if (false) {/" "$D/abonelik-sonuc.js"
-olc M6_tanimsiz_govde "$D"
+mutasyon M1_isaret_adi    iyzico.js         -pi -e "s/hataTipi: 'baglanti'/hataTipi: 'x'/"
+mutasyon M2_http_durum    iyzico.js         -0pi -e "s/    if \(!cevap\.ok\) \{\n.*?\n    \}\n//s"
+mutasyon M3_timeout       iyzico.js         -pi -e "s/signal: kesici\.signal,//; s/kesici\.abort\(\)/void 0/"
+mutasyon M4_belirsizlik   abonelik-sonuc.js -pi -e "s/if \(!cevap \|\| cevap\.hataTipi\) \{/if (false) {/"
+mutasyon M5_mukerrer_freni abonelik-baslat.js -pi -e "s/if \(varOlan === null\) \{/if (false) {/"
+mutasyon M6_tanimsiz_govde abonelik-sonuc.js -pi -e "s/if \(cevap\.status !== 'failure'\) \{/if (false) {/"
 
 [ "$KOR" = 0 ] && echo "kor nokta yok" || echo "EN AZ BIR KOR NOKTA VAR"
 exit $KOR
