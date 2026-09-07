@@ -54,7 +54,7 @@ exports.handler = async (event) => {
     `<div class="kart">
        <p class="etiket">Ne yapabilirsiniz</p>
        <ul>
-         <li>Ayni odemeyi TEKRAR denemeyin; cift tahsilat olusabilir.</li>
+         <li>Aynı ödemeyi TEKRAR denemeyin; çift tahsilat oluşabilir.</li>
          <li>E-postanıza abonelik onayı geldiyse işlem tamamlanmıştır.</li>
          <li>Birkaç dakika içinde bir şey gelmezse dolunay@dolunay.ai adresine yazın.</li>
        </ul>

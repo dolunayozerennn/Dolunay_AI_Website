@@ -11,7 +11,7 @@ const ALANLAR = [
   ['soyad', 'Soyad'],
   ['eposta', 'E-posta'],
   ['telefon', 'Cep telefonu'],
-  ['tckn', 'T.C. kimlik numarasi'],
+  ['tckn', 'T.C. kimlik numarası'],
   ['sehir', 'Şehir'],
   ['adres', 'Adres'],
 ]
@@ -71,7 +71,7 @@ function dogrula(v) {
   const eksik = ALANLAR.filter(([k]) => !v[k]).map(([, ad]) => ad)
   if (eksik.length) return 'Şu alanları doldurun: ' + eksik.join(', ') + '.'
   const uzun = ALANLAR.find(([k]) => v[k].length > (UZUNLUK[k] || 200))
-  if (uzun) return `${uzun[1]} alani cok uzun, en fazla ${UZUNLUK[uzun[0]]} karakter olabilir.`
+  if (uzun) return `${uzun[1]} alanı çok uzun, en fazla ${UZUNLUK[uzun[0]]} karakter olabilir.`
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.eposta)) return 'E-posta adresi geçerli görünmüyor.'
   if (!telefonDuzelt(v.telefon)) return 'Cep telefonu numaranızı 05XX XXX XX XX biçiminde yazın.'
   if (!/^[1-9][0-9]{10}$/.test(v.tckn)) return 'T.C. kimlik numarası 11 haneli olmalı.'
