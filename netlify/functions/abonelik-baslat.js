@@ -11,8 +11,8 @@ const ALANLAR = [
   ['soyad', 'Soyad'],
   ['eposta', 'E-posta'],
   ['telefon', 'Cep telefonu'],
-  ['tckn', 'TC kimlik numarasi'],
-  ['sehir', 'Sehir'],
+  ['tckn', 'T.C. kimlik numarasi'],
+  ['sehir', 'Şehir'],
   ['adres', 'Adres'],
 ]
 
@@ -69,14 +69,14 @@ function tcknGecerli(ham) {
 
 function dogrula(v) {
   const eksik = ALANLAR.filter(([k]) => !v[k]).map(([, ad]) => ad)
-  if (eksik.length) return 'Su alanlari doldurun: ' + eksik.join(', ') + '.'
+  if (eksik.length) return 'Şu alanları doldurun: ' + eksik.join(', ') + '.'
   const uzun = ALANLAR.find(([k]) => v[k].length > (UZUNLUK[k] || 200))
   if (uzun) return `${uzun[1]} alani cok uzun, en fazla ${UZUNLUK[uzun[0]]} karakter olabilir.`
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.eposta)) return 'E-posta adresi gecerli gorunmuyor.'
-  if (!telefonDuzelt(v.telefon)) return 'Cep telefonunu 05XX XXX XX XX biciminde yazin.'
-  if (!/^[1-9][0-9]{10}$/.test(v.tckn)) return 'TC kimlik numarasi 11 haneli olmali.'
-  if (!tcknGecerli(v.tckn)) return 'TC kimlik numarasini kontrol edin, hatali gorunuyor.'
-  if (!v.onay) return 'Devam etmek icin abonelik kosullarini onaylamaniz gerekiyor.'
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.eposta)) return 'E-posta adresi geçerli görünmüyor.'
+  if (!telefonDuzelt(v.telefon)) return 'Cep telefonu numaranızı 05XX XXX XX XX biçiminde yazın.'
+  if (!/^[1-9][0-9]{10}$/.test(v.tckn)) return 'T.C. kimlik numarası 11 haneli olmalı.'
+  if (!tcknGecerli(v.tckn)) return 'T.C. kimlik numaranızı kontrol edin, hatalı görünüyor.'
+  if (!v.onay) return 'Devam etmek için abonelik koşullarını onaylamanız gerekiyor.'
   return null
 }
 
@@ -94,16 +94,16 @@ function formSayfasi(slug, paket, deger, hata) {
     : ''
 
   return sayfa({
-    baslik: 'Abonelik baslat',
+    baslik: 'Abonelik başlat',
     govde: `
       <span class="rozet">Abonelik</span>
-      <h1>${kacir(paket.ad || 'Yonetilen otomasyon')}</h1>
-      <p class="alt">Aylik aboneligi baslatmak icin bilgilerinizi girin.</p>
+      <h1>${kacir(paket.ad || 'Yönetilen otomasyon')}</h1>
+      <p class="alt">Aylık aboneliği başlatmak için bilgilerinizi girin.</p>
 
       ${hata ? `<div class="uyari">${kacir(hata)}</div>` : ''}
 
       <div class="kart vurgu">
-        <p class="etiket">Aylik bedel</p>
+        <p class="etiket">Aylık bedel</p>
         <p class="bedel">${kacir(paket.tutar || '')} <span>/ ${kacir(paket.periyot || 'ay')}</span></p>
         ${paket.notu ? `<p class="ipucu">${kacir(paket.notu)}</p>` : ''}
         ${kapsam}
@@ -118,9 +118,9 @@ function formSayfasi(slug, paket, deger, hata) {
           ${alan('eposta', 'E-posta', 'email', 'Fatura ve tahsilat bildirimleri bu adrese gider.')}
           <div class="ikili">
             ${alan('telefon', 'Cep telefonu', 'tel', '05XX XXX XX XX')}
-            ${alan('tckn', 'TC kimlik numarasi', 'text', 'Odeme kurulusu abonelik icin zorunlu tutuyor.')}
+            ${alan('tckn', 'T.C. kimlik numarası', 'text', 'Ödeme kuruluşu abonelik için zorunlu tutuyor.')}
           </div>
-          ${alan('sehir', 'Sehir', 'text')}
+          ${alan('sehir', 'Şehir', 'text')}
           <div class="satir">
             <label for="adres">Fatura adresi</label>
             <textarea id="adres" name="adres" maxlength="${UZUNLUK.adres}" required>${kacir(d.adres || '')}</textarea>
@@ -128,16 +128,16 @@ function formSayfasi(slug, paket, deger, hata) {
 
           <label class="onay">
             <input type="checkbox" name="onay" ${d.onay ? 'checked' : ''} required>
-            <span><a href="/sozlesmeler/mesafeli-satis" target="_blank">Mesafeli satis sozlesmesini</a>
-            okudum ve aylik olarak kartimdan otomatik tahsilat yapilmasini kabul ediyorum.</span>
+            <span><a href="/sozlesmeler/mesafeli-satis" target="_blank">Mesafeli satış sözleşmesini</a>
+            okudum ve aylık olarak kartımdan otomatik tahsilat yapılmasını kabul ediyorum.</span>
           </label>
 
-          <p class="kartuyari">Odeme yalnizca KREDI KARTI ile alinabilir. Banka karti (debit) abonelikte kabul edilmiyor.</p>
-          <button type="submit">Kart bilgilerine gec</button>
+          <p class="kartuyari">Ödeme yalnızca KREDİ KARTI ile alınabilir. Banka kartı abonelikte kabul edilmiyor.</p>
+          <button type="submit">Kart bilgilerine geç</button>
         </div>
       </form>
 
-      <p class="dip">Odeme iyzico altyapisi uzerinden alinir. Kart bilgileriniz bize ulasmaz.</p>`,
+      <p class="dip">Ödeme iyzico altyapısı üzerinden alınır. Kart bilgileriniz bize ulaşmaz.</p>`,
   })
 }
 
@@ -167,7 +167,7 @@ exports.handler = async (event) => {
   const paket = paketBul(slug)
 
   if (!paket || !paket.plan) {
-    return hataSayfasi(404, 'Sayfa bulunamadi', 'Bu abonelik adresi tanimli degil. Lutfen size iletilen baglantiyi kontrol edin.')
+    return hataSayfasi(404, 'Sayfa bulunamadı', 'Bu abonelik bağlantısı bulunamadı. Lütfen size iletilen bağlantıyı kontrol edin.')
   }
 
   if (event.httpMethod !== 'POST') {
@@ -222,21 +222,21 @@ exports.handler = async (event) => {
       return bizim
     })
     if (varOlan) {
-      return html(409, formSayfasi(slug, paket, v, 'Bu e-posta icin bu pakette zaten aktif bir abonelik var. Ikinci kez tahsilat olmamasi icin yeni odeme baslatilmadi. Sorunuz varsa dolunay@dolunay.ai adresine yazin.'))
+      return html(409, formSayfasi(slug, paket, v, 'Bu e-posta için bu pakette zaten aktif bir abonelik var. İkinci kez tahsilat olmaması için yeni ödeme başlatılmadı. Sorunuz varsa dolunay@dolunay.ai adresine yazın.'))
     }
     // `null` = tarama tamamlanamadi, yani mevcut bir abonelik OLMADIGINI bilmiyoruz.
     // Eskiden bu durum sessizce yutulup odeme aciliyordu; belirsiz sonuc ekranini gorup
     // formu tekrar gonderen musteride ikinci tahsilat riski buradan doguyordu.
     // Bilinmeyeni "yok" saymak yerine duruyoruz: kacan bir satis, mukerrer tahsilattan iyidir.
     if (okunamayanKayit) {
-      return html(503, formSayfasi(slug, paket, v, 'Mevcut aboneliginiz olup olmadigini su an dogrulayamiyoruz. Ikinci kez tahsilat olmamasi icin odeme baslatilmadi. Birkac dakika sonra tekrar deneyin.'))
+      return html(503, formSayfasi(slug, paket, v, 'Mevcut aboneliğiniz olup olmadığını şu an doğrulayamıyoruz. İkinci kez tahsilat olmaması için ödeme başlatılmadı. Birkaç dakika sonra tekrar deneyin.'))
     }
     if (varOlan === null) {
-      return html(503, formSayfasi(slug, paket, v, 'Mevcut aboneliginiz olup olmadigini su an dogrulayamiyoruz. Ikinci kez tahsilat olmamasi icin odeme baslatilmadi. Birkac dakika sonra tekrar deneyin.'))
+      return html(503, formSayfasi(slug, paket, v, 'Mevcut aboneliğiniz olup olmadığını şu an doğrulayamıyoruz. İkinci kez tahsilat olmaması için ödeme başlatılmadı. Birkaç dakika sonra tekrar deneyin.'))
     }
   } catch (e) {
     console.error('mukerrer taramasi hata verdi', e && e.message)
-    return html(503, formSayfasi(slug, paket, v, 'Mevcut aboneliginiz olup olmadigini su an dogrulayamiyoruz. Ikinci kez tahsilat olmamasi icin odeme baslatilmadi. Birkac dakika sonra tekrar deneyin.'))
+    return html(503, formSayfasi(slug, paket, v, 'Mevcut aboneliğiniz olup olmadığını şu an doğrulayamıyoruz. İkinci kez tahsilat olmaması için ödeme başlatılmadı. Birkaç dakika sonra tekrar deneyin.'))
   }
 
   let cevap
@@ -261,13 +261,13 @@ exports.handler = async (event) => {
     })
   } catch (e) {
     console.error('iyzico initialize firlatti', e && e.message)
-    return html(500, formSayfasi(slug, paket, v, 'Odeme sayfasi su an acilamadi. Kartinizdan tahsilat YAPILMADI. Birazdan tekrar deneyin.'))
+    return html(500, formSayfasi(slug, paket, v, 'Ödeme sayfası şu an açılamadı. Kartınızdan tahsilat YAPILMADI. Birazdan tekrar deneyin.'))
   }
 
   // iyzico'ya hic ulasilamadiysa bu bir ret degil belirsizliktir; kart hic denenmedi.
   if (!cevap || cevap.hataTipi) {
     console.error('iyzico initialize ulasilamadi', cevap && cevap.hataTipi)
-    return html(503, formSayfasi(slug, paket, v, 'Su an odeme saglayicisina ulasilamiyor. Kartinizdan tahsilat YAPILMADI. Birkac dakika sonra tekrar deneyin.'))
+    return html(503, formSayfasi(slug, paket, v, 'Ödeme hizmetine şu an ulaşılamıyor. Kartınızdan tahsilat YAPILMADI. Birkaç dakika sonra tekrar deneyin.'))
   }
 
   // `checkoutFormContent` bos nesne ya da dizi olarak gelirse JS'te DOGRUDUR ve
@@ -278,7 +278,7 @@ exports.handler = async (event) => {
   if (cevap.status !== 'success' || !formIcerik) {
     // Saglayicinin ham hata metni musteriye gosterilmez; sunucu kaydinda kalir.
     console.error('iyzico initialize hatasi', cevap && cevap.errorCode, kayitIcin(cevap && cevap.errorMessage))
-    return html(400, formSayfasi(slug, paket, v, 'Odeme sayfasi acilamadi. Bilgileri kontrol edip tekrar deneyin; sorun surerse dolunay@dolunay.ai adresine yazin.'))
+    return html(400, formSayfasi(slug, paket, v, 'Ödeme sayfası açılamadı. Bilgileri kontrol edip tekrar deneyin; sorun sürerse dolunay@dolunay.ai adresine yazın.'))
   }
 
   return html(200, sayfa({
@@ -287,11 +287,11 @@ exports.handler = async (event) => {
       <span class="rozet">Abonelik</span>
       <h1>Kart bilgileri</h1>
       <p class="alt">${kacir(paket.ad || '')} &middot; ${kacir(paket.tutar || '')} / ${kacir(paket.periyot || 'ay')}</p>
-      <p class="kartuyari">Yalnizca KREDI KARTI kabul ediliyor. Banka karti (debit) ile odeme tamamlanmaz.</p>
+      <p class="kartuyari">Yalnızca KREDİ KARTI kabul ediliyor. Banka kartı ile ödeme tamamlanmaz.</p>
       <div class="kart">
         <div id="iyzipay-checkout-form" class="responsive"></div>
       </div>
       ${formIcerik}
-      <p class="dip">Bu sayfa 30 dakika gecerlidir. Suresi dolarsa sayfayi yenileyin.</p>`,
+      <p class="dip">Bu sayfa 30 dakika geçerlidir. Süresi dolarsa sayfayı yenileyin.</p>`,
   }))
 }

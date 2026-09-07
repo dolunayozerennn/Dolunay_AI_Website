@@ -119,7 +119,7 @@ function hataSayfasi(kod, baslik, mesaj) {
     govde: `<span class="rozet">Abonelik</span>
       <h1>${kacir(baslik)}</h1>
       <div class="uyari">${kacir(mesaj)}</div>
-      <p class="dip">Yardim icin <a href="mailto:dolunay@dolunay.ai">dolunay@dolunay.ai</a></p>`,
+      <p class="dip">Yardım için <a href="mailto:dolunay@dolunay.ai">dolunay@dolunay.ai</a></p>`,
   }))
 }
 

@@ -26,37 +26,37 @@ function ciz(kod, baslik, kutuSinifi, mesaj, ek) {
       <h1>${kacir(baslik)}</h1>
       <div class="${kutuSinifi}">${kacir(mesaj)}</div>
       ${ek || ''}
-      <p class="dip">Sorulariniz icin <a href="mailto:dolunay@dolunay.ai">dolunay@dolunay.ai</a></p>`,
+      <p class="dip">Sorularınız için <a href="mailto:dolunay@dolunay.ai">dolunay@dolunay.ai</a></p>`,
   }))
 }
 
 exports.handler = async (event) => {
   const token = tokenBul(event)
   if (!token) {
-    return ciz(400, 'Islem bulunamadi', 'uyari',
-      'Odeme bilgisi alinamadi. Size iletilen baglantidan tekrar deneyin.')
+    return ciz(400, 'İşlem bulunamadı', 'uyari',
+      'Ödeme bilgisi alınamadı. Size iletilen bağlantıdan tekrar deneyin.')
   }
 
   let cevap
   try {
     cevap = await formSonuc(token)
   } catch (e) {
-    return ciz(502, 'Sonuc dogrulanamadi', 'uyari',
-      'Odemeniz alinmis olabilir ama su an teyit edemedik. Sizinle en kisa surede iletisime gececegiz.')
+    return ciz(502, 'Sonuç doğrulanamadı', 'uyari',
+      'Ödemeniz alınmış olabilir ama şu an teyit edemedik. Sizinle en kısa sürede iletişime geçeceğiz.')
   }
 
   const veri = cevap && cevap.data ? cevap.data : cevap || {}
 
   // Belirsizlik cevabi TEK yerde durur: iki ayri dal ayni cumleyi uretmek zorunda,
   // yoksa biri zamanla "tahsilat yapilmadi" tarafina kayar.
-  const belirsiz = () => ciz(502, 'Sonuc teyit edilemedi', 'uyari',
-    'Odemenizin sonucunu su an teyit edemedik. Karttan tahsilat yapilmis olabilir. Lutfen birkac dakika sonra e-postanizi kontrol edin, sorun surerse bize yazin.',
+  const belirsiz = () => ciz(502, 'Sonuç teyit edilemedi', 'uyari',
+    'Ödemenizin sonucunu şu an teyit edemedik. Karttan tahsilat yapılmış olabilir. Lütfen birkaç dakika sonra e-postanızı kontrol edin, sorun sürerse bize yazın.',
     `<div class="kart">
        <p class="etiket">Ne yapabilirsiniz</p>
        <ul>
          <li>Ayni odemeyi TEKRAR denemeyin; cift tahsilat olusabilir.</li>
-         <li>E-postaniza abonelik onayi geldiyse islem tamamlanmistir.</li>
-         <li>Birkac dakika icinde bir sey gelmezse dolunay@dolunay.ai adresine yazin.</li>
+         <li>E-postanıza abonelik onayı geldiyse işlem tamamlanmıştır.</li>
+         <li>Birkaç dakika içinde bir şey gelmezse dolunay@dolunay.ai adresine yazın.</li>
        </ul>
      </div>`)
 
@@ -87,16 +87,16 @@ exports.handler = async (event) => {
       return belirsiz()
     }
     const ref = veri.referenceCode || veri.subscriptionReferenceCode || ''
-    return ciz(200, 'Aboneliginiz basladi', 'iyi',
-      'Odemeniz alindi ve aboneliginiz aktif edildi.',
+    return ciz(200, 'Aboneliğiniz başladı', 'iyi',
+      'Ödemeniz alındı ve aboneliğiniz aktif edildi.',
       `<div class="kart">
-         <p class="etiket">Sirada ne var</p>
+         <p class="etiket">Sırada ne var</p>
          <ul>
-           <li>Fatura ve tahsilat bildirimleri kayitli e-posta adresinize gonderilir.</li>
-           <li>Bir sonraki tahsilat ayni gun otomatik yapilir.</li>
-           <li>Aboneligi durdurmak istediginizde bize yazmaniz yeterli.</li>
+           <li>Fatura ve tahsilat bildirimleri kayıtlı e-posta adresinize gönderilir.</li>
+           <li>Bir sonraki tahsilat, gelecek ayın aynı gününde otomatik yapılır.</li>
+           <li>Aboneliği durdurmak istediğinizde bize yazmanız yeterli.</li>
          </ul>
-         ${ref ? `<p class="ipucu">Abonelik numaraniz: ${kacir(ref)}</p>` : ''}
+         ${ref ? `<p class="ipucu">Abonelik numaranız: ${kacir(ref)}</p>` : ''}
        </div>`)
   }
 
@@ -110,14 +110,14 @@ exports.handler = async (event) => {
 
   // Saglayicinin ham hata metni musteriye gosterilmez; sunucu kaydinda kalir.
   console.error('iyzico sonuc basarisiz', cevap && cevap.errorCode, kayitIcin(cevap && cevap.errorMessage))
-  return ciz(200, 'Odeme tamamlanmadi', 'uyari',
-    'Odeme tamamlanmadi. Karttan herhangi bir tahsilat yapilmadi.',
+  return ciz(200, 'Ödeme tamamlanmadı', 'uyari',
+    'Ödeme tamamlanmadı. Karttan herhangi bir tahsilat yapılmadı.',
     `<div class="kart">
        <p class="etiket">Ne yapabilirsiniz</p>
        <ul>
-         <li>Abonelik odemeleri yalnizca KREDI KARTI ile alinabiliyor. Banka karti (debit) kabul edilmiyor.</li>
-         <li>Bir kredi kartiyla, size iletilen baglantidan tekrar deneyebilirsiniz.</li>
-         <li>Sorun devam ederse bize yazin, birlikte bakalim.</li>
+         <li>Abonelik ödemeleri yalnızca KREDİ KARTI ile alınabiliyor. Banka kartı kabul edilmiyor.</li>
+         <li>Bir kredi kartıyla, size iletilen bağlantıdan tekrar deneyebilirsiniz.</li>
+         <li>Sorun devam ederse bize yazın, birlikte bakalım.</li>
        </ul>
      </div>`)
 }
