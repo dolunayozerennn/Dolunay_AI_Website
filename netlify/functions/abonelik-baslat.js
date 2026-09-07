@@ -73,7 +73,7 @@ function dogrula(v) {
   const uzun = ALANLAR.find(([k]) => v[k].length > (UZUNLUK[k] || 200))
   if (uzun) return `${uzun[1]} alani cok uzun, en fazla ${UZUNLUK[uzun[0]]} karakter olabilir.`
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.eposta)) return 'E-posta adresi gecerli gorunmuyor.'
-  if (!telefonDuzelt(v.telefon)) return 'Cep telefonunu 05XX XXX XX XX bicminde yazin.'
+  if (!telefonDuzelt(v.telefon)) return 'Cep telefonunu 05XX XXX XX XX biciminde yazin.'
   if (!/^[1-9][0-9]{10}$/.test(v.tckn)) return 'TC kimlik numarasi 11 haneli olmali.'
   if (!tcknGecerli(v.tckn)) return 'TC kimlik numarasini kontrol edin, hatali gorunuyor.'
   if (!v.onay) return 'Devam etmek icin abonelik kosullarini onaylamaniz gerekiyor.'
