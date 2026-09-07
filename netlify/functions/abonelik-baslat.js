@@ -205,8 +205,16 @@ exports.handler = async (event) => {
     if (varOlan) {
       return html(409, formSayfasi(slug, paket, v, 'Bu e-posta icin bu pakette zaten aktif bir abonelik var. Ikinci kez tahsilat olmamasi icin yeni odeme baslatilmadi. Sorunuz varsa dolunay@dolunay.ai adresine yazin.'))
     }
+    // `null` = tarama tamamlanamadi, yani mevcut bir abonelik OLMADIGINI bilmiyoruz.
+    // Eskiden bu durum sessizce yutulup odeme aciliyordu; belirsiz sonuc ekranini gorup
+    // formu tekrar gonderen musteride ikinci tahsilat riski buradan doguyordu.
+    // Bilinmeyeni "yok" saymak yerine duruyoruz: kacan bir satis, mukerrer tahsilattan iyidir.
+    if (varOlan === null) {
+      return html(503, formSayfasi(slug, paket, v, 'Mevcut aboneliginiz olup olmadigini su an dogrulayamiyoruz. Ikinci kez tahsilat olmamasi icin odeme baslatilmadi. Birkac dakika sonra tekrar deneyin.'))
+    }
   } catch (e) {
-    // yut: mukerrer kontrolu odemenin onunde duramaz
+    console.error('mukerrer taramasi hata verdi', e && e.message)
+    return html(503, formSayfasi(slug, paket, v, 'Mevcut aboneliginiz olup olmadigini su an dogrulayamiyoruz. Ikinci kez tahsilat olmamasi icin odeme baslatilmadi. Birkac dakika sonra tekrar deneyin.'))
   }
 
   let cevap
@@ -230,7 +238,8 @@ exports.handler = async (event) => {
       },
     })
   } catch (e) {
-    return html(500, formSayfasi(slug, paket, v, 'Odeme sayfasi su an acilamadi. Birazdan tekrar deneyin.'))
+    console.error('iyzico initialize firlatti', e && e.message)
+    return html(500, formSayfasi(slug, paket, v, 'Odeme sayfasi su an acilamadi. Kartinizdan tahsilat YAPILMADI. Birazdan tekrar deneyin.'))
   }
 
   // iyzico'ya hic ulasilamadiysa bu bir ret degil belirsizliktir; kart hic denenmedi.

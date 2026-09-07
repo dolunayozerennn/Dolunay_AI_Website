@@ -25,7 +25,7 @@ function yetki(uriPath, bodyStr) {
 // query'li adreslerde adres query'li, imza query'siz yol ile kurulur (canlida olculdu).
 // Cevapsiz kalan istek fonksiyonu suresiz asili birakirdi; 20 saniyede kesilir.
 // `hataTipi` alani cagirana "bu bir ret degil, belirsizlik" demek icin vardir:
-// `agsiz` = istek gitmedi ya da cevap gelmedi, `sunucu` = HTTP 5xx / JSON olmayan cevap.
+// `baglanti` = istek gitmedi ya da cevap gelmedi, `sunucu` = HTTP 5xx / JSON olmayan cevap.
 // JSON donen 4xx iyzico'nun KENDI hata govdesidir, oldugu gibi gecirilir.
 async function istek(method, uriPath, body, imzaYolu) {
   const bodyStr = body === undefined ? '' : JSON.stringify(body)
@@ -44,15 +44,28 @@ async function istek(method, uriPath, body, imzaYolu) {
       },
       body: bodyStr === '' ? undefined : bodyStr,
     })
-    const ham = await cevap.text()
-    let veri
-    try { veri = JSON.parse(ham) } catch { return { status: 'failure', hataTipi: 'sunucu' } }
-    if (!cevap.ok && (cevap.status < 400 || cevap.status >= 500)) {
+    let ham
+    try {
+      ham = await cevap.text()
+    } catch {
+      // Govde okunamadi ama HTTP cevabi geldi: bu bir ag kopmasi degil sunucu sorunudur.
       return { status: 'failure', hataTipi: 'sunucu' }
     }
+    let veri
+    try { veri = JSON.parse(ham) } catch { return { status: 'failure', hataTipi: 'sunucu' } }
+    // iyzico is kurali reddini (kart reddi, gecersiz plan) HTTP 200 + `status:'failure'`
+    // ile bildirir. Bu yuzden 2xx DISINDAKI her kod -401, 403, 404, 429, 5xx, 3xx dahil-
+    // bizim tarafimizdan ALTYAPI sorunudur ve "kesin ret" sayilamaz. Kesin ret sanmak,
+    // tahsilat belirsizken musteriye "karttan para cekilmedi" demek olurdu.
+    // Saglayicinin hata govdesi kaydi icin korunur, uzerine yalnizca isaret eklenir.
+    if (!cevap.ok) {
+      return Object.assign({}, veri, { status: 'failure', hataTipi: 'sunucu', httpDurum: cevap.status })
+    }
     return veri
-  } catch {
-    return { status: 'failure', hataTipi: 'agsiz' }
+  } catch (e) {
+    // Beklenmeyen programlama hatasi da buraya duser; sessizce yutulmasin diye kaydedilir.
+    console.error('iyzico istek hatasi', uriPath, e && e.name, e && e.message)
+    return { status: 'failure', hataTipi: 'baglanti' }
   } finally {
     clearTimeout(zamanlayici)
   }
@@ -93,7 +106,9 @@ async function abonelikleriTara(bak, sayfaTavani = 20) {
     for (const kayit of kayitlar) if (bak(kayit)) return kayit
     if (kayitlar.length < 100) return false
   }
-  return false
+  // Tavana dayanildi: son sayfaya ulasilamadi, yani "yok" DIYEMEYIZ.
+  // `null` = bilinmiyor; cagiran bunu bir izin degil bir durak olarak okur.
+  return null
 }
 
 module.exports = { formBaslat, formSonuc, paketBul, abonelikleriTara }

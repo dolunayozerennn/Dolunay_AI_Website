@@ -95,3 +95,49 @@ Uctan uca gercek bir odeme alindi ve dogrulandi: 1 TL'lik test paketiyle
 abonelik basladi, ilk tahsilat `SUCCESS` dondu, iptal sonrasi durum `CANCELED`
 oldu ve gelecek tahsilat dustu. Test slug'i katalogdan kaldirildi, canli
 katalogda yalniz `carousel` var.
+
+## Blog Otomasyonu satis sayfasi (2026-09-07)
+
+Sayfa: `public/blog-otomasyonu/index.html`, canli adres
+`https://dolunay.ai/blog-otomasyonu/`. Elle yazilmis tek dosya HTML; `bankalar`
+ve `kurumsal-egitim` sayfalariyla ayni desen. Kapak gorselleri
+`public/blog-otomasyonu/gorseller/` icinde, statik export bunlari `out/`
+altina oldugu gibi kopyalar.
+
+**Bilerek LISTELENMEZ.** Satir 7'de `<meta name="robots" content="noindex,
+nofollow">` var ve canonical etiketi YOK. `src/app/sitemap.ts` yalniz sabit
+yollari ve blog yazilarini uretir, `public/` sayfalarini toplamaz; site
+menusunde de bag yok. `src/app/robots.ts` icine Disallow EKLENMEMELI; engel
+konursa arama motoru sayfayi hic okumaz ve noindex'i goremez. Bu, listelenmeme
+saglar; linki olan herkes acabilir, gizli degil listesizdir.
+
+Katalog anahtarlari: `blog-baslangic`, `blog-profesyonel`, `blog-premium`.
+Sayfadaki fiyat KDV HARIC yazilir (₺2.980 / ₺5.980 / ₺9.980 + KDV), iyzico
+plan bedeli KDV DAHIL kurulur (%20). Ikisi karistirilirsa musteri ekranda
+gordugunden farkli bir tutar oder. Katalog yine `IYZICO_PAKETLER` env'inde;
+degisiklik sonrasi yeniden deploy sart.
+
+### Odeme dayanikliligi sozlesmesi
+
+iyzico **is kurali reddini HTTP 200 + `status:"failure"`** ile bildirir. Bu
+yuzden 2xx disindaki her kod (401, 403, 404, 429, 3xx, 5xx) bizde ALTYAPI
+sorunudur, "kesin ret" degildir. Kurallar:
+
+- Her istek 20 saniyede kesilir; cevapsiz istek fonksiyonu asili birakmaz.
+- Belirsizlikte cevaba `hataTipi` isareti konur (`baglanti` = istek gitmedi,
+  `sunucu` = 5xx / JSON olmayan / 2xx disi cevap). Saglayicinin kendi hata
+  govdesi kaydi icin korunur, musteriye ham metin gosterilmez.
+- **Iki cumle asla yer degistirmez.** Kesin bilgi varsa "kartinizdan tahsilat
+  YAPILMADI"; sonuc teyit edilemiyorsa "tahsilat yapilmis olabilir, ayni
+  odemeyi tekrar denemeyin". Belirsizken "para cekilmedi" demek yanlis
+  guvence verir.
+- Mukerrer abonelik taramasi okunamazsa odeme BASLATILMAZ (503). Kacan satis,
+  ikinci tahsilattan iyidir.
+
+Bu sozlesmeyi bagimsiz bir sinav olcer (fix'i yazan el yazmadi):
+
+    node netlify/sinav/odeme_sozlesmesi.js netlify/lib/iyzico.js \
+      netlify/functions/abonelik-baslat.js netlify/functions/abonelik-sonuc.js
+
+15 vaka, ag cagrisi yok, cikis 0 bekleniyor. Odeme koduna dokunan her
+degisiklikten sonra kosulur.
