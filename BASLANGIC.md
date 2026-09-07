@@ -181,3 +181,15 @@ SABIT yaziliydi, sinav 21 vakaya cikinca esik hicbir zaman tutmadi ve suit
 hayatta kalan bir mutasyonu isaretleyemez hale geldi; ustelik `node` hic
 calismadiginda bile "kor nokta yok" basip cikis 0 donuyordu. Esik artik temel
 kosudan OLCULUR, sabit yazilmaz.
+
+## Paket dogrulama (salt okuma)
+
+`node scripts/plan_dogrula.js`, `IYZICO_PAKETLER` katalogundaki her paketin iyzico'da
+gercekten var oldugunu ve tahsil edilecek bedelin sayfada yazan bedelle ortustugunu olcer.
+Sayfada "+KDV" yazdigi icin kiyas KDV'li tutar uzerinden yapilir (2.980 -> 3576).
+
+Tahsilat yapmaz, abonelik acmaz, iptal etmez; yalniz `GET /v2/subscription/pricing-plans/<ref>`.
+Yeni paket acildiktan sonra ve fiyat degisiminde kosulur; canli test odemesinin yerine gecer.
+Bulgu varsa cikis 1.
+
+Anahtarlar koda yazilmaz: `master.env` + Netlify'dan gelen `IYZICO_PAKETLER` ile kosar.
