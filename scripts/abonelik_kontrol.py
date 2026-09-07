@@ -88,5 +88,57 @@ kayitli = sorted(k[0] for k in kayitlar)
 fazla = [s for s in uretilen if s not in kayitli]
 print(f'[5] ciktidaki musteri sayfasi: {len(uretilen)} {uretilen} | kayitli: {len(kayitli)} | kayitsiz kalinti: {len(fazla)} {fazla}')
 
-hata = bool(fiyat_bulgu) or emdash or sapkali or 'noindex' in acik or noindex_eksik or sizinti or fazla
+# 6) Odeme akisinin GIZLILIGI. Eksen [3] yalniz `_abonelikler.ts` kayitlarina bakar;
+#    blog otomasyonu sayfasi ve Netlify fonksiyonlarinin URETTIGI sayfalar o listede
+#    olmadigi icin oraya bakmiyordu.
+#    DIKKAT: fonksiyon dosyalarinda `noindex` KELIMESINI aramak yanlis pozitif verir;
+#    etiket ortak iskelette durur. Olculen sey ZINCIR: iskelette etiket var mi VE her
+#    fonksiyon sayfayi gercekten o iskeletten uretiyor mu. Biri kopunca gizlilik kopar.
+iskelet = kok/'netlify/lib/sayfa.js'
+gizlilik_eksik = []
+gizli_taranan = 0
+iskelet_metin = iskelet.read_text(encoding='utf-8') if iskelet.exists() else ''
+gizli_taranan += len(iskelet_metin)
+if not re.search(r'name=["\']robots["\'][^>]*noindex', iskelet_metin):
+    gizlilik_eksik.append('sayfa.js:robots-etiketi-yok')
+sayfa_html = [kok/'public/blog-otomasyonu/index.html']
+for p6 in sayfa_html:
+    if not p6.exists():
+        gizlilik_eksik.append(f'{p6.name}:YOK'); continue
+    icerik = p6.read_text(encoding='utf-8')
+    gizli_taranan += len(icerik)
+    if not re.search(r'name=["\']robots["\'][^>]*noindex', icerik):
+        gizlilik_eksik.append(p6.name)
+fonksiyonlar = sorted((kok/'netlify/functions').glob('abonelik-*.js'))
+for p6 in fonksiyonlar:
+    icerik = p6.read_text(encoding='utf-8')
+    gizli_taranan += len(icerik)
+    if "lib/sayfa" not in icerik:
+        gizlilik_eksik.append(f'{p6.name}:iskeleti-kullanmiyor')
+print(f'[6] taranan gizli yuzey: {1 + len(sayfa_html) + len(fonksiyonlar)} '
+      f'| taranan karakter: {gizli_taranan} | eksik: {len(gizlilik_eksik)} {gizlilik_eksik}')
+
+# 7) Musteriye GORUNEN metinde em-dash ve sapkali harf. Eksen [2] yalniz `src` diffine
+#    bakar; bu isin sayfasi ve fonksiyonlarin urettigi metin disarida kaliyordu.
+#    Kapsam BILEREK bu odeme akisiyla sinirli: butun `public/` taranirsa baska islerin
+#    eski sayfalari yuzunden bekci surekli kirmizi kalir ve okunmaz olur.
+#    `kar`/`kar payi` (kazanc) ayrimi icin kullanilan a-sapka BILEREK serbest.
+IZINLI_SAPKA = re.compile(r'[Kk][âÂ]r')
+metin_yuzeyler = sorted((kok/'public/blog-otomasyonu').rglob('*.html')) \
+    + sorted((kok/'netlify/lib').glob('*.js')) + fonksiyonlar
+tr_bulgu = []
+tr_taranan = 0
+for p7 in metin_yuzeyler:
+    ham = p7.read_text(encoding='utf-8', errors='replace')
+    tr_taranan += len(ham)
+    for no, satir in enumerate(ham.splitlines(), 1):
+        if '\u2014' in satir:
+            tr_bulgu.append(f'{p7.relative_to(kok)}:{no}:em-dash')
+        if any(c in sapka for c in IZINLI_SAPKA.sub('', satir)):
+            tr_bulgu.append(f'{p7.relative_to(kok)}:{no}:sapkali')
+print(f'[7] taranan metin yuzeyi: {len(metin_yuzeyler)} | taranan karakter: {tr_taranan} '
+      f'| bulgu: {len(tr_bulgu)} {tr_bulgu[:8]}')
+
+hata = (bool(fiyat_bulgu) or emdash or sapkali or 'noindex' in acik or noindex_eksik
+        or sizinti or fazla or gizlilik_eksik or tr_bulgu)
 sys.exit(1 if hata else 0)

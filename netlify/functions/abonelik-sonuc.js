@@ -68,6 +68,24 @@ exports.handler = async (event) => {
   }
 
   if (cevap && cevap.status === 'success') {
+    // `status:'success'` yalnizca SORGUNUN dondugunu soyler, aboneligin basladigini
+    // degil. Kayitta `subscriptionStatus` alani var (canlida olculdu: ACTIVE / CANCELED).
+    // Saglayici ACTIVE DISINDA bir sey diyorsa "aboneliginiz aktif edildi" demek
+    // kanitsiz bir guvence olur. Alan hic gelmediyse davranis degismez; yalnizca
+    // saglayicinin ACIKCA aksini soyledigi hal belirsizlige dusurulur.
+    // Alanin HIC OLMAMASI ile alanin OKUNAMAMASI ayni sey degildir. `null`, `0`,
+    // `false`, `''` ya da `[]` gelirse saglayici bir sey soylemeye calisiyor ama
+    // biz anlamiyoruz demektir; bunu "alan yok" sayip onay vermek kanitsiz guvence olur.
+    const hamDurum = veri ? veri.subscriptionStatus : undefined
+    const durum = typeof hamDurum === 'string' ? hamDurum.trim().toUpperCase() : ''
+    if (hamDurum !== undefined && durum === '') {
+      console.error('iyzico abonelik durumu okunamadi', typeof hamDurum)
+      return belirsiz()
+    }
+    if (durum && durum !== 'ACTIVE') {
+      console.error('iyzico abonelik ACTIVE degil', durum)
+      return belirsiz()
+    }
     const ref = veri.referenceCode || veri.subscriptionReferenceCode || ''
     return ciz(200, 'Aboneliginiz basladi', 'iyi',
       'Odemeniz alindi ve aboneliginiz aktif edildi.',

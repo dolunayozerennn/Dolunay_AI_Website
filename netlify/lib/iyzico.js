@@ -98,13 +98,27 @@ function paketBul(slug) {
 // bu bir raporlama degil, tekil bir mukerrer kontrolu.
 async function abonelikleriTara(bak, sayfaTavani = 20) {
   const YOL = '/v2/subscription/subscriptions'
+  let gorulen = 0
   for (let sayfa = 1; sayfa <= sayfaTavani; sayfa += 1) {
     const cevap = await istek('GET', `${YOL}?page=${sayfa}&count=100`, undefined, YOL)
     if (!cevap || cevap.status !== 'success') return null
     const govde = cevap.data && typeof cevap.data === 'object' ? cevap.data : cevap
-    const kayitlar = Array.isArray(govde.items) ? govde.items : []
+    // Canlida olculdu (2026-09-07): iyzico bos sayfada BILE `items` alanini dizi
+    // olarak doner (sayfa 99 -> totalCount 1, items []). Yani dizi olmayan bir
+    // `items` "abonelik yok" demek DEGILDIR, okuyamadigimiz bir cevaptir. Onu bos
+    // dizi sayip gecmek, mevcut aboneligi hic gormeden ikinci tahsilat acardi.
+    const kayitlar = govde.items
+    if (!Array.isArray(kayitlar)) return null
     for (const kayit of kayitlar) if (bak(kayit)) return kayit
-    if (kayitlar.length < 100) return false
+    gorulen += kayitlar.length
+    if (kayitlar.length < 100) {
+      // Kisa sayfa normalde "liste bitti" demektir. Ama saglayici toplam sayiyi
+      // bildiriyorsa ve biz o kadar kaydi GORMEDIYSEK liste bitmemistir. Bunu
+      // "abonelik yok" saymak, mevcut aboneligi gormeden ikinci tahsilat acardi.
+      const toplam = typeof govde.totalCount === 'number' ? govde.totalCount : null
+      if (toplam !== null && gorulen < toplam) return null
+      return false
+    }
   }
   // Tavana dayanildi: son sayfaya ulasilamadi, yani "yok" DIYEMEYIZ.
   // `null` = bilinmiyor; cagiran bunu bir izin degil bir durak olarak okur.

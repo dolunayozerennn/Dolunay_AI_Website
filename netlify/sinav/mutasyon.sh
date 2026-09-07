@@ -20,10 +20,19 @@ GECICI="$(mktemp -d)" || { echo "ARIZA: gecici dizin acilamadi"; exit 1; }
 trap 'rm -rf "$GECICI"' EXIT
 KOR=0
 
+# Cikti ile birlikte cikis kodunu da tasir: skor basip ARDINDAN coken bir kosu
+# "gecti" sayilamaz. Son satir daima `KOD=<n>` olur.
 kos() {
-  node --openssl-config=/dev/null "$SINAV" \
-    "$1/iyzico.js" "$1/abonelik-baslat.js" "$1/abonelik-sonuc.js" 2>&1
+  local c k
+  c="$(node --openssl-config=/dev/null "$SINAV" \
+    "$1/iyzico.js" "$1/abonelik-baslat.js" "$1/abonelik-sonuc.js" 2>&1)"
+  k=$?
+  printf '%s\nKOD=%s\n' "$c" "$k"
 }
+
+# Sinavin cikis kodu. DIKKAT: bu bir cokme sinyali DEGILDIR - harness bir vaka
+# dustugunde de 1 doner. Bu yuzden yalniz TEMEL kosuda anlamlidir: bozulmamis kodda
+# hem skor tam hem cikis 0 olmalidir. Mutasyon dalinda hukum SKORA gore verilir.
 
 # Ciktidan `N/M` satirini ayiklar. Bulamazsa bos doner; bos skor ASLA basari sayilmaz.
 skoru_al() { echo "$1" | grep -oE '^[0-9]+/[0-9]+$' | tail -1; }
@@ -74,6 +83,10 @@ if [ -z "$TAVAN" ]; then
   exit 1
 fi
 echo "temel $TAVAN"
+if [ "$(echo "$TEMEL_CIKTI" | awk -F= '/^KOD=/{print $2}' | tail -1)" != "0" ]; then
+  echo "TEMEL ARIZA: bozulmamis kosu sifir disi cikis kodu verdi, olcum guvenilmez"
+  exit 1
+fi
 if [ "${TAVAN%/*}" != "${TAVAN#*/}" ]; then
   echo "TEMEL DUSTU: bozulmamis kod sinavi gecmiyor, mutasyon hukmu verilemez"
   echo "$TEMEL_CIKTI" | awk '/^DUSTU /{print "  " $0}'
@@ -95,6 +108,12 @@ mutasyon M3_timeout       iyzico.js         -pi -e "s/signal: kesici\.signal,//;
 mutasyon M4_belirsizlik   abonelik-sonuc.js -pi -e "s/if \(!cevap \|\| cevap\.hataTipi\) \{/if (false) {/"
 mutasyon M5_mukerrer_freni abonelik-baslat.js -pi -e "s/if \(varOlan === null\) \{/if (false) {/"
 mutasyon M6_tanimsiz_govde abonelik-sonuc.js -pi -e "s/if \(cevap\.status !== 'failure'\) \{/if (false) {/"
+# Okunamayan cevabi kesin hukme cevirmenin bes ayri yuzu. Hepsi ayni sinif.
+mutasyon M7_items_dizi_degil   iyzico.js          -pi -e "s/if \(!Array\.isArray\(kayitlar\)\) return null/if (false) return null/"
+mutasyon M8_toplam_yok_sayilir iyzico.js          -pi -e "s/if \(toplam !== null \&\& gorulen < toplam\) return null/if (false) return null/"
+mutasyon M9_okunamayan_kayit   abonelik-baslat.js -pi -e "s/if \(okunamayanKayit\) \{/if (false) {/"
+mutasyon M10_durum_denetimi    abonelik-sonuc.js  -pi -e "s/if \(durum \&\& durum !== .ACTIVE.\) \{/if (false) {/"
+mutasyon M11_bos_form          abonelik-baslat.js -pi -e "s/typeof cevap\.checkoutFormContent === .string./cevap.checkoutFormContent != null/"
 
 [ "$KOR" = 0 ] && echo "kor nokta yok" || echo "EN AZ BIR KOR NOKTA VAR"
 exit $KOR

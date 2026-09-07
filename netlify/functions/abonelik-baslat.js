@@ -193,14 +193,28 @@ exports.handler = async (event) => {
   try {
     const epostaKucuk = v.eposta.toLowerCase()
     const planKucuk = String(paket.plan).toLowerCase()
+    // Bu musteriye ve bu pakete ait olup DURUMU okunamayan bir kayit gorursek,
+    // "eslesmedi" diyemeyiz. Bayrak disarida durur cunku tarama geri donduginde
+    // hukum verilecek yer burasidir.
+    let okunamayanKayit = false
     const varOlan = await abonelikleriTara((kayit) => {
       // Alt dize araması yanlış pozitif üretir (bir e-posta baska bir alanin
       // icinde gecebilir). Bu yuzden yalnizca TAM esitlik sayilir: kaydin
       // metin yapraklarindan biri e-postanin, bir baskasi plan kodunun aynisi
       // olmali. Yanlis "zaten aboneligin var" ekrani odemeyi bloklar, o yuzden
       // olcut bilerek dar tutuldu.
-      if (String(kayit && kayit.subscriptionStatus).toUpperCase() !== 'ACTIVE') return false
-      return yapraklar(kayit).has(epostaKucuk) && yapraklar(kayit).has(planKucuk)
+      const bizim = yapraklar(kayit).has(epostaKucuk) && yapraklar(kayit).has(planKucuk)
+      const durum = kayit && typeof kayit.subscriptionStatus === 'string'
+        ? kayit.subscriptionStatus.toUpperCase() : null
+      if (durum === null) {
+        // Durum alani okunamiyor. Bu "abonelik degil" DEGIL, "bilmiyorum"dur.
+        // Yalniz kayit gercekten bu musteriye ve bu pakete aitse anlamli;
+        // baskasinin bozuk kaydi bu musterinin odemesini bloklamamali.
+        if (bizim) okunamayanKayit = true
+        return false
+      }
+      if (durum !== 'ACTIVE') return false
+      return bizim
     })
     if (varOlan) {
       return html(409, formSayfasi(slug, paket, v, 'Bu e-posta icin bu pakette zaten aktif bir abonelik var. Ikinci kez tahsilat olmamasi icin yeni odeme baslatilmadi. Sorunuz varsa dolunay@dolunay.ai adresine yazin.'))
@@ -209,6 +223,9 @@ exports.handler = async (event) => {
     // Eskiden bu durum sessizce yutulup odeme aciliyordu; belirsiz sonuc ekranini gorup
     // formu tekrar gonderen musteride ikinci tahsilat riski buradan doguyordu.
     // Bilinmeyeni "yok" saymak yerine duruyoruz: kacan bir satis, mukerrer tahsilattan iyidir.
+    if (okunamayanKayit) {
+      return html(503, formSayfasi(slug, paket, v, 'Mevcut aboneliginiz olup olmadigini su an dogrulayamiyoruz. Ikinci kez tahsilat olmamasi icin odeme baslatilmadi. Birkac dakika sonra tekrar deneyin.'))
+    }
     if (varOlan === null) {
       return html(503, formSayfasi(slug, paket, v, 'Mevcut aboneliginiz olup olmadigini su an dogrulayamiyoruz. Ikinci kez tahsilat olmamasi icin odeme baslatilmadi. Birkac dakika sonra tekrar deneyin.'))
     }
@@ -248,7 +265,12 @@ exports.handler = async (event) => {
     return html(503, formSayfasi(slug, paket, v, 'Su an odeme saglayicisina ulasilamiyor. Kartinizdan tahsilat YAPILMADI. Birkac dakika sonra tekrar deneyin.'))
   }
 
-  if (cevap.status !== 'success' || !cevap.checkoutFormContent) {
+  // `checkoutFormContent` bos nesne ya da dizi olarak gelirse JS'te DOGRUDUR ve
+  // eski kontrolden gecerdi; musteri kart adimini gorur ama icinde kullanilabilir
+  // form olmazdi. Metin olmasi ve bos olmamasi sart.
+  const formIcerik = typeof cevap.checkoutFormContent === 'string'
+    ? cevap.checkoutFormContent.trim() : ''
+  if (cevap.status !== 'success' || !formIcerik) {
     // Saglayicinin ham hata metni musteriye gosterilmez; sunucu kaydinda kalir.
     console.error('iyzico initialize hatasi', cevap && cevap.errorCode, kayitIcin(cevap && cevap.errorMessage))
     return html(400, formSayfasi(slug, paket, v, 'Odeme sayfasi acilamadi. Bilgileri kontrol edip tekrar deneyin; sorun surerse dolunay@dolunay.ai adresine yazin.'))
@@ -264,7 +286,7 @@ exports.handler = async (event) => {
       <div class="kart">
         <div id="iyzipay-checkout-form" class="responsive"></div>
       </div>
-      ${cevap.checkoutFormContent}
+      ${formIcerik}
       <p class="dip">Bu sayfa 30 dakika gecerlidir. Suresi dolarsa sayfayi yenileyin.</p>`,
   }))
 }

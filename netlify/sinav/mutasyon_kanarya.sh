@@ -15,8 +15,11 @@
 set -u
 KOK="$(cd "$(dirname "$0")/../.." && pwd)"
 SUIT="$KOK/netlify/sinav/mutasyon.sh"
-SAHTE="$(mktemp -d)"
-NEGATIF="$KOK/netlify/sinav/.kanarya_negatif.sh"
+SAHTE="$(mktemp -d)" || { echo "ARIZA: gecici dizin acilamadi"; exit 1; }
+# Sabit ad mevcut bir dosyayi ezip silebilirdi; ad benzersiz uretilir ve
+# uzerine yazmadan once varligi kontrol edilir.
+NEGATIF="$KOK/netlify/sinav/.kanarya_negatif_$$.sh"
+[ -e "$NEGATIF" ] && { echo "ARIZA: $NEGATIF zaten var"; exit 1; }
 trap 'rm -rf "$SAHTE" "$NEGATIF"' EXIT
 gecti=0; kaldi=0
 
@@ -30,7 +33,10 @@ bekle() { # ad beklenen_cikis beklenen_desen cikti gercek_cikis
   fi
 }
 
-sahte_node() { printf '%s\n' '#!/bin/bash' "$@" > "$SAHTE/node"; chmod +x "$SAHTE/node"; }
+sahte_node() {
+  printf '%s\n' '#!/bin/bash' "$@" > "$SAHTE/node" || { echo "ARIZA: sahte node yazilamadi"; exit 1; }
+  chmod +x "$SAHTE/node" || { echo "ARIZA: sahte node calistirilabilir yapilamadi"; exit 1; }
+}
 kos_sahte() { PATH="$SAHTE:$PATH" bash "$SUIT" 2>&1; }
 
 # N1: sinav hic skor basmiyor. Cokme "yakalandi" degildir; hukum verilemez.

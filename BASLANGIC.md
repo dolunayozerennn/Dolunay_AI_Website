@@ -132,21 +132,33 @@ sorunudur, "kesin ret" degildir. Kurallar:
   odemeyi tekrar denemeyin". Belirsizken "para cekilmedi" demek yanlis
   guvence verir.
 - Mukerrer abonelik taramasi okunamazsa odeme BASLATILMAZ (503). Kacan satis,
-  ikinci tahsilattan iyidir.
+  ikinci tahsilattan iyidir. Bos liste (`items: []`) okunamamak DEGILDIR: ilk kez
+  satin alan musteri normal sekilde ilerler.
+- Saglayici toplamda daha cok kayit oldugunu soyluyorsa ve biz hepsini gormediysek
+  liste bitmemistir; "abonelik yok" denmez.
+- Sorgunun donmesi aboneligin basladigini KANITLAMAZ. Kaydin kendi durumu ACTIVE
+  degilse ya da okunamiyorsa "aboneliginiz basladi" denmez.
+- Odeme formu gelmediyse ya da bos geldiyse musteriye bos bir kart adimi acilmaz.
 
 Bu sozlesmeyi bagimsiz bir sinav olcer (fix'i yazan el yazmadi):
 
     node netlify/sinav/odeme_sozlesmesi.js netlify/lib/iyzico.js \
       netlify/functions/abonelik-baslat.js netlify/functions/abonelik-sonuc.js
 
-21 vaka, ag cagrisi yok, cikis 0 bekleniyor. Odeme koduna dokunan her
+36 vaka, ag cagrisi yok, cikis 0 bekleniyor. Odeme koduna dokunan her
 degisiklikten sonra kosulur.
 
 Sinavin kendisi de olculur. `bash netlify/sinav/mutasyon.sh` uygulama kodunu
-gecici kopyalarda alti ayri yerden bilerek bozar ve sinavin kirmizi verip
+gecici kopyalarda on bir ayri yerden bilerek bozar ve sinavin kirmizi verip
 vermedigine bakar; gercek dosyalara dokunmaz. Bir mutasyon yesil kaliyorsa orasi
-sinavin KOR NOKTASIDIR ve script cikis 1 verir. Su an alti mutasyonun altisi da
+sinavin KOR NOKTASIDIR ve script cikis 1 verir. Su an on bir mutasyonun on biri de
 yakalaniyor.
+
+Tekrar eden kusur sinifi tek cumlede: **okunamayan bir cevabi kesin bir evete ya da
+hayira cevirmek.** Bu depoda bes ayri yerde bulundu: HTTP 200 + tanimsiz govde,
+dizi olmayan `items`, yok sayilan `totalCount`, okunamayan `subscriptionStatus`,
+ve bos gelen form icerigi. Yeni kod yazarken once bu soru sorulur: cevabi
+anlamadigimizda ne diyoruz.
 
 Olcen aletin kendisi de olculur: `bash netlify/sinav/mutasyon_kanarya.sh`.
 Sahte bir `node` ile "harness cokmus", "bozulmamis kod bile dusuyor", "mutasyon

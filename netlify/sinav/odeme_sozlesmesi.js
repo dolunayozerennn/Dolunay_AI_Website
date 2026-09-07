@@ -50,6 +50,11 @@ const CASES = [
   ['S11_bos_nesne', 'result', 'empty_object', 11],
   ['S11_bos_dizi', 'result', 'empty_array', 11],
   ['S11_beklemede', 'result', 'pending', 11],
+  ...['missing', 'null', 'object', 'string', 'empty'].map((s) => [`S12_items_${s}`, 'start', s, 12]),
+  ...['PENDING', 'UNPAID', 'CANCELED', 'ACTIVE', 'missing'].map((s) => [`S13_durum_${s}`, 'result', s, 13]),
+  ['S14_toplam_uyusmuyor', 'start', 'total_mismatch', 14],
+  ['S15_durum_okunamiyor', 'start', 'unreadable_status', 15],
+  ...['object', 'array', 'blank'].map((s) => [`S16_bos_form_${s}`, 'start', s, 16]),
 ];
 const REAL_LIMIT_MS = 900;
 const WORKER_LIMIT_MS = 2500;
@@ -103,7 +108,7 @@ function networkMarked(value, httpFailure = false) {
   return visit(value);
 }
 
-function verdict(number, value, handler) {
+function verdict(number, value, handler, scenario) {
   if (number <= 4) {
     if (handler) {
       if (!value || typeof value.body !== 'string') return false;
@@ -135,6 +140,21 @@ function verdict(number, value, handler) {
   if (number === 10) return status === 503 && /(?:tekrar|yeniden|sonra)\s+deney/i.test(text);
   // HTTP 200 donen tanimsiz govde kesin ret DEGILDIR; belirsizlik cumlesi cikmalidir.
   if (number === 11) return !noCharge.test(text) && /teyit\s+edemedik|teyit\s+edilemedi/i.test(text);
+  // `items: []` NORMAL bos cevaptir; odemenin acilmasini engellememeli. Diger dort
+  // sekil okunamayan cevaptir ve odemeyi durdurmali.
+  if (number === 12) return scenario === 'empty'
+    ? status >= 200 && status < 300 && html && /odeme\s+formu/i.test(text)
+    : status === 503 && /(?:tekrar|yeniden|sonra)\s+deney/i.test(text);
+  if (number === 13) {
+    const confirmed = /\b(?:aktif\s+edil(?:di|mistir)|odeme(?:niz)?\s+(?:basariyla\s+)?alin(?:di|mistir)|aboneli(?:k|g[a-z]*)(?:\s+(?:basariyla|artik|simdi|hemen))?\s+(?:basladi|baslamistir|baslatildi|baslatilmistir))\b/i.test(text);
+    return ['ACTIVE', 'missing'].includes(scenario) ? confirmed
+      : !confirmed && /teyit\s+edemedik|teyit\s+edilemedi/i.test(text);
+  }
+  // 14: saglayici toplamda daha cok kayit oldugunu soyluyor, biz hepsini gormedik.
+  // 15: bu musteriye ve bu pakete ait bir kaydin durumu okunamiyor.
+  if (number === 14 || number === 15) return status === 503 && /(?:tekrar|yeniden|sonra)\s+deney/i.test(text);
+  // Kullanilabilir form gelmediyse musteriye bos ya da bozuk bir kart adimi acilamaz.
+  if (number === 16) return status >= 400 && html && !/odeme\s+formu/i.test(text);
   return /\baboneli(?:k|g[a-z]*)(?:\s+(?:basariyla|artik|simdi|hemen))?\s+(?:basladi|baslamistir|baslatildi|baslatilmistir)\b/i.test(text);
 }
 
@@ -253,6 +273,47 @@ async function workerCase() {
     }
     if (role === 'start') {
       // S10: olculen cagri taramanin KENDISI; checkout'a hic gidilmemis olmali.
+      if ((number === 12 || number === 14 || number === 15)
+        && method === 'GET' && parsed.pathname.includes('subscriptions')) {
+        if (!reached) { reached = true; parentPort.postMessage({ type: 'reached' }); }
+        const govdeler = {
+          // S12: `items` beklenen sekilde gelmiyor.
+          missing: {},
+          null: { items: null },
+          object: { items: {} },
+          string: { items: 'x' },
+          empty: { totalCount: 0, currentPage: 1, pageCount: 1, items: [] },
+          // S14: kisa sayfa ama saglayici "daha var" diyor.
+          total_mismatch: {
+            totalCount: 5, currentPage: 1, pageCount: 1,
+            items: [{ referenceCode: 'sinav-1', customerEmail: 'baska@ornek.com',
+              pricingPlanReferenceCode: PLAN, subscriptionStatus: 'ACTIVE' }],
+          },
+          // S15: kayit bu musteriye ve bu pakete ait ama durumu okunamiyor.
+          unreadable_status: {
+            totalCount: 1, currentPage: 1, pageCount: 1,
+            items: [{ referenceCode: 'sinav-1', customerEmail: 'ayse@ornek.com',
+              customer: { email: 'ayse@ornek.com' },
+              pricingPlanReferenceCode: PLAN, subscriptionStatus: null }],
+          },
+        };
+        return new Response(JSON.stringify({ status: 'success', data: govdeler[scenario] }),
+          { status: 200, headers: { 'content-type': 'application/json' } });
+      }
+      // Bu vakalarda olculen sey TARAMANIN kendisidir. Tarama gecerse form istegi
+      // normal basarili doner; senaryo adi burada bir hata sinyali DEGILDIR.
+      if (number === 16 && parsed.pathname.includes('checkoutform')) {
+        if (!reached) { reached = true; parentPort.postMessage({ type: 'reached' }); }
+        // `status:'success'` var ama kullanilabilir form icerigi YOK.
+        const icerik = { object: {}, array: [], blank: '   ' }[scenario];
+        return new Response(JSON.stringify({ status: 'success', checkoutFormContent: icerik }),
+          { status: 200, headers: { 'content-type': 'application/json' } });
+      }
+      if ((number === 12 || number === 14 || number === 15) && parsed.pathname.includes('checkoutform')) {
+        return new Response(JSON.stringify(Object.assign({}, SUCCESS, {
+          checkoutFormContent: '<form>Sinav odeme formu</form>',
+        })), { status: 200, headers: { 'content-type': 'application/json' } });
+      }
       if (number === 10 && method === 'GET' && parsed.pathname.includes('subscriptions')) {
         if (!reached) { reached = true; parentPort.postMessage({ type: 'reached' }); }
         if (scenario === 'scan_throw') throw new TypeError('fetch failed: sinav network');
@@ -310,6 +371,16 @@ async function workerCase() {
     const status = scenario === 'server' ? 500 : scenario === 'http4xx' ? (adapter.httpStatus || 400) : 200;
     // S11: iyzico'nun tanimadigimiz govdeleri. Hicbiri "hayir" demek degildir.
     const BILINMEYEN = { empty_object: {}, empty_array: [], pending: { status: 'pending' } };
+    // S13: sorgu dondu (`success`) ama aboneligin KENDI durumu ayri bir sorudur.
+    const DURUMLAR = ['PENDING', 'UNPAID', 'CANCELED', 'ACTIVE', 'missing'];
+    if (number === 13) {
+      const veri = Object.assign({}, SUCCESS.data || {});
+      if (scenario !== 'missing') veri.subscriptionStatus = scenario;
+      else delete veri.subscriptionStatus;
+      return new Response(JSON.stringify(Object.assign({}, SUCCESS, { data: veri })),
+        { status: 200, headers: { 'content-type': 'application/json' } });
+    }
+    void DURUMLAR;
     const body = scenario === 'server' ? '<html><body>Sinav sunucu hatasi</body></html>'
       : JSON.stringify(Object.prototype.hasOwnProperty.call(BILINMEYEN, scenario)
         ? BILINMEYEN[scenario] : scenario === 'success' ? SUCCESS : REJECTION);
@@ -345,8 +416,19 @@ async function workerCase() {
     }] : ['sahte-token'];
     const value = await call.fn.apply(call.owner, args);
     if (!reached || blocked) finish({ state: 'ATLANDI', reason: blocked ? 'ag' : 'giris' });
-    else finish({ state: !invalidRequest && (number !== 10 || checkoutCount === 0)
-      && verdict(number, value, call.handler) ? 'GECTI' : 'DUSTU' });
+    else {
+      // Odemeyi DURDURMASI gereken vakalarda checkout ucuna hic gidilmemis olmali:
+      // 503 dondurup yine de form acan bir surum bu vakalari gecemez. S12'nin
+      // `empty` senaryosu bilerek disaridadir, orada odeme ACILMALIDIR.
+      const durmali = number === 10 || number === 14 || number === 15
+        || (number === 12 && scenario !== 'empty');
+      // Bos liste NORMAL bir cevaptir: odeme gercekten ACILMALIDIR. Yalniz "2xx + HTML"
+      // istemek yetmiyordu; checkout'a hic gitmeden 200 donen bir surum de geciyordu.
+      const acilmali = number === 12 && scenario === 'empty';
+      finish({ state: !invalidRequest && (!durmali || checkoutCount === 0)
+        && (!acilmali || checkoutCount === 1)
+        && verdict(number, value, call.handler, scenario) ? 'GECTI' : 'DUSTU' });
+    }
   } catch {
     finish(blocked ? { state: 'ATLANDI', reason: 'ag' } : reached ? { state: 'DUSTU' }
       : { state: 'ATLANDI', reason: 'giris' });
