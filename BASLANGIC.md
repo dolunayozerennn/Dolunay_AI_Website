@@ -139,5 +139,11 @@ Bu sozlesmeyi bagimsiz bir sinav olcer (fix'i yazan el yazmadi):
     node netlify/sinav/odeme_sozlesmesi.js netlify/lib/iyzico.js \
       netlify/functions/abonelik-baslat.js netlify/functions/abonelik-sonuc.js
 
-15 vaka, ag cagrisi yok, cikis 0 bekleniyor. Odeme koduna dokunan her
+21 vaka, ag cagrisi yok, cikis 0 bekleniyor. Odeme koduna dokunan her
 degisiklikten sonra kosulur.
+
+Sinavin kendisi de olculur. `bash netlify/sinav/mutasyon.sh` uygulama kodunu
+gecici kopyalarda alti ayri yerden bilerek bozar ve sinavin kirmizi verip
+vermedigine bakar; gercek dosyalara dokunmaz. Bir mutasyon yesil kaliyorsa orasi
+sinavin KOR NOKTASIDIR ve script cikis 1 verir. Su an alti mutasyonun altisi da
+yakalaniyor.

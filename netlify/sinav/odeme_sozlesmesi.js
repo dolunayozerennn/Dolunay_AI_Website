@@ -44,6 +44,12 @@ const CASES = [
   ['S7_ag', 'result', 'network', 7],
   ['S8_net_ret', 'result', 'declined', 8],
   ['S9_basari', 'result', 'success', 9],
+  ['S10_tarama_hatasi', 'start', 'scan_failure', 10],
+  ['S10_tarama_istisna', 'start', 'scan_throw', 10],
+  ['S10_sayfalama_tavani', 'start', 'scan_full', 10],
+  ['S11_bos_nesne', 'result', 'empty_object', 11],
+  ['S11_bos_dizi', 'result', 'empty_array', 11],
+  ['S11_beklemede', 'result', 'pending', 11],
 ];
 const REAL_LIMIT_MS = 900;
 const WORKER_LIMIT_MS = 2500;
@@ -125,6 +131,10 @@ function verdict(number, value, handler) {
   if (number === 7) return !/tahsilat\s+yapilmad/i.test(text)
     && /teyit\s+edemedik|teyit\s+edilemedi/i.test(text);
   if (number === 8) return /tahsilat\s+yapilmad/i.test(text) || text.includes('herhangi bir tahsilat');
+  // Mukerrer taramasi okunamadiginda odeme baslatilmaz; musteri tekrar denemeye yonlendirilir.
+  if (number === 10) return status === 503 && /(?:tekrar|yeniden|sonra)\s+deney/i.test(text);
+  // HTTP 200 donen tanimsiz govde kesin ret DEGILDIR; belirsizlik cumlesi cikmalidir.
+  if (number === 11) return !noCharge.test(text) && /teyit\s+edemedik|teyit\s+edilemedi/i.test(text);
   return /\baboneli(?:k|g[a-z]*)(?:\s+(?:basariyla|artik|simdi|hemen))?\s+(?:basladi|baslamistir|baslatildi|baslatilmistir)\b/i.test(text);
 }
 
@@ -185,6 +195,7 @@ async function workerCase() {
   let reached = false;
   let blocked = false;
   let requestCount = 0;
+  let checkoutCount = 0;
   let invalidRequest = false;
   let finished = false;
   const finish = (result) => {
@@ -233,6 +244,7 @@ async function workerCase() {
     try { parsed = new URL(url); } catch { throw new TypeError('sinav_imza'); }
     const method = String(init.method || input?.method || 'GET').toUpperCase();
     requestCount += 1;
+    if (parsed.pathname.includes('checkoutform')) checkoutCount += 1;
     if (!/^https?:$/.test(parsed.protocol) || !/^[A-Z]+$/.test(method)
         || (role === 'api' && (requestCount !== 1 || method !== 'GET'
           || init.body != null || input?.body != null))) {
@@ -240,6 +252,27 @@ async function workerCase() {
       throw new TypeError('sinav_imza');
     }
     if (role === 'start') {
+      // S10: olculen cagri taramanin KENDISI; checkout'a hic gidilmemis olmali.
+      if (number === 10 && method === 'GET' && parsed.pathname.includes('subscriptions')) {
+        if (!reached) { reached = true; parentPort.postMessage({ type: 'reached' }); }
+        if (scenario === 'scan_throw') throw new TypeError('fetch failed: sinav network');
+        if (scenario === 'scan_failure') {
+          return new Response(JSON.stringify(REJECTION), {
+            status: 200, headers: { 'content-type': 'application/json' },
+          });
+        }
+        // scan_full: her sayfa dolu doner, hicbiri eslesmez; tarama tavana dayanir.
+        const items = Array.from({ length: 100 }, (_, index) => ({
+          referenceCode: `sinav-${requestCount}-${index}`,
+          customerEmail: 'baska@ornek.com',
+          customer: { email: 'baska@ornek.com' },
+          pricingPlanReferenceCode: PLAN,
+          subscriptionStatus: 'ACTIVE',
+        }));
+        return new Response(JSON.stringify({ status: 'success', data: { items } }), {
+          status: 200, headers: { 'content-type': 'application/json' },
+        });
+      }
       if (requestCount === 1 && method === 'GET' && parsed.pathname.includes('subscriptions')) {
         // Abonelik taramasi vakayi olcmez; asil hata yalniz form istegine uygulanir.
         return new Response(JSON.stringify({ status: 'success', data: { items: [] } }), {
@@ -275,8 +308,11 @@ async function workerCase() {
     }
     // Is kurali reddi HTTP 200 ile gelir; 4xx ayri altyapi vakasidir.
     const status = scenario === 'server' ? 500 : scenario === 'http4xx' ? (adapter.httpStatus || 400) : 200;
+    // S11: iyzico'nun tanimadigimiz govdeleri. Hicbiri "hayir" demek degildir.
+    const BILINMEYEN = { empty_object: {}, empty_array: [], pending: { status: 'pending' } };
     const body = scenario === 'server' ? '<html><body>Sinav sunucu hatasi</body></html>'
-      : JSON.stringify(scenario === 'success' ? SUCCESS : REJECTION);
+      : JSON.stringify(Object.prototype.hasOwnProperty.call(BILINMEYEN, scenario)
+        ? BILINMEYEN[scenario] : scenario === 'success' ? SUCCESS : REJECTION);
     return new Response(body, { status, headers: {
       'content-type': scenario === 'server' ? 'text/html' : 'application/json',
     } });
@@ -309,7 +345,8 @@ async function workerCase() {
     }] : ['sahte-token'];
     const value = await call.fn.apply(call.owner, args);
     if (!reached || blocked) finish({ state: 'ATLANDI', reason: blocked ? 'ag' : 'giris' });
-    else finish({ state: !invalidRequest && verdict(number, value, call.handler) ? 'GECTI' : 'DUSTU' });
+    else finish({ state: !invalidRequest && (number !== 10 || checkoutCount === 0)
+      && verdict(number, value, call.handler) ? 'GECTI' : 'DUSTU' });
   } catch {
     finish(blocked ? { state: 'ATLANDI', reason: 'ag' } : reached ? { state: 'DUSTU' }
       : { state: 'ATLANDI', reason: 'giris' });
