@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="tr">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Blogunuza düşen her yazı, aynı gün Instagram'da yedi slaytlık carousel olarak yayınlanır.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self'; base-uri 'self'; object-src 'none'">
+<link rel="icon" href="/favicon.svg">
+<title>Instagram Carousel Otomasyonu | Dolunay AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400..800&amp;family=Inter:wght@400..800&amp;display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-dark:#08090C; --bg-darker:#0E0F14; --bg-card:#14161D;
+    --accent:#F4587E; --accent-light:#FF89A9; --accent-warm:#FF9558;
+    --green:#4ADE80;
+    --text:#F4F2EC; --secondary:#C9CCD4; --muted:#8A8E99;
+    --border:rgba(255,255,255,.08); --glass:rgba(255,255,255,.03);
+    --ink:#12060A;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    background:var(--bg-dark); color:var(--text);
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    line-height:1.6; -webkit-font-smoothing:antialiased;
+    padding:72px 0 96px;
+  }
+  ::selection{background:var(--accent);color:var(--ink)}
+  :focus-visible{outline:3px solid var(--accent-light);outline-offset:3px;border-radius:8px}
+
+  .layout{
+    max-width:1200px;margin:0 auto;padding:0 24px;
+    display:grid;grid-template-columns:1fr 1fr;gap:0 56px;align-items:start;
+  }
+  .intro-block{grid-column:2;grid-row:1;margin-bottom:34px}
+  .showcase{grid-column:1;grid-row:1 / span 2;min-width:0}
+  .offer{grid-column:2;grid-row:2;min-width:0}
+
+  /* ---------- BASLIK ---------- */
+  h1{
+    font-family:'Inter Tight',sans-serif;font-size:clamp(34px,4.4vw,50px);font-weight:800;
+    line-height:1.06;letter-spacing:-.03em;margin-bottom:18px;
+  }
+  .headline-line{display:block}
+  .headline-gradient{
+    background:linear-gradient(105deg,var(--accent-light),var(--accent-warm));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+  }
+  .intro{font-size:15.5px;color:var(--secondary);line-height:1.65;max-width:46ch}
+
+  /* ---------- VITRIN ---------- */
+  .styles-label{
+    font-size:10.5px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:11px;
+  }
+  .styles{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+  .style-tab{
+    appearance:none;border:1px solid var(--border);background:var(--glass);color:var(--muted);
+    font-family:inherit;font-size:12.5px;font-weight:500;letter-spacing:.01em;
+    padding:8px 14px;border-radius:999px;cursor:pointer;
+    transition:color .18s,border-color .18s,background .18s;
+  }
+  .style-tab[aria-selected="true"]{color:var(--ink);background:var(--accent);border-color:var(--accent);font-weight:600}
+  @media (hover:hover){.style-tab:not([aria-selected="true"]):hover{color:var(--secondary);border-color:rgba(255,255,255,.18)}}
+
+  .post{
+    background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;
+    box-shadow:0 24px 60px -30px rgba(0,0,0,.9);
+  }
+  .post-head{display:flex;align-items:center;gap:10px;padding:12px 14px}
+  .avatar{
+    width:34px;height:34px;border-radius:50%;flex-shrink:0;
+    background:linear-gradient(135deg,var(--accent),var(--accent-warm));
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Inter Tight',sans-serif;font-weight:700;font-size:12px;color:var(--ink);letter-spacing:.02em;
+  }
+  .post-who{min-width:0;flex:1}
+  .post-handle{font-size:13px;font-weight:600;color:var(--text);line-height:1.3}
+  .post-sub{font-size:11.5px;color:var(--muted);line-height:1.3}
+  .post-dots{color:var(--muted);font-size:16px;letter-spacing:1px;line-height:1}
+
+  .media{position:relative;aspect-ratio:4/5;background:var(--bg-darker);overflow:hidden}
+  .media img{width:100%;height:100%;object-fit:cover;display:block}
+  .nav{
+    position:absolute;top:50%;transform:translateY(-50%);z-index:2;
+    width:44px;height:44px;border-radius:50%;border:0;cursor:pointer;
+    background:rgba(8,9,12,.55);backdrop-filter:blur(6px);color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    opacity:0;transition:opacity .18s,background .18s;
+  }
+  .nav svg{width:16px;height:16px}
+  .nav.prev{left:10px} .nav.next{right:10px}
+  .nav:disabled{opacity:0!important;pointer-events:none}
+  .media:hover .nav,.nav:focus-visible{opacity:1}
+  @media (hover:none){.nav{opacity:.85}}
+  @media (hover:hover){.nav:hover{background:rgba(8,9,12,.82)}}
+
+  .post-actions{display:flex;align-items:center;gap:14px;padding:12px 14px 0}
+  .post-actions svg{width:20px;height:20px;stroke:var(--secondary);fill:none;stroke-width:1.7}
+  .post-actions .spacer{flex:1}
+
+  .dots{display:flex;flex-wrap:wrap;padding:2px 6px;margin-top:2px}
+  .dot{width:30px;height:30px;border:0;padding:0;cursor:pointer;background:none;position:relative}
+  .dot::before{
+    content:"";position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;
+    border-radius:50%;background:var(--muted);transition:background .18s,transform .18s;
+  }
+  .dot[aria-current="true"]::before{background:var(--accent);transform:scale(1.3)}
+  @media (hover:hover){.dot:hover::before{background:var(--secondary)}}
+
+  .post-caption{padding:8px 14px 16px;font-size:13px;color:var(--secondary);line-height:1.55}
+  .post-caption b{color:var(--text);font-weight:600}
+
+  .evidence{
+    margin-top:14px;background:var(--bg-darker);border:1px solid var(--border);
+    border-radius:14px;padding:16px 18px;
+  }
+  .evidence-label{
+    font-size:10.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;
+    color:var(--accent-light);margin-bottom:9px;display:flex;align-items:center;gap:7px;
+  }
+  .evidence-label::before{content:"";width:14px;height:1px;background:var(--accent);flex-shrink:0}
+  .evidence-quote{
+    font-family:'Inter Tight',sans-serif;font-size:14.5px;line-height:1.55;color:var(--text);
+    font-weight:500;border-left:2px solid rgba(244,88,126,.4);padding-left:14px;
+  }
+  .evidence-foot{margin-top:11px;font-size:12px;color:var(--muted);line-height:1.5}
+  .showcase-caption{margin-top:14px;font-size:12px;color:var(--muted);line-height:1.6}
+
+  /* ---------- TEKLIF ---------- */
+  .section-label{
+    font-size:10.5px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:16px;
+  }
+  .steps{list-style:none;margin-bottom:34px}
+  .step{position:relative;padding-left:44px;padding-bottom:22px}
+  .step:last-child{padding-bottom:0}
+  .step::before{
+    content:attr(data-n);position:absolute;left:0;top:-1px;
+    width:28px;height:28px;border-radius:50%;
+    border:1px solid rgba(244,88,126,.35);background:rgba(244,88,126,.08);
+    color:var(--accent-light);font-family:'Inter Tight',sans-serif;font-size:12.5px;font-weight:600;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .step:not(:last-child)::after{
+    content:"";position:absolute;left:14px;top:32px;bottom:6px;width:1px;
+    background:linear-gradient(180deg,rgba(244,88,126,.3),rgba(255,255,255,.05));
+  }
+  .step-title{font-size:14.5px;font-weight:600;color:var(--text);margin-bottom:3px;line-height:1.4}
+  .step-text{font-size:13.5px;color:var(--muted);line-height:1.6}
+
+  .price-card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:22px}
+  .price-line{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+  .price{font-family:'Inter Tight',sans-serif;font-size:38px;font-weight:700;letter-spacing:-.025em;line-height:1}
+  .price-per{font-size:14.5px;color:var(--secondary);font-weight:500}
+  .price-kdv{font-size:13px;color:var(--muted)}
+  .price-note{margin-top:9px;font-size:13px;color:var(--muted);line-height:1.55}
+  .divider{height:1px;background:var(--border);margin:20px 0}
+  .features{list-style:none;display:grid;gap:11px}
+  .features li{position:relative;padding-left:26px;font-size:13.5px;color:var(--secondary);line-height:1.55}
+  .features li::before{
+    content:"";position:absolute;left:0;top:6px;width:14px;height:8px;
+    border-left:1.8px solid var(--green);border-bottom:1.8px solid var(--green);
+    transform:rotate(-45deg);border-radius:1px;
+  }
+
+  .checkout{
+    display:flex;align-items:center;justify-content:center;gap:9px;
+    width:100%;padding:17px 24px;border:0;border-radius:12px;cursor:pointer;
+    background:linear-gradient(105deg,var(--accent),var(--accent-warm));
+    color:var(--ink);font-family:'Inter Tight',sans-serif;font-size:15.5px;font-weight:700;letter-spacing:-.01em;
+    text-decoration:none;transition:transform .16s,box-shadow .16s,filter .16s;
+    box-shadow:0 12px 30px -14px rgba(244,88,126,.75);
+  }
+  .checkout svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.2}
+  @media (hover:hover){.checkout:hover{transform:translateY(-2px);filter:saturate(1.08);box-shadow:0 18px 40px -16px rgba(244,88,126,.85)}}
+  .checkout:active{transform:translateY(0)}
+
+  .setup-note{margin-top:13px;font-size:13px;color:var(--muted);line-height:1.6;text-align:center}
+  .trust{margin-top:18px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:12.5px;color:var(--muted)}
+  .trust svg{width:13px;height:13px;stroke:var(--muted);fill:none;stroke-width:1.9}
+  .contact{margin-top:26px;text-align:center;font-size:13.5px;color:var(--muted)}
+  .contact a{color:var(--secondary);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.18);padding-bottom:1px}
+  @media (hover:hover){.contact a:hover{color:var(--text);border-color:var(--accent)}}
+
+  @media (max-width:899px){
+    body{padding:44px 0 64px}
+    .layout{grid-template-columns:1fr;gap:0}
+    .intro-block,.showcase,.offer{grid-column:1}
+    .intro-block{grid-row:1}
+    .showcase{grid-row:2;margin-bottom:40px}
+    .offer{grid-row:3}
+    .post,.evidence,.showcase-caption{max-width:440px;margin-left:auto;margin-right:auto}
+  }
+  @media (max-width:420px){
+    .layout{padding:0 18px}
+    .price{font-size:33px}
+  }
+  @media (max-width:359px){
+    .layout{padding:0 14px}
+    .step{padding-left:38px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}
+    .checkout:hover{transform:none}
+  }
+</style>
+
+<div class="layout">
+
+  <header class="intro-block">
+    <h1>
+      <span class="headline-line">Blog yazınız</span>
+      <span class="headline-line headline-gradient">aynı gün Instagram'da</span>
+    </h1>
+    <p class="intro">
+      Uzmanlığınız blogda duruyor, Instagram boş kalıyor. Bu sistem blogunuzu izler; yeni yazı çıktığı gün onu yedi slaytlık bir carousel'e çevirip hesabınızda yayınlar. Siz yazmaya devam edersiniz.
+    </p>
+  </header>
+
+  <section class="showcase" aria-label="Örnek carousel">
+    <div class="styles-label" id="styles-label">Beş tasarım stili, birini siz seçersiniz</div>
+    <div class="styles" role="tablist" aria-labelledby="styles-label">
+      <button class="style-tab" role="tab" id="tab-editoryal" aria-selected="true"  aria-controls="post-panel" data-style="editoryal" type="button">Editoryal Otorite</button>
+      <button class="style-tab" role="tab" id="tab-bold"      aria-selected="false" aria-controls="post-panel" data-style="bold"      type="button" tabindex="-1">Cesur Anlatıcı</button>
+      <button class="style-tab" role="tab" id="tab-minimal"   aria-selected="false" aria-controls="post-panel" data-style="minimal"   type="button" tabindex="-1">Modern Minimal</button>
+      <button class="style-tab" role="tab" id="tab-uzman"     aria-selected="false" aria-controls="post-panel" data-style="uzman"     type="button" tabindex="-1">İnsani Uzman</button>
+      <button class="style-tab" role="tab" id="tab-veri"      aria-selected="false" aria-controls="post-panel" data-style="veri"      type="button" tabindex="-1">Veri Defteri</button>
+    </div>
+
+    <article class="post" id="post-panel" role="tabpanel" aria-labelledby="tab-editoryal">
+      <header class="post-head">
+        <div class="avatar" aria-hidden="true">ÖM</div>
+        <div class="post-who">
+          <div class="post-handle">ornekmarka</div>
+          <div class="post-sub" id="style-sub">Editoryal Otorite</div>
+        </div>
+        <div class="post-dots" aria-hidden="true">•••</div>
+      </header>
+
+      <div class="media">
+        <button class="nav prev" id="prev" type="button" aria-label="Önceki slayt" disabled>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="nav next" id="next" type="button" aria-label="Sonraki slayt">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="currentColor" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <img id="slide-img" src="/carousel-otomasyonu/gorseller/editoryal-1.jpg" width="1080" height="1350"
+             decoding="async" fetchpriority="high"
+             alt="1. slayt: Müşteriniz artık karbon verisi de isteyebilir">
+      </div>
+
+      <div class="post-actions" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 20.5S3.5 15 3.5 9.2A4.2 4.2 0 0 1 12 7a4.2 4.2 0 0 1 8.5 2.2c0 5.8-8.5 11.3-8.5 11.3z" stroke-linejoin="round"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M20.5 11.8c0 4-3.8 7.2-8.5 7.2a9.8 9.8 0 0 1-2.6-.35L4.5 20.5l1.3-3.6A6.9 6.9 0 0 1 3.5 11.8c0-4 3.8-7.3 8.5-7.3s8.5 3.3 8.5 7.3z" stroke-linejoin="round"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M21 3L10.5 13.5M21 3l-6.8 18-3.7-7.5L3 10.1 21 3z" stroke-linejoin="round"/></svg>
+        <span class="spacer"></span>
+        <svg viewBox="0 0 24 24"><path d="M6.5 3.5h11v17l-5.5-4-5.5 4v-17z" stroke-linejoin="round"/></svg>
+      </div>
+
+      <div class="dots" id="dots" role="group" aria-label="Slaytlar"></div>
+
+      <div class="post-caption">
+        <b>ornekmarka</b> CBAM: AB'ye İhracatta KOBİ'ler İçin 7 Slaytlık Hızlı Rehber
+      </div>
+    </article>
+
+    <div class="evidence">
+      <div class="evidence-label">Bu slaydın kaynağı</div>
+      <p class="evidence-quote" id="evidence-quote" aria-live="polite">2023'te raporlama zorunluluğuyla başladı ve 2026'dan itibaren demir-çelik, çimento, gübre, alüminyum, elektrik ve hidrojen sektöründeki ihracatçılar için mali bir yükümlülüğe dönüşüyor.</p>
+      <p class="evidence-foot">Ara slaytların her cümlesi, blog yazınızdaki gerçek bir cümleye bağlanır. Kaynağa dayanmayan slayt üretilmez.</p>
+    </div>
+
+    <p class="showcase-caption">
+      Yukarıdaki carousel gerçek bir blog yazısından, üretimdeki sistemle üretildi. Marka adı ve hesap adı örnek olarak değiştirildi. Stillere tıklayarak aynı yazının beş farklı tasarımını görebilirsiniz.
+    </p>
+  </section>
+
+  <section class="offer" aria-label="Paket ve satın alma">
+    <div class="section-label">Nasıl çalışır</div>
+    <ol class="steps">
+      <li class="step" data-n="1">
+        <div class="step-title">Blogunuza yeni yazı düşer</div>
+        <p class="step-text">Adresinizi bir kez veriyorsunuz. Sistem otuz dakikada bir bakar, yeni yazıyı kendisi fark eder.</p>
+      </li>
+      <li class="step" data-n="2">
+        <div class="step-title">Yazı yedi slayta dönüşür</div>
+        <p class="step-text">Metin, kaynak yazıdaki cümlelere bağlanarak yazılır. Görseller yapay zekayla üretilir, yazılar üstüne ayrı katmanda basılır.</p>
+      </li>
+      <li class="step" data-n="3">
+        <div class="step-title">Denetimden geçer, yayınlanır</div>
+        <p class="step-text">Her slayt yayından önce görüntü denetiminden geçer. Bir tanesi bile takılırsa gönderi çıkmaz.</p>
+      </li>
+    </ol>
+
+    <div class="price-card">
+      <div class="price-line">
+        <span class="price">4.000 TL</span>
+        <span class="price-per">/ ay</span>
+        <span class="price-kdv">+ KDV</span>
+      </div>
+      <p class="price-note">Kartınızdan aylık toplam 4.800 TL çekilir.</p>
+      <div class="divider"></div>
+      <ul class="features">
+        <li>Blogunuz otuz dakikada bir kontrol edilir</li>
+        <li>Her yazıdan 1080×1350 boyutunda yedi slayt</li>
+        <li>Slayt metinleri kaynak yazıdaki cümlelere bağlanır</li>
+        <li>Görseller yapay zekayla üretilir, yazı ayrı katmanda basılır</li>
+        <li>Yayından önce görüntü denetimi; takılan gönderi çıkmaz</li>
+        <li>İlk yazınız beş tasarım stilinde hazırlanır, birini seçersiniz</li>
+        <li>Kendi Instagram hesabınıza otomatik paylaşım</li>
+        <li>Aynı yazı iki kez paylaşılmaz</li>
+      </ul>
+    </div>
+
+    <a class="checkout" href="/odeme/carousel">
+      Aboneliği başlat
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <p class="setup-note">Kurulumu biz yapıyoruz. Sizden blog adresiniz, marka renkleriniz ve Instagram bağlantınız yeterli. Şifrenizi ve doğrulama kodunuzu kimseyle paylaşmıyorsunuz.</p>
+
+    <div class="trust">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10V7.5a5 5 0 0 1 10 0V10" stroke-linecap="round"/><rect x="4.5" y="10" width="15" height="10.5" rx="2.2"/></svg>
+      iyzico güvenli ödeme
+    </div>
+
+    <p class="contact">Önce konuşmak istiyorum: <a href="mailto:dolunay@dolunay.ai?subject=Instagram%20Carousel%20Otomasyonu">dolunay@dolunay.ai</a></p>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var LABELS = {
+    editoryal:"Editoryal Otorite",
+    bold:"Cesur Anlatıcı",
+    minimal:"Modern Minimal",
+    uzman:"İnsani Uzman",
+    veri:"Veri Defteri"
+  };
+
+  var SLIDES = [
+    {h:"Müşteriniz artık karbon verisi de isteyebilir",
+     e:"2023'te raporlama zorunluluğuyla başladı ve 2026'dan itibaren demir-çelik, çimento, gübre, alüminyum, elektrik ve hidrojen sektöründeki ihracatçılar için mali bir yükümlülüğe dönüşüyor."},
+    {h:"Yükümlülük ithalatçıda; veri baskısı tedarikçiye geliyor",
+     e:"CBAM yükümlülüğü teknik olarak AB'deki ithalatçı firmaya ait. Ama pratikte ihracatçı KOBİ, gerekli veriyi zamanında ve doğru vermezse müşterisini kaybediyor."},
+    {h:"Kaynakta sayılan sektörler için konu daha yakın",
+     e:"CBAM şu an altı ana sektörü kapsıyor: demir-çelik, çimento, gübre, alüminyum, elektrik ve hidrojen."},
+    {h:"Alıcı veri ister, beyana işler, sertifika hesabını yapar",
+     e:"Sertifikayı sizin şirketiniz değil, AB'deki alıcınız satın alıyor. Ama size düşen kısım, o hesaplamanın temelini oluşturan üretim verisini doğru ve zamanında iletmek."},
+    {h:"Enerji, hammadde ve süreç bilgisi elinizde olmalı",
+     e:"Elinizde üç şey olmalı: enerji tüketim kayıtlarınız, hammadde kaynaklarınız ve üretim süreç bilgisi."},
+    {h:"Asıl risk doğrudan vergi değil, rekabet gücü kaybı",
+     e:"Yani asıl risk, doğrudan bir vergi faturası değil, rekabet gücü kaybı."},
+    {h:"Kapsamı kontrol edin, veriyi toplayın, kaynağı okuyun",
+     e:"1. Kapsam kontrolü: Ürününüz demir-çelik, alüminyum, çimento, gübre, elektrik veya hidrojen kapsamında mı, önce bunu netleştirin."}
+  ];
+
+  var TOTAL = SLIDES.length;
+  var tabs = Array.prototype.slice.call(document.querySelectorAll(".style-tab"));
+  var img = document.getElementById("slide-img");
+  var quote = document.getElementById("evidence-quote");
+  var dotsWrap = document.getElementById("dots");
+  var prevBtn = document.getElementById("prev");
+  var nextBtn = document.getElementById("next");
+  var styleSub = document.getElementById("style-sub");
+  var panel = document.getElementById("post-panel");
+  var media = document.querySelector(".media");
+
+  var style = "editoryal";
+  var index = 0;
+  var preloaded = {};
+
+  function src(st, i){ return "/carousel-otomasyonu/gorseller/" + st + "-" + (i + 1) + ".jpg"; }
+
+  function preload(st){
+    if (preloaded[st]) return;
+    preloaded[st] = true;
+    for (var i = 0; i < TOTAL; i++){ var im = new Image(); im.src = src(st, i); }
+  }
+
+  var dots = [];
+  for (var i = 0; i < TOTAL; i++){
+    var d = document.createElement("button");
+    d.type = "button";
+    d.className = "dot";
+    d.setAttribute("aria-label", (i + 1) + ". slayda git");
+    d.setAttribute("data-i", String(i));
+    dotsWrap.appendChild(d);
+    dots.push(d);
+  }
+
+  function render(){
+    var s = SLIDES[index];
+    img.src = src(style, index);
+    img.alt = (index + 1) + ". slayt: " + s.h;
+    quote.textContent = s.e;
+    prevBtn.disabled = index === 0;
+    nextBtn.disabled = index === TOTAL - 1;
+    for (var i = 0; i < TOTAL; i++){
+      if (i === index) dots[i].setAttribute("aria-current", "true");
+      else dots[i].removeAttribute("aria-current");
+    }
+  }
+
+  function goTo(i){
+    if (i < 0 || i >= TOTAL || i === index) return;
+    index = i;
+    render();
+  }
+
+  dotsWrap.addEventListener("click", function(ev){
+    var t = ev.target;
+    while (t && t !== dotsWrap && t.className !== "dot"){ t = t.parentNode; }
+    if (t && t.className === "dot") goTo(Number(t.getAttribute("data-i")));
+  });
+  prevBtn.addEventListener("click", function(){ goTo(index - 1); });
+  nextBtn.addEventListener("click", function(){ goTo(index + 1); });
+
+  function selectStyle(st, moveFocus){
+    style = st;
+    preload(st);
+    for (var i = 0; i < tabs.length; i++){
+      var t = tabs[i];
+      var on = t.getAttribute("data-style") === st;
+      t.setAttribute("aria-selected", on ? "true" : "false");
+      t.tabIndex = on ? 0 : -1;
+      if (on){
+        panel.setAttribute("aria-labelledby", t.id);
+        styleSub.textContent = LABELS[st];
+        if (moveFocus) t.focus();
+      }
+    }
+    render();
+  }
+
+  for (var k = 0; k < tabs.length; k++){
+    (function(t){
+      t.addEventListener("click", function(){ selectStyle(t.getAttribute("data-style"), false); });
+      t.addEventListener("mouseenter", function(){ preload(t.getAttribute("data-style")); });
+      t.addEventListener("keydown", function(ev){
+        if (ev.metaKey || ev.ctrlKey || ev.altKey || ev.shiftKey) return;
+        var cur = tabs.indexOf(t), n = -1;
+        if (ev.key === "ArrowRight") n = (cur + 1) % tabs.length;
+        else if (ev.key === "ArrowLeft") n = (cur - 1 + tabs.length) % tabs.length;
+        else if (ev.key === "Home") n = 0;
+        else if (ev.key === "End") n = tabs.length - 1;
+        if (n < 0) return;
+        ev.preventDefault();
+        selectStyle(tabs[n].getAttribute("data-style"), true);
+      });
+    })(tabs[k]);
+  }
+
+  media.addEventListener("keydown", function(ev){
+    if (ev.metaKey || ev.ctrlKey || ev.altKey || ev.shiftKey) return;
+    if (ev.key === "ArrowRight"){ ev.preventDefault(); goTo(index + 1); }
+    else if (ev.key === "ArrowLeft"){ ev.preventDefault(); goTo(index - 1); }
+  });
+
+  var startX = null, startY = null;
+  media.addEventListener("touchstart", function(ev){
+    startX = ev.changedTouches[0].clientX;
+    startY = ev.changedTouches[0].clientY;
+  }, {passive:true});
+  media.addEventListener("touchend", function(ev){
+    if (startX === null) return;
+    var dx = ev.changedTouches[0].clientX - startX;
+    var dy = ev.changedTouches[0].clientY - startY;
+    startX = null; startY = null;
+    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy) * 1.4) return;
+    goTo(dx < 0 ? index + 1 : index - 1);
+  }, {passive:true});
+
+  render();
+  preload("editoryal");
+})();
+</script>
+</html>

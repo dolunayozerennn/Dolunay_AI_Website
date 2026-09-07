@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="tr">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Sitenizi yayına almadan önce gezerek görüyorsunuz. Üç örnek tasarım, canlı olarak sayfanın içinde.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; frame-src 'self'; connect-src 'self'; base-uri 'self'; object-src 'none'">
+<link rel="icon" href="/favicon.svg">
+<title>Web Sitesi Tasarımı | Dolunay AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400..800&amp;family=Inter:wght@400..800&amp;display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-dark:#08090C; --bg-darker:#0E0F14; --bg-card:#14161D;
+    --accent:#A78BFA; --accent-light:#C4B5FD; --accent-warm:#E879F9;
+    --accent-deep:#7C3AED; --accent-mag:#C026D3;
+    --green:#4ADE80;
+    --text:#F4F2EC; --secondary:#C9CCD4; --muted:#8A8E99;
+    --border:rgba(255,255,255,.08); --glass:rgba(255,255,255,.03);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    background:var(--bg-dark); color:var(--text);
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    line-height:1.6; -webkit-font-smoothing:antialiased;
+    padding:72px 0 96px;
+  }
+  ::selection{background:var(--accent-deep);color:#fff}
+  :focus-visible{outline:3px solid var(--accent-light);outline-offset:3px;border-radius:8px}
+
+  .layout{
+    max-width:1200px;margin:0 auto;padding:0 24px;
+    display:grid;grid-template-columns:1fr 1fr;gap:0 56px;align-items:start;
+  }
+  .intro-block{grid-column:2;grid-row:1;margin-bottom:34px}
+  .showcase{grid-column:1;grid-row:1 / span 2;min-width:0;align-self:stretch}
+  .showcase-sticky{position:sticky;top:24px}
+  .offer{grid-column:2;grid-row:2;min-width:0}
+
+  /* ---------- BASLIK ---------- */
+  h1{
+    font-family:'Inter Tight',sans-serif;font-size:clamp(34px,4.4vw,50px);font-weight:800;
+    line-height:1.06;letter-spacing:-.03em;margin-bottom:18px;
+  }
+  .headline-line{display:block}
+  .headline-gradient{
+    background:linear-gradient(105deg,var(--accent-light),var(--accent-warm));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+  }
+  .intro{font-size:15.5px;color:var(--secondary);line-height:1.65;max-width:46ch}
+
+  /* ---------- VITRIN ---------- */
+  .sectors-label{
+    font-size:10.5px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:11px;
+  }
+  .sectors{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+  .sector-tab{
+    appearance:none;border:1px solid var(--border);background:var(--glass);color:var(--muted);
+    font-family:inherit;font-size:12.5px;font-weight:500;letter-spacing:.01em;
+    padding:9px 15px;border-radius:999px;cursor:pointer;
+    transition:color .18s,border-color .18s,background .18s;
+  }
+  .sector-tab[aria-selected="true"]{color:#fff;background:var(--accent-deep);border-color:var(--accent-deep);font-weight:600}
+  @media (hover:hover){.sector-tab:not([aria-selected="true"]):hover{color:var(--secondary);border-color:rgba(255,255,255,.18)}}
+
+  .frame{
+    background:var(--bg-card);border:1px solid var(--border);border-radius:14px;overflow:hidden;
+    box-shadow:0 24px 60px -30px rgba(0,0,0,.9);
+  }
+  .frame-bar{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--border);background:var(--bg-darker)}
+  .lights{display:flex;gap:5px;flex-shrink:0}
+  .lights i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.14);display:block}
+  .url{
+    flex:1;min-width:0;background:var(--bg-dark);border:1px solid var(--border);border-radius:999px;
+    padding:5px 12px;font-size:11.5px;color:var(--muted);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:7px;
+  }
+  .url svg{width:11px;height:11px;stroke:var(--green);fill:none;stroke-width:2;flex-shrink:0}
+  #url-text{min-width:0;overflow:hidden;text-overflow:ellipsis}
+
+  .viewport{
+    position:relative;overflow:hidden;background:#fff;
+    aspect-ratio:1180/840;
+  }
+  .viewport iframe{
+    position:absolute;top:0;left:0;border:0;display:block;background:#fff;
+    width:1180px;height:840px;transform:scale(var(--s,.46));transform-origin:0 0;
+  }
+  .viewport.mob{aspect-ratio:1/1;background:var(--bg-darker);padding:0}
+  .viewport.mob iframe{
+    width:min(390px,100%);height:100%;left:50%;transform:translateX(-50%);
+    border-left:1px solid var(--border);border-right:1px solid var(--border);
+  }
+
+  .tools{display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}
+  .device{display:inline-flex;border:1px solid var(--border);border-radius:999px;padding:3px;background:var(--glass)}
+  .device button{
+    appearance:none;border:0;background:none;color:var(--muted);cursor:pointer;
+    font-family:inherit;font-size:12px;font-weight:600;padding:7px 14px;border-radius:999px;
+    transition:color .16s,background .16s;
+  }
+  .device button[aria-pressed="true"]{background:rgba(167,139,250,.16);color:var(--accent-light)}
+  @media (hover:hover){.device button[aria-pressed="false"]:hover{color:var(--secondary)}}
+  .open-new{
+    margin-left:auto;font-size:12.5px;color:var(--secondary);text-decoration:none;
+    display:inline-flex;align-items:center;gap:6px;border-bottom:1px solid rgba(255,255,255,.18);padding-bottom:1px;
+  }
+  .open-new svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2}
+  @media (hover:hover){.open-new:hover{color:var(--text);border-color:var(--accent)}}
+
+  .showcase-caption{margin-top:16px;font-size:12px;color:var(--muted);line-height:1.6}
+
+  /* ---------- TEKLIF ---------- */
+  .section-label{
+    font-size:10.5px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:16px;
+  }
+  .steps{list-style:none;margin-bottom:34px}
+  .step{position:relative;padding-left:44px;padding-bottom:22px}
+  .step:last-child{padding-bottom:0}
+  .step::before{
+    content:attr(data-n);position:absolute;left:0;top:-1px;
+    width:28px;height:28px;border-radius:50%;
+    border:1px solid rgba(167,139,250,.35);background:rgba(167,139,250,.09);
+    color:var(--accent-light);font-family:'Inter Tight',sans-serif;font-size:12.5px;font-weight:600;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .step:not(:last-child)::after{
+    content:"";position:absolute;left:14px;top:32px;bottom:6px;width:1px;
+    background:linear-gradient(180deg,rgba(167,139,250,.3),rgba(255,255,255,.05));
+  }
+  .step-title{font-size:14.5px;font-weight:600;color:var(--text);margin-bottom:3px;line-height:1.4}
+  .step-text{font-size:13.5px;color:var(--muted);line-height:1.6}
+
+  .plans{display:grid;gap:10px;margin-bottom:20px}
+  .plan{
+    position:relative;display:block;width:100%;text-align:left;cursor:pointer;
+    background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;
+    font-family:inherit;color:inherit;
+    transition:border-color .18s,background .18s,transform .18s;
+  }
+  .plan-top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .plan-name{font-family:'Inter Tight',sans-serif;font-size:16px;font-weight:700;letter-spacing:-.015em}
+  .plan-price{margin-left:auto;font-family:'Inter Tight',sans-serif;font-size:15.5px;font-weight:600;color:var(--secondary);white-space:nowrap}
+  .plan-desc{margin-top:5px;font-size:13px;color:var(--muted);line-height:1.55}
+  .plan-badge{
+    display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--accent-light);background:rgba(167,139,250,.14);border:1px solid rgba(167,139,250,.3);
+    border-radius:999px;padding:3px 8px;
+  }
+  .plan[aria-checked="true"]{
+    border-color:var(--accent);background:linear-gradient(180deg,rgba(167,139,250,.1),rgba(167,139,250,.02));
+    box-shadow:0 0 0 1px var(--accent) inset;
+  }
+  .plan[aria-checked="true"] .plan-price{color:var(--accent-light)}
+  .plan[aria-checked="true"]::after{
+    content:"";position:absolute;right:16px;top:50%;margin-top:-5px;width:13px;height:7px;
+    border-left:2px solid var(--accent-light);border-bottom:2px solid var(--accent-light);
+    transform:rotate(-45deg);border-radius:1px;
+  }
+  .plan[aria-checked="true"] .plan-top{padding-right:26px}
+  @media (hover:hover){.plan[aria-checked="false"]:hover{border-color:rgba(255,255,255,.2);transform:translateY(-1px)}}
+
+  .included{background:var(--bg-darker);border:1px solid var(--border);border-radius:14px;padding:20px 22px;margin-bottom:20px}
+  .included-head{
+    font-size:10.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;
+    color:var(--accent-light);margin-bottom:13px;display:flex;align-items:center;gap:7px;
+  }
+  .included-head::before{content:"";width:14px;height:1px;background:var(--accent);flex-shrink:0}
+  .features{list-style:none;display:grid;gap:10px}
+  .features li{position:relative;padding-left:26px;font-size:13.5px;color:var(--secondary);line-height:1.55}
+  .features li::before{
+    content:"";position:absolute;left:0;top:6px;width:14px;height:8px;
+    border-left:1.8px solid var(--green);border-bottom:1.8px solid var(--green);
+    transform:rotate(-45deg);border-radius:1px;
+  }
+  .price-note{margin-top:15px;padding-top:14px;border-top:1px solid var(--border);font-size:12.5px;color:var(--muted);line-height:1.55}
+
+  .checkout{
+    display:flex;align-items:center;justify-content:center;gap:9px;
+    width:100%;padding:17px 24px;border:0;border-radius:12px;cursor:pointer;
+    background:linear-gradient(105deg,var(--accent-deep),var(--accent-mag));
+    color:#fff;font-family:'Inter Tight',sans-serif;font-size:15.5px;font-weight:700;letter-spacing:-.01em;
+    text-decoration:none;transition:transform .16s,box-shadow .16s,filter .16s;
+    box-shadow:0 12px 30px -14px rgba(124,58,237,.85);
+  }
+  .checkout svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.2}
+  @media (hover:hover){.checkout:hover{transform:translateY(-2px);filter:saturate(1.08);box-shadow:0 18px 40px -16px rgba(192,38,211,.85)}}
+  .checkout:active{transform:translateY(0)}
+
+  .setup-note{margin-top:13px;font-size:13px;color:var(--muted);line-height:1.6;text-align:center}
+  .trust{margin-top:18px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:12.5px;color:var(--muted)}
+  .trust svg{width:14px;height:14px;stroke:var(--muted);fill:none;stroke-width:1.6}
+  .contact{margin-top:26px;text-align:center;font-size:13.5px;color:var(--muted)}
+  .contact a{color:var(--secondary);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.18);padding-bottom:1px}
+  @media (hover:hover){.contact a:hover{color:var(--text);border-color:var(--accent)}}
+
+  @media (max-height:849px){.showcase-sticky{position:static}}
+
+  @media (max-width:899px){
+    body{padding:44px 0 64px}
+    .layout{grid-template-columns:1fr;gap:0}
+    .intro-block,.showcase,.offer{grid-column:1}
+    .intro-block{grid-row:1}
+    .showcase{grid-row:2;margin-bottom:40px}
+    .showcase-sticky{position:static}
+    .offer{grid-row:3}
+    .frame,.tools,.showcase-caption{max-width:460px;margin-left:auto;margin-right:auto}
+    .viewport iframe{transform:scale(var(--s,.39))}
+  }
+  @media (max-width:460px){
+    .plan-price{flex-basis:100%;margin-left:0;margin-top:5px;font-size:16px}
+    .plan[aria-checked="true"]::after{top:21px;margin-top:0}
+  }
+  @media (max-width:420px){
+    .layout{padding:0 18px}
+    .viewport iframe{transform:scale(var(--s,.27))}
+  }
+  @media (max-width:359px){
+    .layout{padding:0 14px}
+    .step{padding-left:38px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}
+    .checkout:hover{transform:none}
+  }
+</style>
+
+<div class="layout">
+
+  <header class="intro-block">
+    <h1>
+      <span class="headline-line">Sitenizi yayına almadan</span>
+      <span class="headline-line headline-gradient">gezerek görüyorsunuz</span>
+    </h1>
+    <p class="intro">
+      Yandaki üç site bizim örnek tasarımlarımız. Anlatım değil, gerçekten çalışan sayfalar: tıklayın, kaydırın, mobil görünüme geçirin. Sizin siteniz de yayına çıkmadan önce tam olarak böyle, elinizde gezilebilir halde olur.
+    </p>
+  </header>
+
+  <section class="showcase" aria-label="Örnek siteler">
+   <div class="showcase-sticky">
+    <div class="sectors-label" id="sectors-label">Üç örnek tasarım, canlı ve gezilebilir</div>
+    <div class="sectors" role="tablist" aria-labelledby="sectors-label">
+      <button class="sector-tab" role="tab" id="tab-dis"       aria-selected="true"  aria-controls="site-panel" data-key="dis"       type="button">Diş kliniği</button>
+      <button class="sector-tab" role="tab" id="tab-hukuk"     aria-selected="false" aria-controls="site-panel" data-key="hukuk"     type="button" tabindex="-1">Hukuk bürosu</button>
+      <button class="sector-tab" role="tab" id="tab-mimarlik"  aria-selected="false" aria-controls="site-panel" data-key="mimarlik"  type="button" tabindex="-1">İç mimarlık</button>
+    </div>
+
+    <div class="frame" id="site-panel" role="tabpanel" aria-labelledby="tab-dis">
+      <div class="frame-bar">
+        <span class="lights" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="url" id="url">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 10.5V8a5.5 5.5 0 0 1 11 0v2.5" stroke-linecap="round"/><rect x="4.5" y="10.5" width="15" height="10" rx="2.2"/></svg>
+          <span id="url-text">dolunay.ai/web-sitesi/ornekler/dis-klinigi</span>
+        </span>
+      </div>
+      <div class="viewport" id="viewport">
+        <iframe id="site" src="/web-sitesi/ornekler/dis-klinigi/" title="Örnek tasarım: Beyaz Vadi Ağız ve Diş Sağlığı"></iframe>
+      </div>
+    </div>
+
+    <div class="tools">
+      <div class="device" role="group" aria-label="Görünüm">
+        <button type="button" id="dev-desk" aria-pressed="true">Masaüstü</button>
+        <button type="button" id="dev-mob" aria-pressed="false">Mobil</button>
+      </div>
+      <a class="open-new" id="open-new" href="/web-sitesi/ornekler/dis-klinigi/" target="_blank" rel="noopener">
+        Tam ekran aç
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+
+    <p class="showcase-caption">
+      Üç örnek de aynı yerde, gerçek adreste yayında. Müşteri işi değil, kendi hazırladığımız örnek tasarımlardır; içindeki isimler ve numaralar örnektir. Sizin siteniz kendi metniniz, kendi renginiz ve kendi fotoğraflarınızla kurulur.
+    </p>
+   </div>
+  </section>
+
+  <section class="offer" aria-label="Paketler ve iletişim">
+    <div class="section-label">Nasıl ilerliyoruz</div>
+    <ol class="steps">
+      <li class="step" data-n="1">
+        <div class="step-title">Kısa bir görüşme</div>
+        <p class="step-text">İşinizi, sitede ne olması gerektiğini ve bütçenizi konuşuyoruz. Bu görüşmenin bir bedeli yok.</p>
+      </li>
+      <li class="step" data-n="2">
+        <div class="step-title">Tasarımı gezerek görüyorsunuz</div>
+        <p class="step-text">Site yayına çıkmadan önce, yandaki örnekler gibi gezilebilir halde önünüze gelir. Düzeltmeleri onun üstünde konuşuruz.</p>
+      </li>
+      <li class="step" data-n="3">
+        <div class="step-title">Yayına alıyoruz</div>
+        <p class="step-text">Alan adınıza bağlanır, güvenlik sertifikası ve mobil kontrolleri yapılır, teslim edilir.</p>
+      </li>
+    </ol>
+
+    <div class="section-label">Paketler</div>
+    <div class="plans" role="radiogroup" aria-label="Paket seçimi">
+      <button class="plan" role="radio" type="button" id="plan-baslangic" aria-checked="false" tabindex="-1" data-key="baslangic">
+        <span class="plan-top">
+          <span class="plan-name">Başlangıç</span>
+          <span class="plan-price">15.000 – 20.000 TL</span>
+        </span>
+        <span class="plan-desc">Tek sayfa. İşinizi anlatan, arayıp ulaşılabilen bir adres.</span>
+      </button>
+      <button class="plan" role="radio" type="button" id="plan-standart" aria-checked="true" tabindex="0" data-key="standart">
+        <span class="plan-top">
+          <span class="plan-name">Standart</span>
+          <span class="plan-badge">En çok tercih edilen</span>
+          <span class="plan-price">25.000 – 35.000 TL</span>
+        </span>
+        <span class="plan-desc">Çok sayfalı yapı, galeri ve temel SEO. Çoğu işletmenin ihtiyacı bu.</span>
+      </button>
+      <button class="plan" role="radio" type="button" id="plan-premium" aria-checked="false" tabindex="-1" data-key="premium">
+        <span class="plan-top">
+          <span class="plan-name">Premium</span>
+          <span class="plan-price">45.000 – 70.000 TL</span>
+        </span>
+        <span class="plan-desc">Randevu ve rezervasyon, içerik paneli, çok dilli yapı.</span>
+      </button>
+    </div>
+
+    <div class="included">
+      <div class="included-head" id="included-head">Standart pakete dahil</div>
+      <ul class="features" id="features" aria-live="polite">
+        <li>Çok sayfalı yapı: ana sayfa, hizmetler, hakkımızda, iletişim</li>
+        <li>Görsel galeri</li>
+        <li>İletişim formu</li>
+        <li>Temel SEO ayarları</li>
+        <li>Google Haritalar ve sosyal medya bağlantıları</li>
+        <li>Mobil uyumlu tasarım</li>
+        <li>Alan adı bağlama ve yayına alma</li>
+        <li>Güvenlik sertifikası kurulumu</li>
+      </ul>
+      <p class="price-note">Fiyatlara KDV dahil değildir. Aralık, sayfa sayısı ve içerik yoğunluğuna göre görüşmede netleşir ve yazılı olarak sabitlenir.</p>
+    </div>
+
+    <a class="checkout" id="cta" href="mailto:dolunay@dolunay.ai?subject=Web%20sitesi%20teklifi%3A%20Standart%20paketi&amp;body=Merhaba%2C%0A%0AWeb%20sitesi%20i%C3%A7in%20Standart%20paketiyle%20ilgileniyorum.%0A%0A%C4%B0%C5%9Fim%20%2F%20sekt%C3%B6r%C3%BCm%3A%0A%C5%9Eu%20an%20bir%20sitem%20var%20m%C4%B1%3A%0ASitede%20en%20%C3%A7ok%20ne%20olsun%20istiyorum%3A%0A">
+      Teklif iste
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <p class="setup-note">Formu doldurmanız gerekmiyor. Butona basınca hazır bir e-posta açılır; üç satırı doldurup gönderin.</p>
+    <div class="trust">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7.5 3v6c0 4.4-3.1 7.8-7.5 9-4.4-1.2-7.5-4.6-7.5-9V6L12 3z" stroke-linejoin="round"/></svg>
+      Kapsam ve fiyat, iş başlamadan yazılı olarak paylaşılır
+    </div>
+    <p class="contact">Doğrudan yazmak isterseniz: <a href="mailto:dolunay@dolunay.ai">dolunay@dolunay.ai</a></p>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var SITES = {
+    dis:      {path:"/web-sitesi/ornekler/dis-klinigi/",  url:"dolunay.ai/web-sitesi/ornekler/dis-klinigi",  ad:"Beyaz Vadi Ağız ve Diş Sağlığı"},
+    hukuk:    {path:"/web-sitesi/ornekler/hukuk-burosu/", url:"dolunay.ai/web-sitesi/ornekler/hukuk-burosu", ad:"Aral Hukuk Bürosu"},
+    mimarlik: {path:"/web-sitesi/ornekler/ic-mimarlik/",  url:"dolunay.ai/web-sitesi/ornekler/ic-mimarlik",  ad:"Kavis İç Mimarlık"}
+  };
+
+  var PLANS = {
+    baslangic:{
+      ad:"Başlangıç",
+      liste:[
+        "Tek sayfa tasarım",
+        "İşletme bilgileri ve hizmetler bölümü",
+        "İletişim formu",
+        "Mobil uyumlu tasarım",
+        "Alan adı bağlama ve yayına alma",
+        "Güvenlik sertifikası kurulumu"
+      ]
+    },
+    standart:{
+      ad:"Standart",
+      liste:[
+        "Çok sayfalı yapı: ana sayfa, hizmetler, hakkımızda, iletişim",
+        "Görsel galeri",
+        "İletişim formu",
+        "Temel SEO ayarları",
+        "Google Haritalar ve sosyal medya bağlantıları",
+        "Mobil uyumlu tasarım",
+        "Alan adı bağlama ve yayına alma",
+        "Güvenlik sertifikası kurulumu"
+      ]
+    },
+    premium:{
+      ad:"Premium",
+      liste:[
+        "Standart paketteki her şey",
+        "Randevu veya rezervasyon sistemi",
+        "İçerik yönetim paneli: metni ve görseli siz değiştirirsiniz",
+        "Sezonsal içerik güncellemesi",
+        "İleri seviye SEO çalışması",
+        "Çok dilli yapı"
+      ]
+    }
+  };
+
+  var viewport = document.getElementById("viewport");
+  var urlText  = document.getElementById("url-text");
+  var openNew  = document.getElementById("open-new");
+  var panel    = document.getElementById("site-panel");
+  var tabs     = [].slice.call(document.querySelectorAll(".sector-tab"));
+  var plans    = [].slice.call(document.querySelectorAll(".plan"));
+  var featEl   = document.getElementById("features");
+  var headEl   = document.getElementById("included-head");
+  var cta      = document.getElementById("cta");
+  var devDesk  = document.getElementById("dev-desk");
+  var devMob   = document.getElementById("dev-mob");
+
+  /* ---------- vitrin ---------- */
+  function loadSite(key){
+    var s = SITES[key];
+    if (!s) return;
+    var old = document.getElementById("site");
+    var f = document.createElement("iframe");
+    f.id = "site";
+    f.title = "Örnek tasarım: " + s.ad;
+    f.src = s.path;
+    if (old) viewport.replaceChild(f, old); else viewport.appendChild(f);
+    urlText.textContent = s.url;
+    openNew.setAttribute("href", s.path);
+  }
+
+  function selectSector(key, moveFocus){
+    for (var i = 0; i < tabs.length; i++){
+      var on = tabs[i].getAttribute("data-key") === key;
+      tabs[i].setAttribute("aria-selected", on ? "true" : "false");
+      tabs[i].setAttribute("tabindex", on ? "0" : "-1");
+      if (on){
+        panel.setAttribute("aria-labelledby", tabs[i].id);
+        if (moveFocus) tabs[i].focus();
+      }
+    }
+    loadSite(key);
+  }
+
+  for (var t = 0; t < tabs.length; t++){
+    (function(tab){
+      tab.addEventListener("click", function(){ selectSector(tab.getAttribute("data-key"), false); });
+      tab.addEventListener("keydown", function(ev){
+        if (ev.metaKey || ev.ctrlKey || ev.altKey || ev.shiftKey) return;
+        var cur = tabs.indexOf(tab), n = -1;
+        if (ev.key === "ArrowRight") n = (cur + 1) % tabs.length;
+        else if (ev.key === "ArrowLeft") n = (cur - 1 + tabs.length) % tabs.length;
+        else if (ev.key === "Home") n = 0;
+        else if (ev.key === "End") n = tabs.length - 1;
+        if (n < 0) return;
+        ev.preventDefault();
+        selectSector(tabs[n].getAttribute("data-key"), true);
+      });
+    })(tabs[t]);
+  }
+
+  /* ---------- masaustu / mobil ---------- */
+  function setDevice(mobile){
+    if (mobile) viewport.className = "viewport mob";
+    else viewport.className = "viewport";
+    devDesk.setAttribute("aria-pressed", mobile ? "false" : "true");
+    devMob.setAttribute("aria-pressed", mobile ? "true" : "false");
+    fit();
+  }
+  devDesk.addEventListener("click", function(){ setDevice(false); });
+  devMob.addEventListener("click", function(){ setDevice(true); });
+
+  /* ---------- masaustu goruntusunu sutuna sigdir ---------- */
+  function fit(){
+    if (viewport.className.indexOf("mob") > -1){
+      viewport.style.removeProperty("--s");
+      return;
+    }
+    var w = viewport.clientWidth;
+    if (w > 0) viewport.style.setProperty("--s", (w / 1180).toFixed(4));
+  }
+  fit();
+  if (window.ResizeObserver){
+    new ResizeObserver(fit).observe(viewport);
+  } else {
+    window.addEventListener("resize", fit);
+  }
+  window.addEventListener("orientationchange", fit);
+
+  /* ---------- paketler ---------- */
+  function mailto(key){
+    var p = PLANS[key];
+    var govde = "Merhaba,\n\nWeb sitesi için " + p.ad + " paketiyle ilgileniyorum.\n\n" +
+                "İşim / sektörüm:\nŞu an bir sitem var mı:\nSitede en çok ne olsun istiyorum:\n";
+    return "mailto:dolunay@dolunay.ai?subject=" +
+           encodeURIComponent("Web sitesi teklifi: " + p.ad + " paketi") +
+           "&body=" + encodeURIComponent(govde);
+  }
+
+  function selectPlan(key, moveFocus){
+    var p = PLANS[key];
+    if (!p) return;
+    for (var i = 0; i < plans.length; i++){
+      var on = plans[i].getAttribute("data-key") === key;
+      plans[i].setAttribute("aria-checked", on ? "true" : "false");
+      plans[i].setAttribute("tabindex", on ? "0" : "-1");
+      if (on && moveFocus) plans[i].focus();
+    }
+    headEl.textContent = p.ad + " pakete dahil";
+    while (featEl.firstChild) featEl.removeChild(featEl.firstChild);
+    for (var j = 0; j < p.liste.length; j++){
+      var li = document.createElement("li");
+      li.textContent = p.liste[j];
+      featEl.appendChild(li);
+    }
+    cta.setAttribute("href", mailto(key));
+  }
+
+  for (var k = 0; k < plans.length; k++){
+    (function(pl){
+      pl.addEventListener("click", function(){ selectPlan(pl.getAttribute("data-key"), false); });
+      pl.addEventListener("keydown", function(ev){
+        if (ev.metaKey || ev.ctrlKey || ev.altKey || ev.shiftKey) return;
+        var cur = plans.indexOf(pl), n = -1;
+        if (ev.key === "ArrowDown" || ev.key === "ArrowRight") n = (cur + 1) % plans.length;
+        else if (ev.key === "ArrowUp" || ev.key === "ArrowLeft") n = (cur - 1 + plans.length) % plans.length;
+        else if (ev.key === "Home") n = 0;
+        else if (ev.key === "End") n = plans.length - 1;
+        if (n < 0) return;
+        ev.preventDefault();
+        selectPlan(plans[n].getAttribute("data-key"), true);
+      });
+    })(plans[k]);
+  }
+})();
+</script>
+</html>
