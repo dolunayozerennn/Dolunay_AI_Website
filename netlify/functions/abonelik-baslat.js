@@ -115,7 +115,7 @@ function formSayfasi(slug, paket, deger, hata) {
             ${alan('ad', 'Ad', 'text')}
             ${alan('soyad', 'Soyad', 'text')}
           </div>
-          ${alan('eposta', 'E-posta', 'email', 'Fatura ve tahsilat bildirimleri bu adrese gider.')}
+          ${alan('eposta', 'E-posta', 'email', 'Aboneliğinizle ilgili yazışmalar için bu adresi kullanacağız.')}
           <div class="ikili">
             ${alan('telefon', 'Cep telefonu', 'tel', '05XX XXX XX XX')}
             ${alan('tckn', 'T.C. kimlik numarası', 'text', 'Ödeme kuruluşu abonelik için zorunlu tutuyor.')}

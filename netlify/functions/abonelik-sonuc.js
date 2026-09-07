@@ -42,7 +42,7 @@ exports.handler = async (event) => {
     cevap = await formSonuc(token)
   } catch (e) {
     return ciz(502, 'Sonuç doğrulanamadı', 'uyari',
-      'Ödemeniz alınmış olabilir ama şu an teyit edemedik. Sizinle en kısa sürede iletişime geçeceğiz.')
+      'Ödemeniz alınmış olabilir ama şu an teyit edemedik. Aynı ödemeyi tekrar denemeyin; dolunay@dolunay.ai adresine yazın, durumu kontrol edip size dönelim.')
   }
 
   const veri = cevap && cevap.data ? cevap.data : cevap || {}
@@ -50,13 +50,12 @@ exports.handler = async (event) => {
   // Belirsizlik cevabi TEK yerde durur: iki ayri dal ayni cumleyi uretmek zorunda,
   // yoksa biri zamanla "tahsilat yapilmadi" tarafina kayar.
   const belirsiz = () => ciz(502, 'Sonuç teyit edilemedi', 'uyari',
-    'Ödemenizin sonucunu şu an teyit edemedik. Karttan tahsilat yapılmış olabilir. Lütfen birkaç dakika sonra e-postanızı kontrol edin, sorun sürerse bize yazın.',
+    'Ödemenizin sonucunu şu an teyit edemedik. Karttan tahsilat yapılmış olabilir. Aynı ödemeyi tekrar denemeden bize yazın, durumu kontrol edip size dönelim.',
     `<div class="kart">
        <p class="etiket">Ne yapabilirsiniz</p>
        <ul>
          <li>Aynı ödemeyi TEKRAR denemeyin; çift tahsilat oluşabilir.</li>
-         <li>E-postanıza abonelik onayı geldiyse işlem tamamlanmıştır.</li>
-         <li>Birkaç dakika içinde bir şey gelmezse dolunay@dolunay.ai adresine yazın.</li>
+         <li>dolunay@dolunay.ai adresine yazın; aboneliğinizin durumunu kontrol edip size dönelim.</li>
        </ul>
      </div>`)
 
@@ -92,7 +91,7 @@ exports.handler = async (event) => {
       `<div class="kart">
          <p class="etiket">Sırada ne var</p>
          <ul>
-           <li>Fatura ve tahsilat bildirimleri kayıtlı e-posta adresinize gönderilir.</li>
+           <li>Aboneliğinizle ilgili her konuda size bu e-posta adresinden yazacağız.</li>
            <li>Bir sonraki tahsilat, gelecek ayın aynı gününde otomatik yapılır.</li>
            <li>Aboneliği durdurmak istediğinizde bize yazmanız yeterli.</li>
          </ul>
