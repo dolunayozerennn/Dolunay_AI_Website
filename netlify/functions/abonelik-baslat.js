@@ -188,8 +188,13 @@ exports.handler = async (event) => {
   // Musteri odemeyi tamamladiktan sonra geri gelip formu tekrar doldurursa
   // ikinci bir abonelik acilir ve karttan iki kez cekilir. iyzico'daki kayit
   // tek gercektir; form uretilmeden once oraya bakilir.
-  // Kapi bilerek FAIL-OPEN: okuma basarisiz olursa akis normal devam eder,
-  // yanlis bir "zaten aboneliginiz var" ekrani odemeyi bloklamaktan iyidir.
+  // Kapi bilerek FAIL-CLOSED: tarama tamamlanamazsa ya da bu musteriye ait bir
+  // kaydin durumu okunamazsa odeme BASLATILMAZ (503). Bu yorum eskiden
+  // "fail-open" diyordu ve koda ters dusmustu; okuyan biri kodu yoruma
+  // uydurmaya kalkarsa mukerrer tahsilat kapisi yeniden acilir.
+  // Gerekce: kacan bir satis, ikinci kez cekilen paradan iyidir.
+  // Bos liste (`items: []`) belirsizlik DEGILDIR; ilk kez satin alan musteri
+  // burada takilmaz.
   try {
     const epostaKucuk = v.eposta.toLowerCase()
     const planKucuk = String(paket.plan).toLowerCase()
