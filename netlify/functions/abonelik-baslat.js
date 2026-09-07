@@ -233,6 +233,12 @@ exports.handler = async (event) => {
     return html(500, formSayfasi(slug, paket, v, 'Odeme sayfasi su an acilamadi. Birazdan tekrar deneyin.'))
   }
 
+  // iyzico'ya hic ulasilamadiysa bu bir ret degil belirsizliktir; kart hic denenmedi.
+  if (!cevap || cevap.hataTipi) {
+    console.error('iyzico initialize ulasilamadi', cevap && cevap.hataTipi)
+    return html(503, formSayfasi(slug, paket, v, 'Su an odeme saglayicisina ulasilamiyor. Kartinizdan tahsilat YAPILMADI. Birkac dakika sonra tekrar deneyin.'))
+  }
+
   if (cevap.status !== 'success' || !cevap.checkoutFormContent) {
     // Saglayicinin ham hata metni musteriye gosterilmez; sunucu kaydinda kalir.
     console.error('iyzico initialize hatasi', cevap && cevap.errorCode, cevap && cevap.errorMessage)

@@ -23,23 +23,39 @@ function yetki(uriPath, bodyStr) {
 
 // imzaYolu verilmezse uriPath imzalanir. iyzico sorgu dizesini IMZAYA KATMAZ;
 // query'li adreslerde adres query'li, imza query'siz yol ile kurulur (canlida olculdu).
+// Cevapsiz kalan istek fonksiyonu suresiz asili birakirdi; 20 saniyede kesilir.
+// `hataTipi` alani cagirana "bu bir ret degil, belirsizlik" demek icin vardir:
+// `agsiz` = istek gitmedi ya da cevap gelmedi, `sunucu` = HTTP 5xx / JSON olmayan cevap.
+// JSON donen 4xx iyzico'nun KENDI hata govdesidir, oldugu gibi gecirilir.
 async function istek(method, uriPath, body, imzaYolu) {
   const bodyStr = body === undefined ? '' : JSON.stringify(body)
   const { auth, rnd } = yetki(imzaYolu === undefined ? uriPath : imzaYolu, bodyStr)
-  const cevap = await fetch(BASE + uriPath, {
-    method,
-    headers: {
-      Authorization: auth,
-      'x-iyzi-rnd': rnd,
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    },
-    body: bodyStr === '' ? undefined : bodyStr,
-  })
-  const ham = await cevap.text()
-  let veri
-  try { veri = JSON.parse(ham) } catch { veri = { status: 'failure', errorMessage: 'Beklenmeyen cevap' } }
-  return veri
+  const kesici = new AbortController()
+  const zamanlayici = setTimeout(() => kesici.abort(), 20000)
+  try {
+    const cevap = await fetch(BASE + uriPath, {
+      method,
+      signal: kesici.signal,
+      headers: {
+        Authorization: auth,
+        'x-iyzi-rnd': rnd,
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: bodyStr === '' ? undefined : bodyStr,
+    })
+    const ham = await cevap.text()
+    let veri
+    try { veri = JSON.parse(ham) } catch { return { status: 'failure', hataTipi: 'sunucu' } }
+    if (!cevap.ok && (cevap.status < 400 || cevap.status >= 500)) {
+      return { status: 'failure', hataTipi: 'sunucu' }
+    }
+    return veri
+  } catch {
+    return { status: 'failure', hataTipi: 'agsiz' }
+  } finally {
+    clearTimeout(zamanlayici)
+  }
 }
 
 // Abonelik odeme formu baslatir. Donen token 30 dakika gecerlidir; bu yuzden

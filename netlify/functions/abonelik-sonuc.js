@@ -47,6 +47,22 @@ exports.handler = async (event) => {
 
   const veri = cevap && cevap.data ? cevap.data : cevap || {}
 
+  // Timeout, ag ya da sunucu hatasi bir RET degildir: tahsilat yapilmis olabilir.
+  // Bu dalda "tahsilat yapilmadi" demek musteriye yanlis bilgi verir.
+  if (!cevap || cevap.hataTipi) {
+    console.error('iyzico sonuc teyit edilemedi', cevap && cevap.hataTipi)
+    return ciz(502, 'Sonuc teyit edilemedi', 'uyari',
+      'Odemenizin sonucunu su an teyit edemedik. Karttan tahsilat yapilmis olabilir. Lutfen birkac dakika sonra e-postanizi kontrol edin, sorun surerse bize yazin.',
+      `<div class="kart">
+         <p class="etiket">Ne yapabilirsiniz</p>
+         <ul>
+           <li>Ayni odemeyi TEKRAR denemeyin; cift tahsilat olusabilir.</li>
+           <li>E-postaniza abonelik onayi geldiyse islem tamamlanmistir.</li>
+           <li>Birkac dakika icinde bir sey gelmezse dolunay@dolunay.ai adresine yazin.</li>
+         </ul>
+       </div>`)
+  }
+
   if (cevap && cevap.status === 'success') {
     const ref = veri.referenceCode || veri.subscriptionReferenceCode || ''
     return ciz(200, 'Aboneliginiz basladi', 'iyi',
