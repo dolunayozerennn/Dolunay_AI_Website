@@ -15,8 +15,11 @@ olcum kayit degisince sessizce yanlis sey olcer.
 ONCE `npm run build` kosulmali; olcum `out/` icindeki gercek ciktiyi tarar,
 kaynagi degil. Cikis 0 = temiz, 1 = bulgu var.
 """
-import re, html, sys, pathlib, subprocess
-kok = pathlib.Path('/Users/dolunayozeren/Desktop/Antigravity/Projeler/Dolunay_AI_Website')
+import os, re, html, sys, pathlib, subprocess
+# Kok ortam degiskeniyle ezilebilir: bekcinin KENDI kanaryasi bozulmus bir KOPYAYA
+# karsi kosabilsin diye. Degisken verilmezse davranis aynen eskisi gibi.
+kok = pathlib.Path(os.environ.get('ABONELIK_KOK',
+    '/Users/dolunayozeren/Desktop/Antigravity/Projeler/Dolunay_AI_Website'))
 
 # 0) Kayitlari kaynak dosyadan cikar (yorum satirlari haric)
 kayit_src = (kok/'src/app/abonelik/_abonelikler.ts').read_text(encoding='utf-8')

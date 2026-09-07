@@ -160,6 +160,18 @@ dizi olmayan `items`, yok sayilan `totalCount`, okunamayan `subscriptionStatus`,
 ve bos gelen form icerigi. Yeni kod yazarken once bu soru sorulur: cevabi
 anlamadigimizda ne diyoruz.
 
+Sayfa bekcisi de olculur: `python3 scripts/abonelik_kontrol.py` yedi eksende
+"burada bir sey YOK" hukmu verir, ve `bash scripts/abonelik_kontrol_kanarya.sh`
+bu bekcinin gercekten kirmizi verebildigini gosterir (bozulmus KOPYA, 8 vaka,
+cikis 0 bekleniyor). Kanarya yalniz cikis koduna bakmaz, beklenen eksenin bulguyu
+ADIYLA bastigini da arar: coken bir bekci de sifir disi doner ve cokme "yakaladi"
+demek degildir. Kanaryanin iki vakasi muafiyeti iki yonden sikistirir: `kar payi`
+gecmeli, `zeka` gecmemeli.
+
+Bekcinin ilk gizlilik ekseni fonksiyon dosyalarinda `noindex` KELIMESINI ariyordu
+ve yanlis pozitif veriyordu; etiket ortak sayfa iskeletinde durur. Simdi olculen sey
+ZINCIR: iskelette etiket var mi VE her fonksiyon sayfayi o iskeletten uretiyor mu.
+
 Olcen aletin kendisi de olculur: `bash netlify/sinav/mutasyon_kanarya.sh`.
 Sahte bir `node` ile "harness cokmus", "bozulmamis kod bile dusuyor", "mutasyon
 hayatta kalmis" ve "mutasyon deseni artik tutmuyor" hallerini kurup suitin
