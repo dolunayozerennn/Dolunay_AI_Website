@@ -4,7 +4,7 @@
 // Token 30 dakikada gecersizlesir, bu yuzden onceden uretilmis sabit bir link
 // paylasilamaz; her ziyarette yeniden uretilir.
 const { formBaslat, paketBul, abonelikleriTara } = require('../lib/iyzico')
-const { kacir, sayfa, html, hataSayfasi } = require('../lib/sayfa')
+const { kacir, sayfa, html, hataSayfasi, kayitIcin } = require('../lib/sayfa')
 
 const ALANLAR = [
   ['ad', 'Ad'],
@@ -250,7 +250,7 @@ exports.handler = async (event) => {
 
   if (cevap.status !== 'success' || !cevap.checkoutFormContent) {
     // Saglayicinin ham hata metni musteriye gosterilmez; sunucu kaydinda kalir.
-    console.error('iyzico initialize hatasi', cevap && cevap.errorCode, cevap && cevap.errorMessage)
+    console.error('iyzico initialize hatasi', cevap && cevap.errorCode, kayitIcin(cevap && cevap.errorMessage))
     return html(400, formSayfasi(slug, paket, v, 'Odeme sayfasi acilamadi. Bilgileri kontrol edip tekrar deneyin; sorun surerse dolunay@dolunay.ai adresine yazin.'))
   }
 

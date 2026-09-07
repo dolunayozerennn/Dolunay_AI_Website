@@ -2,7 +2,7 @@
 // buraya token ile birlikte geri gonderir. Sonucu kendimiz sorup gosteririz;
 // "odendi" hukmu formun donusune degil iyzico'nun cevabina dayanir.
 const { formSonuc } = require('../lib/iyzico')
-const { kacir, sayfa, html } = require('../lib/sayfa')
+const { kacir, sayfa, html, kayitIcin } = require('../lib/sayfa')
 
 function tokenBul(event) {
   const q = event.queryStringParameters || {}
@@ -47,20 +47,24 @@ exports.handler = async (event) => {
 
   const veri = cevap && cevap.data ? cevap.data : cevap || {}
 
+  // Belirsizlik cevabi TEK yerde durur: iki ayri dal ayni cumleyi uretmek zorunda,
+  // yoksa biri zamanla "tahsilat yapilmadi" tarafina kayar.
+  const belirsiz = () => ciz(502, 'Sonuc teyit edilemedi', 'uyari',
+    'Odemenizin sonucunu su an teyit edemedik. Karttan tahsilat yapilmis olabilir. Lutfen birkac dakika sonra e-postanizi kontrol edin, sorun surerse bize yazin.',
+    `<div class="kart">
+       <p class="etiket">Ne yapabilirsiniz</p>
+       <ul>
+         <li>Ayni odemeyi TEKRAR denemeyin; cift tahsilat olusabilir.</li>
+         <li>E-postaniza abonelik onayi geldiyse islem tamamlanmistir.</li>
+         <li>Birkac dakika icinde bir sey gelmezse dolunay@dolunay.ai adresine yazin.</li>
+       </ul>
+     </div>`)
+
   // Timeout, ag ya da sunucu hatasi bir RET degildir: tahsilat yapilmis olabilir.
   // Bu dalda "tahsilat yapilmadi" demek musteriye yanlis bilgi verir.
   if (!cevap || cevap.hataTipi) {
     console.error('iyzico sonuc teyit edilemedi', cevap && cevap.hataTipi)
-    return ciz(502, 'Sonuc teyit edilemedi', 'uyari',
-      'Odemenizin sonucunu su an teyit edemedik. Karttan tahsilat yapilmis olabilir. Lutfen birkac dakika sonra e-postanizi kontrol edin, sorun surerse bize yazin.',
-      `<div class="kart">
-         <p class="etiket">Ne yapabilirsiniz</p>
-         <ul>
-           <li>Ayni odemeyi TEKRAR denemeyin; cift tahsilat olusabilir.</li>
-           <li>E-postaniza abonelik onayi geldiyse islem tamamlanmistir.</li>
-           <li>Birkac dakika icinde bir sey gelmezse dolunay@dolunay.ai adresine yazin.</li>
-         </ul>
-       </div>`)
+    return belirsiz()
   }
 
   if (cevap && cevap.status === 'success') {
@@ -78,8 +82,16 @@ exports.handler = async (event) => {
        </div>`)
   }
 
+  // KESIN ret yalnizca `status:'failure'` ile gelir. Tanimadigimiz bir govde
+  // (bos nesne, dizi, `pending` gibi ara durum) ret DEGILDIR; tahsilat yapilmis
+  // olabilir. Burada "tahsilat yapilmadi" demek yanlis guvence olur.
+  if (cevap.status !== 'failure') {
+    console.error('iyzico sonuc anlasilamadi', cevap && cevap.status)
+    return belirsiz()
+  }
+
   // Saglayicinin ham hata metni musteriye gosterilmez; sunucu kaydinda kalir.
-  console.error('iyzico sonuc basarisiz', cevap && cevap.errorCode, cevap && cevap.errorMessage)
+  console.error('iyzico sonuc basarisiz', cevap && cevap.errorCode, kayitIcin(cevap && cevap.errorMessage))
   return ciz(200, 'Odeme tamamlanmadi', 'uyari',
     'Odeme tamamlanmadi. Karttan herhangi bir tahsilat yapilmadi.',
     `<div class="kart">

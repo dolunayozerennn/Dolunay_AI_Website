@@ -123,4 +123,12 @@ function hataSayfasi(kod, baslik, mesaj) {
   }))
 }
 
-module.exports = { kacir, sayfa, html, hataSayfasi }
+// Saglayici hata metni musterinin kendi verisini geri yazabilir (TCKN, telefon,
+// kart parcasi). Kayda giren metinde 6 haneden uzun rakam dizileri maskelenir.
+// Metin BUSBUTUN atilmaz: teshis degerini oldurmek de bir kusurdur.
+function kayitIcin(metin, tavan = 200) {
+  if (typeof metin !== 'string') return metin
+  return metin.replace(/\d{6,}/g, '***').slice(0, tavan)
+}
+
+module.exports = { kacir, sayfa, html, hataSayfasi, kayitIcin }
