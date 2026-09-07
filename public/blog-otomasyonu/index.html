@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="index, follow">
+  <meta name="description" content="Markanıza özel SEO uyumlu blog yazılarıyla aramalarda öne çıkın. Blog otomasyonu paketlerini karşılaştırın, yayın takviminizi seçin ve üretimi hemen başlatın.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self'; base-uri 'self'; object-src 'none'">
+  <link rel="icon" href="/favicon.svg">
+  <link rel="canonical" href="https://dolunay.ai/blog-otomasyonu/">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap">
+  <title>Blog Otomasyonu Fiyatlandırma | Dolunay AI</title>
+  <style>
+    :root {
+      --bg-dark: #0a0e27;
+      --bg-darker: #060820;
+      --bg-card: #111538;
+      --purple: #7c3aed;
+      --purple-dark: #6d28d9;
+      --purple-light: #a78bfa;
+      --gold: #f59e0b;
+      --gold-light: #fbbf24;
+      --green: #34d399;
+      --text: #fff;
+      --secondary: rgba(255,255,255,.7);
+      --muted: rgba(255,255,255,.5);
+      --border: rgba(255,255,255,.1);
+      color-scheme: dark;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100svh;
+      padding: 32px 0 28px;
+      background: var(--bg-dark);
+      color: var(--text);
+      font-family: Inter, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { font: inherit; color: inherit; cursor: pointer; }
+    a { color: inherit; }
+    button, a { touch-action: manipulation; }
+    svg { display: block; flex-shrink: 0; }
+    [hidden] { display: none !important; }
+    :focus-visible { outline: 3px solid var(--purple-light); outline-offset: 5px; }
+    .layout {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: start;
+    }
+    .showcase, .purchase { min-width: 0; }
+    .showcase { padding-top: 10px; }
+    .browser {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: var(--bg-darker);
+      box-shadow: 0 24px 64px rgba(0,0,0,.3);
+    }
+    .browser-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 17px;
+      padding: 17px 18px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,.025);
+    }
+    .window-dots { display: flex; gap: 6px; }
+    .window-dots span { width: 9px; height: 9px; border-radius: 50%; }
+    .window-dots span:nth-child(1) { background: #ff5f57; }
+    .window-dots span:nth-child(2) { background: #febc2e; }
+    .window-dots span:nth-child(3) { background: #28c840; }
+    .browser-arrows { display: flex; gap: 8px; color: rgba(255,255,255,.25); }
+    .address {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 7px;
+      flex: 1;
+      min-width: 0;
+      padding: 8px 10px;
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 6px;
+      background: var(--bg-darker);
+      color: var(--muted);
+      font-size: .64rem;
+    }
+    .address svg { color: var(--green); }
+    .calendar {
+      padding: 20px 23px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(124,58,237,.035);
+    }
+    .calendar-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 13px;
+    }
+    .calendar-heading h2 { margin: 0; font-size: .75rem; font-weight: 600; }
+    #calendar-count { color: var(--purple-light); font-size: .65rem; font-weight: 600; }
+    .week {
+      display: grid;
+      grid-template-columns: repeat(7,1fr);
+      gap: 7px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .week li {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 9px;
+      padding: 10px 3px 8px;
+      border: 1px solid rgba(255,255,255,.05);
+      border-radius: 8px;
+      background: rgba(255,255,255,.02);
+      color: var(--muted);
+      font-size: .65rem;
+      font-weight: 500;
+      transition: background .18s, border-color .18s, color .18s;
+    }
+    .day-dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,.14); }
+    .week .is-active {
+      border-color: rgba(167,139,250,.35);
+      background: rgba(124,58,237,.2);
+      color: #fff;
+    }
+    .is-active .day-dot { background: var(--green); box-shadow: 0 0 7px rgba(52,211,153,.4); }
+    .blog-content { padding: 22px 23px 24px; }
+    .blog-title { margin: 0 0 16px; font-size: 1.25rem; font-weight: 700; letter-spacing: -.04em; }
+    .article-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+    .article-card {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      min-width: 0;
+      padding: 0;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      background: var(--bg-card);
+      text-align: left;
+      transition: transform .18s, border-color .18s, background .18s;
+    }
+    .article-card:focus-visible { outline-offset: -3px; }
+    .article-art {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 62px;
+      padding: 0 17px;
+      overflow: hidden;
+      color: var(--purple-light);
+      background: linear-gradient(120deg,rgba(124,58,237,.3),rgba(167,139,250,.06));
+    }
+    .article-art::after {
+      content: "";
+      position: absolute;
+      width: 98px;
+      height: 98px;
+      top: -45px;
+      right: 26px;
+      border: 1px solid rgba(167,139,250,.15);
+      border-radius: 50%;
+      box-shadow: 0 0 0 14px rgba(167,139,250,.04), 0 0 0 28px rgba(167,139,250,.03);
+    }
+    .article-card:nth-child(2) .article-art,
+    .article-card:nth-child(3) .article-art {
+      color: var(--gold-light);
+      background: linear-gradient(120deg,rgba(245,158,11,.16),rgba(124,58,237,.12));
+    }
+    .article-number { font-size: .62rem; font-weight: 700; letter-spacing: .08em; opacity: .7; }
+    .article-copy { display: flex; flex-direction: column; flex: 1; gap: 9px; padding: 13px; }
+    .article-title { font-size: .75rem; font-weight: 600; line-height: 1.5; overflow-wrap: anywhere; }
+    .article-meta { display: flex; flex-wrap: wrap; gap: 4px 9px; color: var(--muted); font-size: .6rem; line-height: 1.5; }
+    .article-summary {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      color: var(--secondary);
+      font-size: .65rem;
+      font-weight: 400;
+      line-height: 1.65;
+    }
+    .reader { min-height: 453px; }
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 36px;
+      padding: 5px 0;
+      border: 0;
+      background: transparent;
+      color: var(--purple-light);
+      font-size: .75rem;
+      font-weight: 600;
+    }
+    #reader-title { margin: 22px 0 14px; font-size: 1.6rem; font-weight: 700; line-height: 1.35; letter-spacing: -.035em; overflow-wrap: anywhere; }
+    #reader-meta { color: var(--muted); font-size: .75rem; }
+    .summary-label { margin: 28px 0 10px; color: var(--purple-light); font-size: .65rem; font-weight: 700; letter-spacing: .12em; }
+    #reader-summary { margin: 0; color: var(--secondary); font-size: 1.2rem; line-height: 1.8; }
+    .sector-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      width: fit-content;
+      max-width: 100%;
+      margin: 23px auto 0;
+      padding: 5px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      background: rgba(255,255,255,.025);
+    }
+    .sector-tab {
+      min-height: 36px;
+      padding: 8px 15px;
+      border: 1px solid transparent;
+      border-radius: 7px;
+      background: transparent;
+      color: var(--muted);
+      font-size: .7rem;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: color .18s, background .18s, border-color .18s;
+    }
+    .sector-tab[aria-selected="true"] { border-color: rgba(167,139,250,.2); background: rgba(124,58,237,.2); color: #fff; }
+    .showcase-caption { max-width: 380px; margin: 14px auto 0; color: var(--muted); font-size: .68rem; line-height: 1.7; text-align: center; }
+    h1 { margin: 0 0 16px; font-size: clamp(2.5rem,4.1vw,3rem); font-weight: 800; line-height: 1.09; letter-spacing: -.055em; }
+    .headline-line { display: block; }
+    .headline-gradient {
+      background: linear-gradient(120deg,#a78bfa,#c4b5fd);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      font-style: normal;
+    }
+    .intro { margin: 0 0 24px; color: var(--secondary); font-size: .86rem; line-height: 1.8; }
+    .intro b { color: #fff; font-weight: 600; }
+    .package-label { margin: 0 0 16px; font-size: .7rem; font-weight: 800; letter-spacing: .15em; color: rgba(255,255,255,.42); }
+    .plans { display: grid; grid-template-columns: repeat(3,1fr); gap: 11px; }
+    .plan-card {
+      position: relative;
+      min-width: 0;
+      padding: 15px 12px 13px;
+      border: 1.5px solid rgba(255,255,255,.1);
+      border-radius: 14px;
+      background: rgba(255,255,255,.025);
+      text-align: center;
+      transition: border-color .18s, background .18s, box-shadow .18s, transform .18s;
+    }
+    .plan-card[aria-checked="true"] {
+      border: 2px solid #a78bfa;
+      background: linear-gradient(160deg,rgba(124,58,237,.28),rgba(124,58,237,.12));
+      box-shadow: 0 0 0 4px rgba(167,139,250,.12),0 12px 30px rgba(124,58,237,.22);
+    }
+    .plan-check {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      display: grid;
+      place-items: center;
+      width: 17px;
+      height: 17px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 50%;
+      color: var(--bg-darker);
+    }
+    .plan-check svg { opacity: 0; }
+    [aria-checked="true"] .plan-check { background: var(--purple-light); border-color: var(--purple-light); }
+    [aria-checked="true"] .plan-check svg { opacity: 1; }
+    .plan-name { display: block; margin-top: 13px; font-size: .78rem; font-weight: 700; }
+    .plan-volume { display: block; margin-top: 8px; color: var(--secondary); font-size: .64rem; }
+    .plan-volume strong { color: #fff; font-size: 1.3rem; font-weight: 800; }
+    .plan-price { display: block; margin-top: 9px; font-size: 1rem; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .plan-price span { color: var(--muted); font-size: .55rem; font-weight: 500; }
+    .plan-frequency { display: block; margin-top: 6px; color: var(--muted); font-size: .6rem; }
+    .popular-badge {
+      position: absolute;
+      top: -11px;
+      left: -7px;
+      transform: rotate(-5deg);
+      background: linear-gradient(135deg,#f59e0b,#fbbf24);
+      color: #2a1a00;
+      font-size: .56rem;
+      font-weight: 800;
+      letter-spacing: .045em;
+      padding: 4px 11px;
+      border-radius: 7px;
+      box-shadow: 0 5px 14px rgba(0,0,0,.42),0 1px 4px rgba(245,158,11,.4);
+    }
+    .price-line { display: flex; align-items: baseline; flex-wrap: wrap; gap: 10px; margin: 22px 0 6px; }
+    #plan-price { font-size: 2.5rem; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -.05em; }
+    .price-suffix { color: var(--muted); font-size: .8rem; }
+    .frequency-line { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; font-size: .76rem; line-height: 1.6; }
+    #plan-frequency { color: #34d399; font-weight: 700; }
+    .frequency-line span { color: var(--muted); }
+    .features { display: grid; gap: 9px; min-height: 128px; margin: 16px 0 18px; padding: 18px 0 0; border-top: 1px solid var(--border); list-style: none; align-content: start; }
+    .features li { display: flex; align-items: flex-start; gap: 10px; color: var(--secondary); font-size: .77rem; line-height: 1.5; }
+    .features b { color: #fff; font-weight: 600; }
+    .check-icon { width: 17px; height: 17px; margin-top: 1px; color: #34d399; }
+    .checkout {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      border: 0;
+      border-radius: 14px;
+      padding: 18px 24px;
+      background: linear-gradient(135deg,#7c3aed,#a78bfa);
+      box-shadow: 0 14px 36px rgba(124,58,237,.4);
+      color: #fff;
+      font-size: .9rem;
+      font-weight: 700;
+      line-height: 1.4;
+      text-decoration: none;
+      transition: transform .18s, box-shadow .18s;
+    }
+    #setup-note { max-width: 420px; margin: 12px auto 0; color: var(--muted); font-size: .68rem; line-height: 1.65; text-align: center; }
+    .trust { display: flex; align-items: center; justify-content: center; gap: 7px; margin-top: 15px; padding-top: 14px; border-top: 1px solid var(--border); color: var(--secondary); font-size: .7rem; }
+    .contact { margin: 10px 0 0; color: var(--muted); font-size: .7rem; text-align: center; }
+    .contact a { display: inline-block; padding: 6px; text-underline-offset: 4px; text-decoration-color: rgba(255,255,255,.3); }
+    @media (hover: hover) {
+      .article-card:hover { transform: translateY(-2px); border-color: rgba(167,139,250,.4); }
+      .plan-card:hover { border-color: var(--purple-light); }
+      .sector-tab:hover { color: #fff; background: rgba(124,58,237,.12); }
+      .checkout:hover { transform: translateY(-2px); box-shadow: 0 18px 40px rgba(124,58,237,.48); }
+      .contact a:hover { color: #fff; }
+    }
+    @media (max-width: 899px) {
+      body { padding-top: 32px; }
+      .layout { grid-template-columns: 1fr; gap: 40px; }
+      .purchase { grid-row: 1; }
+      .showcase { grid-row: 2; padding-top: 0; }
+      h1 { font-size: clamp(2.5rem,7vw,3.35rem); }
+    }
+    @media (max-width: 420px) {
+      .browser-toolbar { gap: 10px; padding: 13px 12px; }
+      .browser-arrows { display: none; }
+      .calendar { padding: 17px 13px; }
+      .week { gap: 4px; }
+      .blog-content { padding: 19px 13px; }
+      .article-grid { gap: 9px; }
+      .article-copy { padding: 10px; }
+      .plans { gap: 11px; }
+      .plan-name { font-size: .64rem; }
+      .plan-volume { font-size: .54rem; }
+      .plan-price { font-size: .81rem; }
+      .plan-price span { font-size: .46rem; }
+      .plan-frequency { font-size: .51rem; }
+      .sector-tab { padding: 8px 10px; font-size: .64rem; }
+      .checkout { padding: 18px 24px; gap: 9px; font-size: .77rem; }
+    }
+    @media (max-width: 359px) {
+      .article-grid { grid-template-columns: 1fr; }
+      .plan-name { font-size: .58rem; }
+      .plan-price span { display: block; margin-top: 3px; }
+      .plan-frequency { font-size: .46rem; }
+      .sector-tab { padding: 8px; font-size: .59rem; }
+      h1 { font-size: 2.15rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="layout">
+    <section class="showcase" aria-label="Blog vitrini">
+      <div class="browser">
+        <div class="browser-toolbar">
+          <div class="window-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div class="browser-arrows" aria-hidden="true">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m14 6-6 6 6 6"/></svg>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m10 6 6 6-6 6"/></svg>
+          </div>
+          <div class="address">
+            <svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+            <span>sizinsiteniz.com/blog</span>
+          </div>
+        </div>
+        <div class="calendar" aria-labelledby="calendar-title">
+          <div class="calendar-heading"><h2 id="calendar-title">Yayın takvimi</h2><span id="calendar-count">Haftada 4 yayın</span></div>
+          <ol class="week" aria-label="Haftanın yayın günleri">
+            <li data-day="0" class="is-active" aria-label="Pazartesi: yayın var">Pzt<span class="day-dot" aria-hidden="true"></span></li>
+            <li data-day="1" aria-label="Salı: yayın yok">Sal<span class="day-dot" aria-hidden="true"></span></li>
+            <li data-day="2" class="is-active" aria-label="Çarşamba: yayın var">Çar<span class="day-dot" aria-hidden="true"></span></li>
+            <li data-day="3" aria-label="Perşembe: yayın yok">Per<span class="day-dot" aria-hidden="true"></span></li>
+            <li data-day="4" class="is-active" aria-label="Cuma: yayın var">Cum<span class="day-dot" aria-hidden="true"></span></li>
+            <li data-day="5" aria-label="Cumartesi: yayın yok">Cmt<span class="day-dot" aria-hidden="true"></span></li>
+            <li data-day="6" class="is-active" aria-label="Pazar: yayın var">Paz<span class="day-dot" aria-hidden="true"></span></li>
+          </ol>
+        </div>
+        <div id="sector-panel" class="blog-content" role="tabpanel" aria-labelledby="tab-saglik" tabindex="0">
+          <div id="blog-list">
+            <h2 class="blog-title">Blog</h2>
+            <div id="article-grid" class="article-grid"></div>
+            <noscript><p class="showcase-caption">Yazı örneklerini görüntülemek için JavaScript'i etkinleştirin.</p></noscript>
+          </div>
+          <article id="reader" class="reader" aria-labelledby="reader-title" hidden>
+            <button id="back-to-blog" class="back-button" type="button">
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m10 5-7 7 7 7M3 12h18"/></svg>
+              Bloga dön
+            </button>
+            <h2 id="reader-title" tabindex="-1"></h2>
+            <p id="reader-meta"></p>
+            <p class="summary-label">YAZI ÖZETİ</p>
+            <p id="reader-summary"></p>
+          </article>
+        </div>
+      </div>
+      <div class="sector-tabs" role="tablist" aria-label="Örnek yayınların sektörü">
+        <button id="tab-saglik" class="sector-tab" type="button" role="tab" aria-selected="true" aria-controls="sector-panel" tabindex="0" data-sector="saglik">Sağlık</button>
+        <button id="tab-avukatlik" class="sector-tab" type="button" role="tab" aria-selected="false" aria-controls="sector-panel" tabindex="-1" data-sector="avukatlik">Avukatlık</button>
+        <button id="tab-mali" class="sector-tab" type="button" role="tab" aria-selected="false" aria-controls="sector-panel" tabindex="-1" data-sector="mali">Mali Müşavirlik</button>
+      </div>
+      <p class="showcase-caption">Platformun ürettiği gerçek yayınlardan örnekler. Bir yazıya dokunun, içini okuyun.</p>
+    </section>
+
+    <section class="purchase" aria-labelledby="page-title">
+      <h1 id="page-title"><span class="headline-line">Google'da</span><span class="headline-line"><span class="headline-gradient">önce siz</span> çıkın</span></h1>
+      <p class="intro">Hastanız, danışanınız, müşteriniz arama yapıyor. Karşısına <b>blog yazan rakibiniz</b> çıkıyor. Sektörünüzdeki çoğu marka blog yazmıyor; yazanlar aramalarda öne geçiyor.</p>
+      <p id="package-label" class="package-label">PAKETİNİZİ SEÇİN</p>
+      <div class="plans" role="radiogroup" aria-labelledby="package-label">
+        <button class="plan-card" type="button" role="radio" aria-checked="false" aria-controls="plan-details" tabindex="0" data-plan="blog-baslangic">
+          <span class="plan-check" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 8 3 3 7-7"/></svg></span>
+          <span class="plan-name">Başlangıç</span>
+          <span class="plan-volume"><strong>8</strong> yazı/ay</span>
+          <span class="plan-price">₺2.980 <span>+KDV</span></span>
+          <span class="plan-frequency">haftada 2 yayın</span>
+        </button>
+        <button class="plan-card" type="button" role="radio" aria-checked="true" aria-controls="plan-details" tabindex="0" data-plan="blog-profesyonel">
+          <span class="popular-badge">EN POPÜLER</span>
+          <span class="plan-check" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 8 3 3 7-7"/></svg></span>
+          <span class="plan-name">Profesyonel</span>
+          <span class="plan-volume"><strong>16</strong> yazı/ay</span>
+          <span class="plan-price">₺5.980 <span>+KDV</span></span>
+          <span class="plan-frequency">haftada 4 yayın</span>
+        </button>
+        <button class="plan-card" type="button" role="radio" aria-checked="false" aria-controls="plan-details" tabindex="0" data-plan="blog-premium">
+          <span class="plan-check" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 8 3 3 7-7"/></svg></span>
+          <span class="plan-name">Premium</span>
+          <span class="plan-volume"><strong>30</strong> yazı/ay</span>
+          <span class="plan-price">₺9.980 <span>+KDV</span></span>
+          <span class="plan-frequency">her gün yayın</span>
+        </button>
+      </div>
+      <div id="plan-details" aria-live="polite" aria-atomic="true">
+        <p class="price-line"><span id="plan-price">₺5.980</span><span class="price-suffix">/ ay · + KDV</span></p>
+        <p class="frequency-line"><strong id="plan-frequency">Haftada 4 yayın</strong><span>· kesintisiz takvim</span></p>
+        <ul id="plan-features" class="features">
+          <li><svg class="check-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg><span>Ayda <b>16</b> SEO uyumlu yazı, marka sesinizde</span></li>
+          <li><svg class="check-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg><span><b>Ürün kartları</b> + otomatik iç linkleme</span></li>
+          <li><svg class="check-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg><span>Marka renklerinizle özel tasarım</span></li>
+          <li><svg class="check-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg><span>Arama motorlarına otomatik bildirim</span></li>
+        </ul>
+      </div>
+      <a id="checkout" class="checkout" href="/odeme/blog-profesyonel" aria-describedby="setup-note">
+        <span>Ödemeyi Tamamla, Üretimi Başlat</span>
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16m-6-6 6 6-6 6"/></svg>
+      </a>
+      <p id="setup-note">Ödemeden hemen sonra kurulum bilgilerinizi alıyoruz. Site erişimi ya da kod bilgisi gerekmiyor.</p>
+      <div class="trust"><svg class="check-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg><span>iyzico güvenli ödeme</span></div>
+      <p class="contact"><a href="mailto:dolunay@dolunay.ai">Önce konuşmak istiyorum</a></p>
+    </section>
+  </main>
+  <script>
+    'use strict';
+
+    const plans = {
+      'blog-baslangic': {
+        price: '₺2.980',
+        frequency: 'Haftada 2 yayın',
+        days: [0, 3],
+        features: [
+          'Ayda <b>8</b> SEO uyumlu yazı, marka sesinizde',
+          'Kapak görseli + SEO şeması otomatik',
+          'Yayından önce onay ve düzenleme yetkisi'
+        ]
+      },
+      'blog-profesyonel': {
+        price: '₺5.980',
+        frequency: 'Haftada 4 yayın',
+        days: [0, 2, 4, 6],
+        features: [
+          'Ayda <b>16</b> SEO uyumlu yazı, marka sesinizde',
+          '<b>Ürün kartları</b> + otomatik iç linkleme',
+          'Marka renklerinizle özel tasarım',
+          'Arama motorlarına otomatik bildirim'
+        ]
+      },
+      'blog-premium': {
+        price: '₺9.980',
+        frequency: 'Her gün yayın',
+        days: [0, 1, 2, 3, 4, 5, 6],
+        features: [
+          'Ayda <b>30</b> SEO uyumlu yazı, marka sesinizde',
+          "Profesyonel'deki <b>her şey</b> dahil",
+          'Özel ton kalibrasyonu + kapak görseli yükleme',
+          'Öncelikli destek ve özel hesap yöneticisi'
+        ]
+      }
+    };
+
+    const articlesBySector = {
+      saglik: [
+        {
+          title: 'Ben Kontrolü ve Dermatoskopi: Hangi Benler Takip Gerektirir?',
+          date: '5 Ağustos 2026',
+          duration: '7 dk',
+          summary: 'Cildinizdeki benleri evde ABCDE kuralıyla nasıl kontrol edeceğinizi, dermatoskopi muayenesinde neler olduğunu ve hangi benlerin yakın takip gerektirdiğini anlatıyoruz.'
+        },
+        {
+          title: 'Genişlemiş Gözenekler Nasıl Küçültülür? Nedenleri ve Dermatolojik Çözümler',
+          date: '29 Temmuz 2026',
+          duration: '7 dk',
+          summary: 'Genişlemiş gözenekler neden oluşur, evde ve klinikte nasıl küçültülür? Yağlı ve karma ciltler için işe yarayan dermatolojik yöntemleri anlatıyoruz.'
+        },
+        {
+          title: 'Rozasea (Gül Hastalığı) Nedir? Yüz Kızarıklığının Nedenleri ve Tedavi Yöntemleri',
+          date: '27 Temmuz 2026',
+          duration: '5 dk',
+          summary: 'Geçmeyen yüz kızarıklığı basit bir hassasiyet değil, rozasea olabilir. Tetikleyicileri, evreleri ve cerrahisiz modern tedavi yöntemlerini inceliyoruz.'
+        },
+        {
+          title: 'Gözaltı Morlukları Neden Oluşur? Işık Dolgusu ile Tedavi Rehberi',
+          date: '25 Temmuz 2026',
+          duration: '8 dk',
+          summary: 'Gözaltı morluklarının gerçek nedenleri, ışık dolgusunun nasıl çalıştığı ve kimler için doğru bir tercih olduğu adım adım anlatılıyor.'
+        }
+      ],
+      avukatlik: [
+        {
+          title: 'Anlaşmalı boşanma nasıl ilerler, hangi belgeler gerekir?',
+          date: '18 Ağustos 2026',
+          duration: '7 dk',
+          summary: 'Anlaşmalı boşanmada başvuru belgelerini, protokolün içeriğini ve duruşmanın işleyişini açıklıyoruz. Çocuklar, nafaka ve mal paylaşımına ilişkin temel başlıkları ele alıyoruz.'
+        },
+        {
+          title: 'İşten ayrılan çalışan hangi durumlarda kıdem tazminatı alabilir?',
+          date: '11 Ağustos 2026',
+          duration: '6 dk',
+          summary: 'Kıdem tazminatında çalışma süresini, işten ayrılma nedenlerini ve hesaplamanın temel unsurlarını inceliyoruz. İstifa ile işveren feshi arasındaki farkları açıklıyoruz.'
+        },
+        {
+          title: 'Kiracı depozitosu ne zaman iade edilir, kesintiler nasıl belirlenir?',
+          date: '27 Temmuz 2026',
+          duration: '5 dk',
+          summary: 'Depozitonun iadesinde kira sözleşmesini, teslim tutanağını ve konutun durumunu ele alıyoruz. Olağan kullanım izleriyle zarar iddiaları arasındaki farkları açıklıyoruz.'
+        },
+        {
+          title: 'İnternetten alınan ürünlerde cayma hakkı nasıl kullanılır?',
+          date: '9 Temmuz 2026',
+          duration: '8 dk',
+          summary: 'İnternet alışverişlerinde cayma bildiriminin süresini, ürün iadesini ve geri ödeme sürecini açıklıyoruz. Cayma hakkının geçerli olmadığı ürün ve hizmetleri de inceliyoruz.'
+        }
+      ],
+      mali: [
+        {
+          title: 'İştirak Ettiğim Şirketten Kâr Payı Geldi. Ne Yapmalıyım?',
+          date: '7 Ağustos 2026',
+          duration: '6 dk',
+          summary: 'Bir şirketin başka bir şirketten aldığı kâr payı neden tekrar vergilenmiyor? İştirak kazançları istisnasının şartlarını anlatıyoruz.'
+        },
+        {
+          title: 'Yazılım Şirketinizi Teknokente Taşımak İster Misiniz? 2026 Teknokent Kazanç İstisnası Rehberi',
+          date: '6 Ağustos 2026',
+          duration: '6 dk',
+          summary: 'Yazılım geliştiren bir KOBİ, teknokente girerek kazancını kurumlar vergisinden istisna tutabiliyor. Başvurudan raporlamaya adımları anlatıyoruz.'
+        },
+        {
+          title: 'Şirketimin Dükkanını Sattım: Taşınmaz Satışında Kurumlar Vergisi İstisnası, KDV ve Tapu Harcı',
+          date: '4 Ağustos 2026',
+          duration: '6 dk',
+          summary: 'Şirket aktifindeki dükkan, depo veya ofisi satarken vergiyi belirleyen kuralları, istisnanın şartlarını ve tapu harcını inceliyoruz.'
+        },
+        {
+          title: 'Pişmanlık Beyannamesi Verdim: Ceza Öder Miyim?',
+          date: '11 Haziran 2026',
+          duration: '6 dk',
+          summary: 'Eksik beyannameyi geç fark ettiniz. Pişmanlık hükmü doğru zamanda uygulanırsa vergi ziyaı cezasını siler. Şartları ve süreci anlatıyoruz.'
+        }
+      ]
+    };
+
+    const sectorIcons = {
+      saglik: '<path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6z"/>',
+      avukatlik: '<path d="M12 3v18M7 21h10M4 7h16M5 7l-3 7h6L5 7Zm14 0-3 7h6l-3-7Z"/>',
+      mali: '<path d="M4 21V11h4v10m2 0V6h4v15m2 0V3h4v18M2 21h20"/>'
+    };
+    const checkIcon = '<svg class="check-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg>';
+    const dayNames = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'];
+    const planCards = Array.from(document.querySelectorAll('[data-plan]'));
+    const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+    const calendarDays = Array.from(document.querySelectorAll('[data-day]'));
+    const checkout = document.getElementById('checkout');
+    const articleGrid = document.getElementById('article-grid');
+    const blogList = document.getElementById('blog-list');
+    const reader = document.getElementById('reader');
+    let selectedPlan = 'blog-profesyonel';
+    let selectedSector = 'saglik';
+    let openedArticle = 0;
+
+    function selectPlan(slug) {
+      const plan = plans[slug];
+      if (!plan) return;
+      selectedPlan = slug;
+      planCards.forEach(card => card.setAttribute('aria-checked', String(card.dataset.plan === slug)));
+      document.getElementById('plan-price').textContent = plan.price;
+      document.getElementById('plan-frequency').textContent = plan.frequency;
+      document.getElementById('plan-features').innerHTML = plan.features.map(feature => `<li>${checkIcon}<span>${feature}</span></li>`).join('');
+      document.getElementById('calendar-count').textContent = plan.frequency;
+      checkout.setAttribute('href', '/odeme/' + slug);
+      calendarDays.forEach((day, index) => {
+        const active = plan.days.includes(index);
+        day.classList.toggle('is-active', active);
+        day.setAttribute('aria-label', dayNames[index] + (active ? ': yayın var' : ': yayın yok'));
+      });
+    }
+
+    function navigationIndex(event, index, length) {
+      if (event.key === 'ArrowRight' || event.key === 'ArrowDown') return (index + 1) % length;
+      if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') return (index + length - 1) % length;
+      if (event.key === 'Home') return 0;
+      if (event.key === 'End') return length - 1;
+      return null;
+    }
+
+    planCards.forEach((card, index) => {
+      card.addEventListener('click', () => selectPlan(card.dataset.plan));
+      card.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          selectPlan(card.dataset.plan);
+          return;
+        }
+        const next = navigationIndex(event, index, planCards.length);
+        if (next === null) return;
+        event.preventDefault();
+        selectPlan(planCards[next].dataset.plan);
+        planCards[next].focus();
+      });
+    });
+
+    checkout.addEventListener('click', event => {
+      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      window.location.href = '/odeme/' + selectedPlan;
+    });
+
+    function renderArticles() {
+      articleGrid.innerHTML = articlesBySector[selectedSector].map((article, index) => `
+        <button class="article-card" type="button" data-article="${index}">
+          <span class="article-art" aria-hidden="true">
+            <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">${sectorIcons[selectedSector]}</svg>
+            <span class="article-number">0${index + 1}</span>
+          </span>
+          <span class="article-copy">
+            <span class="article-title">${article.title}</span>
+            <span class="article-meta"><span>${article.date}</span><span>· ${article.duration}</span></span>
+            <span class="article-summary">${article.summary}</span>
+          </span>
+        </button>`).join('');
+      blogList.hidden = false;
+      reader.hidden = true;
+    }
+
+    function selectSector(sector) {
+      if (!articlesBySector[sector]) return;
+      selectedSector = sector;
+      tabs.forEach(tab => {
+        const selected = tab.dataset.sector === sector;
+        tab.setAttribute('aria-selected', String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+      });
+      document.getElementById('sector-panel').setAttribute('aria-labelledby', 'tab-' + sector);
+      renderArticles();
+    }
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => selectSector(tab.dataset.sector));
+      tab.addEventListener('keydown', event => {
+        const next = navigationIndex(event, index, tabs.length);
+        if (next === null) return;
+        event.preventDefault();
+        selectSector(tabs[next].dataset.sector);
+        tabs[next].focus();
+      });
+    });
+
+    articleGrid.addEventListener('click', event => {
+      const card = event.target.closest('[data-article]');
+      if (!card || !articleGrid.contains(card)) return;
+      const article = articlesBySector[selectedSector][Number(card.dataset.article)];
+      if (!article) return;
+      openedArticle = Number(card.dataset.article);
+      document.getElementById('reader-title').textContent = article.title;
+      document.getElementById('reader-meta').textContent = article.date + ' · ' + article.duration;
+      document.getElementById('reader-summary').textContent = article.summary;
+      blogList.hidden = true;
+      reader.hidden = false;
+      document.getElementById('reader-title').focus();
+    });
+
+    function closeArticle() {
+      reader.hidden = true;
+      blogList.hidden = false;
+      const card = articleGrid.querySelector(`[data-article="${openedArticle}"]`);
+      if (card) card.focus();
+    }
+
+    document.getElementById('back-to-blog').addEventListener('click', closeArticle);
+    reader.addEventListener('keydown', event => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        closeArticle();
+      }
+    });
+
+    renderArticles();
+  </script>
+</body>
+</html>
