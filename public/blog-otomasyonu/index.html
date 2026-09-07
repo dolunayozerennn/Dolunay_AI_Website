@@ -4,28 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="color-scheme" content="dark">
-  <meta name="robots" content="index, follow">
+  <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="Markanıza özel SEO uyumlu blog yazılarıyla aramalarda öne çıkın. Blog otomasyonu paketlerini karşılaştırın, yayın takviminizi seçin ve üretimi hemen başlatın.">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self'; base-uri 'self'; object-src 'none'">
   <link rel="icon" href="/favicon.svg">
-  <link rel="canonical" href="https://dolunay.ai/blog-otomasyonu/">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400..800&amp;family=Inter:wght@400..800&amp;display=swap">
   <title>Blog Otomasyonu Fiyatlandırma | Dolunay AI</title>
   <style>
     :root {
-      --bg-dark: #0a0e27;
-      --bg-darker: #060820;
-      --bg-card: #111538;
-      --purple: #7c3aed;
-      --purple-dark: #6d28d9;
-      --purple-light: #a78bfa;
-      --gold: #f59e0b;
-      --gold-light: #fbbf24;
-      --green: #34d399;
-      --text: #fff;
-      --secondary: rgba(255,255,255,.7);
-      --muted: rgba(255,255,255,.5);
-      --border: rgba(255,255,255,.1);
+      --bg-dark: #08090C;
+      --bg-darker: #0E0F14;
+      --bg-card: #14161D;
+      --accent: #4F8BFF;
+      --accent-dark: #2F6BE6;
+      --accent-light: #7AA8FF;
+      --paper: #EDEAE3;
+      --paper-light: #F4F2EC;
+      --paper-card: #FFFFFF;
+      --paper-secondary: #4A4E57;
+      --green: #4ADE80;
+      --text: #F4F2EC;
+      --secondary: #C9CCD4;
+      --muted: #8A8E99;
+      --border: rgba(255,255,255,.08);
+      --glass: rgba(255,255,255,.03);
       color-scheme: dark;
     }
 
@@ -37,7 +39,7 @@
       padding: 32px 0 28px;
       background: var(--bg-dark);
       color: var(--text);
-      font-family: Inter, sans-serif;
+      font-family: 'Inter Tight','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
       -webkit-font-smoothing: antialiased;
     }
     button, a { -webkit-tap-highlight-color: transparent; }
@@ -46,7 +48,7 @@
     button, a { touch-action: manipulation; }
     svg { display: block; flex-shrink: 0; }
     [hidden] { display: none !important; }
-    :focus-visible { outline: 3px solid var(--purple-light); outline-offset: 5px; }
+    :focus-visible { outline: 3px solid var(--accent-light); outline-offset: 5px; }
     .layout {
       max-width: 1200px;
       margin: 0 auto;
@@ -63,7 +65,7 @@
       border: 1px solid var(--border);
       border-radius: 18px;
       background: var(--bg-darker);
-      box-shadow: 0 24px 64px rgba(0,0,0,.3);
+      box-shadow: 0 24px 64px rgba(8,9,12,.3);
     }
     .browser-toolbar {
       display: flex;
@@ -71,14 +73,14 @@
       gap: 17px;
       padding: 17px 18px;
       border-bottom: 1px solid var(--border);
-      background: rgba(255,255,255,.025);
+      background: var(--bg-darker);
     }
     .window-dots { display: flex; gap: 6px; }
     .window-dots span { width: 9px; height: 9px; border-radius: 50%; }
-    .window-dots span:nth-child(1) { background: #ff5f57; }
-    .window-dots span:nth-child(2) { background: #febc2e; }
-    .window-dots span:nth-child(3) { background: #28c840; }
-    .browser-arrows { display: flex; gap: 8px; color: rgba(255,255,255,.25); }
+    .window-dots span:nth-child(1) { background: var(--muted); }
+    .window-dots span:nth-child(2) { background: var(--secondary); }
+    .window-dots span:nth-child(3) { background: var(--green); }
+    .browser-arrows { display: flex; gap: 8px; color: var(--muted); }
     .address {
       display: flex;
       justify-content: center;
@@ -87,9 +89,9 @@
       flex: 1;
       min-width: 0;
       padding: 8px 10px;
-      border: 1px solid rgba(255,255,255,.06);
+      border: 1px solid var(--border);
       border-radius: 6px;
-      background: var(--bg-darker);
+      background: var(--bg-card);
       color: var(--muted);
       font-size: .64rem;
     }
@@ -97,7 +99,7 @@
     .calendar {
       padding: 20px 23px;
       border-bottom: 1px solid var(--border);
-      background: rgba(124,58,237,.035);
+      background: var(--bg-darker);
     }
     .calendar-heading {
       display: flex;
@@ -107,7 +109,7 @@
       margin-bottom: 13px;
     }
     .calendar-heading h2 { margin: 0; font-size: .75rem; font-weight: 600; }
-    #calendar-count { color: var(--purple-light); font-size: .65rem; font-weight: 600; }
+    #calendar-count { color: var(--accent-light); font-size: .65rem; font-weight: 600; }
     .week {
       display: grid;
       grid-template-columns: repeat(7,1fr);
@@ -122,22 +124,23 @@
       align-items: center;
       gap: 9px;
       padding: 10px 3px 8px;
-      border: 1px solid rgba(255,255,255,.05);
+      border: 1px solid var(--border);
       border-radius: 8px;
-      background: rgba(255,255,255,.02);
+      background: var(--glass);
       color: var(--muted);
       font-size: .65rem;
       font-weight: 500;
       transition: background .18s, border-color .18s, color .18s;
     }
-    .day-dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,.14); }
+    .day-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--muted); }
     .week .is-active {
-      border-color: rgba(167,139,250,.35);
-      background: rgba(124,58,237,.2);
-      color: #fff;
+      border-color: rgba(122,168,255,.35);
+      background: rgba(79,139,255,.2);
+      color: var(--text);
     }
-    .is-active .day-dot { background: var(--green); box-shadow: 0 0 7px rgba(52,211,153,.4); }
-    .blog-content { padding: 22px 23px 24px; }
+    .is-active .day-dot { background: var(--green); box-shadow: 0 0 7px rgba(74,222,128,.4); }
+    .blog-content { padding: 22px 23px 24px; background: var(--paper-light); color: var(--bg-darker); color-scheme: light; }
+    .blog-content:focus-visible, .blog-content :focus-visible { outline-color: var(--accent-dark); }
     .blog-title { margin: 0 0 16px; font-size: 1.25rem; font-weight: 700; letter-spacing: -.04em; }
     .article-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
     .article-card {
@@ -147,41 +150,22 @@
       min-width: 0;
       padding: 0;
       overflow: hidden;
-      border: 1px solid var(--border);
-      border-radius: 11px;
-      background: var(--bg-card);
+      border: 1px solid rgba(10,12,20,.08);
+      border-radius: 12px;
+      background: var(--paper-card);
+      box-shadow: 0 1px 2px rgba(10,12,20,.06);
       text-align: left;
-      transition: transform .18s, border-color .18s, background .18s;
+      transition: transform .18s, border-color .18s, background .18s, box-shadow .18s;
     }
     .article-card:focus-visible { outline-offset: -3px; }
     .article-art {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 62px;
-      padding: 0 17px;
-      overflow: hidden;
-      color: var(--purple-light);
-      background: linear-gradient(120deg,rgba(124,58,237,.3),rgba(167,139,250,.06));
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 920 / 512;
+      object-fit: cover;
+      border-radius: 12px 12px 0 0;
     }
-    .article-art::after {
-      content: "";
-      position: absolute;
-      width: 98px;
-      height: 98px;
-      top: -45px;
-      right: 26px;
-      border: 1px solid rgba(167,139,250,.15);
-      border-radius: 50%;
-      box-shadow: 0 0 0 14px rgba(167,139,250,.04), 0 0 0 28px rgba(167,139,250,.03);
-    }
-    .article-card:nth-child(2) .article-art,
-    .article-card:nth-child(3) .article-art {
-      color: var(--gold-light);
-      background: linear-gradient(120deg,rgba(245,158,11,.16),rgba(124,58,237,.12));
-    }
-    .article-number { font-size: .62rem; font-weight: 700; letter-spacing: .08em; opacity: .7; }
     .article-copy { display: flex; flex-direction: column; flex: 1; gap: 9px; padding: 13px; }
     .article-title { font-size: .75rem; font-weight: 600; line-height: 1.5; overflow-wrap: anywhere; }
     .article-meta { display: flex; flex-wrap: wrap; gap: 4px 9px; color: var(--muted); font-size: .6rem; line-height: 1.5; }
@@ -190,11 +174,12 @@
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 2;
       overflow: hidden;
-      color: var(--secondary);
+      color: var(--paper-secondary);
       font-size: .65rem;
       font-weight: 400;
       line-height: 1.65;
     }
+    .article-open { margin-top: auto; color: var(--accent-dark); font-weight: 600; font-size: 13px; }
     .reader { min-height: 453px; }
     .back-button {
       display: inline-flex;
@@ -204,14 +189,14 @@
       padding: 5px 0;
       border: 0;
       background: transparent;
-      color: var(--purple-light);
+      color: var(--accent-dark);
       font-size: .75rem;
       font-weight: 600;
     }
     #reader-title { margin: 22px 0 14px; font-size: 1.6rem; font-weight: 700; line-height: 1.35; letter-spacing: -.035em; overflow-wrap: anywhere; }
     #reader-meta { color: var(--muted); font-size: .75rem; }
-    .summary-label { margin: 28px 0 10px; color: var(--purple-light); font-size: .65rem; font-weight: 700; letter-spacing: .12em; }
-    #reader-summary { margin: 0; color: var(--secondary); font-size: 1.2rem; line-height: 1.8; }
+    .summary-label { margin: 28px 0 10px; color: var(--accent-dark); font-size: .65rem; font-weight: 700; letter-spacing: .12em; }
+    #reader-summary { margin: 0; color: var(--paper-secondary); font-size: 1.2rem; line-height: 1.8; }
     .sector-tabs {
       display: flex;
       justify-content: center;
@@ -222,7 +207,7 @@
       padding: 5px;
       border: 1px solid var(--border);
       border-radius: 11px;
-      background: rgba(255,255,255,.025);
+      background: var(--glass);
     }
     .sector-tab {
       min-height: 36px;
@@ -236,12 +221,12 @@
       white-space: nowrap;
       transition: color .18s, background .18s, border-color .18s;
     }
-    .sector-tab[aria-selected="true"] { border-color: rgba(167,139,250,.2); background: rgba(124,58,237,.2); color: #fff; }
+    .sector-tab[aria-selected="true"] { border-color: rgba(122,168,255,.2); background: rgba(79,139,255,.2); color: var(--text); }
     .showcase-caption { max-width: 380px; margin: 14px auto 0; color: var(--muted); font-size: .68rem; line-height: 1.7; text-align: center; }
     h1 { margin: 0 0 16px; font-size: clamp(2.5rem,4.1vw,3rem); font-weight: 800; line-height: 1.09; letter-spacing: -.055em; }
     .headline-line { display: block; }
     .headline-gradient {
-      background: linear-gradient(120deg,#a78bfa,#c4b5fd);
+      background: linear-gradient(120deg,var(--accent),var(--accent-light));
       background-clip: text;
       -webkit-background-clip: text;
       color: transparent;
@@ -249,23 +234,23 @@
       font-style: normal;
     }
     .intro { margin: 0 0 24px; color: var(--secondary); font-size: .86rem; line-height: 1.8; }
-    .intro b { color: #fff; font-weight: 600; }
-    .package-label { margin: 0 0 16px; font-size: .7rem; font-weight: 800; letter-spacing: .15em; color: rgba(255,255,255,.42); }
+    .intro b { color: var(--text); font-weight: 600; }
+    .package-label { margin: 0 0 16px; font-size: .7rem; font-weight: 800; letter-spacing: .15em; color: var(--muted); }
     .plans { display: grid; grid-template-columns: repeat(3,1fr); gap: 11px; }
     .plan-card {
       position: relative;
       min-width: 0;
       padding: 15px 12px 13px;
-      border: 1.5px solid rgba(255,255,255,.1);
+      border: 1.5px solid var(--border);
       border-radius: 14px;
-      background: rgba(255,255,255,.025);
+      background: var(--glass);
       text-align: center;
       transition: border-color .18s, background .18s, box-shadow .18s, transform .18s;
     }
     .plan-card[aria-checked="true"] {
-      border: 2px solid #a78bfa;
-      background: linear-gradient(160deg,rgba(124,58,237,.28),rgba(124,58,237,.12));
-      box-shadow: 0 0 0 4px rgba(167,139,250,.12),0 12px 30px rgba(124,58,237,.22);
+      border: 2px solid var(--accent-light);
+      background: linear-gradient(160deg,rgba(79,139,255,.28),rgba(79,139,255,.12));
+      box-shadow: 0 0 0 4px rgba(122,168,255,.12),0 12px 30px rgba(79,139,255,.22);
     }
     .plan-check {
       position: absolute;
@@ -275,16 +260,16 @@
       place-items: center;
       width: 17px;
       height: 17px;
-      border: 1px solid rgba(255,255,255,.2);
+      border: 1px solid var(--border);
       border-radius: 50%;
       color: var(--bg-darker);
     }
     .plan-check svg { opacity: 0; }
-    [aria-checked="true"] .plan-check { background: var(--purple-light); border-color: var(--purple-light); }
+    [aria-checked="true"] .plan-check { background: var(--accent-light); border-color: var(--accent-light); }
     [aria-checked="true"] .plan-check svg { opacity: 1; }
     .plan-name { display: block; margin-top: 13px; font-size: .78rem; font-weight: 700; }
     .plan-volume { display: block; margin-top: 8px; color: var(--secondary); font-size: .64rem; }
-    .plan-volume strong { color: #fff; font-size: 1.3rem; font-weight: 800; }
+    .plan-volume strong { color: var(--text); font-size: 1.3rem; font-weight: 800; }
     .plan-price { display: block; margin-top: 9px; font-size: 1rem; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
     .plan-price span { color: var(--muted); font-size: .55rem; font-weight: 500; }
     .plan-frequency { display: block; margin-top: 6px; color: var(--muted); font-size: .6rem; }
@@ -293,25 +278,25 @@
       top: -11px;
       left: -7px;
       transform: rotate(-5deg);
-      background: linear-gradient(135deg,#f59e0b,#fbbf24);
-      color: #2a1a00;
+      background: var(--paper);
+      color: var(--bg-dark);
       font-size: .56rem;
       font-weight: 800;
       letter-spacing: .045em;
       padding: 4px 11px;
       border-radius: 7px;
-      box-shadow: 0 5px 14px rgba(0,0,0,.42),0 1px 4px rgba(245,158,11,.4);
+      box-shadow: 0 5px 14px rgba(8,9,12,.42),0 1px 4px rgba(8,9,12,.4);
     }
     .price-line { display: flex; align-items: baseline; flex-wrap: wrap; gap: 10px; margin: 22px 0 6px; }
     #plan-price { font-size: 2.5rem; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -.05em; }
     .price-suffix { color: var(--muted); font-size: .8rem; }
     .frequency-line { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; font-size: .76rem; line-height: 1.6; }
-    #plan-frequency { color: #34d399; font-weight: 700; }
+    #plan-frequency { color: var(--green); font-weight: 700; }
     .frequency-line span { color: var(--muted); }
     .features { display: grid; gap: 9px; min-height: 128px; margin: 16px 0 18px; padding: 18px 0 0; border-top: 1px solid var(--border); list-style: none; align-content: start; }
     .features li { display: flex; align-items: flex-start; gap: 10px; color: var(--secondary); font-size: .77rem; line-height: 1.5; }
-    .features b { color: #fff; font-weight: 600; }
-    .check-icon { width: 17px; height: 17px; margin-top: 1px; color: #34d399; }
+    .features b { color: var(--text); font-weight: 600; }
+    .check-icon { width: 17px; height: 17px; margin-top: 1px; color: var(--green); }
     .checkout {
       display: flex;
       justify-content: center;
@@ -321,9 +306,9 @@
       border: 0;
       border-radius: 14px;
       padding: 18px 24px;
-      background: linear-gradient(135deg,#7c3aed,#a78bfa);
-      box-shadow: 0 14px 36px rgba(124,58,237,.4);
-      color: #fff;
+      background: linear-gradient(135deg,var(--accent),var(--accent-light));
+      box-shadow: 0 14px 36px rgba(79,139,255,.4);
+      color: var(--bg-dark);
       font-size: .9rem;
       font-weight: 700;
       line-height: 1.4;
@@ -333,13 +318,13 @@
     #setup-note { max-width: 420px; margin: 12px auto 0; color: var(--muted); font-size: .68rem; line-height: 1.65; text-align: center; }
     .trust { display: flex; align-items: center; justify-content: center; gap: 7px; margin-top: 15px; padding-top: 14px; border-top: 1px solid var(--border); color: var(--secondary); font-size: .7rem; }
     .contact { margin: 10px 0 0; color: var(--muted); font-size: .7rem; text-align: center; }
-    .contact a { display: inline-block; padding: 6px; text-underline-offset: 4px; text-decoration-color: rgba(255,255,255,.3); }
+    .contact a { display: inline-block; padding: 6px; text-underline-offset: 4px; text-decoration-color: var(--muted); }
     @media (hover: hover) {
-      .article-card:hover { transform: translateY(-2px); border-color: rgba(167,139,250,.4); }
-      .plan-card:hover { border-color: var(--purple-light); }
-      .sector-tab:hover { color: #fff; background: rgba(124,58,237,.12); }
-      .checkout:hover { transform: translateY(-2px); box-shadow: 0 18px 40px rgba(124,58,237,.48); }
-      .contact a:hover { color: #fff; }
+      .article-card:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(10,12,20,.1); }
+      .plan-card:hover { border-color: var(--accent-light); }
+      .sector-tab:hover { color: var(--text); background: rgba(79,139,255,.12); }
+      .checkout:hover { transform: translateY(-2px); box-shadow: 0 18px 40px rgba(79,139,255,.48); }
+      .contact a:hover { color: var(--text); }
     }
     @media (max-width: 899px) {
       body { padding-top: 32px; }
@@ -520,24 +505,28 @@
       saglik: [
         {
           title: 'Ben Kontrolü ve Dermatoskopi: Hangi Benler Takip Gerektirir?',
+          gorsel: 'gorseller/k-saglik-1.jpg',
           date: '5 Ağustos 2026',
           duration: '7 dk',
           summary: 'Cildinizdeki benleri evde ABCDE kuralıyla nasıl kontrol edeceğinizi, dermatoskopi muayenesinde neler olduğunu ve hangi benlerin yakın takip gerektirdiğini anlatıyoruz.'
         },
         {
           title: 'Genişlemiş Gözenekler Nasıl Küçültülür? Nedenleri ve Dermatolojik Çözümler',
+          gorsel: 'gorseller/k-saglik-2.jpg',
           date: '29 Temmuz 2026',
           duration: '7 dk',
           summary: 'Genişlemiş gözenekler neden oluşur, evde ve klinikte nasıl küçültülür? Yağlı ve karma ciltler için işe yarayan dermatolojik yöntemleri anlatıyoruz.'
         },
         {
           title: 'Rozasea (Gül Hastalığı) Nedir? Yüz Kızarıklığının Nedenleri ve Tedavi Yöntemleri',
+          gorsel: 'gorseller/k-saglik-3.jpg',
           date: '27 Temmuz 2026',
           duration: '5 dk',
           summary: 'Geçmeyen yüz kızarıklığı basit bir hassasiyet değil, rozasea olabilir. Tetikleyicileri, evreleri ve cerrahisiz modern tedavi yöntemlerini inceliyoruz.'
         },
         {
           title: 'Gözaltı Morlukları Neden Oluşur? Işık Dolgusu ile Tedavi Rehberi',
+          gorsel: 'gorseller/k-saglik-4.jpg',
           date: '25 Temmuz 2026',
           duration: '8 dk',
           summary: 'Gözaltı morluklarının gerçek nedenleri, ışık dolgusunun nasıl çalıştığı ve kimler için doğru bir tercih olduğu adım adım anlatılıyor.'
@@ -546,24 +535,28 @@
       avukatlik: [
         {
           title: 'Anlaşmalı boşanma nasıl ilerler, hangi belgeler gerekir?',
+          gorsel: 'gorseller/av-1.jpg',
           date: '18 Ağustos 2026',
           duration: '7 dk',
           summary: 'Anlaşmalı boşanmada başvuru belgelerini, protokolün içeriğini ve duruşmanın işleyişini açıklıyoruz. Çocuklar, nafaka ve mal paylaşımına ilişkin temel başlıkları ele alıyoruz.'
         },
         {
           title: 'İşten ayrılan çalışan hangi durumlarda kıdem tazminatı alabilir?',
+          gorsel: 'gorseller/av-2.jpg',
           date: '11 Ağustos 2026',
           duration: '6 dk',
           summary: 'Kıdem tazminatında çalışma süresini, işten ayrılma nedenlerini ve hesaplamanın temel unsurlarını inceliyoruz. İstifa ile işveren feshi arasındaki farkları açıklıyoruz.'
         },
         {
           title: 'Kiracı depozitosu ne zaman iade edilir, kesintiler nasıl belirlenir?',
+          gorsel: 'gorseller/av-3.jpg',
           date: '27 Temmuz 2026',
           duration: '5 dk',
           summary: 'Depozitonun iadesinde kira sözleşmesini, teslim tutanağını ve konutun durumunu ele alıyoruz. Olağan kullanım izleriyle zarar iddiaları arasındaki farkları açıklıyoruz.'
         },
         {
           title: 'İnternetten alınan ürünlerde cayma hakkı nasıl kullanılır?',
+          gorsel: 'gorseller/av-4.jpg',
           date: '9 Temmuz 2026',
           duration: '8 dk',
           summary: 'İnternet alışverişlerinde cayma bildiriminin süresini, ürün iadesini ve geri ödeme sürecini açıklıyoruz. Cayma hakkının geçerli olmadığı ürün ve hizmetleri de inceliyoruz.'
@@ -572,24 +565,28 @@
       mali: [
         {
           title: 'İştirak Ettiğim Şirketten Kâr Payı Geldi. Ne Yapmalıyım?',
+          gorsel: 'gorseller/k-mali-1.jpg',
           date: '7 Ağustos 2026',
           duration: '6 dk',
           summary: 'Bir şirketin başka bir şirketten aldığı kâr payı neden tekrar vergilenmiyor? İştirak kazançları istisnasının şartlarını anlatıyoruz.'
         },
         {
           title: 'Yazılım Şirketinizi Teknokente Taşımak İster Misiniz? 2026 Teknokent Kazanç İstisnası Rehberi',
+          gorsel: 'gorseller/k-mali-2.jpg',
           date: '6 Ağustos 2026',
           duration: '6 dk',
           summary: 'Yazılım geliştiren bir KOBİ, teknokente girerek kazancını kurumlar vergisinden istisna tutabiliyor. Başvurudan raporlamaya adımları anlatıyoruz.'
         },
         {
           title: 'Şirketimin Dükkanını Sattım: Taşınmaz Satışında Kurumlar Vergisi İstisnası, KDV ve Tapu Harcı',
+          gorsel: 'gorseller/k-mali-3.jpg',
           date: '4 Ağustos 2026',
           duration: '6 dk',
           summary: 'Şirket aktifindeki dükkan, depo veya ofisi satarken vergiyi belirleyen kuralları, istisnanın şartlarını ve tapu harcını inceliyoruz.'
         },
         {
           title: 'Pişmanlık Beyannamesi Verdim: Ceza Öder Miyim?',
+          gorsel: 'gorseller/k-mali-4.jpg',
           date: '11 Haziran 2026',
           duration: '6 dk',
           summary: 'Eksik beyannameyi geç fark ettiniz. Pişmanlık hükmü doğru zamanda uygulanırsa vergi ziyaı cezasını siler. Şartları ve süreci anlatıyoruz.'
@@ -665,14 +662,12 @@
     function renderArticles() {
       articleGrid.innerHTML = articlesBySector[selectedSector].map((article, index) => `
         <button class="article-card" type="button" data-article="${index}">
-          <span class="article-art" aria-hidden="true">
-            <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">${sectorIcons[selectedSector]}</svg>
-            <span class="article-number">0${index + 1}</span>
-          </span>
+          <img class="article-art" src="${article.gorsel}" width="920" height="512" loading="${selectedSector === 'saglik' && index < 2 ? 'eager' : 'lazy'}" decoding="async" alt="">
           <span class="article-copy">
-            <span class="article-title">${article.title}</span>
             <span class="article-meta"><span>${article.date}</span><span>· ${article.duration}</span></span>
+            <span class="article-title">${article.title}</span>
             <span class="article-summary">${article.summary}</span>
+            <span class="article-open">Yazıyı aç →</span>
           </span>
         </button>`).join('');
       blogList.hidden = false;
