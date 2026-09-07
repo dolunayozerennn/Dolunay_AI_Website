@@ -22,6 +22,8 @@
       --paper-light: #F4F2EC;
       --paper-card: #FFFFFF;
       --paper-secondary: #4A4E57;
+      --paper-muted: #5F6470;
+      --accent-ink: #1F55C4;
       --green: #4ADE80;
       --text: #F4F2EC;
       --secondary: #C9CCD4;
@@ -59,7 +61,10 @@
       align-items: start;
     }
     .showcase, .purchase { min-width: 0; }
-    .showcase { padding-top: 10px; }
+    .showcase { display: flex; flex-direction: column; padding-top: 10px; }
+    .showcase > .browser { order: 1; }
+    .showcase > .sector-tabs { order: 2; }
+    .showcase > .showcase-caption { order: 3; }
     .browser {
       overflow: hidden;
       border: 1px solid var(--border);
@@ -168,7 +173,7 @@
     }
     .article-copy { display: flex; flex-direction: column; flex: 1; gap: 9px; padding: 13px; }
     .article-title { font-size: .75rem; font-weight: 600; line-height: 1.5; overflow-wrap: anywhere; }
-    .article-meta { display: flex; flex-wrap: wrap; gap: 4px 9px; color: var(--muted); font-size: .6rem; line-height: 1.5; }
+    .article-meta { display: flex; flex-wrap: wrap; gap: 4px 9px; color: var(--paper-muted); font-size: .6rem; line-height: 1.5; }
     .article-summary {
       display: -webkit-box;
       -webkit-box-orient: vertical;
@@ -179,7 +184,7 @@
       font-weight: 400;
       line-height: 1.65;
     }
-    .article-open { margin-top: auto; color: var(--accent-dark); font-weight: 600; font-size: 13px; }
+    .article-open { margin-top: auto; color: var(--accent-ink); font-weight: 600; font-size: 13px; }
     .reader { min-height: 453px; }
     .back-button {
       display: inline-flex;
@@ -189,13 +194,13 @@
       padding: 5px 0;
       border: 0;
       background: transparent;
-      color: var(--accent-dark);
+      color: var(--accent-ink);
       font-size: .75rem;
       font-weight: 600;
     }
     #reader-title { margin: 22px 0 14px; font-size: 1.6rem; font-weight: 700; line-height: 1.35; letter-spacing: -.035em; overflow-wrap: anywhere; }
-    #reader-meta { color: var(--muted); font-size: .75rem; }
-    .summary-label { margin: 28px 0 10px; color: var(--accent-dark); font-size: .65rem; font-weight: 700; letter-spacing: .12em; }
+    #reader-meta { color: var(--paper-muted); font-size: .75rem; }
+    .summary-label { margin: 28px 0 10px; color: var(--accent-ink); font-size: .65rem; font-weight: 700; letter-spacing: .12em; }
     #reader-summary { margin: 0; color: var(--paper-secondary); font-size: 1.2rem; line-height: 1.8; }
     .sector-tabs {
       display: flex;
@@ -223,6 +228,7 @@
     }
     .sector-tab[aria-selected="true"] { border-color: rgba(122,168,255,.2); background: rgba(79,139,255,.2); color: var(--text); }
     .showcase-caption { max-width: 380px; margin: 14px auto 0; color: var(--muted); font-size: .68rem; line-height: 1.7; text-align: center; }
+    .blog-content .showcase-caption { color: var(--paper-secondary); }
     h1 { margin: 0 0 16px; font-size: clamp(2.5rem,4.1vw,3rem); font-weight: 800; line-height: 1.09; letter-spacing: -.055em; }
     .headline-line { display: block; }
     .headline-gradient {
@@ -366,6 +372,11 @@
 <body>
   <main class="layout">
     <section class="showcase" aria-label="Blog vitrini">
+      <div class="sector-tabs" role="tablist" aria-label="Örnek yayınların sektörü">
+        <button id="tab-saglik" class="sector-tab" type="button" role="tab" aria-selected="true" aria-controls="sector-panel" tabindex="0" data-sector="saglik">Sağlık</button>
+        <button id="tab-avukatlik" class="sector-tab" type="button" role="tab" aria-selected="false" aria-controls="sector-panel" tabindex="-1" data-sector="avukatlik">Avukatlık</button>
+        <button id="tab-mali" class="sector-tab" type="button" role="tab" aria-selected="false" aria-controls="sector-panel" tabindex="-1" data-sector="mali">Mali Müşavirlik</button>
+      </div>
       <div class="browser">
         <div class="browser-toolbar">
           <div class="window-dots" aria-hidden="true"><span></span><span></span><span></span></div>
@@ -408,11 +419,6 @@
           </article>
         </div>
       </div>
-      <div class="sector-tabs" role="tablist" aria-label="Örnek yayınların sektörü">
-        <button id="tab-saglik" class="sector-tab" type="button" role="tab" aria-selected="true" aria-controls="sector-panel" tabindex="0" data-sector="saglik">Sağlık</button>
-        <button id="tab-avukatlik" class="sector-tab" type="button" role="tab" aria-selected="false" aria-controls="sector-panel" tabindex="-1" data-sector="avukatlik">Avukatlık</button>
-        <button id="tab-mali" class="sector-tab" type="button" role="tab" aria-selected="false" aria-controls="sector-panel" tabindex="-1" data-sector="mali">Mali Müşavirlik</button>
-      </div>
       <p class="showcase-caption">Platformun ürettiği gerçek yayınlardan örnekler. Bir yazıya dokunun, içini okuyun.</p>
     </section>
 
@@ -421,7 +427,7 @@
       <p class="intro">Hastanız, danışanınız, müşteriniz arama yapıyor. Karşısına <b>blog yazan rakibiniz</b> çıkıyor. Sektörünüzdeki çoğu marka blog yazmıyor; yazanlar aramalarda öne geçiyor.</p>
       <p id="package-label" class="package-label">PAKETİNİZİ SEÇİN</p>
       <div class="plans" role="radiogroup" aria-labelledby="package-label">
-        <button class="plan-card" type="button" role="radio" aria-checked="false" aria-controls="plan-details" tabindex="0" data-plan="blog-baslangic">
+        <button class="plan-card" type="button" role="radio" aria-checked="false" aria-controls="plan-details" tabindex="-1" data-plan="blog-baslangic">
           <span class="plan-check" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 8 3 3 7-7"/></svg></span>
           <span class="plan-name">Başlangıç</span>
           <span class="plan-volume"><strong>8</strong> yazı/ay</span>
@@ -436,7 +442,7 @@
           <span class="plan-price">₺5.980 <span>+KDV</span></span>
           <span class="plan-frequency">haftada 4 yayın</span>
         </button>
-        <button class="plan-card" type="button" role="radio" aria-checked="false" aria-controls="plan-details" tabindex="0" data-plan="blog-premium">
+        <button class="plan-card" type="button" role="radio" aria-checked="false" aria-controls="plan-details" tabindex="-1" data-plan="blog-premium">
           <span class="plan-check" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 8 3 3 7-7"/></svg></span>
           <span class="plan-name">Premium</span>
           <span class="plan-volume"><strong>30</strong> yazı/ay</span>
@@ -616,7 +622,12 @@
       const plan = plans[slug];
       if (!plan) return;
       selectedPlan = slug;
-      planCards.forEach(card => card.setAttribute('aria-checked', String(card.dataset.plan === slug)));
+      planCards.forEach(card => {
+        const secili = card.dataset.plan === slug;
+        card.setAttribute('aria-checked', String(secili));
+        // Radio grubuna Tab ile girildiginde odak dogrudan secili karta dussun.
+        card.setAttribute('tabindex', secili ? '0' : '-1');
+      });
       document.getElementById('plan-price').textContent = plan.price;
       document.getElementById('plan-frequency').textContent = plan.frequency;
       document.getElementById('plan-features').innerHTML = plan.features.map(feature => `<li>${checkIcon}<span>${feature}</span></li>`).join('');
