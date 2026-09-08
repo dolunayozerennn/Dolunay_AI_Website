@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="robots" content="noindex, nofollow">
-<meta name="description" content="Sitenizi yayına almadan önce gezerek görüyorsunuz. Üç örnek tasarım, canlı olarak sayfanın içinde.">
+<meta name="description" content="Sitenizi yayına almadan önce gezerek görüyorsunuz. Örnek tasarım, canlı olarak sayfanın içinde.">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; frame-src 'self'; connect-src 'self'; base-uri 'self'; object-src 'none'">
 <link rel="icon" href="/favicon.svg">
 <title>Web Sitesi Tasarımı | Dolunay AI</title>
@@ -55,17 +55,8 @@
   /* ---------- VITRIN ---------- */
   .sectors-label{
     font-size:10.5px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;
-    color:var(--muted);margin-bottom:11px;
+    color:var(--muted);margin-bottom:16px;
   }
-  .sectors{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
-  .sector-tab{
-    appearance:none;border:1px solid var(--border);background:var(--glass);color:var(--muted);
-    font-family:inherit;font-size:12.5px;font-weight:500;letter-spacing:.01em;
-    padding:9px 15px;border-radius:999px;cursor:pointer;
-    transition:color .18s,border-color .18s,background .18s;
-  }
-  .sector-tab[aria-selected="true"]{color:#fff;background:var(--accent-deep);border-color:var(--accent-deep);font-weight:600}
-  @media (hover:hover){.sector-tab:not([aria-selected="true"]):hover{color:var(--secondary);border-color:rgba(255,255,255,.18)}}
 
   .frame{
     background:var(--bg-card);border:1px solid var(--border);border-radius:14px;overflow:hidden;
@@ -238,29 +229,24 @@
       <span class="headline-line headline-gradient">gezerek görüyorsunuz</span>
     </h1>
     <p class="intro">
-      Yandaki üç site bizim örnek tasarımlarımız. Anlatım değil, gerçekten çalışan sayfalar: tıklayın, kaydırın, mobil görünüme geçirin. Sizin siteniz de yayına çıkmadan önce tam olarak böyle, elinizde gezilebilir halde olur.
+      Yandaki site bizim örnek tasarımımız. Anlatım değil, gerçekten çalışan bir sayfa: tıklayın, kaydırın, mobil görünüme geçirin. Sizin siteniz de yayına çıkmadan önce tam olarak böyle, elinizde gezilebilir halde olur.
     </p>
   </header>
 
-  <section class="showcase" aria-label="Örnek siteler">
+  <section class="showcase" aria-label="Örnek site">
    <div class="showcase-sticky">
-    <div class="sectors-label" id="sectors-label">Üç örnek tasarım, canlı ve gezilebilir</div>
-    <div class="sectors" role="tablist" aria-labelledby="sectors-label">
-      <button class="sector-tab" role="tab" id="tab-dis"       aria-selected="true"  aria-controls="site-panel" data-key="dis"       type="button">Diş kliniği</button>
-      <button class="sector-tab" role="tab" id="tab-hukuk"     aria-selected="false" aria-controls="site-panel" data-key="hukuk"     type="button" tabindex="-1">Hukuk bürosu</button>
-      <button class="sector-tab" role="tab" id="tab-mimarlik"  aria-selected="false" aria-controls="site-panel" data-key="mimarlik"  type="button" tabindex="-1">İç mimarlık</button>
-    </div>
+    <div class="sectors-label">Örnek tasarım, canlı ve gezilebilir</div>
 
-    <div class="frame" id="site-panel" role="tabpanel" aria-labelledby="tab-dis">
+    <div class="frame" id="site-panel">
       <div class="frame-bar">
         <span class="lights" aria-hidden="true"><i></i><i></i><i></i></span>
         <span class="url" id="url">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 10.5V8a5.5 5.5 0 0 1 11 0v2.5" stroke-linecap="round"/><rect x="4.5" y="10.5" width="15" height="10" rx="2.2"/></svg>
-          <span id="url-text">dolunay.ai/web-sitesi/ornekler/dis-klinigi</span>
+          <span id="url-text">dolunay.ai/web-sitesi/ornekler/ic-mimarlik</span>
         </span>
       </div>
       <div class="viewport" id="viewport">
-        <iframe id="site" src="/web-sitesi/ornekler/dis-klinigi/" title="Örnek tasarım: Beyaz Vadi Ağız ve Diş Sağlığı"></iframe>
+        <iframe id="site" src="/web-sitesi/ornekler/ic-mimarlik/" title="Örnek tasarım: Kavis İç Mimarlık"></iframe>
       </div>
     </div>
 
@@ -269,14 +255,14 @@
         <button type="button" id="dev-desk" aria-pressed="true">Masaüstü</button>
         <button type="button" id="dev-mob" aria-pressed="false">Mobil</button>
       </div>
-      <a class="open-new" id="open-new" href="/web-sitesi/ornekler/dis-klinigi/" target="_blank" rel="noopener">
+      <a class="open-new" id="open-new" href="/web-sitesi/ornekler/ic-mimarlik/" target="_blank" rel="noopener">
         Tam ekran aç
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
     </div>
 
     <p class="showcase-caption">
-      Üç örnek de aynı yerde, gerçek adreste yayında. Müşteri işi değil, kendi hazırladığımız örnek tasarımlardır; içindeki isimler ve numaralar örnektir. Sizin siteniz kendi metniniz, kendi renginiz ve kendi fotoğraflarınızla kurulur.
+      Örnek gerçek adreste yayında. Müşteri işi değil, kendi hazırladığımız bir örnek tasarımdır; içindeki isimler, fotoğraflar ve numaralar örnektir. Sizin siteniz kendi metniniz, kendi renginiz ve kendi fotoğraflarınızla kurulur.
     </p>
    </div>
   </section>
@@ -290,7 +276,7 @@
       </li>
       <li class="step" data-n="2">
         <div class="step-title">Tasarımı gezerek görüyorsunuz</div>
-        <p class="step-text">Site yayına çıkmadan önce, yandaki örnekler gibi gezilebilir halde önünüze gelir. Düzeltmeleri onun üstünde konuşuruz.</p>
+        <p class="step-text">Site yayına çıkmadan önce, yandaki örnek gibi gezilebilir halde önünüze gelir. Düzeltmeleri onun üstünde konuşuruz.</p>
       </li>
       <li class="step" data-n="3">
         <div class="step-title">Yayına alıyoruz</div>
@@ -357,12 +343,6 @@
 (function(){
   "use strict";
 
-  var SITES = {
-    dis:      {path:"/web-sitesi/ornekler/dis-klinigi/",  url:"dolunay.ai/web-sitesi/ornekler/dis-klinigi",  ad:"Beyaz Vadi Ağız ve Diş Sağlığı"},
-    hukuk:    {path:"/web-sitesi/ornekler/hukuk-burosu/", url:"dolunay.ai/web-sitesi/ornekler/hukuk-burosu", ad:"Aral Hukuk Bürosu"},
-    mimarlik: {path:"/web-sitesi/ornekler/ic-mimarlik/",  url:"dolunay.ai/web-sitesi/ornekler/ic-mimarlik",  ad:"Kavis İç Mimarlık"}
-  };
-
   var PLANS = {
     baslangic:{
       ad:"Başlangıç",
@@ -402,60 +382,12 @@
   };
 
   var viewport = document.getElementById("viewport");
-  var urlText  = document.getElementById("url-text");
-  var openNew  = document.getElementById("open-new");
-  var panel    = document.getElementById("site-panel");
-  var tabs     = [].slice.call(document.querySelectorAll(".sector-tab"));
   var plans    = [].slice.call(document.querySelectorAll(".plan"));
   var featEl   = document.getElementById("features");
   var headEl   = document.getElementById("included-head");
   var cta      = document.getElementById("cta");
   var devDesk  = document.getElementById("dev-desk");
   var devMob   = document.getElementById("dev-mob");
-
-  /* ---------- vitrin ---------- */
-  function loadSite(key){
-    var s = SITES[key];
-    if (!s) return;
-    var old = document.getElementById("site");
-    var f = document.createElement("iframe");
-    f.id = "site";
-    f.title = "Örnek tasarım: " + s.ad;
-    f.src = s.path;
-    if (old) viewport.replaceChild(f, old); else viewport.appendChild(f);
-    urlText.textContent = s.url;
-    openNew.setAttribute("href", s.path);
-  }
-
-  function selectSector(key, moveFocus){
-    for (var i = 0; i < tabs.length; i++){
-      var on = tabs[i].getAttribute("data-key") === key;
-      tabs[i].setAttribute("aria-selected", on ? "true" : "false");
-      tabs[i].setAttribute("tabindex", on ? "0" : "-1");
-      if (on){
-        panel.setAttribute("aria-labelledby", tabs[i].id);
-        if (moveFocus) tabs[i].focus();
-      }
-    }
-    loadSite(key);
-  }
-
-  for (var t = 0; t < tabs.length; t++){
-    (function(tab){
-      tab.addEventListener("click", function(){ selectSector(tab.getAttribute("data-key"), false); });
-      tab.addEventListener("keydown", function(ev){
-        if (ev.metaKey || ev.ctrlKey || ev.altKey || ev.shiftKey) return;
-        var cur = tabs.indexOf(tab), n = -1;
-        if (ev.key === "ArrowRight") n = (cur + 1) % tabs.length;
-        else if (ev.key === "ArrowLeft") n = (cur - 1 + tabs.length) % tabs.length;
-        else if (ev.key === "Home") n = 0;
-        else if (ev.key === "End") n = tabs.length - 1;
-        if (n < 0) return;
-        ev.preventDefault();
-        selectSector(tabs[n].getAttribute("data-key"), true);
-      });
-    })(tabs[t]);
-  }
 
   /* ---------- masaustu / mobil ---------- */
   function setDevice(mobile){

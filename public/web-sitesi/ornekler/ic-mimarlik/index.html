@@ -1,293 +1,480 @@
 <!DOCTYPE html>
 <html lang="tr">
-<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light">
 <meta name="robots" content="noindex, nofollow">
-<meta name="description" content="Örnek tasarım · Kavis İç Mimarlık.">
-<title>Kavis İç Mimarlık</title>
+<meta name="description" content="Kavis Ic Mimarlik · Konut, ofis ve perakende projelerinde tasarim ve anahtar teslim uygulama. Ornek tasarim calismasidir.">
+<title>Kavis İç Mimarlık | Tasarım ve Uygulama</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..600&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
 <style>
-  *{box-sizing:border-box;margin:0;padding:0}
   :root{
-    --paper:#F6F3EE; --paper-2:#EFEAE2; --ink:#1B1815; --ink-2:#4C4741;
-    --mute:#6F6962; --line:#DED7CC; --clay:#B3532F; --clay-l:#D3714A; --sage:#5C6B52;
+    --ink:#1A1714; --ink-2:#453D35; --mute:#6B635A;
+    --paper:#FBF8F3; --paper-2:#F2ECE2; --paper-3:#E7DFD2;
+    --line:rgba(26,23,20,.13); --line-2:rgba(26,23,20,.22);
+    --clay:#A8492A; --clay-deep:#8E3C21; --olive:#55634B;
+    --serif:"Fraunces",Georgia,"Times New Roman",serif;
+    --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    --pad:clamp(20px,5vw,64px);
   }
-  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-  body{
-    background:var(--paper);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased;
-    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
-  }
-  a{color:inherit;text-decoration:none}
-  .wrap{max-width:1140px;margin:0 auto;padding:0 30px}
-  .eyebrow{font-size:10.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--clay)}
-  h2{font-size:clamp(26px,3.4vw,42px);font-weight:300;letter-spacing:-.03em;line-height:1.1}
-  h2 b{font-weight:700}
-  .lead{color:var(--ink-2);font-size:15.5px;max-width:56ch}
-  .btn{display:inline-flex;align-items:center;gap:9px;padding:14px 24px;border-radius:0;
-    background:var(--ink);color:var(--paper);font-weight:600;font-size:14.5px;border:0;cursor:pointer;
-    transition:background .18s,transform .18s}
-  .btn:hover{background:var(--clay);transform:translateY(-1px)}
-  .btn.line{background:transparent;color:var(--ink);border:1px solid var(--ink)}
-  .btn.line:hover{background:var(--ink);color:var(--paper)}
-  .btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2}
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+    font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  img{display:block;max-width:100%}
+  a{color:inherit}
+  h1,h2,h3{font-family:var(--serif);font-weight:300;font-variation-settings:"SOFT" 20;
+    letter-spacing:-.015em;line-height:1.06;margin:0}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 var(--pad)}
+  .eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--clay);
+    font-weight:600;margin:0 0 18px}
+  .eyebrow.q{color:var(--mute)}
 
-  header.nav{position:sticky;top:0;z-index:20;background:rgba(246,243,238,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-  .nav-in{display:flex;align-items:center;gap:28px;height:72px}
-  .logo{display:flex;align-items:center;gap:11px;font-size:19px;font-weight:300;letter-spacing:.14em}
-  .logo b{font-weight:700;letter-spacing:-.01em}
-  .logo-mark{width:26px;height:26px;border:1.5px solid var(--ink);border-radius:50% 50% 50% 0}
-  .nav-links{display:flex;gap:24px;margin-left:auto;font-size:14px;color:var(--ink-2)}
-  .nav-links a:hover{color:#9D4929}
-  .nav .btn{padding:10px 18px;font-size:13.5px}
-  @media(max-width:880px){.nav-links{display:none}}
+  /* ---------- nav ---------- */
+  .nav{position:sticky;top:0;z-index:50;background:rgba(251,248,243,.88);
+    backdrop-filter:saturate(160%) blur(12px);border-bottom:1px solid var(--line)}
+  .nav-in{max-width:1240px;margin:0 auto;padding:0 var(--pad);height:70px;
+    display:flex;align-items:center;gap:18px}
+  .logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex:0 0 auto}
+  .logo .mark{width:26px;height:26px;border:1.5px solid var(--ink);border-radius:50% 50% 50% 2px;
+    transform:rotate(-45deg)}
+  .logo b{font-family:var(--serif);font-weight:500;font-size:20px;letter-spacing:.06em}
+  .logo span{font-size:11px;letter-spacing:.2em;color:#635B52;text-transform:uppercase;
+    padding-top:3px}
+  .nav-links{margin-left:auto;display:flex;gap:30px}
+  .nav-links a{text-decoration:none;font-size:14px;color:var(--ink-2);position:relative;padding:4px 0}
+  .nav-links a::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1px;
+    background:var(--clay);transition:right .28s}
+  .nav-links a:hover::after,.nav-links a:focus-visible::after{right:0}
+  .nav-cta{flex:0 0 auto;background:var(--ink);color:var(--paper);text-decoration:none;
+    font-size:13.5px;font-weight:500;padding:11px 20px;border-radius:2px;transition:background .2s}
+  .nav-cta:hover{background:var(--clay-deep)}
+  .burger{display:none;flex:0 0 auto;margin-left:auto;width:44px;height:44px;border:1px solid var(--line-2);
+    background:none;border-radius:2px;cursor:pointer;align-items:center;justify-content:center}
+  .burger i{display:block;width:17px;height:1.5px;background:var(--ink);position:relative}
+  .burger i::before,.burger i::after{content:"";position:absolute;left:0;width:17px;height:1.5px;
+    background:var(--ink)}
+  .burger i::before{top:-5px} .burger i::after{top:5px}
+  .drawer{display:none;border-bottom:1px solid var(--line);background:var(--paper)}
+  .drawer.open{display:block}
+  .drawer a{display:block;padding:15px var(--pad);text-decoration:none;font-size:15px;
+    border-top:1px solid var(--line)}
 
-  /* HERO */
-  .hero{padding:58px 0 0}
-  h1{font-size:clamp(38px,6.4vw,78px);font-weight:300;line-height:1.02;letter-spacing:-.045em;max-width:14ch}
-  h1 b{font-weight:700}
-  h1 i{font-style:italic;color:var(--clay)}
-  .hero-row{display:flex;flex-wrap:wrap;gap:34px;align-items:flex-end;justify-content:space-between;margin-top:22px}
-  .hero-row p{font-size:16.5px;color:var(--ink-2);max-width:40ch}
-  .hero-band{margin-top:34px;height:clamp(230px,26vw,320px);border:1px solid rgba(27,24,21,.16);position:relative;overflow:hidden;
+  /* ---------- hero ---------- */
+  .hero{position:relative;min-height:clamp(520px,78vh,760px);display:flex;align-items:flex-end;
+    overflow:hidden;background:var(--paper-3)}
+  .hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .hero::after{content:"";position:absolute;inset:0;
     background:
-      radial-gradient(520px 380px at 76% 108%,rgba(180,84,47,.34),transparent 64%),
-      radial-gradient(380px 300px at 14% -14%,rgba(92,107,82,.30),transparent 62%),
-      linear-gradient(165deg,#F0EAE0,#DFD6C8)}
-  /* zemin cizgisi */
-  .hero-band::before{content:"";position:absolute;left:0;right:0;bottom:0;height:26%;
-    background:linear-gradient(180deg,rgba(27,24,21,.10),rgba(27,24,21,.16));
-    border-top:1px solid rgba(27,24,21,.34)}
-  /* soldaki kapi/pencere boslugu */
-  .hero-band::after{content:"";position:absolute;left:8%;bottom:26%;width:30%;height:52%;
-    border:1px solid rgba(27,24,21,.42);border-bottom:0;
-    background:linear-gradient(180deg,rgba(255,255,255,.72),rgba(255,255,255,.14))}
-  /* sagdaki kemer */
-  .hero-band .arc{position:absolute;right:12%;bottom:26%;width:23%;height:62%;
-    border:1px solid rgba(27,24,21,.44);border-bottom:0;border-radius:50% 50% 0 0 / 62% 62% 0 0;
-    background:linear-gradient(180deg,rgba(180,84,47,.32),rgba(180,84,47,.06))}
-  /* sarkit lamba */
-  .hero-band .lamp{position:absolute;left:50%;top:0;width:1px;height:31%;background:rgba(27,24,21,.42)}
-  .hero-band .lamp::after{content:"";position:absolute;left:50%;top:100%;width:34px;height:17px;margin-left:-17px;
-    border-radius:0 0 999px 999px;background:linear-gradient(180deg,#1B1815,#3A342D)}
-  /* bitki */
-  .hero-band .plant{position:absolute;right:5%;bottom:calc(26% + 3px);width:52px;height:74px}
-  .hero-band .plant i{position:absolute;bottom:2px;left:50%;width:11px;height:46px;margin-left:-5.5px;
-    border-radius:999px;background:rgba(92,107,82,.5);transform-origin:50% 100%}
-  .hero-band .plant i:nth-child(1){transform:rotate(-30deg)}
-  .hero-band .plant i:nth-child(2){transform:rotate(0deg);height:58px;width:12px;margin-left:-6px}
-  .hero-band .plant i:nth-child(3){transform:rotate(30deg)}
-  .hero-band .plant::after{content:"";position:absolute;bottom:0;left:50%;width:30px;height:20px;margin-left:-15px;
-    background:linear-gradient(180deg,rgba(27,24,21,.5),rgba(27,24,21,.68));border-radius:2px 2px 7px 7px}
-  @media(max-width:620px){.hero-band .plant{display:none}}
+      linear-gradient(180deg,rgba(26,23,20,.46) 0%,rgba(26,23,20,.18) 26%,rgba(26,23,20,.64) 62%,rgba(26,23,20,.86) 100%),
+      linear-gradient(90deg,rgba(26,23,20,.70) 0%,rgba(26,23,20,.44) 42%,rgba(26,23,20,.06) 80%)}
+  .hero-in{position:relative;z-index:2;width:100%;padding:0 0 clamp(34px,6vw,64px)}
+  .hero .eyebrow{color:rgba(255,255,255,.94)}
+  .hero h1{color:#fff;font-size:clamp(38px,6.4vw,80px);max-width:15ch;overflow-wrap:break-word;
+    text-shadow:0 2px 30px rgba(26,23,20,.32)}
+  .hero h1 em{font-style:italic;color:#F1C7A8}
+  .hero p{color:rgba(255,255,255,.95);max-width:46ch;margin:22px 0 0;font-size:16.5px;
+    text-shadow:0 1px 18px rgba(26,23,20,.45)}
+  .hero-btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+  .btn{display:inline-flex;align-items:center;gap:9px;text-decoration:none;font-size:14.5px;
+    font-weight:500;padding:14px 24px;border-radius:2px;transition:background .2s,color .2s,border-color .2s}
+  .btn-p{background:var(--paper);color:var(--ink)}
+  .btn-p:hover{background:var(--clay);color:#fff}
+  .btn-g{border:1px solid rgba(255,255,255,.5);color:#fff}
+  .btn-g:hover{background:rgba(255,255,255,.16);border-color:#fff}
+  .btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.7}
 
-  .marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:52px;
-    display:grid;grid-template-columns:repeat(4,1fr)}
-  .marquee div{padding:24px 30px;border-right:1px solid var(--line)}
-  .marquee div:last-child{border-right:0}
-  .marquee b{display:block;font-size:28px;font-weight:300;letter-spacing:-.03em}
-  .marquee span{font-size:12.5px;color:var(--mute)}
+  /* ---------- stats ---------- */
+  .stats{border-bottom:1px solid var(--line);background:var(--paper-2)}
+  .stats-in{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+  .stat{padding:26px 0 28px;border-left:1px solid var(--line)}
+  .stat:first-child{border-left:0}
+  .stat b{display:block;font-family:var(--serif);font-weight:400;font-size:clamp(26px,3.2vw,38px);
+    line-height:1;letter-spacing:-.02em}
+  .stat span{display:block;margin-top:7px;font-size:12.5px;color:var(--mute);letter-spacing:.02em}
+  .stats-in .stat{padding-left:clamp(14px,2.4vw,30px);padding-right:12px}
+  .stats-in .stat:first-child{padding-left:0}
 
-  section{padding:84px 0}
-  .sec-head{margin-bottom:40px;display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:flex-end}
-  .sec-head h2{margin-top:10px}
+  /* ---------- sections ---------- */
+  section{padding:clamp(64px,9vw,120px) 0}
+  .sec-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);
+    gap:clamp(24px,5vw,72px);align-items:start}
+  .sec-head h2{font-size:clamp(28px,3.8vw,46px);max-width:16ch}
+  .sec-head p{margin:0;color:var(--ink-2);font-size:16.5px}
+  .sec-head p+p{margin-top:16px}
 
-  /* PROJELER */
-  .projects{display:grid;grid-template-columns:1fr 1fr;gap:26px}
-  .proj{border:1px solid var(--line);background:#fff;transition:transform .2s,box-shadow .2s}
-  .proj:hover{transform:translateY(-4px);box-shadow:0 26px 50px -34px rgba(27,24,21,.55)}
-  .proj-art{aspect-ratio:16/11;position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
-  .proj-art i{position:absolute;display:block}
-  .a1{background:linear-gradient(165deg,#EDE6DA,#D9CDBA)}
-  .a1 i:nth-child(1){left:12%;bottom:0;width:30%;height:58%;background:rgba(180,84,47,.5)}
-  .a1 i:nth-child(2){left:46%;bottom:0;width:20%;height:78%;background:rgba(27,24,21,.72)}
-  .a1 i:nth-child(3){left:70%;bottom:0;width:18%;height:38%;background:rgba(92,107,82,.6)}
-  .a2{background:linear-gradient(150deg,#E7E9E2,#CBD2C2)}
-  .a2 i:nth-child(1){left:16%;top:16%;width:38%;aspect-ratio:1;border-radius:50%;background:rgba(92,107,82,.55)}
-  .a2 i:nth-child(2){right:12%;bottom:12%;width:34%;height:46%;background:rgba(27,24,21,.7)}
-  .a3{background:linear-gradient(200deg,#F0E3DC,#DCC3B6)}
-  .a3 i:nth-child(1){left:0;bottom:0;width:100%;height:34%;background:rgba(180,84,47,.42)}
-  .a3 i:nth-child(2){left:24%;bottom:34%;width:52%;aspect-ratio:2/1;border-radius:50% 50% 0 0/100% 100% 0 0;background:rgba(27,24,21,.66)}
-  .a4{background:linear-gradient(140deg,#E4E1DB,#C8C3B8)}
-  .a4 i:nth-child(1){left:10%;top:20%;width:80%;height:1px;background:rgba(27,24,21,.5);box-shadow:0 22px 0 rgba(27,24,21,.5),0 44px 0 rgba(27,24,21,.5),0 66px 0 rgba(27,24,21,.5)}
-  .a4 i:nth-child(2){right:14%;bottom:0;width:22%;height:64%;background:rgba(180,84,47,.55)}
-  .proj-body{padding:22px 24px}
-  .proj-body .k{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
-  .proj-body h3{font-size:20px;font-weight:400;letter-spacing:-.02em;margin:7px 0 8px}
-  .proj-body p{font-size:14px;color:var(--ink-2);line-height:1.6}
+  /* ---------- projects ---------- */
+  #projeler{border-top:1px solid var(--line)}
+  .proj-top{display:flex;flex-wrap:wrap;align-items:flex-end;gap:20px;justify-content:space-between;
+    margin-bottom:clamp(28px,4vw,48px)}
+  .proj-top h2{font-size:clamp(28px,3.8vw,46px)}
+  .tags{display:flex;flex-wrap:wrap;gap:8px}
+  .tags .tag{font-size:12.5px;color:var(--mute);border:1px solid var(--line-2);
+    appearance:none;background:none;font-family:inherit;cursor:pointer;
+    transition:color .18s,background .18s,border-color .18s;
+    padding:7px 14px;border-radius:999px}
+  .tags .tag[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  @media (hover:hover){.tags .tag:not([aria-pressed="true"]):hover{color:var(--ink);border-color:var(--line-2)}}
+  .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2.2vw,30px)}
+  .card{grid-column:span 1;text-decoration:none;display:block}
+  .card figure{margin:0;overflow:hidden;background:var(--paper-3);position:relative}
+  .card img{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.2,.7,.3,1)}
+  .card:hover img{transform:scale(1.045)}
+  .card .ratio{aspect-ratio:4/3}
+  .card-meta{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:14px;
+    padding:15px 2px 0;border-top:1px solid var(--line);margin-top:14px}
+  .card h3{font-size:19px;font-weight:400;letter-spacing:-.005em}
+  .card small{font-size:12.5px;color:var(--mute);white-space:nowrap;letter-spacing:.02em}
+  .card .kind{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--clay);
+    font-weight:600;margin-bottom:9px;display:block}
 
-  /* HIZMET */
-  .svc{background:var(--ink);color:var(--paper)}
-  .svc .eyebrow{color:var(--clay-l)}
-  .svc h2{color:var(--paper)}
-  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(246,243,238,.14);border:1px solid rgba(246,243,238,.14);margin-top:36px}
-  .svc-grid > div{background:var(--ink);padding:28px 26px}
-  .svc-grid h3{font-size:17px;font-weight:600;margin:12px 0 8px;letter-spacing:-.01em}
-  .svc-grid p{font-size:13.8px;color:#B8B1A7;line-height:1.65}
-  .svc-grid .n{font-size:12px;color:var(--clay-l);letter-spacing:.14em}
+  /* ---------- band ---------- */
+  .band{position:relative;min-height:clamp(300px,42vw,460px);display:flex;align-items:center;
+    overflow:hidden;background:var(--ink)}
+  .band>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.5}
+  .band::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(100deg,rgba(26,23,20,.88) 0%,rgba(26,23,20,.66) 46%,rgba(26,23,20,.42) 100%)}
+  .band-in{position:relative;z-index:2}
+  .band blockquote{margin:0;max-width:22ch;font-family:var(--serif);font-weight:300;
+    font-size:clamp(24px,3.4vw,42px);line-height:1.16;color:#fff;letter-spacing:-.015em}
+  .band cite{display:block;margin-top:20px;font-family:var(--sans);font-style:normal;
+    font-size:13px;color:rgba(255,255,255,.88);letter-spacing:.03em}
 
-  /* SUREC */
-  .flow{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line)}
-  .flow div{padding:26px 24px;border-right:1px solid var(--line)}
-  .flow div:last-child{border-right:0}
-  .flow .n{font-size:12px;color:var(--clay);letter-spacing:.14em}
-  .flow b{display:block;font-size:16.5px;font-weight:600;margin:9px 0 6px;letter-spacing:-.01em}
-  .flow p{font-size:13.5px;color:var(--ink-2);line-height:1.6}
+  /* ---------- services ---------- */
+  .cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,3vw,44px);
+    margin-top:clamp(34px,5vw,60px)}
+  .col{border-top:1px solid var(--line-2);padding-top:22px}
+  .col b{display:block;font-family:var(--serif);font-size:15px;color:var(--clay);
+    letter-spacing:.06em;margin-bottom:14px;font-weight:500}
+  .col h3{font-size:22px;font-weight:400;margin-bottom:11px}
+  .col p{margin:0;color:var(--ink-2);font-size:15.5px}
 
-  /* CTA */
-  .cta{border:1px solid var(--ink);padding:52px;display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center;
-    background:linear-gradient(120deg,var(--paper-2),var(--paper))}
-  .cta .eyebrow{color:#AA502D}
-  .cta h2{margin:10px 0 12px}
-  .cta p{color:var(--ink-2);font-size:15.5px;max-width:44ch}
-  .cta-side{display:grid;gap:14px;font-size:14.5px;color:var(--ink-2)}
-  .cta-side b{display:block;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);margin-bottom:4px}
+  /* ---------- process ---------- */
+  #surec{background:var(--paper-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(18px,2.6vw,36px);
+    margin-top:clamp(34px,5vw,58px)}
+  .step{position:relative;padding-top:30px;border-top:1px solid var(--line-2)}
+  .step::before{content:"";position:absolute;top:-4px;left:0;width:7px;height:7px;
+    border-radius:50%;background:var(--clay)}
+  .step b{display:block;font-size:12px;letter-spacing:.16em;color:var(--mute);margin-bottom:10px}
+  .step h3{font-size:19px;font-weight:400;margin-bottom:9px}
+  .step p{margin:0;font-size:15px;color:var(--ink-2)}
 
-  footer{border-top:1px solid var(--line);padding:34px 0;font-size:13px;color:var(--mute)}
-  .foot-in{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
-  .foot-in strong{color:var(--ink);font-weight:600}
+  /* ---------- quote ---------- */
+  .ref{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);
+    gap:clamp(24px,5vw,72px);align-items:center}
+  .ref blockquote{margin:0;font-family:var(--serif);font-weight:300;font-size:clamp(21px,2.6vw,31px);
+    line-height:1.3;letter-spacing:-.012em}
+  .ref cite{display:block;margin-top:22px;font-family:var(--sans);font-style:normal;font-size:13.5px;
+    color:var(--mute)}
+  .ref .stars{display:flex;gap:4px;margin-bottom:20px}
+  .ref .stars i{width:13px;height:13px;background:var(--clay);
+    clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
 
-  @media(max-width:940px){
-    .projects{grid-template-columns:1fr}
-    .svc-grid{grid-template-columns:1fr 1fr}
-    .flow{grid-template-columns:1fr 1fr}
-    .flow div:nth-child(2){border-right:0}
-    .flow div:nth-child(-n+2){border-bottom:1px solid var(--line)}
-    .marquee{grid-template-columns:1fr 1fr}
-    .marquee div:nth-child(2){border-right:0}
-    .marquee div:nth-child(-n+2){border-bottom:1px solid var(--line)}
-    .cta{grid-template-columns:1fr;padding:34px}
+  /* ---------- cta ---------- */
+  #iletisim{background:var(--ink);color:var(--paper)}
+  .cta-in{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);
+    gap:clamp(28px,5vw,72px);align-items:center}
+  #iletisim h2{color:#fff;font-size:clamp(30px,4.2vw,52px);max-width:14ch}
+  #iletisim .eyebrow{color:#E9A281}
+  #iletisim p{color:rgba(251,248,243,.72);margin:20px 0 0;max-width:44ch}
+  .cta-card{border:1px solid rgba(251,248,243,.22);padding:clamp(22px,3vw,34px)}
+  .cta-card a{display:flex;align-items:center;gap:12px;overflow-wrap:anywhere;min-width:0;text-decoration:none;padding:13px 0;
+    border-bottom:1px solid rgba(251,248,243,.14);font-size:15.5px;color:#fff}
+  .cta-card a:last-of-type{border-bottom:0}
+  .cta-card svg{width:16px;height:16px;stroke:#E9A281;fill:none;stroke-width:1.6;flex:0 0 auto}
+  .cta-card .btn{margin-top:20px;width:100%;justify-content:center;background:var(--paper);color:var(--ink)}
+  .cta-card .btn:hover{background:var(--clay);color:#fff}
+
+  /* ---------- footer ---------- */
+  footer{background:var(--ink);color:rgba(251,248,243,.5);border-top:1px solid rgba(251,248,243,.14);
+    font-size:13px}
+  .foot-in{display:flex;flex-wrap:wrap;gap:14px 28px;justify-content:space-between;
+    padding:26px 0}
+  .foot-in a{text-decoration:none}
+  .foot-in a:hover{color:#fff}
+
+  /* ---------- responsive ---------- */
+  @media(max-width:980px){
+    .nav-links{display:none}
+    .nav-cta{display:none}
+    .burger{display:flex}
+    .sec-head,.ref,.cta-in{grid-template-columns:1fr}
+    .grid{grid-template-columns:repeat(2,1fr)}
+      .cols{grid-template-columns:1fr 1fr}
+    .steps{grid-template-columns:1fr 1fr}
   }
-  @media(max-width:620px){
-    .wrap{padding:0 20px}
-    section{padding:56px 0}
-    .hero{padding-top:52px}
-    .svc-grid,.flow,.marquee{grid-template-columns:1fr}
-    .svc-grid > div,.flow div,.marquee div{border-right:0}
-    .flow div:not(:last-child),.marquee div:not(:last-child){border-bottom:1px solid var(--line)}
+  @media(max-width:640px){
+    .stats-in{grid-template-columns:1fr 1fr}
+    .stat:nth-child(3){border-left:0}
+    .stat:nth-child(-n+2){border-bottom:1px solid var(--line)}
+    .stats-in .stat:nth-child(3){padding-left:0}
+    .grid{grid-template-columns:1fr}
+    .cols{grid-template-columns:1fr}
+    .steps{grid-template-columns:1fr}
+    .band blockquote{max-width:none}
   }
-  @media(max-width:389px){.nav-in{flex-wrap:wrap;height:auto;min-height:72px;gap:10px 16px;padding-top:14px;padding-bottom:14px}}
-  @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto}}
+  @media(max-width:380px){
+    .logo span{display:none}
+  }
+  :focus-visible{outline:2px solid var(--clay);outline-offset:3px}
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *{transition:none!important;animation:none!important}
+  }
 </style>
-</head>
-<body>
 
 <header class="nav">
-  <div class="wrap nav-in">
-    <a class="logo" href="#"><span class="logo-mark" aria-hidden="true"></span><b>KAVİS</b> İÇ MİMARLIK</a>
-    <nav class="nav-links">
+  <div class="nav-in">
+    <a class="logo" href="#top"><span class="mark" aria-hidden="true"></span><b>KAVİS</b><span>İç Mimarlık</span></a>
+    <nav class="nav-links" aria-label="Ana menü">
       <a href="#projeler">Projeler</a>
       <a href="#hizmetler">Hizmetler</a>
       <a href="#surec">Süreç</a>
-      <a href="#iletisim">İletişim</a>
+      <a href="#studyo">Stüdyo</a>
     </nav>
-    <a class="btn" href="#iletisim">Proje görüşmesi</a>
+    <a class="nav-cta" href="#iletisim">Proje görüşmesi</a>
+    <button class="burger" id="burger" aria-label="Menüyü aç" aria-expanded="false" aria-controls="drawer"><i></i></button>
+  </div>
+  <div class="drawer" id="drawer">
+    <a href="#projeler">Projeler</a>
+    <a href="#hizmetler">Hizmetler</a>
+    <a href="#surec">Süreç</a>
+    <a href="#studyo">Stüdyo</a>
+    <a href="#iletisim">Proje görüşmesi</a>
   </div>
 </header>
 
-<div class="hero">
-  <div class="wrap">
-    <span class="eyebrow">İç Mimarlık ve Uygulama · İstanbul</span>
-    <h1 style="margin-top:16px">Mekanı <b>büyütmenin</b> yolu <i>duvar yıkmak</i> değildir.</h1>
-    <div class="hero-row">
-      <p>Konut, ofis ve perakende projelerinde tasarımdan anahtar teslimine kadar tek elden çalışıyoruz. Şantiyeyi de biz yönetiyoruz.</p>
-      <div style="display:flex;gap:12px;flex-wrap:wrap">
-        <a class="btn" href="#projeler">Projeleri gör<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-        <a class="btn line" href="#iletisim">Bize yazın</a>
-      </div>
-    </div>
-    <div class="hero-band" aria-hidden="true"><span class="arc"></span><span class="lamp"></span><span class="plant"><i></i><i></i><i></i></span></div>
-  </div>
-</div>
+<main id="top">
 
-<div class="wrap">
-  <div class="marquee">
-    <div><b>62</b><span>Tamamlanmış proje</span></div>
-    <div><b>11 yıl</b><span>Uygulama tecrübesi</span></div>
-    <div><b>Tek ekip</b><span>Tasarım ve şantiye</span></div>
-    <div><b>3 ay</b><span>Ortalama konut süresi</span></div>
-  </div>
-</div>
-
-<section id="projeler">
-  <div class="wrap">
-    <div class="sec-head">
-      <div><span class="eyebrow">Seçili işler</span><h2>Son <b>dört proje</b></h2></div>
-      <p class="lead" style="max-width:36ch">Her projede metrekare değil, günün hangi saatinde nerede oturulduğu konuşulur.</p>
-    </div>
-    <div class="projects">
-      <article class="proj">
-        <div class="proj-art a1" aria-hidden="true"><i></i><i></i><i></i></div>
-        <div class="proj-body"><span class="k">Konut · Etiler</span><h3>Işığı takip eden daire</h3><p>135 m². Mutfak duvarı kaldırılmadan, tezgah yönü değiştirilerek gün ışığı salona taşındı.</p></div>
-      </article>
-      <article class="proj">
-        <div class="proj-art a2" aria-hidden="true"><i></i><i></i></div>
-        <div class="proj-body"><span class="k">Ofis · Maslak</span><h3>Sessiz odalar planı</h3><p>420 m². Açık ofis korunarak dört akustik kabin ve iki sessiz oda kurgulandı.</p></div>
-      </article>
-      <article class="proj">
-        <div class="proj-art a3" aria-hidden="true"><i></i><i></i></div>
-        <div class="proj-body"><span class="k">Perakende · Nişantaşı</span><h3>Kemerli vitrin</h3><p>68 m². Vitrin hattı kavise çevrildi, mağaza içi dolaşım tek yöne oturtuldu.</p></div>
-      </article>
-      <article class="proj">
-        <div class="proj-art a4" aria-hidden="true"><i></i><i></i></div>
-        <div class="proj-body"><span class="k">Konut · Kadıköy</span><h3>Raflı ev</h3><p>92 m². Depolama duvara gömüldü, oturma alanı on iki metrekare büyümüş gibi göründü.</p></div>
-      </article>
-    </div>
-  </div>
-</section>
-
-<section class="svc" id="hizmetler">
-  <div class="wrap">
-    <span class="eyebrow">Hizmetler</span>
-    <h2 style="margin-top:10px">Tasarımı çizen ekip, <b>şantiyeyi de yönetir</b></h2>
-    <div class="svc-grid">
-      <div><span class="n">01</span><h3>Konsept ve 3B görsel</h3><p>Karar vermeden önce mekanı gerçekçi görsellerle görürsünüz. Malzeme ve renk kararları burada verilir.</p></div>
-      <div><span class="n">02</span><h3>Uygulama projesi</h3><p>Elektrik, tesisat, aydınlatma ve mobilya detayları çizilir. Ustanın tahmin etmesi gereken hiçbir şey kalmaz.</p></div>
-      <div><span class="n">03</span><h3>Anahtar teslim</h3><p>Taşeron koordinasyonu, malzeme alımı ve saha takibi bizde. Tek muhatabınız oluruz.</p></div>
-    </div>
-  </div>
-</section>
-
-<section id="surec">
-  <div class="wrap">
-    <div class="sec-head"><div><span class="eyebrow">Süreç</span><h2>Dört adımda <b>anahtar teslim</b></h2></div></div>
-    <div class="flow">
-      <div><span class="n">01</span><b>Yerinde keşif</b><p>Mekanı ölçüyor, nasıl kullandığınızı dinliyoruz. Bu görüşme ücretsizdir.</p></div>
-      <div><span class="n">02</span><b>Konsept</b><p>İki farklı kurgu sunulur. Görselleri gördükten sonra yönü birlikte seçeriz.</p></div>
-      <div><span class="n">03</span><b>Sabit bütçe</b><p>Metraj çıkar, kalem kalem bütçe imzalanır. Sonradan kalem eklenmez.</p></div>
-      <div><span class="n">04</span><b>Uygulama</b><p>Şantiye bizde. Haftalık fotoğraflı ilerleme raporu gönderilir.</p></div>
-    </div>
-  </div>
-</section>
-
-<section id="iletisim" style="padding-top:0">
-  <div class="wrap">
-    <div class="cta">
-      <div>
-        <span class="eyebrow">İletişim</span>
-        <h2>Projenizi <b>konuşalım</b></h2>
-        <p>Planınızı ya da mekanın birkaç fotoğrafını gönderin; ilk değerlendirmeyi ücretsiz yapıp kabaca bütçe aralığını söyleyelim.</p>
-        <div style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap">
-          <a class="btn" href="#iletisim">Proje görüşmesi talep et</a>
-          <a class="btn line" href="#projeler">Projeleri gör</a>
+  <section class="hero" style="padding:0">
+    <img src="f/hero.jpg" alt="Boğaz manzaralı, sıcak minimal bir oturma odası" width="1900" height="1069">
+    <div class="hero-in">
+      <div class="wrap">
+        <p class="eyebrow">İç mimarlık ve uygulama · İstanbul</p>
+        <h1>Mekanı büyütmenin yolu <em>duvar yıkmak</em> değildir.</h1>
+        <p>Konut, ofis ve perakende projelerinde tasarımdan anahtar teslimine kadar tek elden çalışıyoruz. Şantiyeyi de biz yönetiyoruz.</p>
+        <div class="hero-btns">
+          <a class="btn btn-p" href="#projeler">Projeleri gör
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn btn-g" href="#iletisim">Bize yazın</a>
         </div>
       </div>
-      <div class="cta-side">
-        <div><b>Stüdyo</b>Bomonti, Şişli / İstanbul</div>
-        <div><b>Telefon</b>0212 000 00 00</div>
-        <div><b>E-posta</b>studyo@kavis.example</div>
-        <div><b>Randevu</b>Hafta içi 10:00 – 18:00</div>
+    </div>
+  </section>
+
+  <div class="stats">
+    <div class="wrap"><div class="stats-in">
+      <div class="stat"><b>11</b><span>yıllık stüdyo</span></div>
+      <div class="stat"><b>140</b><span>tamamlanan proje</span></div>
+      <div class="stat"><b>9.400</b><span>metrekare uygulama</span></div>
+      <div class="stat"><b>6</b><span>şehir</span></div>
+    </div></div>
+  </div>
+
+  <section id="studyo">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">Stüdyo</p>
+          <h2>İyi bir mekan, içinde yaşayan insanın gününü kolaylaştırır.</h2>
+        </div>
+        <div>
+          <p>Kavis 2015'te İstanbul'da kuruldu. Konut, ofis ve perakende olmak üzere üç alanda çalışıyoruz. Ekipte üç iç mimar, bir teknik ressam ve kendi uygulama ekibimiz var.</p>
+          <p>Her projeye yerinde ölçüm ve ihtiyaç görüşmesiyle başlıyoruz. Tasarımı üç boyutlu görselle onaylatıyoruz, uygulamayı kendi ustalarımızla bitiriyoruz. Bir proje boyunca tek bir muhatapla konuşuyorsunuz.</p>
+        </div>
       </div>
     </div>
+  </section>
+
+  <section id="projeler">
+    <div class="wrap">
+      <div class="proj-top">
+        <div>
+          <p class="eyebrow">Seçilmiş işler</p>
+          <h2>Projeler</h2>
+        </div>
+        <div class="tags" role="group" aria-label="Proje türü filtresi"><button type="button" class="tag" data-tur="tumu" aria-pressed="true">Tümü</button><button type="button" class="tag" data-tur="konut" aria-pressed="false">Konut</button><button type="button" class="tag" data-tur="ofis" aria-pressed="false">Ofis</button><button type="button" class="tag" data-tur="perakende" aria-pressed="false">Perakende</button></div>
+      </div>
+
+      <div class="grid">
+        <a class="card" href="#iletisim" data-tur="ofis">
+          <figure class="ratio"><img src="f/p2.jpg" alt="Ahşap çalışma masası ve malzeme rafları olan tasarım stüdyosu" loading="lazy" width="1150" height="863"></figure>
+          <div class="card-meta">
+            <div><span class="kind">Ofis</span><h3>Levent Tasarım Stüdyosu</h3></div>
+            <small>2024 · 210 m²</small>
+          </div>
+        </a>
+        <a class="card" href="#iletisim" data-tur="konut">
+          <figure class="ratio"><img src="f/p1.jpg" alt="Travertan tezgahlı meşe mutfak" loading="lazy" width="1150" height="863"></figure>
+          <div class="card-meta">
+            <div><span class="kind">Konut</span><h3>Etiler Mutfak Yenileme</h3></div>
+            <small>2025 · 42 m²</small>
+          </div>
+        </a>
+        <a class="card" href="#iletisim" data-tur="perakende">
+          <figure class="ratio"><img src="f/p4.jpg" alt="Travertan tezgahlı butik kahve dükkanı" loading="lazy" width="1150" height="863"></figure>
+          <div class="card-meta">
+            <div><span class="kind">Perakende</span><h3>Moda Kahve Dükkanı</h3></div>
+            <small>2024 · 74 m²</small>
+          </div>
+        </a>
+        <a class="card" href="#iletisim" data-tur="konut">
+          <figure class="ratio"><img src="f/p3.jpg" alt="Keten perdeli, ceviz karyolalı sakin yatak odası" loading="lazy" width="1150" height="863"></figure>
+          <div class="card-meta">
+            <div><span class="kind">Konut</span><h3>Bebek Yatak Odası Süiti</h3></div>
+            <small>2025 · 38 m²</small>
+          </div>
+        </a>
+        <a class="card" href="#iletisim" data-tur="perakende">
+          <figure class="ratio"><img src="f/p5.jpg" alt="Işıklı nişleri olan seramik showroom" loading="lazy" width="1150" height="863"></figure>
+          <div class="card-meta">
+            <div><span class="kind">Perakende</span><h3>Nişantaşı Seramik Showroom</h3></div>
+            <small>2025 · 130 m²</small>
+          </div>
+        </a>
+        <a class="card" href="#iletisim" data-tur="ofis">
+          <figure class="ratio"><img src="f/p6.jpg" alt="Meşe karşılama bankosu olan sakin klinik bekleme alanı" loading="lazy" width="1150" height="863"></figure>
+          <div class="card-meta">
+            <div><span class="kind">Ofis</span><h3>Ataşehir Klinik Karşılama</h3></div>
+            <small>2023 · 96 m²</small>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="band">
+    <img src="f/detay.jpg" alt="Ceviz masa üzerinde travertan, meşe, keten ve pirinç malzeme örnekleri" loading="lazy" width="1900" height="1069">
+    <div class="band-in"><div class="wrap">
+      <blockquote>Malzemeyi katalogdan değil, elimize alarak seçiyoruz.</blockquote>
+      <cite>Her projede malzeme kutusu müşteriye teslim edilir</cite>
+    </div></div>
   </div>
-</section>
+
+  <section id="hizmetler">
+    <div class="wrap">
+      <p class="eyebrow">Ne yapıyoruz</p>
+      <h2 style="font-size:clamp(28px,3.8vw,46px);max-width:18ch">Tasarım ve uygulama aynı ekipte.</h2>
+      <div class="cols">
+        <div class="col">
+          <b>01</b>
+          <h3>Tasarım</h3>
+          <p>Yerinde ölçüm, plan çözümü, üç boyutlu görsel ve malzeme seçimi. Siz onaylamadan hiçbir şey uygulanmaz.</p>
+        </div>
+        <div class="col">
+          <b>02</b>
+          <h3>Uygulama</h3>
+          <p>Kendi ustalarımızla anahtar teslim. Alçı, elektrik, tesisat, boya ve montaj tek sözleşmede toplanır.</p>
+        </div>
+        <div class="col">
+          <b>03</b>
+          <h3>Mobilya</h3>
+          <p>Ölçüye özel üretim. Mutfak, gardırop, tezgah ve oturma birimleri kendi atölyemizde çıkar.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="surec">
+    <div class="wrap">
+      <p class="eyebrow">Nasıl çalışıyoruz</p>
+      <h2 style="font-size:clamp(28px,3.8vw,46px);max-width:18ch">Dört adım, sürpriz yok.</h2>
+      <div class="steps">
+        <div class="step"><b>01</b><h3>Yerinde ölçüm</h3><p>Mekana geliyoruz, ölçüyoruz, orayı nasıl kullandığınızı dinliyoruz.</p></div>
+        <div class="step"><b>02</b><h3>Tasarım ve görsel</h3><p>Plan çözümünü ve üç boyutlu görselleri sunuyoruz. Değişiklikleri bu aşamada yapıyoruz.</p></div>
+        <div class="step"><b>03</b><h3>Sözleşme ve takvim</h3><p>Malzeme listesi, fiyat ve teslim tarihi yazılı olarak netleşiyor.</p></div>
+        <div class="step"><b>04</b><h3>Uygulama ve teslim</h3><p>Şantiyeyi biz yönetiyoruz. Teslimde temizlik ve eksik listesi bize ait.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="ref">
+        <div>
+          <p class="eyebrow q">Müşteri yorumu</p>
+          <div class="stars" role="img" aria-label="Beş yıldız"><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+        <div>
+          <blockquote>Mutfağı üç haftada bitireceklerini söylediler, on dokuzuncu günde anahtarı aldık. Durum sormak için aramak zorunda kalmadık, her hafta kendileri haber verdi.</blockquote>
+          <cite>Selin A. · Etiler, konut projesi</cite>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="iletisim">
+    <div class="wrap">
+      <div class="cta-in">
+        <div>
+          <p class="eyebrow">İletişim</p>
+          <h2>Projenizi konuşalım.</h2>
+          <p>İlk görüşme ücretsiz. Mekanınızı yerinde görüp ihtiyaç listesini birlikte çıkarıyoruz. Fiyat, bu listeden sonra netleşiyor.</p>
+        </div>
+        <div class="cta-card">
+          <a href="mailto:merhaba@kavismimarlik.com">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3z"/><path d="m3 6 9 7 9-7"/></svg>
+            merhaba@kavismimarlik.com</a>
+          <a href="tel:+902125550124">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-3 2a12 12 0 0 0 5 5l2-3 5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"/></svg>
+            0212 555 01 24</a>
+          <a href="#iletisim">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
+            Caferağa, Kadıköy · İstanbul</a>
+          <a class="btn btn-p" href="mailto:merhaba@kavismimarlik.com?subject=Proje%20g%C3%B6r%C3%BC%C5%9Fmesi">Randevu alın</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
 
 <footer>
-  <div class="wrap foot-in">
-    <div><strong>KAVİS İç Mimarlık</strong> · Bomonti, İstanbul</div>
-    <div>Örnek tasarım · Dolunay AI</div>
-  </div>
+  <div class="wrap"><div class="foot-in">
+    <span>Kavis İç Mimarlık · Tasarım ve uygulama</span>
+    <span>Pazartesi - Cumartesi, 09:00 - 18:30</span>
+    <span>© 2026 Kavis İç Mimarlık</span>
+  </div></div>
 </footer>
 
+<script>
+(function(){
+  var b=document.getElementById('burger'), d=document.getElementById('drawer');
+  function kapat(odak){
+    d.classList.remove('open');
+    b.setAttribute('aria-expanded','false');
+    b.setAttribute('aria-label','Menüyü aç');
+    if(odak){b.focus();}
+  }
+  b.addEventListener('click',function(){
+    if(d.classList.contains('open')){kapat(false);return;}
+    d.classList.add('open');
+    b.setAttribute('aria-expanded','true');
+    b.setAttribute('aria-label','Menüyü kapat');
+  });
+  d.addEventListener('click',function(e){ if(e.target.tagName==='A'){kapat(false);} });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'&&d.classList.contains('open')){kapat(true);}
+  });
+})();
+(function(){
+  var dugmeler = [].slice.call(document.querySelectorAll('.tag'));
+  var kartlar  = [].slice.call(document.querySelectorAll('.card[data-tur]'));
+  if(!dugmeler.length || !kartlar.length) return;
+  function uygula(tur){
+    for(var i=0;i<dugmeler.length;i++){
+      dugmeler[i].setAttribute('aria-pressed', dugmeler[i].getAttribute('data-tur')===tur ? 'true' : 'false');
+    }
+    for(var k=0;k<kartlar.length;k++){
+      kartlar[k].hidden = !(tur==='tumu' || kartlar[k].getAttribute('data-tur')===tur);
+    }
+  }
+  for(var d=0;d<dugmeler.length;d++){
+    (function(b){ b.addEventListener('click', function(){ uygula(b.getAttribute('data-tur')); }); })(dugmeler[d]);
+  }
+})();
+</script>
 </body>
 </html>
