@@ -44,7 +44,14 @@ function sayfaKurusu(metin) {
   let bulgu = 0
   for (const slug of slugler) {
     const p = paketler[slug] || {}
-    if (!p.plan) { console.log(`${slug.padEnd(18)} BULGU: plan kodu bos`); bulgu++; continue }
+    if (!p.plan) {
+      // Tek seferlik paket: iyzico'da plan kaydi yoktur, tutar katalogda durur.
+      if (Number.isSafeInteger(p.tutar_kurus) && p.tutar_kurus > 0) {
+        console.log(`${slug.padEnd(18)} tek-seferlik | ${(p.tutar_kurus / 100).toFixed(2)} TRY | ${p.ad || '-'}`)
+        continue
+      }
+      console.log(`${slug.padEnd(18)} BULGU: ne plan kodu ne gecerli tutar_kurus var`); bulgu++; continue
+    }
     const c = await get(`/v2/subscription/pricing-plans/${encodeURIComponent(p.plan)}`)
     const d = (c && c.data) || {}
     if (c.status !== 'success') {

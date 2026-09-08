@@ -45,7 +45,23 @@ JSON sekli:
       "kapsam": ["...", "..."]
     }}
 
-Zorunlu tek alan `plan`. `periyot` bos ise `ay` varsayilir.
+**Iki paket turu vardir ve ayrimi tek alan yapar.**
+
+- **Abonelik paketi:** `plan` alani DOLU. Yukaridaki sekildir; `/odeme/<slug>` istegi
+  `abonelik-baslat.js`e gider. `periyot` bos ise `ay` varsayilir.
+- **Tek seferlik paket:** `plan` alani YOK, yerine `tutar_kurus` (KDV DAHIL, pozitif
+  tamsayi, kurus cinsinden) vardir. Istek `odeme-baslat.js`e gider.
+
+Tek seferlik sekli:
+
+    {"web-sitesi": {
+      "ad": "Web Sitesi Tasarimi",
+      "tutar_kurus": 1800000,
+      "notu": "15.000 TL + KDV, toplam 18.000 TL tek seferde tahsil edilir.",
+      "kapsam": ["...", "..."]
+    }}
+
+`plan` varsa tek seferlik alanlara BAKILMAZ; abonelik dali her zaman onceliklidir.
 
 ### Fiyat degistirmek
 
@@ -58,6 +74,11 @@ alanini degistirmek tahsilati DEGISTIRMEZ. Gercek tutari degistirmek icin
 iyzico panelinde yeni fiyatlandirma plani acilir ve `plan` kodu guncellenir.
 Ekranda vergi harici rakam yaziyorsa (bugunku hali), toplamin yanindaki notta
 acikca yazili olmasi sarttir, yoksa sayfa yalan soyler.
+
+**Tek seferlik pakette bu kural TERSINE isler.** Orada ekranda gorunen tutari da,
+karttan cekilen tutari da AYNI alan belirler: `tutar_kurus`. Serbest metin yoktur,
+KDV dahil tek sayi vardir; `tutar_kurus` degistiginde tahsilat da degisir. iyzico
+panelinde acilacak bir plan YOKTUR.
 
 ### Env degiskenini guncelleme (calisan yontem)
 
@@ -77,12 +98,37 @@ deploy sonrasi gorur: `POST /api/v1/sites/<site_id>/builds` govde
 `{"clear_cache":false}`, sonra `deploy_id` ile `ready` olana kadar bekle
 (~40-50 sn). Sonra sayfayi curl ile ac ve yaziyi gozle dogrula.
 
+### Tek seferlik odeme akisi
+
+Abonelikten AYRI bir yoldur ve iyzico'nun Checkout Form ucunu kullanir.
+
+- `/odeme/<slug>` -> `netlify/functions/odeme-baslat.js`. Paket `plan` tasiyorsa istek
+  oldugu gibi `abonelik-baslat.js`e devredilir; tasimiyorsa tek seferlik dal calisir.
+- Donus adresi `/odeme/tek-sonuc` -> `netlify/functions/odeme-sonuc.js`.
+  Abonelik donusu olan `/odeme/sonuc` ile KARISTIRILMAZ; ikisi ayri fonksiyondur ve
+  `netlify.toml`da yildizdan ONCE gelmek zorundadir.
+- Tutar butunlugu: `conversationId` ve tutar `IYZICO_SECRET_KEY` ile `tek-sefer:` on ekli
+  HMAC'e baglanir, donus adresine imzali olarak konur ve sonuc ucunda yeniden dogrulanir.
+  Kullanici tutari degistiremez; bedel daima katalogdan gelir, formdan degil.
+- Sonuc ancak `paymentStatus=SUCCESS`, `fraudStatus=1`, para birimi TRY ve hem `price` hem
+  `paidPrice` beklenen kurusa esitse basari sayilir. Aksi halde ekran "teyit edilemedi"
+  der; sessizce basari YAZILMAZ.
+
+**Bilinen risk: mukerrer tahsilat kilidi YOK.** Ayni kisi formu iki kez gonderip ikisini de
+tamamlarsa iki ayri tahsilat olusur. Netlify fonksiyonlarinda kalici depo olmadigi icin
+kilit kurulmadi; olursa iyzico panelinden iade edilir.
+
 ### Yeni musteri paketi acmak
 
+**Abonelik paketi:**
+
 1. iyzico panelinde urun + fiyatlandirma plani olustur, plan referans kodunu al.
-2. `IYZICO_PAKETLER` icine yeni slug ekle (yukaridaki PUT + build).
+2. `IYZICO_PAKETLER` icine `plan` alanli yeni slug ekle (yukaridaki PUT + build).
 3. `https://dolunay.ai/odeme/<slug>` adresini curl ile ac, 200 ve dogru metin gor.
 4. Linki musteriye gonder.
+
+**Tek seferlik paket:** iyzico panelinde HICBIR SEY yapilmaz. Kataloga `tutar_kurus`
+alanli slug eklenir (adim 2), sonra 3 ve 4 aynidir. Tutar KDV DAHIL girilir.
 
 Slug'i katalogdan silmek sayfayi 404 yapar; test paketleri boyle kapatilir.
 
@@ -204,8 +250,11 @@ kosudan OLCULUR, sabit yazilmaz.
 
 ## Paket dogrulama (salt okuma)
 
-`node scripts/plan_dogrula.js`, `IYZICO_PAKETLER` katalogundaki her paketin iyzico'da
-gercekten var oldugunu ve tahsil edilecek bedelin sayfada yazan bedelle ortustugunu olcer.
+`node scripts/plan_dogrula.js`, `IYZICO_PAKETLER` katalogundaki her ABONELIK paketinin
+iyzico'da gercekten var oldugunu ve tahsil edilecek bedelin sayfada yazan bedelle
+ortustugunu olcer. Tek seferlik paketlerde iyzico'da plan olmadigi icin yalnizca
+`tutar_kurus` alaninin gecerli oldugu denetlenir; o paketler tek satirda listelenir
+ve bulgu sayilmaz.
 Sayfada "+KDV" yazdigi icin kiyas KDV'li tutar uzerinden yapilir (2.980 -> 3576).
 
 Tahsilat yapmaz, abonelik acmaz, iptal etmez; yalniz `GET /v2/subscription/pricing-plans/<ref>`.

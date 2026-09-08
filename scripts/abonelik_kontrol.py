@@ -112,7 +112,8 @@ for p6 in sayfa_html:
     gizli_taranan += len(icerik)
     if not re.search(r'name=["\']robots["\'][^>]*noindex', icerik):
         gizlilik_eksik.append(p6.name)
-fonksiyonlar = sorted((kok/'netlify/functions').glob('abonelik-*.js'))
+fonksiyonlar = sorted(set((kok/'netlify/functions').glob('abonelik-*.js'))
+                     | set((kok/'netlify/functions').glob('odeme-*.js')))
 for p6 in fonksiyonlar:
     icerik = p6.read_text(encoding='utf-8')
     gizli_taranan += len(icerik)
