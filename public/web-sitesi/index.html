@@ -127,34 +127,23 @@
   .step-title{font-size:14.5px;font-weight:600;color:var(--text);margin-bottom:3px;line-height:1.4}
   .step-text{font-size:13.5px;color:var(--muted);line-height:1.6}
 
-  .plans{display:grid;gap:10px;margin-bottom:20px}
-  .plan{
-    position:relative;display:block;width:100%;text-align:left;cursor:pointer;
-    background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;
-    font-family:inherit;color:inherit;
-    transition:border-color .18s,background .18s,transform .18s;
+  .price-card{
+    position:relative;background:var(--bg-card);border:1px solid var(--accent);border-radius:14px;
+    padding:20px 22px;margin-bottom:14px;
+    background-image:linear-gradient(180deg,rgba(167,139,250,.11),rgba(167,139,250,.02));
+    box-shadow:0 0 0 1px var(--accent) inset;
   }
-  .plan-top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
-  .plan-name{font-family:'Inter Tight',sans-serif;font-size:16px;font-weight:700;letter-spacing:-.015em}
-  .plan-price{margin-left:auto;font-family:'Inter Tight',sans-serif;font-size:15.5px;font-weight:600;color:var(--secondary);white-space:nowrap}
-  .plan-desc{margin-top:5px;font-size:13px;color:var(--muted);line-height:1.55}
-  .plan-badge{
+  .price-row{display:flex;align-items:baseline;gap:11px;flex-wrap:wrap}
+  .price-amount{
+    font-family:'Inter Tight',sans-serif;font-size:32px;font-weight:700;
+    letter-spacing:-.025em;color:var(--accent-light);line-height:1.05;
+  }
+  .price-tag{
     display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
     color:var(--accent-light);background:rgba(167,139,250,.14);border:1px solid rgba(167,139,250,.3);
     border-radius:999px;padding:3px 8px;
   }
-  .plan[aria-checked="true"]{
-    border-color:var(--accent);background:linear-gradient(180deg,rgba(167,139,250,.1),rgba(167,139,250,.02));
-    box-shadow:0 0 0 1px var(--accent) inset;
-  }
-  .plan[aria-checked="true"] .plan-price{color:var(--accent-light)}
-  .plan[aria-checked="true"]::after{
-    content:"";position:absolute;right:16px;top:50%;margin-top:-5px;width:13px;height:7px;
-    border-left:2px solid var(--accent-light);border-bottom:2px solid var(--accent-light);
-    transform:rotate(-45deg);border-radius:1px;
-  }
-  .plan[aria-checked="true"] .plan-top{padding-right:26px}
-  @media (hover:hover){.plan[aria-checked="false"]:hover{border-color:rgba(255,255,255,.2);transform:translateY(-1px)}}
+  .price-sub{margin-top:8px;font-size:13.5px;color:var(--secondary);line-height:1.55}
 
   .included{background:var(--bg-darker);border:1px solid var(--border);border-radius:14px;padding:20px 22px;margin-bottom:20px}
   .included-head{
@@ -204,8 +193,7 @@
     .viewport iframe{transform:scale(var(--s,.39))}
   }
   @media (max-width:460px){
-    .plan-price{flex-basis:100%;margin-left:0;margin-top:5px;font-size:16px}
-    .plan[aria-checked="true"]::after{top:21px;margin-top:0}
+    .price-amount{font-size:28px}
   }
   @media (max-width:420px){
     .layout{padding:0 18px}
@@ -267,65 +255,45 @@
    </div>
   </section>
 
-  <section class="offer" aria-label="Paketler ve iletişim">
+  <section class="offer" aria-label="Fiyat ve iletişim">
     <div class="section-label">Nasıl ilerliyoruz</div>
     <ol class="steps">
       <li class="step" data-n="1">
         <div class="step-title">Kısa bir görüşme</div>
-        <p class="step-text">İşinizi, sitede ne olması gerektiğini ve bütçenizi konuşuyoruz. Bu görüşmenin bir bedeli yok.</p>
+        <p class="step-text">İşinizi ve sitede ne olması gerektiğini konuşuyoruz. Bu görüşmenin bir bedeli yok.</p>
       </li>
       <li class="step" data-n="2">
         <div class="step-title">Tasarımı gezerek görüyorsunuz</div>
-        <p class="step-text">Site yayına çıkmadan önce, yandaki örnek gibi gezilebilir halde önünüze gelir. Düzeltmeleri onun üstünde konuşuruz.</p>
+        <p class="step-text">Site yayına çıkmadan önce, yandaki örnek gibi gezilebilir halde önünüze gelir. İki revize hakkınızı burada kullanıyorsunuz.</p>
       </li>
       <li class="step" data-n="3">
         <div class="step-title">Yayına alıyoruz</div>
-        <p class="step-text">Alan adınıza bağlanır, güvenlik sertifikası ve mobil kontrolleri yapılır, teslim edilir.</p>
+        <p class="step-text">Alan adını ve hosting işini biz hallediyoruz. Site yayına alınır, mobil kontrolleri yapılır, teslim edilir.</p>
       </li>
     </ol>
 
-    <div class="section-label">Paketler</div>
-    <div class="plans" role="radiogroup" aria-label="Paket seçimi">
-      <button class="plan" role="radio" type="button" id="plan-baslangic" aria-checked="false" tabindex="-1" data-key="baslangic">
-        <span class="plan-top">
-          <span class="plan-name">Başlangıç</span>
-          <span class="plan-price">15.000 – 20.000 TL</span>
-        </span>
-        <span class="plan-desc">Tek sayfa. İşinizi anlatan, arayıp ulaşılabilen bir adres.</span>
-      </button>
-      <button class="plan" role="radio" type="button" id="plan-standart" aria-checked="true" tabindex="0" data-key="standart">
-        <span class="plan-top">
-          <span class="plan-name">Standart</span>
-          <span class="plan-badge">En çok tercih edilen</span>
-          <span class="plan-price">25.000 – 35.000 TL</span>
-        </span>
-        <span class="plan-desc">Çok sayfalı yapı, galeri ve temel SEO. Çoğu işletmenin ihtiyacı bu.</span>
-      </button>
-      <button class="plan" role="radio" type="button" id="plan-premium" aria-checked="false" tabindex="-1" data-key="premium">
-        <span class="plan-top">
-          <span class="plan-name">Premium</span>
-          <span class="plan-price">45.000 – 70.000 TL</span>
-        </span>
-        <span class="plan-desc">Randevu veya rezervasyon, içerik paneli, çok dilli yapı.</span>
-      </button>
+    <div class="section-label">Fiyat</div>
+    <div class="price-card">
+      <div class="price-row">
+        <span class="price-amount">15.000 TL</span>
+        <span class="price-tag">Sabit fiyat</span>
+      </div>
+      <p class="price-sub">Tek fiyat, tek kapsam. Sayfa sayısına ya da işinize göre değişmiyor.</p>
     </div>
 
     <div class="included">
-      <div class="included-head" id="included-head">Standart pakete dahil</div>
-      <ul class="features" id="features" aria-live="polite">
-        <li>Çok sayfalı yapı: ana sayfa, hizmetler, hakkımızda, iletişim</li>
-        <li>Görsel galeri</li>
-        <li>İletişim formu</li>
-        <li>Temel SEO ayarları</li>
-        <li>Google Haritalar ve sosyal medya bağlantıları</li>
-        <li>Mobil uyumlu tasarım</li>
-        <li>Alan adı bağlama ve yayına alma</li>
-        <li>Güvenlik sertifikası kurulumu</li>
+      <div class="included-head">Fiyata dahil</div>
+      <ul class="features">
+        <li>Alan adı alımı</li>
+        <li>Hosting</li>
+        <li>Sayfaların kurulumu</li>
+        <li>SEO uyumlu site haritası</li>
+        <li>Sitenin sorunsuz çalışması</li>
+        <li>Süreç içinde iki revize hakkı</li>
       </ul>
-      <p class="price-note">Fiyatlara KDV dahil değildir. Aralık, sayfa sayısı ve içerik yoğunluğuna göre görüşmede netleşir ve yazılı olarak sabitlenir.</p>
     </div>
 
-    <a class="checkout" id="cta" href="mailto:dolunay@dolunay.ai?subject=Web%20sitesi%20teklifi%3A%20Standart%20paketi&amp;body=Merhaba%2C%0A%0AWeb%20sitesi%20i%C3%A7in%20Standart%20paketiyle%20ilgileniyorum.%0A%0A%C4%B0%C5%9Fim%20%2F%20sekt%C3%B6r%C3%BCm%3A%0A%C5%9Eu%20an%20bir%20sitem%20var%20m%C4%B1%3A%0ASitede%20en%20%C3%A7ok%20ne%20olsun%20istiyorum%3A%0A">
+    <a class="checkout" href="mailto:dolunay@dolunay.ai?subject=Web%20sitesi%20teklifi&amp;body=Merhaba%2C%0A%0AWeb%20sitesi%20yapt%C4%B1rmak%20istiyorum.%0A%0A%C4%B0%C5%9Fim%3A%0A%C5%9Eu%20an%20bir%20sitem%20var%20m%C4%B1%3A%0ASitede%20en%20%C3%A7ok%20ne%20olsun%20istiyorum%3A%0A">
       Teklif iste
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </a>
@@ -343,49 +311,7 @@
 (function(){
   "use strict";
 
-  var PLANS = {
-    baslangic:{
-      ad:"Başlangıç",
-      liste:[
-        "Tek sayfa tasarım",
-        "İşletme bilgileri ve hizmetler bölümü",
-        "İletişim formu",
-        "Mobil uyumlu tasarım",
-        "Alan adı bağlama ve yayına alma",
-        "Güvenlik sertifikası kurulumu"
-      ]
-    },
-    standart:{
-      ad:"Standart",
-      liste:[
-        "Çok sayfalı yapı: ana sayfa, hizmetler, hakkımızda, iletişim",
-        "Görsel galeri",
-        "İletişim formu",
-        "Temel SEO ayarları",
-        "Google Haritalar ve sosyal medya bağlantıları",
-        "Mobil uyumlu tasarım",
-        "Alan adı bağlama ve yayına alma",
-        "Güvenlik sertifikası kurulumu"
-      ]
-    },
-    premium:{
-      ad:"Premium",
-      liste:[
-        "Standart paketteki her şey",
-        "Randevu veya rezervasyon sistemi",
-        "İçerik yönetim paneli: metni ve görseli siz değiştirirsiniz",
-        "Sezonsal içerik güncellemesi",
-        "İleri seviye SEO çalışması",
-        "Çok dilli yapı"
-      ]
-    }
-  };
-
   var viewport = document.getElementById("viewport");
-  var plans    = [].slice.call(document.querySelectorAll(".plan"));
-  var featEl   = document.getElementById("features");
-  var headEl   = document.getElementById("included-head");
-  var cta      = document.getElementById("cta");
   var devDesk  = document.getElementById("dev-desk");
   var devMob   = document.getElementById("dev-mob");
 
@@ -417,51 +343,7 @@
   }
   window.addEventListener("orientationchange", fit);
 
-  /* ---------- paketler ---------- */
-  function mailto(key){
-    var p = PLANS[key];
-    var govde = "Merhaba,\n\nWeb sitesi için " + p.ad + " paketiyle ilgileniyorum.\n\n" +
-                "İşim / sektörüm:\nŞu an bir sitem var mı:\nSitede en çok ne olsun istiyorum:\n";
-    return "mailto:dolunay@dolunay.ai?subject=" +
-           encodeURIComponent("Web sitesi teklifi: " + p.ad + " paketi") +
-           "&body=" + encodeURIComponent(govde);
-  }
-
-  function selectPlan(key, moveFocus){
-    var p = PLANS[key];
-    if (!p) return;
-    for (var i = 0; i < plans.length; i++){
-      var on = plans[i].getAttribute("data-key") === key;
-      plans[i].setAttribute("aria-checked", on ? "true" : "false");
-      plans[i].setAttribute("tabindex", on ? "0" : "-1");
-      if (on && moveFocus) plans[i].focus();
-    }
-    headEl.textContent = p.ad + " paketine dahil";
-    while (featEl.firstChild) featEl.removeChild(featEl.firstChild);
-    for (var j = 0; j < p.liste.length; j++){
-      var li = document.createElement("li");
-      li.textContent = p.liste[j];
-      featEl.appendChild(li);
-    }
-    cta.setAttribute("href", mailto(key));
-  }
-
-  for (var k = 0; k < plans.length; k++){
-    (function(pl){
-      pl.addEventListener("click", function(){ selectPlan(pl.getAttribute("data-key"), false); });
-      pl.addEventListener("keydown", function(ev){
-        if (ev.metaKey || ev.ctrlKey || ev.altKey || ev.shiftKey) return;
-        var cur = plans.indexOf(pl), n = -1;
-        if (ev.key === "ArrowDown" || ev.key === "ArrowRight") n = (cur + 1) % plans.length;
-        else if (ev.key === "ArrowUp" || ev.key === "ArrowLeft") n = (cur - 1 + plans.length) % plans.length;
-        else if (ev.key === "Home") n = 0;
-        else if (ev.key === "End") n = plans.length - 1;
-        if (n < 0) return;
-        ev.preventDefault();
-        selectPlan(plans[n].getAttribute("data-key"), true);
-      });
-    })(plans[k]);
-  }
 })();
 </script>
+</body>
 </html>
