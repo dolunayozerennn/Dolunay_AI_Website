@@ -87,21 +87,34 @@
     border-left:1px solid var(--border);border-right:1px solid var(--border);
   }
 
-  .tools{display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}
-  .device{display:inline-flex;border:1px solid var(--border);border-radius:999px;padding:3px;background:var(--glass)}
+  .tools{display:flex;align-items:center;gap:12px;margin-top:16px;flex-wrap:wrap}
+  .device{
+    display:inline-flex;border:1px solid rgba(255,255,255,.18);border-radius:999px;
+    padding:4px;background:rgba(255,255,255,.06);
+  }
   .device button{
-    appearance:none;border:0;background:none;color:var(--muted);cursor:pointer;
-    font-family:inherit;font-size:12px;font-weight:600;padding:7px 14px;border-radius:999px;
-    transition:color .16s,background .16s;
+    appearance:none;border:0;background:none;color:var(--text);cursor:pointer;
+    font-family:inherit;font-size:14px;font-weight:600;letter-spacing:-.01em;
+    padding:13px 24px;border-radius:999px;
+    transition:color .16s,background .16s,box-shadow .16s;
   }
-  .device button[aria-pressed="true"]{background:rgba(167,139,250,.16);color:var(--accent-light)}
-  @media (hover:hover){.device button[aria-pressed="false"]:hover{color:var(--secondary)}}
+  .device button[aria-pressed="true"]{
+    color:#fff;background:linear-gradient(105deg,var(--accent-deep),var(--accent-mag));
+    box-shadow:0 8px 20px -10px rgba(192,38,211,.95);
+  }
+  @media (hover:hover){.device button[aria-pressed="false"]:hover{background:rgba(255,255,255,.1)}}
+  .device button:focus-visible{outline:2px solid var(--accent-light);outline-offset:3px}
   .open-new{
-    margin-left:auto;font-size:12.5px;color:var(--secondary);text-decoration:none;
-    display:inline-flex;align-items:center;gap:6px;border-bottom:1px solid rgba(255,255,255,.18);padding-bottom:1px;
+    margin-left:auto;font-size:13.5px;font-weight:600;color:var(--text);text-decoration:none;
+    display:inline-flex;align-items:center;gap:8px;
+    border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);
+    padding:13px 19px;border-radius:999px;
+    transition:background .16s,border-color .16s;
   }
-  .open-new svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2}
-  @media (hover:hover){.open-new:hover{color:var(--text);border-color:var(--accent)}}
+  .open-new svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2}
+  @media (hover:hover){.open-new:hover{background:rgba(255,255,255,.11);border-color:rgba(255,255,255,.32)}}
+  .open-new:focus-visible{outline:2px solid var(--accent-light);outline-offset:3px}
+@media (max-width:560px){.open-new{margin-left:0}}
 
   .showcase-caption{margin-top:16px;font-size:12px;color:var(--muted);line-height:1.6}
 
@@ -143,6 +156,7 @@
     color:var(--accent-light);background:rgba(167,139,250,.14);border:1px solid rgba(167,139,250,.3);
     border-radius:999px;padding:3px 8px;
   }
+  .price-kdv{font-size:15px;font-weight:600;color:var(--secondary);letter-spacing:-.01em}
   .price-sub{margin-top:8px;font-size:13.5px;color:var(--secondary);line-height:1.55}
 
   .included{background:var(--bg-darker);border:1px solid var(--border);border-radius:14px;padding:20px 22px;margin-bottom:20px}
@@ -216,13 +230,13 @@
       <span class="headline-line headline-gradient">gezerek görüyorsunuz</span>
     </h1>
     <p class="intro">
-      Buradaki site bizim örnek tasarımımız. Anlatım değil, gerçekten çalışan bir sayfa: tıklayın, kaydırın, mobil görünüme geçirin. Sizin siteniz de yayına çıkmadan önce tam olarak böyle, elinizde gezilebilir halde olur.
+      Siteniz yayına çıkmadan önce, tam olarak böyle gezilebilir halde önünüze gelir.
     </p>
   </header>
 
   <section class="showcase" aria-label="Örnek site">
    <div class="showcase-sticky">
-    <div class="sectors-label">Örnek tasarım, canlı ve gezilebilir</div>
+    <div class="sectors-label">Tıklayın, kaydırın, mobile geçirin</div>
 
     <div class="frame" id="site-panel">
       <div class="frame-bar">
@@ -249,7 +263,7 @@
     </div>
 
     <p class="showcase-caption">
-      Örnek gerçek adreste yayında. Müşteri işi değil, kendi hazırladığımız bir örnek tasarımdır; içindeki isimler, fotoğraflar ve numaralar örnektir. Sizin siteniz kendi metniniz, kendi renginiz ve kendi fotoğraflarınızla kurulur.
+      Örnek tasarım. İçindeki isimler ve fotoğraflar temsilidir.
     </p>
    </div>
   </section>
@@ -259,15 +273,15 @@
     <ol class="steps">
       <li class="step" data-n="1">
         <div class="step-title">Kısa bir görüşme</div>
-        <p class="step-text">İşinizi ve sitede ne olması gerektiğini konuşuyoruz. Bu görüşmenin bir bedeli yok.</p>
+        <p class="step-text">Ne istediğinizi konuşuyoruz. Ücretsiz.</p>
       </li>
       <li class="step" data-n="2">
         <div class="step-title">Tasarımı gezerek görüyorsunuz</div>
-        <p class="step-text">Site yayına çıkmadan önce, buradaki örnek gibi gezilebilir halde önünüze gelir. İki revize hakkınızı bu aşamada kullanıyorsunuz.</p>
+        <p class="step-text">Yayına çıkmadan önce elinizde. İki revize hakkınız burada.</p>
       </li>
       <li class="step" data-n="3">
         <div class="step-title">Yayına alıyoruz</div>
-        <p class="step-text">Alan adını ve hosting işini biz hallediyoruz. Site yayına alınır, mobil kontrolleri yapılır, teslim edilir.</p>
+        <p class="step-text">Alan adı, hosting ve mobil kontrolleri bizde.</p>
       </li>
     </ol>
 
@@ -275,9 +289,10 @@
     <div class="price-card">
       <div class="price-row">
         <span class="price-amount">15.000 TL</span>
+        <span class="price-kdv">+ KDV</span>
         <span class="price-tag">Sabit fiyat</span>
       </div>
-      <p class="price-sub">Tek fiyat, tek kapsam. Sayfa sayısına ya da işinize göre değişmiyor.</p>
+      <p class="price-sub">Sayfa sayısına ya da işinize göre değişmiyor.</p>
     </div>
 
     <div class="included">
@@ -296,7 +311,7 @@
       Teklif iste
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </a>
-    <p class="setup-note">Formu doldurmanız gerekmiyor. Butona basınca hazır bir e-posta açılır; üç satırı doldurup gönderin.</p>
+    <p class="setup-note">Butona basınca hazır bir e-posta açılır.</p>
     <div class="trust">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7.5 3v6c0 4.4-3.1 7.8-7.5 9-4.4-1.2-7.5-4.6-7.5-9V6L12 3z" stroke-linejoin="round"/></svg>
       Kapsam ve fiyat, iş başlamadan yazılı olarak paylaşılır
