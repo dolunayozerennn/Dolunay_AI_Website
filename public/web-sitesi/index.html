@@ -306,7 +306,7 @@
           <span class="plan-name">Premium</span>
           <span class="plan-price">45.000 – 70.000 TL</span>
         </span>
-        <span class="plan-desc">Randevu ve rezervasyon, içerik paneli, çok dilli yapı.</span>
+        <span class="plan-desc">Randevu veya rezervasyon, içerik paneli, çok dilli yapı.</span>
       </button>
     </div>
 
@@ -436,7 +436,7 @@
       plans[i].setAttribute("tabindex", on ? "0" : "-1");
       if (on && moveFocus) plans[i].focus();
     }
-    headEl.textContent = p.ad + " pakete dahil";
+    headEl.textContent = p.ad + " paketine dahil";
     while (featEl.firstChild) featEl.removeChild(featEl.firstChild);
     for (var j = 0; j < p.liste.length; j++){
       var li = document.createElement("li");

@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light">
 <meta name="robots" content="noindex, nofollow">
-<meta name="description" content="Kavis Ic Mimarlik · Konut, ofis ve perakende projelerinde tasarim ve anahtar teslim uygulama. Ornek tasarim calismasidir.">
+<meta name="description" content="Kavis İç Mimarlık · Konut, ofis ve perakende projelerinde tasarım ve anahtar teslim uygulama. Örnek tasarım çalışmasıdır.">
 <title>Kavis İç Mimarlık | Tasarım ve Uygulama</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -111,8 +111,9 @@
     margin-bottom:clamp(28px,4vw,48px)}
   .proj-top h2{font-size:clamp(28px,3.8vw,46px)}
   .tags{display:flex;flex-wrap:wrap;gap:8px}
+  [hidden]{display:none!important}
   .tags .tag{font-size:12.5px;color:var(--mute);border:1px solid var(--line-2);
-    appearance:none;background:none;font-family:inherit;cursor:pointer;
+    appearance:none;background:none;font-family:inherit;line-height:1.6;cursor:pointer;
     transition:color .18s,background .18s,border-color .18s;
     padding:7px 14px;border-radius:999px}
   .tags .tag[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
@@ -123,10 +124,11 @@
   .card img{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.2,.7,.3,1)}
   .card:hover img{transform:scale(1.045)}
   .card .ratio{aspect-ratio:4/3}
-  .card-meta{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:14px;
-    padding:15px 2px 0;border-top:1px solid var(--line);margin-top:14px}
-  .card h3{font-size:19px;font-weight:400;letter-spacing:-.005em}
-  .card small{font-size:12.5px;color:var(--mute);white-space:nowrap;letter-spacing:.02em}
+  .card-meta{padding:15px 2px 0;border-top:1px solid var(--line);margin-top:14px}
+  .card h3{font-size:19px;font-weight:400;letter-spacing:-.005em;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .card small{display:block;margin-top:7px;font-size:12.5px;color:var(--mute);
+    white-space:nowrap;letter-spacing:.02em}
   .card .kind{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--clay);
     font-weight:600;margin-bottom:9px;display:block}
 
@@ -201,19 +203,19 @@
     .nav-links{display:none}
     .nav-cta{display:none}
     .burger{display:flex}
-    .sec-head,.ref,.cta-in{grid-template-columns:1fr}
-    .grid{grid-template-columns:repeat(2,1fr)}
-      .cols{grid-template-columns:1fr 1fr}
-    .steps{grid-template-columns:1fr 1fr}
+    .sec-head,.ref,.cta-in{grid-template-columns:minmax(0,1fr)}
+    .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .cols{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .steps{grid-template-columns:repeat(2,minmax(0,1fr))}
   }
   @media(max-width:640px){
-    .stats-in{grid-template-columns:1fr 1fr}
+    .stats-in{grid-template-columns:repeat(2,minmax(0,1fr))}
     .stat:nth-child(3){border-left:0}
     .stat:nth-child(-n+2){border-bottom:1px solid var(--line)}
     .stats-in .stat:nth-child(3){padding-left:0}
-    .grid{grid-template-columns:1fr}
-    .cols{grid-template-columns:1fr}
-    .steps{grid-template-columns:1fr}
+    .grid{grid-template-columns:minmax(0,1fr)}
+    .cols{grid-template-columns:minmax(0,1fr)}
+    .steps{grid-template-columns:minmax(0,1fr)}
     .band blockquote{max-width:none}
   }
   @media(max-width:380px){
@@ -331,7 +333,7 @@
         <a class="card" href="#iletisim" data-tur="perakende">
           <figure class="ratio"><img src="f/p5.jpg" alt="Işıklı nişleri olan seramik showroom" loading="lazy" width="1150" height="863"></figure>
           <div class="card-meta">
-            <div><span class="kind">Perakende</span><h3>Nişantaşı Seramik Showroom</h3></div>
+            <div><span class="kind">Perakende</span><h3>Nişantaşı Showroom</h3></div>
             <small>2025 · 130 m²</small>
           </div>
         </a>
@@ -421,7 +423,7 @@
           <a href="tel:+902125550124">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-3 2a12 12 0 0 0 5 5l2-3 5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"/></svg>
             0212 555 01 24</a>
-          <a href="#iletisim">
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=Cafera%C4%9Fa%2C%20Kad%C4%B1k%C3%B6y%2C%20%C4%B0stanbul" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
             Caferağa, Kadıköy · İstanbul</a>
           <a class="btn btn-p" href="mailto:merhaba@kavismimarlik.com?subject=Proje%20g%C3%B6r%C3%BC%C5%9Fmesi">Randevu alın</a>
