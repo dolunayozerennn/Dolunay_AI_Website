@@ -263,7 +263,7 @@
         <button class="nav next" id="next" type="button" aria-label="Sonraki slayt">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="currentColor" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
-        <img id="slide-img" src="/carousel-otomasyonu/gorseller/editoryal-1.jpg" width="1080" height="1350"
+        <img id="slide-img" src="/carousel-otomasyonu/gorseller/editoryal-1.jpg?v=2" width="1080" height="1350"
              decoding="async" fetchpriority="high"
              alt="1. slayt: Müşteriniz artık karbon verisi de isteyebilir">
       </div>
@@ -391,7 +391,7 @@
   var index = 0;
   var preloaded = {};
 
-  function src(st, i){ return "/carousel-otomasyonu/gorseller/" + st + "-" + (i + 1) + ".jpg"; }
+  function src(st, i){ return "/carousel-otomasyonu/gorseller/" + st + "-" + (i + 1) + ".jpg?v=2"; }
 
   function preload(st){
     if (preloaded[st]) return;
