@@ -19,8 +19,14 @@
   force = true
 
 [[redirects]]
+  from = "/odeme/tek-sonuc"
+  to = "/.netlify/functions/odeme-sonuc"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/odeme/*"
-  to = "/.netlify/functions/abonelik-baslat?paket=:splat"
+  to = "/.netlify/functions/odeme-baslat?paket=:splat"
   status = 200
   force = true
 

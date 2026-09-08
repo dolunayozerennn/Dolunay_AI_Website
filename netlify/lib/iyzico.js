@@ -125,4 +125,12 @@ async function abonelikleriTara(bak, sayfaTavani = 20) {
   return null
 }
 
-module.exports = { formBaslat, formSonuc, paketBul, abonelikleriTara }
+function tekSeferBaslat (veri) {
+  return istek('POST', '/payment/iyzipos/checkoutform/initialize/auth/ecom', veri)
+}
+
+function tekSeferSonuc (token) {
+  return istek('POST', '/payment/iyzipos/checkoutform/auth/ecom/detail', { locale: 'tr', token })
+}
+
+module.exports = { formBaslat, formSonuc, paketBul, abonelikleriTara, tekSeferBaslat, tekSeferSonuc }

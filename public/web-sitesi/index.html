@@ -14,17 +14,18 @@
 <style>
   :root{
     --bg-dark:#08090C; --bg-darker:#0E0F14; --bg-card:#14161D;
-    --accent:#A78BFA; --accent-light:#C4B5FD; --accent-warm:#E879F9;
-    --accent-deep:#7C3AED; --accent-mag:#C026D3;
+    --accent:#4F8BFF; --accent-light:#8FB6FF; --accent-warm:#8FB6FF;
+    --accent-deep:#2563EB; --accent-mag:#4F8BFF;
     --green:#4ADE80;
     --text:#F4F2EC; --secondary:#C9CCD4; --muted:#8A8E99;
     --border:rgba(255,255,255,.08); --glass:rgba(255,255,255,.03);
+    --ink:#04070F;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{-webkit-text-size-adjust:100%}
   body{
     background:var(--bg-dark); color:var(--text);
-    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    font-family:'Inter Tight','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
     line-height:1.6; -webkit-font-smoothing:antialiased;
     padding:72px 0 96px;
   }
@@ -42,12 +43,12 @@
 
   /* ---------- BASLIK ---------- */
   h1{
-    font-family:'Inter Tight',sans-serif;font-size:clamp(34px,4.4vw,50px);font-weight:800;
+    font-family:'Inter Tight',sans-serif;font-size:clamp(34px,4.4vw,50px);font-weight:600;
     line-height:1.06;letter-spacing:-.03em;margin-bottom:18px;
   }
   .headline-line{display:block}
   .headline-gradient{
-    background:linear-gradient(105deg,var(--accent-light),var(--accent-warm));
+    background:var(--accent);
     -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
   }
   .intro{font-size:15.5px;color:var(--secondary);line-height:1.65;max-width:46ch}
@@ -99,8 +100,8 @@
     transition:color .16s,background .16s,box-shadow .16s;
   }
   .device button[aria-pressed="true"]{
-    color:#fff;background:linear-gradient(105deg,var(--accent-deep),var(--accent-mag));
-    box-shadow:0 8px 20px -10px rgba(192,38,211,.95);
+    color:#fff;background:var(--accent);
+    box-shadow:0 8px 20px -10px rgba(37,99,235,.95);
   }
   @media (hover:hover){.device button[aria-pressed="false"]:hover{background:rgba(255,255,255,.1)}}
   .device button:focus-visible{outline:2px solid var(--accent-light);outline-offset:3px}
@@ -129,13 +130,13 @@
   .step::before{
     content:attr(data-n);position:absolute;left:0;top:-1px;
     width:28px;height:28px;border-radius:50%;
-    border:1px solid rgba(167,139,250,.35);background:rgba(167,139,250,.09);
+    border:1px solid rgba(79,139,255,.35);background:rgba(79,139,255,.09);
     color:var(--accent-light);font-family:'Inter Tight',sans-serif;font-size:12.5px;font-weight:600;
     display:flex;align-items:center;justify-content:center;
   }
   .step:not(:last-child)::after{
     content:"";position:absolute;left:14px;top:32px;bottom:6px;width:1px;
-    background:linear-gradient(180deg,rgba(167,139,250,.3),rgba(255,255,255,.05));
+    background:linear-gradient(180deg,rgba(79,139,255,.3),rgba(255,255,255,.05));
   }
   .step-title{font-size:14.5px;font-weight:600;color:var(--text);margin-bottom:3px;line-height:1.4}
   .step-text{font-size:13.5px;color:var(--muted);line-height:1.6}
@@ -143,7 +144,7 @@
   .price-card{
     position:relative;background:var(--bg-card);border:1px solid var(--accent);border-radius:14px;
     padding:20px 22px;margin-bottom:14px;
-    background-image:linear-gradient(180deg,rgba(167,139,250,.11),rgba(167,139,250,.02));
+    background-image:linear-gradient(180deg,rgba(79,139,255,.11),rgba(79,139,255,.02));
     box-shadow:0 0 0 1px var(--accent) inset;
   }
   .price-row{display:flex;align-items:baseline;gap:11px;flex-wrap:wrap}
@@ -153,7 +154,7 @@
   }
   .price-tag{
     display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-    color:var(--accent-light);background:rgba(167,139,250,.14);border:1px solid rgba(167,139,250,.3);
+    color:var(--accent-light);background:rgba(79,139,255,.14);border:1px solid rgba(79,139,255,.3);
     border-radius:999px;padding:3px 8px;
   }
   .price-kdv{font-size:15px;font-weight:600;color:var(--secondary);letter-spacing:-.01em}
@@ -175,14 +176,14 @@
 
   .checkout{
     display:flex;align-items:center;justify-content:center;gap:9px;
-    width:100%;padding:17px 24px;border:0;border-radius:12px;cursor:pointer;
-    background:linear-gradient(105deg,var(--accent-deep),var(--accent-mag));
-    color:#fff;font-family:'Inter Tight',sans-serif;font-size:15.5px;font-weight:700;letter-spacing:-.01em;
-    text-decoration:none;transition:transform .16s,box-shadow .16s,filter .16s;
-    box-shadow:0 12px 30px -14px rgba(124,58,237,.85);
+    width:100%;padding:16px 28px;border:0;border-radius:999px;cursor:pointer;
+    background:var(--accent);
+    color:#fff;font-family:'Inter Tight',sans-serif;font-size:15px;font-weight:600;letter-spacing:-.01em;
+    text-decoration:none;transition:transform .16s,background .16s;
   }
+
   .checkout svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.2}
-  @media (hover:hover){.checkout:hover{transform:translateY(-2px);filter:saturate(1.08);box-shadow:0 18px 40px -16px rgba(192,38,211,.85)}}
+  @media (hover:hover){.checkout:hover{transform:translateY(-1px);background:#6699FF}}
   .checkout:active{transform:translateY(0)}
 
   .setup-note{margin-top:13px;font-size:13px;color:var(--muted);line-height:1.6;text-align:center}
@@ -307,11 +308,11 @@
       </ul>
     </div>
 
-    <a class="checkout" href="mailto:dolunay@dolunay.ai?subject=Web%20sitesi%20teklifi&amp;body=Merhaba%2C%0A%0AWeb%20sitesi%20yapt%C4%B1rmak%20istiyorum.%0A%0A%C4%B0%C5%9Fim%3A%0A%C5%9Eu%20an%20bir%20sitem%20var%20m%C4%B1%3A%0ASitede%20en%20%C3%A7ok%20ne%20olsun%20istiyorum%3A%0A">
-      Teklif iste
+    <a class="checkout" href="/odeme/web-sitesi">
+      Hemen başlayalım
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </a>
-    <p class="setup-note">Butona basınca hazır bir e-posta açılır.</p>
+    <p class="setup-note">Kartınızla ödersiniz, iş aynı gün başlar.</p>
     <div class="trust">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7.5 3v6c0 4.4-3.1 7.8-7.5 9-4.4-1.2-7.5-4.6-7.5-9V6L12 3z" stroke-linejoin="round"/></svg>
       Kapsam ve fiyat, iş başlamadan yazılı olarak paylaşılır
