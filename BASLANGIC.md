@@ -13,6 +13,19 @@ Akis: `/odeme/<slug>` formu (ad, soyad, mail, telefon, adres) →
 `abonelik-baslat.js` iyzico'da abonelik baslatir ve gomulu kart formunu cizer →
 kart girilir → `abonelik-sonuc.js` sonucu gosterir.
 
+**Bildirim maili YOK ve kurulmayacak (2026-09-08, Dolunay'in karari).** Ne musteriye
+ne Dolunay'a odeme bildirimi gonderen bir otomasyon vardir. Sebep onun kendi cumlesi:
+musterilerle birebir iletisim var ve "ekstradan boyle bir is icin otomasyonu yonetmekle
+ugrasmak da istemiyoruz". Sayfa noindex ve link elden gonderildigi icin Dolunay kimin
+satin aldigini zaten biliyor. Bu bir eksik degil TERCIHTIR; sonraki oturum "bildirim
+kurulmamis" diye is acmaz. Pratik sonuc: ekran metinlerinde musteriye mail vaat EDILMEZ.
+
+**Musteriye gorunen her metin duzgun Turkce yazilir (2026-09-07).** Kart bilgisi girilen
+ekranda ASCII Turkce ("Sehir", "Odeme yalnizca") guven kirar. Sinav dosyasi karsilastirma
+oncesi aksani duselttigi icin duzgun Turkce yazmak suiti bozmaz; yani ASCII yazmanin
+teknik bir mazereti yoktur. Kod tarafi (degisken, regex, JSON anahtari, iyzico'ya giden
+alan degerleri) ASCII kalir.
+
 ### EN ONEMLI: paket katalogu REPODA DEGIL
 
 Paketler `IYZICO_PAKETLER` adli **Netlify ortam degiskeninde** durur. Repoda
@@ -134,6 +147,13 @@ sorunudur, "kesin ret" degildir. Kurallar:
 - Mukerrer abonelik taramasi okunamazsa odeme BASLATILMAZ (503). Kacan satis,
   ikinci tahsilattan iyidir. Bos liste (`items: []`) okunamamak DEGILDIR: ilk kez
   satin alan musteri normal sekilde ilerler.
+- **Ekran metni sistemde karsiligi olmayan sey VAAT ETMEZ (2026-09-08).** Bes ayri
+  yerde musteriye "e-postaniza gonderilir / e-postanizi kontrol edin / onay maili
+  geldiyse islem tamamlanmistir" deniyordu; boyle bir gonderim hic olmadi. En agir
+  hali belirsiz sonuc ekranindaydi: musteri gelmeyecek bir maili beklemeye
+  yonlendiriliyor, sonra da odemeyi tekrar deneyebiliyordu. Artik o ekranlar
+  musteriyi dogrudan `dolunay@dolunay.ai` adresine yaziyor. Yeni metin yazarken
+  kural tek: cumlenin karsiligi kodda yoksa cumle yazilmaz.
 - Saglayici toplamda daha cok kayit oldugunu soyluyorsa ve biz hepsini gormediysek
   liste bitmemistir; "abonelik yok" denmez.
 - Sorgunun donmesi aboneligin basladigini KANITLAMAZ. Kaydin kendi durumu ACTIVE
@@ -189,7 +209,8 @@ gercekten var oldugunu ve tahsil edilecek bedelin sayfada yazan bedelle ortustug
 Sayfada "+KDV" yazdigi icin kiyas KDV'li tutar uzerinden yapilir (2.980 -> 3576).
 
 Tahsilat yapmaz, abonelik acmaz, iptal etmez; yalniz `GET /v2/subscription/pricing-plans/<ref>`.
-Yeni paket acildiktan sonra ve fiyat degisiminde kosulur; canli test odemesinin yerine gecer.
+Yeni paket acildiktan sonra ve fiyat degisiminde kosulur. Canli test odemesinin YERINE
+GECMEZ: yalniz planin var oldugunu ve tutarin dogru oldugunu olcer, kart/3DS akisini sinamaz.
 Bulgu varsa cikis 1.
 
 Anahtarlar koda yazilmaz: `master.env` + Netlify'dan gelen `IYZICO_PAKETLER` ile kosar.
