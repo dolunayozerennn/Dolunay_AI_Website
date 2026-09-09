@@ -111,7 +111,7 @@ footer strong{color:var(--murekkep)}
 .kur code{font-family:var(--mn);font-size:12.5px;background:var(--kod-z);color:var(--kod-m);
   padding:10px 12px;border-radius:3px;display:block;overflow-x:auto;white-space:nowrap}
 
-/* adim 2 - girdi formu */
+/* adim 3 - girdi formu */
 ol.girdi{grid-template-columns:1fr 1fr}
 ol.girdi li{min-width:0}
 ol.girdi li.gen{grid-column:1 / -1}
@@ -131,7 +131,7 @@ pre.prompt{position:relative;scroll-behavior:smooth}
   margin-left:4px}
 .sil:hover{color:var(--murekkep);border-bottom-color:var(--soluk)}
 
-/* adim 3 - panolar */
+/* adim 4 - panolar */
 .genis{max-width:1400px;margin:0 auto;padding:0 24px}
 .panolar{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .pano{border:1px solid var(--cizgi);border-radius:4px;background:var(--yuzey);
@@ -199,12 +199,22 @@ pre.prompt{position:relative;scroll-behavior:smooth}
       <code>npm install -g @openai/codex</code>
     </article>
   </div>
-  <p class="olcu">Kurulumdan sonra tek yapman gereken, sectigin ajana AIsa
-    baglantisini eklemek. Baska anahtar, baska hesap istenmiyor.</p>
 </div></section>
 
 <section><div class="sr">
   <div class="adim"><span class="no">2</span><div>
+    <h2>AIsa'yi kurdugun ajana bagla</h2>
+    <p>aisa.one adresinden hesabini ac ve AIsa baglantisini Claude Code ya da
+      Codex'e ekle. Sistemin baktigi her sey buradan geliyor: arama hacmi,
+      tedarikci fiyatlari, rakip sayfalari, videolar. Baglanti kurulu degilse
+      sistem ilk adimda durur.</p>
+  </div></div>
+  <p class="olcu">Bu tek baglanti yeter. Baska anahtar, baska hesap, baska
+    kurulum istenmiyor.</p>
+</div></section>
+
+<section><div class="sr">
+  <div class="adim"><span class="no">3</span><div>
     <h2>Sekiz soruyu cevapla, sonra kiti kopyala</h2>
     <p>Prompt'un en tepesinde bir girdi blogu var. Asagiya yazdigin her cevap
       aninda prompt'un icine islenir: noktali satirin yerini senin cevabin alir.
@@ -249,7 +259,7 @@ pre.prompt{position:relative;scroll-behavior:smooth}
 
 <section>
   <div class="sr">
-    <div class="adim"><span class="no">3</span><div>
+    <div class="adim"><span class="no">4</span><div>
       <h2>Cikan sey bir pano</h2>
       <p>Okunacak bir rapor degil, bakilacak bir sayfa. Urunun tedarikci
         gorselleri, fiyat merdiveni, on iki aylik arama egrisi, rakiplerin
