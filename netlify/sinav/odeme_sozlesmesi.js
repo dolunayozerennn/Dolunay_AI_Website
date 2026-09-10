@@ -168,9 +168,14 @@ function fixture() {
   const packages = {
     'blog-profesyonel': { plan: PLAN, ad: 'Blog Profesyonel', tutar: 10 },
   };
+  // Zorunlu alanlarin TAMAMI burada durmali. Eksik bir alan vakayi dusurmez,
+  // ATLANDI yapar: dogrulama formu geri cevirir, olculecek fetch cagrisina hic
+  // gidilmez. Forma yeni zorunlu alan eklendiginde burasi da guncellenir.
   const fields = {
-    ad: 'Ayse', soyad: 'Yilmaz', eposta: 'ayse@ornek.com', telefon: '5301234567',
-    tckn: digits.join(''), sehir: 'Istanbul', adres: 'Ornek Mah 1 Sok No 2', onay: 'on',
+    markaAdi: 'Ornek Marka', ad: 'Ayse', soyad: 'Yilmaz', eposta: 'ayse@ornek.com',
+    telefon: '5301234567', tckn: digits.join(''), ilce: 'Kadikoy', sehir: 'Istanbul',
+    adres: 'Ornek Mah 1 Sok No 2', sifre: 'sinavSifre123', sifreTekrar: 'sinavSifre123',
+    onay: 'on',
   };
   return { packages, fields };
 }
@@ -237,6 +242,31 @@ async function workerCase() {
   require('node:net').Socket.prototype.connect = denyNetwork;
   if (globalThis.WebSocket) globalThis.WebSocket = denyNetwork;
   if (globalThis.EventSource) globalThis.EventSource = denyNetwork;
+
+  // Uygulama Netlify Blobs kullaniyor. Sinav ortaminda gercek depo yok ve
+  // depoya cikan her yol yukaridaki ag engeline takilir. Bellekte calisan bir
+  // depo konur ki odeme baslatma yolu bekleyen kaydi yazabilsin. Vakalar depo
+  // icerigini olcmez; olcum yine HTTP cevabi uzerinden yapilir.
+  const Module = require('node:module');
+  const bellekDepo = new Map();
+  const sahteBlobs = {
+    getStore: () => ({
+      get: async (key) => {
+        const deger = bellekDepo.get(key);
+        return deger === undefined ? null : JSON.parse(deger);
+      },
+      setJSON: async (key, value) => { bellekDepo.set(key, JSON.stringify(value)); },
+      delete: async (key) => { bellekDepo.delete(key); },
+      list: async ({ prefix } = {}) => ({
+        blobs: [...bellekDepo.keys()]
+          .filter((key) => !prefix || key.startsWith(prefix)).map((key) => ({ key })),
+      }),
+    }),
+  };
+  const gercekYukle = Module._load;
+  Module._load = function (istek, ...kalan) {
+    return istek === '@netlify/blobs' ? sahteBlobs : gercekYukle.call(this, istek, ...kalan);
+  };
 
   // Sahte saat, uygulamanin kendi abort/deadline kurmasini gerektirir.
   // Hic timeout kurmayan kodu sinav kendi abort ederek basarili saymaz.
