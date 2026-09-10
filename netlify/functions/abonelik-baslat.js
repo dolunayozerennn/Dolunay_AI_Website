@@ -5,16 +5,32 @@
 // paylasilamaz; her ziyarette yeniden uretilir.
 const { formBaslat, paketBul, abonelikleriTara } = require('../lib/iyzico')
 const { kacir, sayfa, html, hataSayfasi, kayitIcin } = require('../lib/sayfa')
+const { sifreOzetle, bekleyenYaz } = require('../lib/hesap')
 
+// Zorunlu metin alanlari. Sira, hata mesajindaki siralamayi da belirler;
+// formdaki sirayla ayni tutuldu ki musteri asagi dogru okurken kaybolmasin.
 const ALANLAR = [
+  ['markaAdi', 'Marka adı'],
+  ['eposta', 'E-posta'],
   ['ad', 'Ad'],
   ['soyad', 'Soyad'],
-  ['eposta', 'E-posta'],
   ['telefon', 'Cep telefonu'],
   ['tckn', 'T.C. kimlik numarası'],
-  ['sehir', 'Şehir'],
   ['adres', 'Adres'],
+  ['ilce', 'İlçe'],
+  ['sehir', 'Şehir'],
 ]
+
+// Zorunlu olmayan metin alanlari. Bos gecilebilir; doluysa dogrulanir.
+const ISTEGE_BAGLI = [
+  ['webSitesi', 'Web siteniz'],
+  ['postaKodu', 'Posta kodu'],
+]
+
+// Sifre alanlari AYRI tutulur: kirpilmaz (bastaki/sondaki bosluk musterinin
+// sifresinin parcasi olabilir), forma geri BASILMAZ, loglanmaz, iyzico'ya
+// gonderilmez. Bu yuzden ALANLAR/ISTEGE_BAGLI donguleriyle islenmezler.
+const SIFRE_ALANLARI = ['sifre', 'sifreTekrar']
 
 function govdeCoz(event) {
   let ham = event.body || ''
@@ -22,13 +38,30 @@ function govdeCoz(event) {
   const p = new URLSearchParams(ham)
   const o = {}
   for (const [k] of ALANLAR) o[k] = (p.get(k) || '').trim()
+  for (const [k] of ISTEGE_BAGLI) o[k] = (p.get(k) || '').trim()
+  for (const k of SIFRE_ALANLARI) o[k] = p.get(k) || ''
   o.onay = ['on', '1', 'true', 'evet'].includes((p.get('onay') || '').trim().toLowerCase())
+  return o
+}
+
+// Formun yeniden basildigi her yerde sifreler dusurulur. Tek satirda kalmasi
+// icin: "hangi degerler geri gosterilebilir" sorusunun tek cevabi burasi.
+function gosterilebilir(v) {
+  const o = Object.assign({}, v)
+  for (const k of SIFRE_ALANLARI) delete o[k]
   return o
 }
 
 // Alan uzunluklari: cok uzun degerin iyzico'nun ham hatasina donmesindense
 // burada anlasilir sekilde durmasi icin.
-const UZUNLUK = { ad: 50, soyad: 50, eposta: 100, sehir: 50, adres: 200, telefon: 20, tckn: 11 }
+// Sifre ust siniri scrypt maliyetini sinirlamak icin de var: cok uzun girdi
+// fonksiyonu mesgul etmesin.
+const UZUNLUK = {
+  ad: 50, soyad: 50, eposta: 100, sehir: 50, adres: 200, telefon: 20, tckn: 11,
+  markaAdi: 80, ilce: 50, webSitesi: 200, postaKodu: 5, sifre: 200,
+}
+
+const SIFRE_EN_AZ = 8
 
 function telefonDuzelt(ham) {
   const d = String(ham).replace(/\D/g, '')
@@ -67,25 +100,65 @@ function tcknGecerli(ham) {
   return ilkOn % 10 === d[10]
 }
 
+// Web sitesi zorunlu degil ama girildiyse otomasyonun yaziyi nereye
+// gonderecegini belirleyecek. Sema yalnizca http/https; javascript: ve data:
+// gibi semalarin kayda girmesi istenmiyor.
+function siteDuzelt(ham) {
+  const s = String(ham || '').trim()
+  if (!s) return ''
+  const aday = /^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(s) ? s : 'https://' + s
+  let u
+  try {
+    u = new URL(aday)
+  } catch {
+    return null
+  }
+  if (u.protocol !== 'http:' && u.protocol !== 'https:') return null
+  if (!u.hostname.includes('.')) return null
+  return u.toString()
+}
+
 function dogrula(v) {
   const eksik = ALANLAR.filter(([k]) => !v[k]).map(([, ad]) => ad)
   if (eksik.length) return 'Şu alanları doldurun: ' + eksik.join(', ') + '.'
-  const uzun = ALANLAR.find(([k]) => v[k].length > (UZUNLUK[k] || 200))
+  const uzun = ALANLAR.concat(ISTEGE_BAGLI).find(([k]) => v[k].length > (UZUNLUK[k] || 200))
   if (uzun) return `${uzun[1]} alanı çok uzun, en fazla ${UZUNLUK[uzun[0]]} karakter olabilir.`
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.eposta)) return 'E-posta adresi geçerli görünmüyor.'
   if (!telefonDuzelt(v.telefon)) return 'Cep telefonu numaranızı 05XX XXX XX XX biçiminde yazın.'
   if (!/^[1-9][0-9]{10}$/.test(v.tckn)) return 'T.C. kimlik numarası 11 haneli olmalı.'
   if (!tcknGecerli(v.tckn)) return 'T.C. kimlik numaranızı kontrol edin, hatalı görünüyor.'
+  if (siteDuzelt(v.webSitesi) === null) return 'Web sitesi adresini https://siteniz.com biçiminde yazın.'
+  if (v.postaKodu && !/^[0-9]{5}$/.test(v.postaKodu)) return 'Posta kodu 5 haneli olmalı.'
+
+  // Sifre kontrolleri: mesaj hicbir zaman girilen degeri icermez.
+  if (!v.sifre) return 'Panele girmek için bir şifre belirleyin.'
+  if (v.sifre.length < SIFRE_EN_AZ) return `Şifre en az ${SIFRE_EN_AZ} karakter olmalı.`
+  if (v.sifre.length > UZUNLUK.sifre) return `Şifre en fazla ${UZUNLUK.sifre} karakter olabilir.`
+  if (v.sifre !== v.sifreTekrar) return 'İki şifre birbirini tutmuyor.'
+
   if (!v.onay) return 'Devam etmek için abonelik koşullarını onaylamanız gerekiyor.'
   return null
 }
 
 function formSayfasi(slug, paket, deger, hata) {
-  const d = deger || {}
-  const alan = (ad, etiket, tip, ipucu) => `
+  // Sifreler burada dusurulur, cagiran yerlerde degil. Form sekiz ayri yerden
+  // yeniden ciziliyor; suzgeci tek noktada tutmak, bir cagri yerinde unutulup
+  // sifrenin HTML'e geri yazilmasini imkansiz kilar.
+  const d = gosterilebilir(deger || {})
+  const alan = (ad, etiket, tip, ipucu, zorunlu = true) => `
     <div class="satir">
       <label for="${ad}">${kacir(etiket)}</label>
-      <input id="${ad}" name="${ad}" type="${tip}" value="${kacir(d[ad] || '')}" maxlength="${UZUNLUK[ad] || 200}" required>
+      <input id="${ad}" name="${ad}" type="${tip}" value="${kacir(d[ad] || '')}" maxlength="${UZUNLUK[ad] || 200}"${zorunlu ? ' required' : ''}>
+      ${ipucu ? `<p class="ipucu">${kacir(ipucu)}</p>` : ''}
+    </div>`
+
+  // Sifre alanlari ayri yardimci: `value` HIC basilmaz. Dogrulama hatasinda
+  // form yeniden ciziliyor; girilen sifrenin HTML'e geri yazilmasi onu tarayici
+  // gecmisine ve ara belleklere dusurur. Musteri iki kutuyu tekrar doldurur.
+  const sifreAlani = (ad, etiket, ipucu) => `
+    <div class="satir">
+      <label for="${ad}">${kacir(etiket)}</label>
+      <input id="${ad}" name="${ad}" type="password" maxlength="${UZUNLUK.sifre}" minlength="${SIFRE_EN_AZ}" autocomplete="new-password" required>
       ${ipucu ? `<p class="ipucu">${kacir(ipucu)}</p>` : ''}
     </div>`
 
@@ -111,25 +184,49 @@ function formSayfasi(slug, paket, deger, hata) {
 
       <form class="kform" method="POST" action="/odeme/${encodeURIComponent(slug)}">
         <div class="kart">
+          <p class="etiket">Hesap</p>
+          <div class="ikili">
+            ${alan('markaAdi', 'Marka adı', 'text', 'Blogunuzda görünecek isim.')}
+            ${alan('webSitesi', 'Web siteniz', 'url', 'Varsa yazın; yazılar buraya gönderilecek.', false)}
+          </div>
+          ${alan('eposta', 'E-posta', 'email', 'Hem aboneliğinizle ilgili yazışmalar hem panel girişi için bu adresi kullanacağız.')}
+          <div class="ikili">
+            ${sifreAlani('sifre', 'Şifre', `Panele bu şifreyle gireceksiniz. En az ${SIFRE_EN_AZ} karakter.`)}
+            ${sifreAlani('sifreTekrar', 'Şifre (tekrar)')}
+          </div>
+        </div>
+
+        <div class="kart">
+          <p class="etiket">Fatura bilgileri</p>
           <div class="ikili">
             ${alan('ad', 'Ad', 'text')}
             ${alan('soyad', 'Soyad', 'text')}
           </div>
-          ${alan('eposta', 'E-posta', 'email', 'Aboneliğinizle ilgili yazışmalar için bu adresi kullanacağız.')}
           <div class="ikili">
             ${alan('telefon', 'Cep telefonu', 'tel', '05XX XXX XX XX')}
             ${alan('tckn', 'T.C. kimlik numarası', 'text', 'Ödeme kuruluşu abonelik için zorunlu tutuyor.')}
           </div>
-          ${alan('sehir', 'Şehir', 'text')}
           <div class="satir">
             <label for="adres">Fatura adresi</label>
             <textarea id="adres" name="adres" maxlength="${UZUNLUK.adres}" required>${kacir(d.adres || '')}</textarea>
           </div>
+          <div class="ikili">
+            ${alan('ilce', 'İlçe', 'text')}
+            ${alan('sehir', 'Şehir', 'text')}
+          </div>
+          ${alan('postaKodu', 'Posta kodu', 'text', 'İsteğe bağlı.', false)}
 
+          <!-- Onay metni yalnizca SITEDE GERCEKTEN VAR OLAN belgelere baglanir.
+               Genel bir Gizlilik Politikasi ve Kullanim Kosullari sayfasi yok;
+               /sozlesmeler altindaki gizlilik ve kosullar sayfalari kapatilmis
+               Artifex urunune ait. Olmayan sayfaya baglanan onay kutusu, alicinin
+               okumadigi belgeyi kabul ettirmis olur. O iki belge yazildiginda
+               buraya eklenecek. -->
           <label class="onay">
             <input type="checkbox" name="onay" ${d.onay ? 'checked' : ''} required>
-            <span><a href="/sozlesmeler/mesafeli-satis" target="_blank">Mesafeli satış sözleşmesini</a>
-            okudum ve aylık olarak kartımdan otomatik tahsilat yapılmasını kabul ediyorum.</span>
+            <span><a href="/sozlesmeler/mesafeli-satis" target="_blank">Mesafeli Satış Sözleşmesi</a>&apos;ni
+            ve <a href="/sozlesmeler/kvkk" target="_blank">KVKK Aydınlatma Metni</a>&apos;ni okudum;
+            aylık olarak kartımdan otomatik tahsilat yapılmasını kabul ediyorum.</span>
           </label>
 
           <p class="kartuyari">Ödeme yalnızca KREDİ KARTI ile alınabilir. Banka kartı abonelikte kabul edilmiyor.</p>
@@ -239,11 +336,45 @@ exports.handler = async (event) => {
     return html(503, formSayfasi(slug, paket, v, 'Mevcut aboneliğiniz olup olmadığını şu an doğrulayamıyoruz. İkinci kez tahsilat olmaması için ödeme başlatılmadı. Birkaç dakika sonra tekrar deneyin.'))
   }
 
+  // Hesap odeme aninda ACILMAZ; odemenin alindigi ancak iyzico donusunde belli
+  // olur. Musterinin hesap bilgileri burada "bekleyen kayit" olarak saklanir,
+  // hesap abonelik-sonuc'ta ACTIVE dogrulandiktan sonra bu kayittan acilir.
+  //
+  // Sira onemli: kayit iyzico'dan ONCE yazilir. Kapi bilerek FAIL-CLOSED --
+  // kayit yazilamazsa odeme HIC baslatilmaz. Tersi, parasi alinmis ama hesabi
+  // acilamayan musteri demek olurdu; mukerrer tahsilat kapisiyla ayni gerekce.
+  const konusmaKimligi = `${slug}-${Date.now()}`
+  try {
+    const sifreOzeti = await sifreOzetle(v.sifre)
+    await bekleyenYaz({
+      eposta: v.eposta,
+      plan: paket.plan,
+      slug,
+      konusmaKimligi,
+      sifreOzeti,
+      markaAdi: v.markaAdi,
+      webSitesi: siteDuzelt(v.webSitesi),
+      ad: v.ad,
+      soyad: v.soyad,
+      telefon: telefonDuzelt(v.telefon),
+      tckn: v.tckn,
+      adres: v.adres,
+      ilce: v.ilce,
+      sehir: v.sehir,
+      postaKodu: v.postaKodu,
+    })
+  } catch (e) {
+    // Hata metni kayda gider, musteriye gosterilmez. `v` LOGLANMAZ: icinde
+    // sifre var.
+    console.error('bekleyen kayit yazilamadi', e && e.message)
+    return html(503, formSayfasi(slug, paket, v, 'Hesabınız hazırlanamadı, bu yüzden ödeme başlatılmadı. Kartınızdan tahsilat YAPILMADI. Birkaç dakika sonra tekrar deneyin.'))
+  }
+
   let cevap
   try {
     cevap = await formBaslat({
       locale: 'tr',
-      conversationId: `${slug}-${Date.now()}`,
+      conversationId: konusmaKimligi,
       // Host basligi istemciden gelir, guvenilmez. Netlify'in kendi verdigi
       // site adresi kullanilir; o da yoksa kanonik alan adi.
       callbackUrl: `${(process.env.URL || 'https://dolunay.ai').replace(/\/+$/, '')}/odeme/sonuc`,
