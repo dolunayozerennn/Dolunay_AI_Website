@@ -79,6 +79,12 @@ h1, h2, h3, h4 {
 
 ::selection { background: rgba(79, 139, 255, .3); }
 
+/* Oturum sorusu cevaplanana kadar panel gizli. Güvenlik önlemi değil,
+   görünüm önlemi: giriş yapmamış biri paneli bir an görüp kaybetmesin.
+   Asıl koruma sayfada müşteri verisi olmaması ve verinin yalnızca kimlik
+   doğrulayan uçlardan gelmesi. */
+body.dogrulaniyor { visibility: hidden; }
+
 /* ---------- marka ---------- */
 
 .marka {

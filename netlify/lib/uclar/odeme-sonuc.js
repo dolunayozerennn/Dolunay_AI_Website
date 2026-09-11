@@ -1,6 +1,6 @@
 const crypto = require('crypto')
-const { tekSeferSonuc } = require('../lib/iyzico')
-const { kacir, sayfa, html } = require('../lib/sayfa')
+const { tekSeferSonuc } = require('../iyzico')
+const { kacir, sayfa, html } = require('../sayfa')
 
 function ciz (kod, baslik, sinif, mesaj) {
   return html(kod, sayfa({ baslik, govde: `<span class="rozet">Tek seferlik ödeme</span><h1>${kacir(baslik)}</h1><div class="${sinif}">${kacir(mesaj)}</div><p class="dip">Sorularınız için <a href="mailto:dolunay@dolunay.ai">dolunay@dolunay.ai</a></p>` }))

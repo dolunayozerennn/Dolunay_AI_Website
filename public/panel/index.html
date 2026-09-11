@@ -47,18 +47,22 @@
 
     <div class="giris-alt">
       <p class="giris-ipucu">
-        Bu bir önizleme panelidir. <code>Herhangi bir e-posta</code> ve
-        <code>en az 6 karakterli</code> bir şifre ile girebilirsiniz.
+        Aboneliğinizi başlatırken verdiğiniz e-posta ve belirlediğiniz şifreyle
+        girin. Şifrenizi hatırlamıyorsanız
+        <a href="mailto:dolunay@dolunay.ai">dolunay@dolunay.ai</a> adresine yazın.
       </p>
     </div>
 
   </div>
 </main>
 
-<script src="data/mock.js"></script>
 <script>
 (function () {
   "use strict";
+
+  /* Panel /panel/ altında, fonksiyonlar /.netlify/functions/ altında: aynı
+     köken. Oturum çerezi bu yüzden doğrudan çalışıyor. */
+  var GIRIS_UCU = "/.netlify/functions/giris";
 
   var form = document.getElementById("girisForm");
   var uyari = document.getElementById("formUyari");
@@ -78,9 +82,11 @@
       kutu: document.getElementById("alanSifre"),
       girdi: document.getElementById("sifre"),
       hata: document.getElementById("hataSifre"),
+      /* Burada uzunluk kuralı YOK. Bu bir giriş ekranı, kayıt değil:
+         şifrenin kuralı hesap açılırken uygulandı. Burada uzunluk denetlemek
+         hem gereksiz, hem de şifre kuralı hakkında bilgi sızdırır. */
       dogrula: function (v) {
         if (!v) return "Şifrenizi yazın.";
-        if (v.length < 6) return "Şifre en az 6 karakter olmalı.";
         return null;
       }
     }
@@ -136,15 +142,54 @@
       return;
     }
 
-    /* Sahte doğrulama. Gerçek kimlik doğrulama Netlify tarafında kurulacak;
-       burada sadece "giriş yapılmış" işareti bırakılıyor. */
-    try {
-      sessionStorage.setItem("dolunay_panel_oturum", alanlar.eposta.girdi.value.trim());
-    } catch (hata) {
-      /* gizli sekmede depolama kapalı olabilir — panel yine de açılsın */
-    }
-    window.location.href = "panel.html";
+    gonder();
   });
+
+  function uyar(mesaj) {
+    uyari.textContent = mesaj;
+    uyari.classList.add("acik");
+  }
+
+  function gonder() {
+    var dugme = form.querySelector('button[type="submit"]');
+    var eskiMetin = dugme.textContent;
+    dugme.disabled = true;
+    dugme.textContent = "Giriş yapılıyor…";
+
+    function bitir() {
+      dugme.disabled = false;
+      dugme.textContent = eskiMetin;
+    }
+
+    /* Şifre TRIMLENMEZ: baştaki ya da sondaki boşluk şifrenin parçası
+       olabilir; hesap açılırken de kırpılmamıştı. E-posta kırpılır. */
+    fetch(GIRIS_UCU, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify({
+        eposta: alanlar.eposta.girdi.value.trim(),
+        sifre: alanlar.sifre.girdi.value
+      })
+    }).then(function (cevap) {
+      return cevap.json().catch(function () { return {}; }).then(function (veri) {
+        return { kod: cevap.status, veri: veri };
+      });
+    }).then(function (s) {
+      if (s.kod === 200 && s.veri.girisli === true) {
+        /* Oturum çerezde; panel açılışta kendisi doğrulayacak. */
+        window.location.href = "panel.html";
+        return;
+      }
+      bitir();
+      uyar(s.veri && s.veri.hata ? s.veri.hata : "Giriş yapılamadı. Birazdan tekrar deneyin.");
+      alanlar.sifre.girdi.value = "";
+      alanlar.sifre.girdi.focus();
+    }).catch(function () {
+      bitir();
+      uyar("Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.");
+    });
+  }
 })();
 </script>
 

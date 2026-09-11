@@ -1,8 +1,8 @@
 const crypto = require('crypto')
 const { isIP } = require('net')
-const { tekSeferBaslat, paketBul } = require('../lib/iyzico')
+const { tekSeferBaslat, paketBul } = require('../iyzico')
 const abonelik = require('./abonelik-baslat')
-const { kacir, sayfa, html } = require('../lib/sayfa')
+const { kacir, sayfa, html } = require('../sayfa')
 
 const ALANLAR = [['ad','Ad','text',50],['soyad','Soyad','text',50],['eposta','E-posta','email',100],['telefon','Cep telefonu','tel',20],['tckn','T.C. kimlik numarası','text',11],['sehir','Şehir','text',50],['adres','Fatura adresi','text',200]]
 

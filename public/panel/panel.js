@@ -11,14 +11,41 @@
   var M = window.MOCK || {};
 
   /* ---- oturum kontrolü ----
-     Sahte. Gerçek kimlik doğrulama Netlify tarafında kurulacak. */
-  try {
-    if (!sessionStorage.getItem("dolunay_panel_oturum")) {
-      window.location.replace("index.html");
-      return;
-    }
-  } catch (hata) {
-    /* depolama kapalıysa panel yine de gezilebilsin */
+     Panel sayfaları statik dosya; sunucu tarafında kapatılamıyorlar. Asıl
+     koruma şu kuralda: SAYFADA MÜŞTERİ VERİSİ YOK, veri yalnızca kimlik
+     doğrulayan uçlardan gelir. Buradaki iş, giriş yapmamış birini panelde
+     oyalamamak.
+
+     Sayfa doğrulama bitene kadar gizli duruyor (body.dogrulaniyor). Bu bir
+     güvenlik önlemi değil görünüm önlemi: panel bir an görünüp kaybolmasın. */
+  var OTURUM_UCU = "/.netlify/functions/oturum";
+  var CIKIS_UCU = "/.netlify/functions/cikis";
+
+  function girisEkranina() {
+    window.location.replace("index.html");
+  }
+
+  fetch(OTURUM_UCU, {
+    credentials: "same-origin",
+    headers: { "Accept": "application/json" }
+  }).then(function (cevap) {
+    if (!cevap.ok) return null;
+    return cevap.json();
+  }).then(function (veri) {
+    if (!veri || veri.girisli !== true) { girisEkranina(); return; }
+    document.body.classList.remove("dogrulaniyor");
+  }).catch(function () {
+    /* Uç yanıt vermiyorsa panel açılmaz. Doğrulanmamış birine panel
+       göstermektense giriş ekranına dönmek doğrusu. */
+    girisEkranina();
+  });
+
+  function cikisYap() {
+    /* Asıl iş oturum kaydını sunucuda kapatmak; çerezi düşürmek tek başına
+       yetmez. Uç yanıt vermese bile giriş ekranına dönülür. */
+    fetch(CIKIS_UCU, { method: "POST", credentials: "same-origin" })
+      .catch(function () { /* yine de çıkılır */ })
+      .then(function () { window.location.href = "index.html"; });
   }
 
   /* =======================================================================
@@ -1337,8 +1364,7 @@
     var cikisDugmesi = e.target.closest('[data-eylem="cikis"]');
     if (cikisDugmesi) {
       e.preventDefault();
-      try { sessionStorage.removeItem("dolunay_panel_oturum"); } catch (hata) {}
-      window.location.href = "index.html";
+      cikisYap();
       return;
     }
 
@@ -1396,8 +1422,10 @@
       if (eylem === "hesap-sil-onayla") {
         e.preventDefault();
         modalKapat();
-        try { sessionStorage.removeItem("dolunay_panel_oturum"); } catch (hata) {}
-        window.location.href = "index.html";
+        /* Bu turda hesap gerçekten SİLİNMİYOR; demo verisi duruyor.
+           Yapılan tek gerçek iş oturumu kapatmak. Silme, panelin yazma
+           yolları geldiğinde gerçek olacak. */
+        cikisYap();
         return;
       }
       if (eylem === "reddet")  { e.preventDefault(); reddetAc(yaziId); return; }

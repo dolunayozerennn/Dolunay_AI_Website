@@ -13,9 +13,28 @@
 // tek dosya burasidir; cagiranlar bu dosyanin disina cikmaz.
 
 const crypto = require('crypto')
-const { getStore } = require('@netlify/blobs')
 
 const KOVA = 'hesaplar'
+
+// Blobs istemcisi iki yoldan gelebilir:
+//   1. CommonJS require ile (yerel testler ve sinav dosyalari boyle kullanir)
+//   2. v2 kabugu ESM import edip `getStoreAyarla` ile verir (Netlify'da boyle)
+//
+// Ikincisi ZORUNLU. Olculdu: fonksiyonlar .mjs (ESM) olunca esbuild bu
+// CommonJS require'ini bundle'a katmiyor, calisma anina birakiyor; paket
+// /var/task altinda bulunmadigi icin fonksiyon "Cannot find module" ile 502
+// veriyor. Kabugun ESM import'u ise normal sekilde bundle'laniyor.
+let getStoreFn = null
+try {
+  ;({ getStore: getStoreFn } = require('@netlify/blobs'))
+} catch (e) {
+  // Bulunamadi; kabuk enjekte edecek. Burada patlamak yanlis olurdu, cunku
+  // modul yuklenirken henuz kimse depoya dokunmuyor.
+}
+
+function getStoreAyarla (fn) {
+  if (typeof fn === 'function') getStoreFn = fn
+}
 
 // Bekleyen kayit odeme tamamlanmazsa ortada kalir. Kart formu 30 dakika
 // gecerli; 24 saat, gec donen bir odemeyi de kapsayacak kadar genis ama
@@ -30,10 +49,13 @@ const SCRYPT = { N: 16384, r: 8, p: 1, uzunluk: 64 }
 const SCRYPT_BELLEK = 64 * 1024 * 1024
 
 function depo () {
+  if (typeof getStoreFn !== 'function') {
+    throw new Error('Blobs istemcisi yok: kabuk getStoreAyarla ile vermeli')
+  }
   // Guclu tutarlilik: kayit yazildiktan dakikalar sonra callback'te okunacak.
   // Eventual tutarlilikta "kayit yok" gorup hesabi acamamak, odemesi alinmis
   // musteriyi hesapsiz birakir.
-  return getStore({ name: KOVA, consistency: 'strong' })
+  return getStoreFn({ name: KOVA, consistency: 'strong' })
 }
 
 // Ayni adresin farkli yazimlari tek kayda dusmeli.
@@ -217,8 +239,99 @@ async function taniYaz (sekil) {
   return true
 }
 
+// --- Asama 3: oturum ve giris denemesi sayaci ----------------------------
+//
+//   oturum/<id>      giris yapmis kullanici
+//   deneme/<eposta>  basarisiz giris sayaci
+//
+// Oturum kimligi OPAK ve rastgele; icinde bilgi tasimaz. Imzali jeton
+// (HMAC) da olurdu ve depo gerektirmezdi, ama IPTAL EDILEMEZDI: cikis
+// yapinca oturum gercekten kapanmali, sifre degisince eski oturumlar
+// dusmeli. Zaten Blobs kullaniliyor, yeni bagimlilik yok.
+
+const OTURUM = (id) => `oturum/${encodeURIComponent(String(id))}`
+const DENEME = (e) => `deneme/${encodeURIComponent(epostaAnahtari(e))}`
+
+// 7 gun. Panel gunluk kullanilan bir arac; kisa sure surekli giris demek.
+// "Beni hatirla" yok: tek sure herkese ayni.
+const OTURUM_OMRU_MS = 7 * 24 * 60 * 60 * 1000
+
+// Kaba kuvvet kapisi. scrypt zaten pahali (N=16384), bu sayac onun ustune
+// ikinci katman. Sayilar burada duruyor ki degistirmek icin kod okumak
+// gerekmesin.
+const DENEME_PENCERESI_MS = 15 * 60 * 1000
+const DENEME_TAVANI = 10
+
+// 32 bayt rastgele, base64url. Tahmin edilemez olmasi tek sart.
+function oturumKimligiUret () {
+  return crypto.randomBytes(32).toString('base64url')
+}
+
+async function oturumAc (eposta) {
+  const id = oturumKimligiUret()
+  const simdi = Date.now()
+  await depo().setJSON(OTURUM(id), {
+    eposta: epostaAnahtari(eposta),
+    olusturuldu: new Date(simdi).toISOString(),
+    sonKullanma: new Date(simdi + OTURUM_OMRU_MS).toISOString(),
+  })
+  return { id, omurMs: OTURUM_OMRU_MS }
+}
+
+// Suresi dolmus oturum YOK sayilir. Kaydi ayrica silmiyoruz: silme isi
+// bir sonraki cikis ya da temizlik turuna kalir, okuma tarafi yeter.
+async function oturumOku (id) {
+  if (!id) return null
+  const kayit = await depo().get(OTURUM(id), { type: 'json' })
+  if (!kayit) return null
+  const bitis = Date.parse(kayit.sonKullanma || '')
+  if (!Number.isFinite(bitis) || bitis < Date.now()) return null
+  return kayit
+}
+
+async function oturumKapat (id) {
+  if (!id) return
+  await depo().delete(OTURUM(id))
+}
+
+// Pencere dolduysa sayac sifirdan baslar; boylece eski hatalar birikmez.
+async function denemeOku (eposta) {
+  const kayit = await depo().get(DENEME(eposta), { type: 'json' })
+  if (!kayit) return { sayi: 0, kilitli: false, kalanMs: 0 }
+  const bitis = Date.parse(kayit.pencereSonu || '')
+  if (!Number.isFinite(bitis) || bitis < Date.now()) return { sayi: 0, kilitli: false, kalanMs: 0 }
+  return {
+    sayi: Number(kayit.sayi) || 0,
+    kilitli: (Number(kayit.sayi) || 0) >= DENEME_TAVANI,
+    kalanMs: bitis - Date.now(),
+  }
+}
+
+async function denemeArtir (eposta) {
+  const d = depo()
+  const anahtar = DENEME(eposta)
+  const kayit = await d.get(anahtar, { type: 'json' })
+  const bitis = kayit ? Date.parse(kayit.pencereSonu || '') : NaN
+  const pencereSuruyor = Number.isFinite(bitis) && bitis >= Date.now()
+  const sayi = (pencereSuruyor ? Number(kayit.sayi) || 0 : 0) + 1
+  await d.setJSON(anahtar, {
+    sayi,
+    pencereSonu: pencereSuruyor
+      ? kayit.pencereSonu
+      : new Date(Date.now() + DENEME_PENCERESI_MS).toISOString(),
+  })
+  return sayi
+}
+
+async function denemeSifirla (eposta) {
+  await depo().delete(DENEME(eposta))
+}
+
 module.exports = {
+  getStoreAyarla,
   sifreOzetle, sifreDogrula, bekleyenYaz, bekleyenOku, bekleyenSil, epostaAnahtari,
   hesapOku, hesapAc, odemeOku, odemeYaz, yetimYaz, bekleyenBulKimlikle, taniYaz,
   jetonYaz, jetonOku,
+  oturumAc, oturumOku, oturumKapat, denemeOku, denemeArtir, denemeSifirla,
+  OTURUM_OMRU_MS, DENEME_TAVANI, DENEME_PENCERESI_MS,
 }

@@ -20,8 +20,8 @@ const EPOSTA = 'ayse@ornek.com';
 const SIFRE = 'gercekSifre123';
 const KONUSMA = 'blog-profesyonel-1757500000000';
 
-const SONUC = path.resolve(__dirname, '../functions/abonelik-sonuc.js');
-const BASLAT = path.resolve(__dirname, '../functions/abonelik-baslat.js');
+const SONUC = path.resolve(__dirname, '../lib/uclar/abonelik-sonuc.js');
+const BASLAT = path.resolve(__dirname, '../lib/uclar/abonelik-baslat.js');
 const HESAP = path.resolve(__dirname, '../lib/hesap.js');
 const IYZICO = path.resolve(__dirname, '../lib/iyzico.js');
 const SAYFA = path.resolve(__dirname, '../lib/sayfa.js');
