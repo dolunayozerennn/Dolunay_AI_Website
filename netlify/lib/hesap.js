@@ -314,6 +314,23 @@ async function oturumKapat (id) {
   await depo().delete(OTURUM(id))
 }
 
+// Bir hesabin acik oturum kimlikleri. Sifre degisince digerlerini dusurmek
+// icin. Oturum sayisi az oldugu ve kayitlar 7 gunde dustugu icin tarama
+// yeterli; hacim buyurse e-posta basina isaretci anahtar eklenir.
+async function oturumlariListele (eposta) {
+  const anahtar = epostaAnahtari(eposta)
+  const d = depo()
+  const liste = await d.list({ prefix: 'oturum/' })
+  const kayitlar = liste && Array.isArray(liste.blobs) ? liste.blobs.slice(0, TARAMA_TAVANI) : []
+  const cikti = []
+  for (const b of kayitlar) {
+    const kayit = await d.get(b.key, { type: 'json' })
+    if (kayit && kayit.eposta === anahtar) cikti.push(b.key.slice('oturum/'.length))
+  }
+  // Anahtarlar URL kodlu saklaniyor; cagiran ham kimligi bekliyor.
+  return cikti.map((k) => { try { return decodeURIComponent(k) } catch { return k } })
+}
+
 // Pencere dolduysa sayac sifirdan baslar; boylece eski hatalar birikmez.
 async function denemeOku (eposta) {
   const kayit = await depo().get(DENEME(eposta), { type: 'json' })
@@ -352,6 +369,6 @@ module.exports = {
   sifreOzetle, sifreDogrula, bekleyenYaz, bekleyenOku, bekleyenSil, epostaAnahtari,
   hesapOku, hesapAc, hesapGuncelle, odemeOku, odemeYaz, yetimYaz, bekleyenBulKimlikle, taniYaz,
   jetonYaz, jetonOku,
-  oturumAc, oturumOku, oturumKapat, denemeOku, denemeArtir, denemeSifirla,
+  oturumAc, oturumOku, oturumKapat, oturumlariListele, denemeOku, denemeArtir, denemeSifirla,
   OTURUM_OMRU_MS, DENEME_TAVANI, DENEME_PENCERESI_MS,
 }

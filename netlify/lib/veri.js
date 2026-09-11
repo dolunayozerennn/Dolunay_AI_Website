@@ -189,6 +189,31 @@ function yaziBirlestir (motorYazi, karar) {
   return y
 }
 
+// Marka profili henuz doldurulmamis olabilir. Panel ic ice alanlari
+// (anahtarKelimeler.birincil gibi) dogrudan okuyor; eksik nesne orada
+// patlardi. Bos da olsa TAM SEKIL donuyor.
+function markaSekli (ham) {
+  const m = ham || {}
+  const ak = m.anahtarKelimeler || {}
+  const r = m.renkler || {}
+  return {
+    sektor: m.sektor || '',
+    tonStili: m.tonStili || '',
+    markaKisiligi: m.markaKisiligi || '',
+    birincilKitle: m.birincilKitle || '',
+    ikincilKitle: m.ikincilKitle || '',
+    anahtarKelimeler: {
+      birincil: ak.birincil || '',
+      ikincil: ak.ikincil || '',
+      uzunKuyruk: ak.uzunKuyruk || '',
+    },
+    hizmetler: m.hizmetler || '',
+    rakipler: m.rakipler || '',
+    yasakli: m.yasakli || '',
+    renkler: { ana: r.ana || '#4F8BFF', ikincil: r.ikincil || '#7AA8FF' },
+  }
+}
+
 // Panelin bekledigi sekli kurar. Panelin geri kalani degismez: Asama 1'de
 // "tek veri nesnesinden okusun" diye kurulmustu, karsiligini burada veriyor.
 function birlestir (girdi) {
@@ -224,10 +249,14 @@ function birlestir (girdi) {
     yayinProgrami: ayarlar.yayinProgrami || { saat: '', gunler: [] },
     yazilar,
     konular,
-    marka: ayarlar.marka || {},
+    marka: markaSekli(ayarlar.marka),
     whatsapp: ayarlar.whatsapp || { numara: '', izin: false, izinZamani: null, izinMetniSurumu: null },
     destek: {
-      baglantiDurumu: motor.baglantiDurumu || 'bilinmiyor',
+      // Baglanti durumunu motor bildiriyor: siteye yazip yazamadigini o biliyor.
+      baglantiDurumu: motor.baglantiDurumu
+        || 'Bağlantı durumu henüz bildirilmedi.',
+      // Iletisim bilgisi sabit, veriden gelmiyor; panel dogrudan okuyor.
+      iletisim: { eposta: 'dolunay@dolunay.ai' },
       talepler: ayarlar.destekTalepleri || [],
     },
     odemeGecmisi: girdi.odemeGecmisi || [],

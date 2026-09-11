@@ -879,28 +879,44 @@
       return;
     }
 
-    M.konular.unshift({
+    var yeniKayit = {
       id: "k-" + Date.now(),
       konu: metin,
       kategori: "Sizin öneriniz",
       hacim: null,
       rekabet: "—",
       skor: "—"
-    });
-
+    };
+    M.konular.unshift(yeniKayit);
     konularCiz();
-    toast("Konu listenin en üstüne eklendi, sıradaki yazı olarak üretilecek.");
-    var yeni = document.getElementById("yeniKonu");
-    if (yeni) yeni.focus();
+
+    kararGonder({ tur: "konu-ekle", konu: metin }).then(function (v) {
+      if (!v) return;
+      toast("Konu listenin en üstüne eklendi, sıradaki yazı olarak üretilecek.");
+      var yeni = document.getElementById("yeniKonu");
+      if (yeni) yeni.focus();
+    }).catch(function () {
+      var i = M.konular.indexOf(yeniKayit);
+      if (i >= 0) M.konular.splice(i, 1);
+      konularCiz();
+    });
   }
 
   function konuSil(id) {
     var i = (M.konular || []).findIndex(function (k) { return k.id === id; });
     if (i < 0) return;
-    var ad = M.konular[i].konu;
+    var kayit = M.konular[i];
+    var ad = kayit.konu;
     M.konular.splice(i, 1);
     konularCiz();
-    toast("“" + (ad.length > 40 ? ad.slice(0, 40) + "…" : ad) + "” listeden çıkarıldı.");
+
+    kararGonder({ tur: "konu-cikar", konuId: id }).then(function (v) {
+      if (!v) return;
+      toast("“" + (ad.length > 40 ? ad.slice(0, 40) + "…" : ad) + "” listeden çıkarıldı.");
+    }).catch(function () {
+      M.konular.splice(i, 0, kayit);
+      konularCiz();
+    });
   }
 
   /* =======================================================================
@@ -1020,22 +1036,28 @@
 
     if (!tamam) { document.getElementById("mRenk1").focus(); return; }
 
-    var m = M.marka;
-    m.sektor = d("mSektor");
-    m.tonStili = d("mTon");
-    m.markaKisiligi = d("mKisilik");
-    m.birincilKitle = d("mKitle1");
-    m.ikincilKitle = d("mKitle2");
-    m.anahtarKelimeler.birincil = d("mAk1");
-    m.anahtarKelimeler.ikincil = d("mAk2");
-    m.anahtarKelimeler.uzunKuyruk = d("mAk3");
-    m.hizmetler = d("mHizmet");
-    m.rakipler = d("mRakip");
-    m.yasakli = d("mYasakli");
-    m.renkler.ana = d("mRenk1");
-    m.renkler.ikincil = d("mRenk2");
+    var eski = M.marka;
+    var yeni = {
+      sektor: d("mSektor"),
+      tonStili: d("mTon"),
+      markaKisiligi: d("mKisilik"),
+      birincilKitle: d("mKitle1"),
+      ikincilKitle: d("mKitle2"),
+      anahtarKelimeler: { birincil: d("mAk1"), ikincil: d("mAk2"), uzunKuyruk: d("mAk3") },
+      hizmetler: d("mHizmet"),
+      rakipler: d("mRakip"),
+      yasakli: d("mYasakli"),
+      renkler: { ana: d("mRenk1"), ikincil: d("mRenk2") }
+    };
+    M.marka = yeni;
 
-    toast("Marka profiliniz kaydedildi. Sonraki yazılar bu bilgilere göre üretilecek.");
+    kararGonder({ tur: "ayarlar", marka: yeni }).then(function (v) {
+      if (!v) return;
+      toast("Marka profiliniz kaydedildi. Sonraki yazılar bu bilgilere göre üretilecek.");
+    }).catch(function () {
+      M.marka = eski;
+      markamCiz();
+    });
   }
 
   /* =======================================================================
@@ -1108,15 +1130,25 @@
 
     if (!tamam) { konu.focus(); return; }
 
-    M.destek.talepler.unshift({
+    var talep = {
       konu: konu.value.trim(),
       mesaj: mesaj.value.trim(),
       tarih: M.bugun,
       durum: "Açık"
-    });
-
+    };
+    M.destek.talepler.unshift(talep);
     destekCiz();
-    toast("Destek talebiniz alındı. En kısa sürede dönüş yapacağız.");
+
+    /* Talepler ayarlar kaydında duruyor: motor okuyor, panel yazıyor.
+       Listenin tamamı gönderiliyor, uç onu olduğu gibi saklıyor. */
+    kararGonder({ tur: "ayarlar", destekTalepleri: M.destek.talepler }).then(function (v) {
+      if (!v) return;
+      toast("Destek talebiniz alındı. En kısa sürede dönüş yapacağız.");
+    }).catch(function () {
+      var i = M.destek.talepler.indexOf(talep);
+      if (i >= 0) M.destek.talepler.splice(i, 1);
+      destekCiz();
+    });
   }
 
   /* =======================================================================
@@ -1147,6 +1179,9 @@
 
       '<div class="kart-bolum"><h3 class="ayrik">Şifre</h3>' +
         '<p class="bolum-alt">Panele e-posta ve şifreyle giriş yapmak için yeni bir şifre belirleyin.</p>' +
+        '<div class="alan" id="alanSifreEski"><label for="hSifreEski">Mevcut şifre</label>' +
+          '<input type="password" id="hSifreEski" autocomplete="current-password">' +
+          '<p class="hata"></p></div>' +
         '<div class="alan" id="alanSifre1"><label for="hSifre1">Yeni şifre</label>' +
           '<input type="password" id="hSifre1" placeholder="En az 8 karakter">' +
           '<p class="hata"></p></div>' +
@@ -1214,8 +1249,16 @@
     }
     alan.classList.remove("hatali");
     alan.querySelector(".hata").textContent = "";
+    var eski = M.hesap.telefon;
     M.hesap.telefon = deger;
-    toast("Telefon numaranız kaydedildi.");
+
+    kararGonder({ tur: "ayarlar", telefon: deger }).then(function (v) {
+      if (!v) return;
+      toast("Telefon numaranız kaydedildi.");
+    }).catch(function () {
+      M.hesap.telefon = eski;
+      hesabimCiz();
+    });
   }
 
   function sifreKaydet() {
@@ -1230,15 +1273,44 @@
       return !mesaj;
     }
 
+    var sEski = document.getElementById("hSifreEski");
+    var aEski = sEski.closest(".alan");
+
+    var t0 = isaret(aEski, sEski.value ? null : "Mevcut şifrenizi yazın.");
     var t1 = isaret(a1, s1.value.length < 8 ? "Şifre en az 8 karakter olmalı." : null);
     var t2 = isaret(a2, s1.value !== s2.value ? "İki şifre birbirini tutmuyor." : null);
+    if (!t0) { sEski.focus(); return; }
     if (!t1) { s1.focus(); return; }
     if (!t2) { s2.focus(); return; }
 
-    /* Şifre hiçbir yere yazılmıyor: gerçek üyelik Netlify tarafında kurulacak. */
-    s1.value = "";
-    s2.value = "";
-    toast("Şifreniz güncellendi.");
+    /* Mevcut şifre soruluyor: oturum tek başına yetmez. Çerezi ele geçirmiş
+       biri şifreyi değiştirip hesabı kalıcı olarak devralabilirdi. */
+    fetch("/.netlify/functions/sifre-degistir", {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify({ mevcut: sEski.value, yeni: s1.value })
+    }).then(function (cevap) {
+      /* 401 iki şey olabilir: oturum düştü ya da mevcut şifre yanlış.
+         Ayıran şey gövde: oturum düştüyse `girisli: false` geliyor. */
+      return cevap.json().catch(function () { return {}; }).then(function (v) {
+        return { kod: cevap.status, veri: v };
+      });
+    }).then(function (s) {
+      if (s.kod === 200 && s.veri.degisti) {
+        sEski.value = ""; s1.value = ""; s2.value = "";
+        var ek = s.veri.dusenOturum > 0
+          ? " Diğer cihazlardaki oturumlarınız kapatıldı."
+          : "";
+        toast("Şifreniz güncellendi." + ek);
+        return;
+      }
+      if (s.kod === 401 && s.veri.girisli === false) { girisEkranina(); return; }
+      isaret(aEski, s.veri.hata || "Şifre değiştirilemedi.");
+      sEski.focus();
+    }).catch(function () {
+      toast("Sunucuya ulaşılamadı. Şifreniz değişmedi.");
+    });
   }
 
   function programKaydet() {
@@ -1255,11 +1327,19 @@
     alan.classList.remove("hatali");
     alan.querySelector(".hata").textContent = "";
 
-    M.yayinProgrami.gunler = secili;
-    M.yayinProgrami.saat = document.getElementById("hSaat").value;
-
+    var eski = { gunler: M.yayinProgrami.gunler, saat: M.yayinProgrami.saat };
+    var yeni = { gunler: secili, saat: document.getElementById("hSaat").value };
+    M.yayinProgrami = yeni;
     yazilarimiCiz();
-    toast("Yayın programınız kaydedildi: " + secili.join(", ") + " · " + M.yayinProgrami.saat);
+
+    kararGonder({ tur: "ayarlar", yayinProgrami: yeni }).then(function (v) {
+      if (!v) return;
+      toast("Yayın programınız kaydedildi: " + secili.join(", ") + " · " + yeni.saat);
+    }).catch(function () {
+      M.yayinProgrami = eski;
+      yazilarimiCiz();
+      hesabimCiz();
+    });
   }
 
   function verileriIndir() {
@@ -1290,27 +1370,60 @@
     toast("Verileriniz JSON dosyası olarak indirildi.");
   }
 
+  /* Silme TALEBİ, silmenin kendisi değil.
+     Panel hesabı doğrudan silemiyor, çünkü silme aynı anda iyzico'daki aktif
+     aboneliğin iptalini gerektiriyor ve o çağrı panelde yok. "Sildik" deyip
+     aboneliği açık bırakmak, müşteriden para çekilmeye devam etmesi demekti.
+     Talep destek kaydına düşüyor, KVKK süresi içinde elle tamamlanıyor. */
   function hesapSilOnayi() {
     modalAc(
-      modalBasiHtml("Hesabınızı silmek üzeresiniz",
-        "Bu işlem geri alınamaz.") +
+      modalBasiHtml("Hesap silme talebi",
+        "Talebiniz bize iletilir, işlemi biz tamamlarız.") +
       '<div class="modal-govde">' +
         '<div class="bilgi-serit" style="background:rgba(248,113,113,.1);' +
           'border-color:rgba(248,113,113,.3);margin-bottom:0">' +
           '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" ' +
             'stroke-linecap="round" style="color:var(--red)">' +
             '<path d="M12 8v5M12 16.5h.01"/><circle cx="12" cy="12" r="8.5"/></svg>' +
-          "<span>İletişim bilgileriniz, kart referansınız ve erişim kayıtlarınız silinir. " +
-          "Yayınlanmış blog yazılarınız sitenizde kalmaya devam eder. Aktif aboneliğiniz " +
-          "otomatik iptal edilir.</span>" +
+          "<span>Talebiniz alındıktan sonra iletişim bilgileriniz, kart referansınız ve " +
+          "erişim kayıtlarınız silinir, aktif aboneliğiniz iptal edilir. " +
+          "Yayınlanmış blog yazılarınız sitenizde kalmaya devam eder. " +
+          "İşlem tamamlanınca size e-posta ile bilgi veririz.</span>" +
         "</div>" +
       "</div>" +
       '<div class="modal-alti">' +
         '<button class="btn btn-ikincil" data-eylem="modal-kapat">Vazgeç</button>' +
-        '<button class="btn btn-ret" data-eylem="hesap-sil-onayla">Hesabımı Sil</button>' +
+        '<button class="btn btn-ret" data-eylem="hesap-sil-onayla">Silme talebi gönder</button>' +
       "</div>",
-      { dar: true, ad: "Hesabı sil" }
+      { dar: true, ad: "Hesap silme talebi" }
     );
+  }
+
+  /* Talep destek kaydına düşüyor: müşterinin de bizim de gördüğümüz tek
+     ortak liste orası. Yazma başarısız olursa müşteriye "alındı" DENMİYOR;
+     kararGonder zaten uyarıyor, biz de listeden geri alıyoruz. */
+  function hesapSilmeTalebi() {
+    if (!M.destek) M.destek = { talepler: [] };
+    if (!Array.isArray(M.destek.talepler)) M.destek.talepler = [];
+
+    var talep = {
+      konu: "Hesap silme talebi",
+      mesaj: "Müşteri panelden hesabının silinmesini istedi. Aktif aboneliğin " +
+        "iptali ve kayıtların silinmesi elle tamamlanacak.",
+      tarih: M.bugun,
+      durum: "Açık"
+    };
+    M.destek.talepler.unshift(talep);
+    destekCiz();
+
+    kararGonder({ tur: "ayarlar", destekTalepleri: M.destek.talepler }).then(function (v) {
+      if (!v) return;
+      toast("Silme talebiniz alındı. İşlem tamamlanınca e-posta ile bilgi vereceğiz.");
+    }).catch(function () {
+      var i = M.destek.talepler.indexOf(talep);
+      if (i >= 0) M.destek.talepler.splice(i, 1);
+      destekCiz();
+    });
   }
 
   /* ---- takvimde sürükle-bırak ----
@@ -1564,10 +1677,7 @@
       if (eylem === "hesap-sil-onayla") {
         e.preventDefault();
         modalKapat();
-        /* Bu turda hesap gerçekten SİLİNMİYOR; demo verisi duruyor.
-           Yapılan tek gerçek iş oturumu kapatmak. Silme, panelin yazma
-           yolları geldiğinde gerçek olacak. */
-        cikisYap();
+        hesapSilmeTalebi();
         return;
       }
       if (eylem === "reddet")  { e.preventDefault(); reddetAc(yaziId); return; }
