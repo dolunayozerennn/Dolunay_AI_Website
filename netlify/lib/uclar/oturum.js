@@ -4,8 +4,8 @@
 // su kurala dayaniyor: SAYFADA MUSTERI VERISI YOK, veri yalnizca kimlik
 // dogrulayan uclardan gelir. Bu uc, panelin acilista "girisli miyim"
 // sorusunu sordugu yer.
-const { oturumOku, hesapOku } = require('../lib/hesap')
-const { cerezOku, cerezSil, json } = require('../lib/oturum')
+const { oturumOku, hesapOku } = require('../hesap')
+const { cerezOku, cerezSil, json } = require('../oturum')
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'GET' && event.httpMethod !== 'HEAD') {

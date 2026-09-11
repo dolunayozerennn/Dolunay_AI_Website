@@ -3,8 +3,8 @@
 // Oturum kaydi DEPODAN SILINIR, sonra cerez dusurulur. Sadece cerezi
 // dusurmek yetmezdi: kimligi bir yerde saklamis biri onu tekrar
 // kullanabilirdi. Opak kimlik + depo secilmesinin sebebi tam olarak bu.
-const { oturumKapat } = require('../lib/hesap')
-const { cerezOku, cerezSil, json } = require('../lib/oturum')
+const { oturumKapat } = require('../hesap')
+const { cerezOku, cerezSil, json } = require('../oturum')
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {

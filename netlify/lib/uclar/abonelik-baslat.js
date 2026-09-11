@@ -3,9 +3,9 @@
 // POST -> iyzico'dan TAZE odeme formu alir ve sayfaya gomer.
 // Token 30 dakikada gecersizlesir, bu yuzden onceden uretilmis sabit bir link
 // paylasilamaz; her ziyarette yeniden uretilir.
-const { formBaslat, paketBul, abonelikleriTara } = require('../lib/iyzico')
-const { kacir, sayfa, html, hataSayfasi, kayitIcin } = require('../lib/sayfa')
-const { sifreOzetle, bekleyenYaz, jetonYaz } = require('../lib/hesap')
+const { formBaslat, paketBul, abonelikleriTara } = require('../iyzico')
+const { kacir, sayfa, html, hataSayfasi, kayitIcin } = require('../sayfa')
+const { sifreOzetle, bekleyenYaz, jetonYaz } = require('../hesap')
 
 // Zorunlu metin alanlari. Sira, hata mesajindaki siralamayi da belirler;
 // formdaki sirayla ayni tutuldu ki musteri asagi dogru okurken kaybolmasin.

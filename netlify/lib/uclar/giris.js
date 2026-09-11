@@ -3,8 +3,8 @@
 // Hesap odeme sonrasi acildi (Asama 2); burada yalnizca dogrulama var,
 // kayit YOK. Basarili olursa opak bir oturum kimligi uretilir ve HttpOnly
 // cerezle doner.
-const { hesapOku, sifreDogrula, oturumAc, denemeOku, denemeArtir, denemeSifirla, DENEME_TAVANI } = require('../lib/hesap')
-const { cerezYaz, json, govdeCoz } = require('../lib/oturum')
+const { hesapOku, sifreDogrula, oturumAc, denemeOku, denemeArtir, denemeSifirla, DENEME_TAVANI } = require('../hesap')
+const { cerezYaz, json, govdeCoz } = require('../oturum')
 
 // Hesap var mi yok mu, sifre mi yanlis: DISARIDAN AYIRT EDILEMEZ. Tek
 // mesaj, tek kod. Ayri mesaj vermek, hangi e-postalarin musteri oldugunu

@@ -1,12 +1,12 @@
 // /odeme/sonuc adresini karsilar. iyzico odeme formunu tamamlayan musteriyi
 // buraya token ile birlikte geri gonderir. Sonucu kendimiz sorup gosteririz;
 // "odendi" hukmu formun donusune degil iyzico'nun cevabina dayanir.
-const { formSonuc } = require('../lib/iyzico')
-const { kacir, sayfa, html, kayitIcin } = require('../lib/sayfa')
+const { formSonuc } = require('../iyzico')
+const { kacir, sayfa, html, kayitIcin } = require('../sayfa')
 const {
   bekleyenOku, bekleyenSil, bekleyenBulKimlikle, hesapAc, odemeOku, odemeYaz, yetimYaz, taniYaz,
   jetonOku,
-} = require('../lib/hesap')
+} = require('../hesap')
 
 function tokenBul(event) {
   const q = event.queryStringParameters || {}

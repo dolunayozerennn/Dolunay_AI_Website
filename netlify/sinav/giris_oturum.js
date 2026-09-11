@@ -15,9 +15,9 @@ const SIFRE = 'gercekSifre123';
 
 const HESAP = path.resolve(__dirname, '../lib/hesap.js');
 const OTURUM_LIB = path.resolve(__dirname, '../lib/oturum.js');
-const GIRIS = path.resolve(__dirname, '../functions/giris.js');
-const OTURUM = path.resolve(__dirname, '../functions/oturum.js');
-const CIKIS = path.resolve(__dirname, '../functions/cikis.js');
+const GIRIS = path.resolve(__dirname, '../lib/uclar/giris.js');
+const OTURUM = path.resolve(__dirname, '../lib/uclar/oturum.js');
+const CIKIS = path.resolve(__dirname, '../lib/uclar/cikis.js');
 
 // --- bellekteki sahte depo ------------------------------------------------
 const kutu = new Map();
