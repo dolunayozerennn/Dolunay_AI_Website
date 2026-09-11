@@ -26,9 +26,10 @@ export default function KVKKPolitikasiPage() {
           <h2 className="text-xl font-semibold text-white mt-8">2. Toplanan Kişisel Veriler</h2>
           <p>Site&apos;yi kullanımınız sırasında aşağıdaki kategorilerde kişisel verileriniz işlenebilir:</p>
           <ul className="list-disc list-inside space-y-2">
-            <li><strong className="text-white">Kimlik Bilgileri:</strong> Ad, soyad</li>
-            <li><strong className="text-white">İletişim Bilgileri:</strong> E-posta adresi, telefon numarası</li>
-            <li><strong className="text-white">İşlem Güvenliği:</strong> IP adresi, giriş/çıkış log kayıtları</li>
+            <li><strong className="text-white">Kimlik Bilgileri:</strong> Ad, soyad, T.C. kimlik numarası (abonelik işlemleri için ödeme kuruluşu tarafından zorunlu tutulmaktadır)</li>
+            <li><strong className="text-white">İletişim Bilgileri:</strong> E-posta adresi, telefon numarası, fatura adresi (adres, ilçe, şehir, posta kodu)</li>
+            <li><strong className="text-white">Müşteri İşlem Bilgileri:</strong> Marka adı, web sitesi adresi, abonelik ve paket bilgileri</li>
+            <li><strong className="text-white">İşlem Güvenliği:</strong> IP adresi, giriş/çıkış log kayıtları, panel giriş şifreniz (geri döndürülemez biçimde şifrelenerek saklanır, düz metin olarak tutulmaz)</li>
             <li><strong className="text-white">Finansal Bilgiler:</strong> Ödeme bilgileri (kredi kartı bilgileri doğrudan işlenmez, ödeme altyapısı tarafından güvenli şekilde yönetilir)</li>
             <li><strong className="text-white">Pazarlama:</strong> Çerez verileri, tercih/ilgi alanı bilgileri</li>
           </ul>
