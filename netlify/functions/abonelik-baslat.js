@@ -5,7 +5,7 @@
 // paylasilamaz; her ziyarette yeniden uretilir.
 const { formBaslat, paketBul, abonelikleriTara } = require('../lib/iyzico')
 const { kacir, sayfa, html, hataSayfasi, kayitIcin } = require('../lib/sayfa')
-const { sifreOzetle, bekleyenYaz } = require('../lib/hesap')
+const { sifreOzetle, bekleyenYaz, jetonYaz } = require('../lib/hesap')
 
 // Zorunlu metin alanlari. Sira, hata mesajindaki siralamayi da belirler;
 // formdaki sirayla ayni tutuldu ki musteri asagi dogru okurken kaybolmasin.
@@ -410,6 +410,20 @@ exports.handler = async (event) => {
     // Saglayicinin ham hata metni musteriye gosterilmez; sunucu kaydinda kalir.
     console.error('iyzico initialize hatasi', cevap && cevap.errorCode, kayitIcin(cevap && cevap.errorMessage))
     return html(400, formSayfasi(slug, paket, v, 'Ödeme sayfası açılamadı. Bilgileri kontrol edip tekrar deneyin; sorun sürerse dolunay@dolunay.ai adresine yazın.'))
+  }
+
+  // Jeton isaretcisi: callback'te bekleyen kaydi kesin olarak bulmak icin.
+  // EN IYI CABA -- yazilamazsa odeme aksamaz, musteri kart adimini yine gorur;
+  // eslestirme o zaman konusma kimligine ve e-posta + plana duser. Bu yuzden
+  // bekleyen kayittaki fail-closed kurali BURADA gecerli degil: form zaten
+  // uretildi, musteriyi geri cevirmek kazandirmaz.
+  const jeton = cevap.token || (cevap.data && cevap.data.token) || ''
+  if (jeton) {
+    try {
+      await jetonYaz(jeton, { eposta: v.eposta, plan: paket.plan, konusmaKimligi })
+    } catch (e) {
+      console.error('jeton isaretcisi yazilamadi', e && e.message)
+    }
   }
 
   return html(200, sayfa({

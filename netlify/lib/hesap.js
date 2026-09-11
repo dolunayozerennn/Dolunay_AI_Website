@@ -108,4 +108,117 @@ async function bekleyenSil (eposta, plan) {
   await depo().delete(bekleyenAnahtar(eposta, plan))
 }
 
-module.exports = { sifreOzetle, sifreDogrula, bekleyenYaz, bekleyenOku, bekleyenSil, epostaAnahtari }
+// --- Asama 2: hesap, odeme ve tani kayitlari -----------------------------
+//
+// Yukarisi odeme ONCESI. Burasi odeme ACTIVE dogrulandiktan SONRA calisir.
+//   hesap/<eposta>     panel girisi, marka bilgisi, sifre ozeti
+//   odeme/<referans>   hangi abonelik hangi hesaba baglandi
+//   yetim/<referans>   odeme alindi ama bekleyen kayit bulunamadi; elle acilir
+//   tani/callback-sekli  saglayici donusunun ALAN ADLARI, bir kereligine
+
+const HESAP = (e) => `hesap/${encodeURIComponent(epostaAnahtari(e))}`
+const ODEME = (r) => `odeme/${encodeURIComponent(String(r))}`
+const YETIM = (r) => `yetim/${encodeURIComponent(String(r))}`
+const TANI = 'tani/callback-sekli'
+const BEKLEYEN_ONEK = 'bekleyen/'
+
+// Bekleyen kayitlar 24 saatte dusuyor, yani bu onek her zaman kucuk kalir.
+// Tavan yine de var: tanimadigimiz bir depo durumunda fonksiyon suresiz
+// donmesin.
+const TARAMA_TAVANI = 500
+
+// Jeton isaretcisi: <token> -> {eposta, plan}
+//
+// Callback'te ELIMIZDE HER ZAMAN OLAN tek sey token. Konusma kimligi
+// saglayicinin donusune bagli (belgeye gore yalniz istekte gonderilirse geri
+// geliyor, biz sorguda gondermiyoruz), e-posta ve plan da cevapta olmayabilir.
+// Bu isaretci ikisine de bagli olmayan kesin yolu acar. En iyi cabadir:
+// yazilamazsa odeme AKSAMAZ, eslestirme diger yollara duser.
+const JETON = (t) => `jeton/${encodeURIComponent(String(t))}`
+
+async function jetonYaz (token, kayit) {
+  const simdi = Date.now()
+  await depo().setJSON(JETON(token), Object.assign({}, kayit, {
+    olusturuldu: new Date(simdi).toISOString(),
+    sonKullanma: new Date(simdi + BEKLEYEN_OMRU_MS).toISOString(),
+  }))
+}
+
+async function jetonOku (token) {
+  const kayit = await depo().get(JETON(token), { type: 'json' })
+  if (!kayit) return null
+  const bitis = Date.parse(kayit.sonKullanma || '')
+  if (!Number.isFinite(bitis) || bitis < Date.now()) return null
+  return kayit
+}
+
+async function hesapOku (eposta) {
+  return depo().get(HESAP(eposta), { type: 'json' })
+}
+
+// Ikinci kez cagrilirsa mevcut hesaba DOKUNMAZ. Callback birden fazla kez
+// gelebilir ve musteri sonuc sayfasini yenileyebilir. Ustune yazmak, musterinin
+// sonradan degistirdigi sifreyi ya da marka bilgisini sessizce geri alirdi.
+async function hesapAc (eposta, kayit) {
+  const varOlan = await hesapOku(eposta)
+  if (varOlan) return { yeni: false, kayit: varOlan }
+  const govde = Object.assign({}, kayit, { acildi: new Date().toISOString() })
+  await depo().setJSON(HESAP(eposta), govde)
+  return { yeni: true, kayit: govde }
+}
+
+async function odemeOku (referans) {
+  return depo().get(ODEME(referans), { type: 'json' })
+}
+
+// Referans anahtarin kendisi oldugu icin ayni odeme iki kez yazilmaz.
+async function odemeYaz (referans, kayit) {
+  const anahtar = ODEME(referans)
+  if (await depo().get(anahtar, { type: 'json' })) return false
+  await depo().setJSON(anahtar, Object.assign({}, kayit, { yazildi: new Date().toISOString() }))
+  return true
+}
+
+// Odeme alindi ama sahibi bulunamadi. Bu kayit bir hata raporu degil, elle
+// islenecek bir is emridir: silinmez, ustune yazilir ki son durum gorunsun.
+async function yetimYaz (referans, kayit) {
+  await depo().setJSON(YETIM(referans), Object.assign({}, kayit, { yazildi: new Date().toISOString() }))
+}
+
+// Bekleyen kayit e-posta + plan ile anahtarlanir. Callback bu ikisini
+// vermiyorsa elimizde yalniz konusma kimligi kalir; o da kaydin ICINDE durur,
+// anahtarinda degil. Kayit sayisi az oldugu icin tarama yeterli. Hacim
+// buyurse konusma kimligi icin ayri bir isaretci anahtar yazilir; o degisiklik
+// yalniz bu dosyayi ilgilendirir, cagiranlar ayni kalir.
+async function bekleyenBulKimlikle (konusmaKimligi) {
+  const aranan = String(konusmaKimligi || '').trim()
+  if (!aranan) return null
+  const d = depo()
+  const liste = await d.list({ prefix: BEKLEYEN_ONEK })
+  const kayitlar = liste && Array.isArray(liste.blobs) ? liste.blobs.slice(0, TARAMA_TAVANI) : []
+  for (const b of kayitlar) {
+    const kayit = await d.get(b.key, { type: 'json' })
+    if (!kayit || kayit.konusmaKimligi !== aranan) continue
+    // Suresi dolmus kayit bekleyenOku'da da yok sayiliyor; iki yol ayni
+    // kurala uymazsa eski bir denemenin sifresiyle hesap acilabilir.
+    const bitis = Date.parse(kayit.sonKullanma || '')
+    if (!Number.isFinite(bitis) || bitis < Date.now()) return null
+    return kayit
+  }
+  return null
+}
+
+// Bir kez yazilir, ustune YAZILMAZ: aranan sey ilk gercek callback'in sekli.
+// Sonraki odemeler ayni soruyu tekrar cevaplamaz.
+async function taniYaz (sekil) {
+  const d = depo()
+  if (await d.get(TANI, { type: 'json' })) return false
+  await d.setJSON(TANI, Object.assign({}, sekil, { yazildi: new Date().toISOString() }))
+  return true
+}
+
+module.exports = {
+  sifreOzetle, sifreDogrula, bekleyenYaz, bekleyenOku, bekleyenSil, epostaAnahtari,
+  hesapOku, hesapAc, odemeOku, odemeYaz, yetimYaz, bekleyenBulKimlikle, taniYaz,
+  jetonYaz, jetonOku,
+}
