@@ -36,6 +36,13 @@ function getStoreAyarla (fn) {
   if (typeof fn === 'function') getStoreFn = fn
 }
 
+// Ayni kovayi kullanan diger katmanlar (veri.js) icin. Istemci tek yerden
+// enjekte edildigi icin depo da tek yerden acilir; ikinci bir getStore
+// cagrisi, enjeksiyonu atlayip Netlify'da patlardi.
+function depoAc () {
+  return depo()
+}
+
 // Bekleyen kayit odeme tamamlanmazsa ortada kalir. Kart formu 30 dakika
 // gecerli; 24 saat, gec donen bir odemeyi de kapsayacak kadar genis ama
 // kaydin suresiz durmasina izin vermeyecek kadar dar.
@@ -189,6 +196,19 @@ async function hesapAc (eposta, kayit) {
   return { yeni: true, kayit: govde }
 }
 
+// Hesap kaydina alan EKLER, digerlerine dokunmaz. hesapAc mevcut hesabi
+// bilerek ezmiyor; bu, "sonradan ogrenilen tek bir alani yaz" ihtiyaci icin.
+// Ornegi: motor ilk yazisinda musteri slug'ini bildiriyor (Karar F).
+async function hesapGuncelle (eposta, alanlar) {
+  const varOlan = await hesapOku(eposta)
+  if (!varOlan) return null
+  const govde = Object.assign({}, varOlan, alanlar, {
+    guncellendi: new Date().toISOString(),
+  })
+  await depo().setJSON(HESAP(eposta), govde)
+  return govde
+}
+
 async function odemeOku (referans) {
   return depo().get(ODEME(referans), { type: 'json' })
 }
@@ -294,6 +314,23 @@ async function oturumKapat (id) {
   await depo().delete(OTURUM(id))
 }
 
+// Bir hesabin acik oturum kimlikleri. Sifre degisince digerlerini dusurmek
+// icin. Oturum sayisi az oldugu ve kayitlar 7 gunde dustugu icin tarama
+// yeterli; hacim buyurse e-posta basina isaretci anahtar eklenir.
+async function oturumlariListele (eposta) {
+  const anahtar = epostaAnahtari(eposta)
+  const d = depo()
+  const liste = await d.list({ prefix: 'oturum/' })
+  const kayitlar = liste && Array.isArray(liste.blobs) ? liste.blobs.slice(0, TARAMA_TAVANI) : []
+  const cikti = []
+  for (const b of kayitlar) {
+    const kayit = await d.get(b.key, { type: 'json' })
+    if (kayit && kayit.eposta === anahtar) cikti.push(b.key.slice('oturum/'.length))
+  }
+  // Anahtarlar URL kodlu saklaniyor; cagiran ham kimligi bekliyor.
+  return cikti.map((k) => { try { return decodeURIComponent(k) } catch { return k } })
+}
+
 // Pencere dolduysa sayac sifirdan baslar; boylece eski hatalar birikmez.
 async function denemeOku (eposta) {
   const kayit = await depo().get(DENEME(eposta), { type: 'json' })
@@ -328,10 +365,10 @@ async function denemeSifirla (eposta) {
 }
 
 module.exports = {
-  getStoreAyarla,
+  getStoreAyarla, depoAc,
   sifreOzetle, sifreDogrula, bekleyenYaz, bekleyenOku, bekleyenSil, epostaAnahtari,
-  hesapOku, hesapAc, odemeOku, odemeYaz, yetimYaz, bekleyenBulKimlikle, taniYaz,
+  hesapOku, hesapAc, hesapGuncelle, odemeOku, odemeYaz, yetimYaz, bekleyenBulKimlikle, taniYaz,
   jetonYaz, jetonOku,
-  oturumAc, oturumOku, oturumKapat, denemeOku, denemeArtir, denemeSifirla,
+  oturumAc, oturumOku, oturumKapat, oturumlariListele, denemeOku, denemeArtir, denemeSifirla,
   OTURUM_OMRU_MS, DENEME_TAVANI, DENEME_PENCERESI_MS,
 }

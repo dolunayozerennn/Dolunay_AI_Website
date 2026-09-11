@@ -11,7 +11,7 @@ const path = require('node:path');
 const Module = require('node:module');
 
 const EPOSTA = 'ayse@ornek.com';
-const SIFRE = 'gercekSifre123';
+const SIFRE_METNI = 'gercekSifre123';
 
 const HESAP = path.resolve(__dirname, '../lib/hesap.js');
 const OTURUM_LIB = path.resolve(__dirname, '../lib/oturum.js');
@@ -42,7 +42,7 @@ Module._load = function (istek, ...kalan) {
 };
 
 function taze() {
-  for (const d of [HESAP, OTURUM_LIB, GIRIS, OTURUM, CIKIS]) {
+  for (const d of [HESAP, OTURUM_LIB, GIRIS, OTURUM, CIKIS, SIFRE]) {
     try { delete require.cache[require.resolve(d)]; } catch { /* ilk kosu */ }
   }
 }
@@ -81,7 +81,7 @@ async function hesapKur() {
   const h = require(HESAP);
   await h.hesapAc(EPOSTA, {
     eposta: EPOSTA,
-    sifreOzeti: await h.sifreOzetle(SIFRE),
+    sifreOzeti: await h.sifreOzetle(SIFRE_METNI),
     markaAdi: 'Ornek Marka',
     webSitesi: 'https://ornek.com/',
     plan: 'plan-1',
@@ -101,7 +101,7 @@ const vaka = (ad, f) => VAKALAR.push([ad, f]);
 
 vaka('G1_dogru_sifreyle_giris', async () => {
   await hesapKur();
-  const c = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE });
+  const c = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE_METNI });
   return {
     gecti: c.statusCode === 200 && govde(c).girisli === true
       && govde(c).markaAdi === 'Ornek Marka'
@@ -112,7 +112,7 @@ vaka('G1_dogru_sifreyle_giris', async () => {
 
 vaka('G2_cerez_bayraklari_dogru', async () => {
   await hesapKur();
-  const c = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE });
+  const c = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE_METNI });
   const ham = String(c.headers['Set-Cookie'] || '');
   return {
     gecti: /HttpOnly/i.test(ham) && /Secure/i.test(ham) && /SameSite=Lax/i.test(ham)
@@ -154,7 +154,7 @@ vaka('G5_eksik_alan_400_ve_yanlis_yontem_405', async () => {
 
 vaka('G6_form_encoded_govde_de_calisir', async () => {
   await hesapKur();
-  const c = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE }, null, 'application/x-www-form-urlencoded');
+  const c = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE_METNI }, null, 'application/x-www-form-urlencoded');
   return { gecti: c.statusCode === 200 && !!cerezDegeri(c), not: `kod:${c.statusCode}` };
 });
 
@@ -165,7 +165,7 @@ vaka('G7_oturum_cerezsiz_401', async () => {
 
 vaka('G8_gecerli_cerezle_oturum_bilgi_dondurur', async () => {
   await hesapKur();
-  const g = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE });
+  const g = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE_METNI });
   const c = await cagir.oturum(cerezDegeri(g));
   const b = govde(c);
   return {
@@ -179,7 +179,7 @@ vaka('G8_gecerli_cerezle_oturum_bilgi_dondurur', async () => {
 
 vaka('G9_suresi_dolmus_oturum_401_ve_cerez_dusurulur', async () => {
   await hesapKur();
-  const g = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE });
+  const g = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE_METNI });
   for (const a of anahtarlar('oturum/')) {
     const k = JSON.parse(kutu.get(a));
     k.sonKullanma = new Date(Date.now() - 60000).toISOString();
@@ -195,7 +195,7 @@ vaka('G9_suresi_dolmus_oturum_401_ve_cerez_dusurulur', async () => {
 
 vaka('G10_cikis_oturumu_gercekten_kapatir', async () => {
   await hesapKur();
-  const g = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE });
+  const g = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE_METNI });
   const id = cerezDegeri(g);
   const c = await cagir.cikis(id);
   const sonra = await cagir.oturum(id);
@@ -214,7 +214,7 @@ vaka('G11_deneme_tavani_429_verir', async () => {
   for (let i = 0; i < DENEME_TAVANI; i += 1) {
     son = await cagir.giris({ eposta: EPOSTA, sifre: 'yanlis' + i });
   }
-  const kilitli = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE });
+  const kilitli = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE_METNI });
   return {
     gecti: son.statusCode === 401 && kilitli.statusCode === 429 && !cerezDegeri(kilitli),
     not: `son:${son.statusCode} kilitli:${kilitli.statusCode}`,
@@ -225,7 +225,7 @@ vaka('G12_basarili_giris_sayaci_sifirlar', async () => {
   await hesapKur();
   for (let i = 0; i < 3; i += 1) await cagir.giris({ eposta: EPOSTA, sifre: 'yanlis' + i });
   const once = anahtarlar('deneme/').length;
-  await cagir.giris({ eposta: EPOSTA, sifre: SIFRE });
+  await cagir.giris({ eposta: EPOSTA, sifre: SIFRE_METNI });
   return {
     gecti: once === 1 && anahtarlar('deneme/').length === 0,
     not: `once:${once} sonra:${anahtarlar('deneme/').length}`,
@@ -235,7 +235,7 @@ vaka('G12_basarili_giris_sayaci_sifirlar', async () => {
 vaka('G13_depo_kapaliyken_giris_acilmaz', async () => {
   await hesapKur();
   depoKapali = true;
-  const g = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE });
+  const g = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE_METNI });
   const o = await cagir.oturum('herhangi');
   depoKapali = false;
   return {
@@ -247,7 +247,7 @@ vaka('G13_depo_kapaliyken_giris_acilmaz', async () => {
 
 vaka('G14_oturum_kimligi_cevap_govdesinde_gecmez', async () => {
   await hesapKur();
-  const g = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE });
+  const g = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE_METNI });
   const id = cerezDegeri(g);
   return {
     gecti: !!id && !g.body.includes(id),
@@ -257,9 +257,9 @@ vaka('G14_oturum_kimligi_cevap_govdesinde_gecmez', async () => {
 
 vaka('G15_duz_sifre_hicbir_kayitta_yok', async () => {
   await hesapKur();
-  await cagir.giris({ eposta: EPOSTA, sifre: SIFRE });
+  await cagir.giris({ eposta: EPOSTA, sifre: SIFRE_METNI });
   return {
-    gecti: ![...kutu.values()].join('\n').includes(SIFRE),
+    gecti: ![...kutu.values()].join('\n').includes(SIFRE_METNI),
     not: 'duz sifre depoda bulundu',
   };
 });
@@ -268,7 +268,7 @@ vaka('G17_hesabi_silinmis_oturum_gecersiz', async () => {
   // Onizlemede olculdu: test hesabi silindikten sonra oturum ucu hala
   // "girisli" diyordu. Hesap yoksa oturum da gecersiz sayilmali.
   await hesapKur();
-  const g = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE });
+  const g = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE_METNI });
   const id = cerezDegeri(g);
   for (const a of anahtarlar('hesap/')) kutu.delete(a);
   const c = await cagir.oturum(id);
@@ -281,7 +281,7 @@ vaka('G17_hesabi_silinmis_oturum_gecersiz', async () => {
 
 vaka('G18_hesap_okunamazsa_girisli_denmez', async () => {
   await hesapKur();
-  const g = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE });
+  const g = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE_METNI });
   const id = cerezDegeri(g);
   depoKapali = true;
   const c = await cagir.oturum(id);
@@ -294,11 +294,70 @@ vaka('G18_hesap_okunamazsa_girisli_denmez', async () => {
 
 vaka('G16_cevaplar_onbellege_alinmaz', async () => {
   await hesapKur();
-  const g = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE });
+  const g = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE_METNI });
   const o = await cagir.oturum(cerezDegeri(g));
   const c = await cagir.cikis(cerezDegeri(g));
   const hepsi = [g, o, c].every((x) => String(x.headers['Cache-Control'] || '') === 'no-store');
   return { gecti: hepsi, not: 'bir cevapta no-store yok' };
+});
+
+// --- sifre degistirme -----------------------------------------------------
+
+const SIFRE = path.resolve(__dirname, '../lib/uclar/sifre-degistir.js');
+
+vaka('G19_sifre_degisiyor_ve_yeni_sifreyle_giriliyor', async () => {
+  await hesapKur();
+  const g = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE_METNI });
+  const id = cerezDegeri(g);
+  const c = await require(SIFRE).handler(olay('POST', { mevcut: SIFRE_METNI, yeni: 'yeniSifre12345' }, id));
+  taze();
+  const eskiyle = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE_METNI });
+  const yeniyle = await cagir.giris({ eposta: EPOSTA, sifre: 'yeniSifre12345' });
+  return {
+    gecti: c.statusCode === 200 && govde(c).degisti === true
+      && eskiyle.statusCode === 401 && yeniyle.statusCode === 200,
+    not: `degis:${c.statusCode} eski:${eskiyle.statusCode} yeni:${yeniyle.statusCode}`,
+  };
+});
+
+vaka('G20_mevcut_sifre_yanlissa_degismiyor', async () => {
+  await hesapKur();
+  const g = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE_METNI });
+  const c = await require(SIFRE).handler(olay('POST', { mevcut: 'yanlis', yeni: 'yeniSifre12345' }, cerezDegeri(g)));
+  taze();
+  const hala = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE_METNI });
+  return {
+    gecti: c.statusCode === 401 && hala.statusCode === 200,
+    not: `degis:${c.statusCode} eski sifre hala:${hala.statusCode}`,
+  };
+});
+
+vaka('G21_kisa_sifre_reddediliyor', async () => {
+  await hesapKur();
+  const g = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE_METNI });
+  const c = await require(SIFRE).handler(olay('POST', { mevcut: SIFRE_METNI, yeni: 'kisa' }, cerezDegeri(g)));
+  return { gecti: c.statusCode === 400, not: `kod:${c.statusCode}` };
+});
+
+vaka('G22_sifre_degisince_diger_oturumlar_dusuyor', async () => {
+  await hesapKur();
+  const bir = cerezDegeri(await cagir.giris({ eposta: EPOSTA, sifre: SIFRE_METNI }));
+  const iki = cerezDegeri(await cagir.giris({ eposta: EPOSTA, sifre: SIFRE_METNI }));
+  const c = await require(SIFRE).handler(olay('POST', { mevcut: SIFRE_METNI, yeni: 'yeniSifre12345' }, bir));
+  const birDurum = await cagir.oturum(bir);
+  const ikiDurum = await cagir.oturum(iki);
+  return {
+    // Degisikligi yapan oturum acik kalir, digeri duser.
+    gecti: c.statusCode === 200 && govde(c).dusenOturum === 1
+      && birDurum.statusCode === 200 && ikiDurum.statusCode === 401,
+    not: `dusen:${govde(c).dusenOturum} bir:${birDurum.statusCode} iki:${ikiDurum.statusCode}`,
+  };
+});
+
+vaka('G23_oturumsuz_sifre_degistirilemez', async () => {
+  await hesapKur();
+  const c = await require(SIFRE).handler(olay('POST', { mevcut: SIFRE_METNI, yeni: 'yeniSifre12345' }, null));
+  return { gecti: c.statusCode === 401, not: `kod:${c.statusCode}` };
 });
 
 // --- kosum ----------------------------------------------------------------
