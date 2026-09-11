@@ -8,8 +8,11 @@
 // Guvenlik notu: depo site genelinde ortak, yani buraya yazilan kayit
 // uretimdeki depoda da gorunur. Bu yuzden adres `.invalid` uzantili (hicbir
 // zaman gercek bir adres olamaz) ve is biter bitmez silinir.
+import { getStore } from '@netlify/blobs'
 import hesapLib from '../lib/hesap.js'
 import crypto from 'node:crypto'
+
+hesapLib.getStoreAyarla(getStore)
 
 const ANAHTAR = 'deneme-2026-09-11'
 const EPOSTA = 'uctan-uca-deneme@dolunay.invalid'

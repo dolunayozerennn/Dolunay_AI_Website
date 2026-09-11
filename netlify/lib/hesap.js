@@ -13,9 +13,28 @@
 // tek dosya burasidir; cagiranlar bu dosyanin disina cikmaz.
 
 const crypto = require('crypto')
-const { getStore } = require('@netlify/blobs')
 
 const KOVA = 'hesaplar'
+
+// Blobs istemcisi iki yoldan gelebilir:
+//   1. CommonJS require ile (yerel testler ve sinav dosyalari boyle kullanir)
+//   2. v2 kabugu ESM import edip `getStoreAyarla` ile verir (Netlify'da boyle)
+//
+// Ikincisi ZORUNLU. Olculdu: fonksiyonlar .mjs (ESM) olunca esbuild bu
+// CommonJS require'ini bundle'a katmiyor, calisma anina birakiyor; paket
+// /var/task altinda bulunmadigi icin fonksiyon "Cannot find module" ile 502
+// veriyor. Kabugun ESM import'u ise normal sekilde bundle'laniyor.
+let getStoreFn = null
+try {
+  ;({ getStore: getStoreFn } = require('@netlify/blobs'))
+} catch (e) {
+  // Bulunamadi; kabuk enjekte edecek. Burada patlamak yanlis olurdu, cunku
+  // modul yuklenirken henuz kimse depoya dokunmuyor.
+}
+
+function getStoreAyarla (fn) {
+  if (typeof fn === 'function') getStoreFn = fn
+}
 
 // Bekleyen kayit odeme tamamlanmazsa ortada kalir. Kart formu 30 dakika
 // gecerli; 24 saat, gec donen bir odemeyi de kapsayacak kadar genis ama
@@ -30,10 +49,13 @@ const SCRYPT = { N: 16384, r: 8, p: 1, uzunluk: 64 }
 const SCRYPT_BELLEK = 64 * 1024 * 1024
 
 function depo () {
+  if (typeof getStoreFn !== 'function') {
+    throw new Error('Blobs istemcisi yok: kabuk getStoreAyarla ile vermeli')
+  }
   // Guclu tutarlilik: kayit yazildiktan dakikalar sonra callback'te okunacak.
   // Eventual tutarlilikta "kayit yok" gorup hesabi acamamak, odemesi alinmis
   // musteriyi hesapsiz birakir.
-  return getStore({ name: KOVA, consistency: 'strong' })
+  return getStoreFn({ name: KOVA, consistency: 'strong' })
 }
 
 // Ayni adresin farkli yazimlari tek kayda dusmeli.
@@ -306,6 +328,7 @@ async function denemeSifirla (eposta) {
 }
 
 module.exports = {
+  getStoreAyarla,
   sifreOzetle, sifreDogrula, bekleyenYaz, bekleyenOku, bekleyenSil, epostaAnahtari,
   hesapOku, hesapAc, odemeOku, odemeYaz, yetimYaz, bekleyenBulKimlikle, taniYaz,
   jetonYaz, jetonOku,
