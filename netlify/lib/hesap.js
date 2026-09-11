@@ -36,6 +36,13 @@ function getStoreAyarla (fn) {
   if (typeof fn === 'function') getStoreFn = fn
 }
 
+// Ayni kovayi kullanan diger katmanlar (veri.js) icin. Istemci tek yerden
+// enjekte edildigi icin depo da tek yerden acilir; ikinci bir getStore
+// cagrisi, enjeksiyonu atlayip Netlify'da patlardi.
+function depoAc () {
+  return depo()
+}
+
 // Bekleyen kayit odeme tamamlanmazsa ortada kalir. Kart formu 30 dakika
 // gecerli; 24 saat, gec donen bir odemeyi de kapsayacak kadar genis ama
 // kaydin suresiz durmasina izin vermeyecek kadar dar.
@@ -189,6 +196,19 @@ async function hesapAc (eposta, kayit) {
   return { yeni: true, kayit: govde }
 }
 
+// Hesap kaydina alan EKLER, digerlerine dokunmaz. hesapAc mevcut hesabi
+// bilerek ezmiyor; bu, "sonradan ogrenilen tek bir alani yaz" ihtiyaci icin.
+// Ornegi: motor ilk yazisinda musteri slug'ini bildiriyor (Karar F).
+async function hesapGuncelle (eposta, alanlar) {
+  const varOlan = await hesapOku(eposta)
+  if (!varOlan) return null
+  const govde = Object.assign({}, varOlan, alanlar, {
+    guncellendi: new Date().toISOString(),
+  })
+  await depo().setJSON(HESAP(eposta), govde)
+  return govde
+}
+
 async function odemeOku (referans) {
   return depo().get(ODEME(referans), { type: 'json' })
 }
@@ -328,9 +348,9 @@ async function denemeSifirla (eposta) {
 }
 
 module.exports = {
-  getStoreAyarla,
+  getStoreAyarla, depoAc,
   sifreOzetle, sifreDogrula, bekleyenYaz, bekleyenOku, bekleyenSil, epostaAnahtari,
-  hesapOku, hesapAc, odemeOku, odemeYaz, yetimYaz, bekleyenBulKimlikle, taniYaz,
+  hesapOku, hesapAc, hesapGuncelle, odemeOku, odemeYaz, yetimYaz, bekleyenBulKimlikle, taniYaz,
   jetonYaz, jetonOku,
   oturumAc, oturumOku, oturumKapat, denemeOku, denemeArtir, denemeSifirla,
   OTURUM_OMRU_MS, DENEME_TAVANI, DENEME_PENCERESI_MS,
