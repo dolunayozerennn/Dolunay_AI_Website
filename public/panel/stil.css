@@ -1585,3 +1585,13 @@ input[type="color"].renk-kutu:focus-visible {
   .konu-form-satir { flex-direction: column; }
   .konu-form-satir .btn { width: 100%; }
 }
+
+/* Motorun son yazma zamani. Tek yonlu akista musteri, kararinin neden
+   hemen yansimadigini buradan anlar. */
+.son-guncelleme {
+  font-size: 12px;
+  color: var(--muted);
+  margin-left: 14px;
+  white-space: nowrap;
+}
+@media (max-width: 640px) { .son-guncelleme { display: none; } }

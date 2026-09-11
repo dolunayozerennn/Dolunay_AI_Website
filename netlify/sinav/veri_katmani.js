@@ -13,6 +13,10 @@ const HESAP = path.resolve(__dirname, '../lib/hesap.js');
 const VERI = path.resolve(__dirname, '../lib/veri.js');
 const YAZ = path.resolve(__dirname, '../lib/uclar/motor-yaz.js');
 const OKU = path.resolve(__dirname, '../lib/uclar/motor-oku.js');
+const P_VERI = path.resolve(__dirname, '../lib/uclar/panel-veri.js');
+const P_YAZI = path.resolve(__dirname, '../lib/uclar/panel-yazi.js');
+const P_KARAR = path.resolve(__dirname, '../lib/uclar/panel-karar.js');
+const EPOSTA = 'musteri@ornek.com';
 
 const SIR = 'sinav-motor-sirri';
 const SLUG = 'ornek-musteri';
@@ -37,7 +41,7 @@ Module._load = function (istek, ...kalan) {
 };
 
 function taze() {
-  for (const d of [HESAP, VERI, YAZ, OKU]) {
+  for (const d of [HESAP, VERI, YAZ, OKU, P_VERI, P_YAZI, P_KARAR]) {
     try { delete require.cache[require.resolve(d)]; } catch { /* ilk kosu */ }
   }
 }
@@ -312,6 +316,173 @@ vaka('V18_depo_kapaliyken_yazma_503', async () => {
   const o = await require(OKU).handler(olay('GET', null, { slug: SLUG }));
   depoKapali = false;
   return { gecti: c.statusCode === 503 && o.statusCode === 503, not: `${c.statusCode}/${o.statusCode}` };
+});
+
+// --- HTML temizligi (Karar E2) --------------------------------------------
+
+vaka('V19_zararli_html_temizleniyor_metin_kaliyor', async () => {
+  const v = require(VERI);
+  const c = v.htmlTemizle(
+    '<p>iyi</p><script>alert(1)</script><img src=x onerror=alert(1)>' +
+    '<b onclick="kotu()">kalin</b><div class="x">metin</div>'
+  );
+  return {
+    gecti: !/script|onerror|onclick|<img|<div|class=/i.test(c)
+      && c.includes('<p>iyi</p>') && c.includes('<b>kalin</b>')
+      // Izinsiz etiketin ICINDEKI metin korunur.
+      && c.includes('metin'),
+    not: c,
+  };
+});
+
+vaka('V20_javascript_semali_baglanti_adressiz_kaliyor', async () => {
+  const v = require(VERI);
+  const kotu = v.htmlTemizle('<a href="javascript:alert(1)">tik</a>');
+  const iyi = v.htmlTemizle('<a href="https://ornek.com/x">iyi</a>');
+  return {
+    gecti: !/javascript:/i.test(kotu) && kotu.includes('tik')
+      && iyi.includes('href="https://ornek.com/x"') && iyi.includes('rel="noopener nofollow"'),
+    not: kotu + ' | ' + iyi,
+  };
+});
+
+// --- panel uclari ---------------------------------------------------------
+
+async function oturumKur() {
+  const h = require(HESAP);
+  await h.hesapAc(EPOSTA, { eposta: EPOSTA, markaAdi: 'Ornek Buro', sifreOzeti: 'x', slug: 'blog-profesyonel' });
+  await h.hesapGuncelle(EPOSTA, { motorSlug: SLUG });
+  const o = await h.oturumAc(EPOSTA);
+  return o.id;
+}
+
+function panelOlay(yontem, govde, cerez, sorgu) {
+  return {
+    httpMethod: yontem,
+    headers: Object.assign({ 'content-type': 'application/json' }, cerez ? { cookie: `dolunay_oturum=${cerez}` } : {}),
+    body: govde ? JSON.stringify(govde) : '',
+    isBase64Encoded: false,
+    queryStringParameters: sorgu || {},
+  };
+}
+
+vaka('V21_panel_veri_oturumsuz_401', async () => {
+  const c = await require(P_VERI).handler(panelOlay('GET'));
+  return { gecti: c.statusCode === 401, not: `kod:${c.statusCode}` };
+});
+
+vaka('V22_panel_veri_birlesik_sekli_donduruyor', async () => {
+  await require(YAZ).handler(olay('POST', Object.assign({}, ORNEK, { eposta: EPOSTA })));
+  const cerez = await oturumKur();
+  const v = require(VERI);
+  await v.kararlarYaz(SLUG, { yazilar: { y1: { onay: { zaman: 'z' } } } });
+  const c = await require(P_VERI).handler(panelOlay('GET', null, cerez));
+  const b = govde(c);
+  return {
+    gecti: c.statusCode === 200 && b.hesap.markaAdi === 'Ornek Buro'
+      && b.yazilar.length === 2
+      && b.yazilar.find((y) => y.id === 'y1').durum === 'planlandi'
+      && b.motorBagli === true && b.motorYazdiMi === true
+      && b.sonGuncelleme && b.bugun
+      // Liste metinsiz gelmeli.
+      && !b.yazilar.some((y) => y.icerik),
+    not: `kod:${c.statusCode} ${JSON.stringify({ y: b.yazilar && b.yazilar.length, m: b.motorBagli })}`,
+  };
+});
+
+vaka('V23_motor_hic_yazmadiysa_ayirt_ediliyor', async () => {
+  const cerez = await oturumKur();
+  const c = await require(P_VERI).handler(panelOlay('GET', null, cerez));
+  const b = govde(c);
+  return {
+    gecti: c.statusCode === 200 && b.motorBagli === true && b.motorYazdiMi === false
+      && b.yazilar.length === 0 && b.sonGuncelleme === null,
+    not: JSON.stringify({ b: b.motorBagli, y: b.motorYazdiMi, s: b.sonGuncelleme }),
+  };
+});
+
+vaka('V24_yazi_metni_istendiginde_geliyor', async () => {
+  await require(YAZ).handler(olay('POST', Object.assign({}, ORNEK, { eposta: EPOSTA })));
+  const cerez = await oturumKur();
+  const c = await require(P_YAZI).handler(panelOlay('GET', null, cerez, { id: 'y2' }));
+  const b = govde(c);
+  return {
+    gecti: c.statusCode === 200 && b.kaynak === 'motor' && b.icerik.includes('govde iki'),
+    not: `kod:${c.statusCode} kaynak:${b.kaynak}`,
+  };
+});
+
+vaka('V25_duzenlenmis_yazida_panelin_metni_donuyor', async () => {
+  await require(YAZ).handler(olay('POST', Object.assign({}, ORNEK, { eposta: EPOSTA })));
+  const cerez = await oturumKur();
+  await require(P_KARAR).handler(panelOlay('POST', {
+    tur: 'metin', yaziId: 'y2', icerik: '<p>musteri yazdi</p><script>kotu()</script>',
+  }, cerez));
+  const c = await require(P_YAZI).handler(panelOlay('GET', null, cerez, { id: 'y2' }));
+  const b = govde(c);
+  return {
+    gecti: b.kaynak === 'panel' && b.icerik.includes('musteri yazdi')
+      && !/script/i.test(b.icerik),
+    not: `kaynak:${b.kaynak} icerik:${b.icerik}`,
+  };
+});
+
+vaka('V26_karar_ucu_onay_ret_tarih_yaziyor', async () => {
+  await require(YAZ).handler(olay('POST', Object.assign({}, ORNEK, { eposta: EPOSTA })));
+  const cerez = await oturumKur();
+  const p = require(P_KARAR);
+  await p.handler(panelOlay('POST', { tur: 'onay', yaziId: 'y1' }, cerez));
+  await p.handler(panelOlay('POST', { tur: 'tarih', yaziId: 'y1', tarih: '2026-09-20' }, cerez));
+  const kotuTarih = await p.handler(panelOlay('POST', { tur: 'tarih', yaziId: 'y1', tarih: '20/09' }, cerez));
+  const k = await require(VERI).kararlarOku(SLUG);
+  return {
+    gecti: k.yazilar.y1.onay && k.yazilar.y1.tarihDegisikligi.tarih === '2026-09-20'
+      && kotuTarih.statusCode === 400,
+    not: JSON.stringify(k.yazilar.y1) + ' kotuTarih:' + kotuTarih.statusCode,
+  };
+});
+
+vaka('V27_onay_onceki_reddi_geri_alir', async () => {
+  await require(YAZ).handler(olay('POST', Object.assign({}, ORNEK, { eposta: EPOSTA })));
+  const cerez = await oturumKur();
+  const p = require(P_KARAR);
+  await p.handler(panelOlay('POST', { tur: 'ret', yaziId: 'y1', neden: 'olmadi' }, cerez));
+  await p.handler(panelOlay('POST', { tur: 'onay', yaziId: 'y1' }, cerez));
+  const k = await require(VERI).kararlarOku(SLUG);
+  return {
+    gecti: !!k.yazilar.y1.onay && k.yazilar.y1.ret === undefined,
+    not: JSON.stringify(k.yazilar.y1),
+  };
+});
+
+vaka('V28_motor_slug_yoksa_409', async () => {
+  const h = require(HESAP);
+  await h.hesapAc(EPOSTA, { eposta: EPOSTA, markaAdi: 'M', sifreOzeti: 'x' });
+  const o = await h.oturumAc(EPOSTA);
+  const c = await require(P_KARAR).handler(panelOlay('POST', { tur: 'onay', yaziId: 'y1' }, o.id));
+  const v = await require(P_VERI).handler(panelOlay('GET', null, o.id));
+  return {
+    // Karar yazilamaz ama panel yine acilir: "baglanmadi" durumu gosterilir.
+    gecti: c.statusCode === 409 && v.statusCode === 200 && govde(v).motorBagli === false,
+    not: `karar:${c.statusCode} veri:${v.statusCode}`,
+  };
+});
+
+vaka('V29_ayarlar_ayri_kayitta_kararlari_bozmuyor', async () => {
+  await require(YAZ).handler(olay('POST', Object.assign({}, ORNEK, { eposta: EPOSTA })));
+  const cerez = await oturumKur();
+  const p = require(P_KARAR);
+  await p.handler(panelOlay('POST', { tur: 'onay', yaziId: 'y1' }, cerez));
+  await p.handler(panelOlay('POST', {
+    tur: 'ayarlar', yayinProgrami: { saat: '15:00', gunler: ['Pzt'] },
+    whatsapp: { numara: '+905000000000', izin: true, izinZamani: 'z', izinMetniSurumu: 'v1' },
+  }, cerez));
+  const k = await require(VERI).kararlarOku(SLUG);
+  const a = await require(VERI).ayarlarOku(SLUG);
+  return {
+    gecti: !!k.yazilar.y1.onay && a.yayinProgrami.saat === '15:00' && a.whatsapp.izin === true,
+    not: JSON.stringify({ k: !!k.yazilar.y1, a: a.yayinProgrami }),
+  };
 });
 
 async function main() {

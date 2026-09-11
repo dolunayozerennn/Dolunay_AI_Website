@@ -98,6 +98,47 @@ function okumaDakikasi (kelime) {
   return Math.max(1, Math.round((Number(kelime) || 0) / 200))
 }
 
+// --- HTML temizligi (Karar E2) --------------------------------------------
+//
+// Duzenleme alani tarayicinin kendi duzenleme ozelligiyle calisiyor, ciktisi
+// HTML. O HTML depoya, oradan da musterinin KENDI SITESINE gidiyor.
+// Temizlenmezse panel, musterinin sitesine HTML enjekte etme yolu olur.
+//
+// Arac cubugu yalniz kalin, italik, madde listesi ve H2 uretiyor; motorun
+// teslim HTML'i de paragraf, baglanti, ara baslik ve liste kullaniyor. Izin
+// listesi bu yuzden dar tutulabiliyor. Listede olmayan etiket ATILIR, icindeki
+// metin KORUNUR: musterinin yazdigi kaybolmasin.
+const IZINLI_ETIKET = new Set(['p', 'br', 'strong', 'b', 'em', 'i', 'u', 'ul', 'ol', 'li', 'h2', 'h3', 'blockquote', 'a'])
+
+function htmlTemizle (ham) {
+  const metin = String(ham || '')
+  // Once tamamen atilacaklar: govdeleriyle birlikte gider.
+  let s = metin
+    .replace(/<script\b[\s\S]*?<\/script\s*>/gi, '')
+    .replace(/<style\b[\s\S]*?<\/style\s*>/gi, '')
+    .replace(/<!--[\s\S]*?-->/g, '')
+
+  s = s.replace(/<\/?([a-zA-Z][a-zA-Z0-9]*)\b([^>]*)>/g, (tam, etiket, nitelikler) => {
+    const ad = etiket.toLowerCase()
+    if (!IZINLI_ETIKET.has(ad)) return ''
+    if (tam.startsWith('</')) return `</${ad}>`
+    // Nitelikler tamamen dusuyor; tek istisna baglantinin adresi.
+    if (ad === 'a') {
+      const m = /\bhref\s*=\s*("([^"]*)"|'([^']*)')/i.exec(nitelikler)
+      const adres = m ? (m[2] !== undefined ? m[2] : m[3]) : ''
+      // javascript: ve data: semalari alinmaz.
+      if (/^(https?:\/\/|\/|mailto:)/i.test(adres.trim())) {
+        const guvenli = adres.trim().replace(/"/g, '&quot;')
+        return `<a href="${guvenli}" rel="noopener nofollow">`
+      }
+      return '<a>'
+    }
+    return `<${ad}>`
+  })
+
+  return s
+}
+
 // --- birlestirme ----------------------------------------------------------
 
 // Tek cumlelik kural: panelin bir karari varsa o kazanir, yoksa motorun degeri.
@@ -214,5 +255,5 @@ module.exports = {
   motorListeOku, motorListeYaz, motorYaziOku, motorYaziYaz,
   islenenOku, islenenYaz,
   kararlarOku, kararlarYaz, ayarlarOku, ayarlarYaz,
-  kelimeSay, okumaDakikasi, yaziBirlestir, birlestir, bekleyenKararlar,
+  kelimeSay, okumaDakikasi, htmlTemizle, yaziBirlestir, birlestir, bekleyenKararlar,
 }

@@ -1,14 +1,14 @@
 /* =========================================================================
    Panel — kabuk, yönlendirme ve ekranlar.
-   Veri yalnızca data/mock.js üzerinden okunur; başka hiçbir yerde sabit
-   içerik yoktur. Durum değişiklikleri bellekte tutulur, sayfa yenilenince
-   mock.js'teki başlangıç hâline döner.
+   Veri yalnızca /.netlify/functions/panel-veri ucundan okunur; sayfada
+   müşteri verisi yok. Panel sayfaları statik dosya olduğu için koruma bu
+   kuralda: veri kimlik doğrulayan uçlardan gelir.
    ========================================================================= */
 
 (function () {
   "use strict";
 
-  var M = window.MOCK || {};
+  var M = {};   /* panel-veri ucundan dolar, acilista */
 
   /* ---- oturum kontrolü ----
      Panel sayfaları statik dosya; sunucu tarafında kapatılamıyorlar. Asıl
@@ -18,27 +18,81 @@
 
      Sayfa doğrulama bitene kadar gizli duruyor (body.dogrulaniyor). Bu bir
      güvenlik önlemi değil görünüm önlemi: panel bir an görünüp kaybolmasın. */
-  var OTURUM_UCU = "/.netlify/functions/oturum";
+  var VERI_UCU = "/.netlify/functions/panel-veri";
+  var YAZI_UCU = "/.netlify/functions/panel-yazi";
   var CIKIS_UCU = "/.netlify/functions/cikis";
 
   function girisEkranina() {
     window.location.replace("index.html");
   }
 
-  fetch(OTURUM_UCU, {
-    credentials: "same-origin",
-    headers: { "Accept": "application/json" }
-  }).then(function (cevap) {
-    if (!cevap.ok) return null;
-    return cevap.json();
-  }).then(function (veri) {
-    if (!veri || veri.girisli !== true) { girisEkranina(); return; }
-    document.body.classList.remove("dogrulaniyor");
-  }).catch(function () {
-    /* Uç yanıt vermiyorsa panel açılmaz. Doğrulanmamış birine panel
-       göstermektense giriş ekranına dönmek doğrusu. */
-    girisEkranina();
-  });
+  /* Motorun son yazma zamanı. Akış tek yönlü: panelden yapılan hiçbir şey
+     anında yansımıyor, yazılar günde bir kez işleniyor. Müşteri kararının
+     neden hemen görünmediğini buradan anlıyor; yoksa paneli bozuk sanar. */
+  function sonGuncellemeyiGoster() {
+    var yuva = document.getElementById("tepeSag");
+    if (!yuva) return;
+    var metin = M.sonGuncelleme
+      ? "Son güncelleme: " + trTarihSaat(M.sonGuncelleme)
+      : "Henüz güncelleme alınmadı";
+    var s = document.createElement("span");
+    s.className = "son-guncelleme";
+    s.title = "Yazılar günde bir kez işleniyor. Panelden yaptığınız değişiklikler bir sonraki güncellemede yansır.";
+    s.textContent = metin;
+    yuva.appendChild(s);
+  }
+
+  var KARAR_UCU = "/.netlify/functions/panel-karar";
+
+  /* Panelin kararını sunucuya yazar. Ekran zaten iyimser güncelleniyor;
+     burada asıl iş, yazma başarısız olursa müşteriye SÖYLEMEK. Sessizce
+     kaybolan bir onay, müşterinin yaptığını sandığı ama olmamış bir iştir. */
+  function kararGonder(govde) {
+    return fetch(KARAR_UCU, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify(govde)
+    }).then(function (cevap) {
+      if (cevap.status === 401) { girisEkranina(); return null; }
+      return cevap.json().catch(function () { return {}; }).then(function (v) {
+        if (!cevap.ok) throw new Error(v.hata || ("kod " + cevap.status));
+        return v;
+      });
+    }).catch(function (hata) {
+      toast("Kaydedilemedi: " + (hata && hata.message ? hata.message : "bağlantı sorunu") +
+        ". Sayfayı yenileyip tekrar deneyin.");
+      throw hata;
+    });
+  }
+
+  /* Yazının tam metni listede gelmiyor (liste hafif kalsın diye); önizleme
+     ya da düzenleme açılınca çekiliyor. Müşteri metni düzenlediyse uç
+     panelin metnini döndürür. */
+  function yaziMetniGetir(id) {
+    return fetch(YAZI_UCU + "?id=" + encodeURIComponent(id), {
+      credentials: "same-origin",
+      headers: { "Accept": "application/json" }
+    }).then(function (cevap) {
+      if (cevap.status === 401) { girisEkranina(); return ""; }
+      if (!cevap.ok) return "";
+      return cevap.json().then(function (v) { return v.icerik || ""; });
+    }).catch(function () { return ""; });
+  }
+
+  /* "Veri gelmedi" ile "yazı yok" ayrı şeyler. Ayrı metin olmazsa müşteri
+     kendi yazılarının silindiğini sanır. */
+  function veriYokEkrani(sebep) {
+    var yuva = document.querySelector(".icerik-ic");
+    if (!yuva) return;
+    yuva.innerHTML =
+      '<div class="bos-durum">' +
+      "<p>Panel verileriniz şu an okunamadı. Oturumunuz açık, sorun bizde.</p>" +
+      "<p class=\"yardim-metni\">Birazdan sayfayı yenileyin; sürerse " +
+      '<a href="mailto:dolunay@dolunay.ai">dolunay@dolunay.ai</a> adresine yazın.</p>' +
+      "</div>";
+    if (sebep) console.error("panel verisi alinamadi:", sebep);
+  }
 
   function cikisYap() {
     /* Asıl iş oturum kaydını sunucuda kapatmak; çerezi düşürmek tek başına
@@ -68,11 +122,21 @@
     return Number(p[2]) + " " + AYLAR[Number(p[1]) - 1] + " " + p[0];
   }
 
+  /* ISO zaman damgası → "8 Eylül 2026, 14:30". Motorun son yazma zamanı için.
+     Tarayıcının saat dilimine çevirir; müşteri kendi saatini görür. */
+  function trTarihSaat(iso) {
+    if (!iso) return "";
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return "";
+    var saat = String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
+    return d.getDate() + " " + AYLAR[d.getMonth()] + " " + d.getFullYear() + ", " + saat;
+  }
+
   function sayi(n) {
     return Number(n || 0).toLocaleString("tr-TR");
   }
 
-  /* mock.js'te kapak yoksa marka renklerinde bir yüzey üretilir.
+  /* Kapak yoksa marka renklerinde bir yüzey üretilir.
      id'den türetilir ki her açılışta aynı kapak aynı yazıda kalsın. */
   function kapakSinifi(id) {
     var t = 0;
@@ -220,11 +284,20 @@
   function yaziOnayla(id) {
     var yazi = yaziBul(id);
     if (!yazi || yazi.durum !== "bekliyor") return;
+    var eskiDurum = yazi.durum;
+    /* Ekran iyimser güncelleniyor; yazma düşerse geri alınıyor. Müşterinin
+       onayladığını sanıp onaylamamış olması en kötü sonuç. */
     yazi.durum = "planlandi";
     cizHepsi();
-    /* "yayın takvimine eklendi" yerine "sıraya girdi": takvim panelin kendi
-       görüntüsü, gerçek yayın sırası motorun bir sonraki turunda kuruluyor. */
-    toast("Onayınız alındı. Yazı " + trTarih(yazi.tarih) + " için sıraya girdi.");
+    kararGonder({ tur: "onay", yaziId: id }).then(function (v) {
+      if (!v) return;
+      /* "yayın takvimine eklendi" yerine "sıraya girdi": takvim panelin kendi
+         görüntüsü, gerçek yayın sırası motorun bir sonraki turunda kuruluyor. */
+      toast("Onayınız alındı. Yazı " + trTarih(yazi.tarih) + " için sıraya girdi.");
+    }).catch(function () {
+      yazi.durum = eskiDurum;
+      cizHepsi();
+    });
   }
 
   function yaziBul(id) {
@@ -300,6 +373,19 @@
     return '<div class="kagit-kapak kapak ' + kapakSinifi(y.id) + '" role="presentation"></div>';
   }
 
+  /* Tam metin listede gelmiyor; modal önce açılıp metin sonra doluyor.
+     Beklerken boş bir kağıt göstermek yerine "yükleniyor" denir. */
+  function metniYerlestir(id, secici, bosMetin) {
+    yaziMetniGetir(id).then(function (html) {
+      var yuva = document.querySelector(secici);
+      if (!yuva) return;
+      yuva.innerHTML = html || bosMetin;
+      if (secici === "#duzIcerik") duzenlemeBaslangicMetni = yuva.innerHTML;
+    });
+  }
+
+  var duzenlemeBaslangicMetni = "";
+
   function onizlemeAc(id) {
     var y = yaziBul(id);
     if (!y) return;
@@ -317,10 +403,11 @@
           esc(trTarih(y.tarih)) + (y.durum === "yayinda" ? " tarihinde yayınlandı" : " için planlandı") +
           " · " + esc(y.kategori) + " · " + esc(y.okumaDk) + " dk" +
         "</div>" +
-        (y.icerik || "<p>Bu yazının içeriği henüz hazırlanmadı.</p>") +
+        '<div id="onizlemeGovde"><p class="yardim-metni">Yazı yükleniyor…</p></div>' +
       "</article></div>",
       { ad: "Yazı önizlemesi" }
     );
+    metniYerlestir(id, "#onizlemeGovde", "<p>Bu yazının içeriği henüz hazırlanmadı.</p>");
   }
 
   /* ---- 2) Reddetme ---- */
@@ -351,6 +438,7 @@
     var alan = document.getElementById("retNedeni");
     var neden = alan ? alan.value.trim() : "";
 
+    var eski = { durum: y.durum, tarih: y.tarih, reddedildi: y.reddedildi, neden: y.reddetmeNedeni };
     y.durum = "reddedildi";
     y.reddedildi = M.bugun;
     y.tarih = null;
@@ -358,7 +446,14 @@
 
     modalKapat();
     cizHepsi();
-    toast("Yazı reddedildi. Yerine yeni bir yazı hazırlanacak.");
+    kararGonder({ tur: "ret", yaziId: id, neden: neden }).then(function (v) {
+      if (!v) return;
+      toast("Yazı reddedildi. Yerine yeni bir yazı hazırlanacak.");
+    }).catch(function () {
+      y.durum = eski.durum; y.tarih = eski.tarih;
+      y.reddedildi = eski.reddedildi; y.reddetmeNedeni = eski.neden;
+      cizHepsi();
+    });
   }
 
   /* ---- 3) Düzenleme ----
@@ -392,7 +487,7 @@
             "</div>" +
             '<div class="kagit" id="duzIcerik" contenteditable="true" ' +
               'role="textbox" aria-multiline="true" aria-labelledby="icerikEtiket">' +
-              (y.icerik || "") +
+              '<p class="yardim-metni">Yazı yükleniyor…</p>' +
             "</div>" +
           "</div>" +
         "</div>" +
@@ -403,6 +498,8 @@
       "</div>",
       { ad: "Yazıyı düzenle", odakla: "#duzBaslik" }
     );
+    duzenlemeBaslangicMetni = "";
+    metniYerlestir(id, "#duzIcerik", "");
   }
 
   function yaziKaydet(id, dugme) {
@@ -433,25 +530,54 @@
     dugme.disabled = true;
     dugme.textContent = "Kaydediliyor…";
 
-    /* Gerçek kayıt yok; kısa bir bekleme kaydediliyor hissini veriyor. */
-    setTimeout(function () {
-      y.baslik = yeniBaslik;
-      y.ozet = document.getElementById("duzOzet").value.trim();
-      y.icerik = icerik;
+    /* Düzenlenen metin PANELIN KARARI sayılır: motor bu yazının düzenlenen
+       alanlarını bir daha ezmez. Yalnız gerçekten değiştirilen alanlar
+       gönderilir (Karar E4); müşteri sadece başlığı düzelttiyse motor gövdeyi
+       güncellemeye devam etsin. HTML uçta temizleniyor (Karar E2), kelime ve
+       okuma süresi de orada yeniden hesaplanıyor (Karar E3). */
+    var yeniOzet = document.getElementById("duzOzet").value.trim();
+    var govde = { tur: "metin", yaziId: id };
+    if (yeniBaslik !== y.baslik) govde.baslik = yeniBaslik;
+    if (yeniOzet !== y.ozet) govde.ozet = yeniOzet;
+    if (icerik !== duzenlemeBaslangicMetni) govde.icerik = icerik;
 
-      /* kelime sayısı ve okuma süresine dokunulmuyor: bunlar yazıyı üreten
-         tarafın verdiği değerler. Buradan metne bakıp yeniden hesaplarsak,
-         sahte gövdeler kısa olduğu için düzenlenen her yazının kelime sayısı
-         çöküyor ve "Yayınlanan Kelime" sayacı yanlış görünüyor. */
-
+    if (!govde.baslik && !govde.ozet && !govde.icerik) {
+      dugme.disabled = false;
+      dugme.textContent = "Kaydet";
       modalKapat();
-      cizHepsi();
+      return;
+    }
+
+    kararGonder(govde).then(function (v) {
+      if (!v) return;
+      /* Sunucu neyi kabul ettiyse ekran da onu göstersin: veriyi yeniden
+         çekmek, yerel tahminle sunucunun gerçeği ayrışmasın diye. */
+      return veriyiYenile();
+    }).then(function () {
+      modalKapat();
       /* "sitenize yansıtıldı" DEMEZ. Panelden yapılan hiçbir şey anında
-         yayına gitmiyor: yazılar günde bir kez işleniyor. Olmamış bir şeyi
-         olmuş gibi söylemek, müşteri siteye bakıp değişikliği göremeyince
-         paneli bozuk sandırır. */
+         yayına gitmiyor: yazılar günde bir kez işleniyor. */
       toast("Değişiklikleriniz kaydedildi. Sonraki güncellemede sitenize yansıyacak.");
-    }, 450);
+    }).catch(function () {
+      dugme.disabled = false;
+      dugme.textContent = "Kaydet";
+    });
+  }
+
+  /* Veriyi uçtan yeniden çeker ve ekranları tazeler. */
+  function veriyiYenile() {
+    return fetch(VERI_UCU, {
+      credentials: "same-origin",
+      headers: { "Accept": "application/json" }
+    }).then(function (cevap) {
+      if (cevap.status === 401) { girisEkranina(); return null; }
+      if (!cevap.ok) throw new Error("veri alınamadı");
+      return cevap.json();
+    }).then(function (veri) {
+      if (!veri) return;
+      M = veri;
+      cizHepsi();
+    });
   }
 
   /* araç çubuğu */
@@ -1265,14 +1391,24 @@
     var eski = yazi.tarih;
     yazi.tarih = hedef;
 
-    if (mevcut) {
-      mevcut.tarih = eski;
+    if (mevcut) mevcut.tarih = eski;
+    cizHepsi();
+
+    /* Yer değiştirmede İKİ yazının da tarihi değişiyor, yani iki karar.
+       İkisi de yazılamazsa ekran geri alınır; yarım kalmış bir takvim,
+       müşterinin gördüğüyle motorun göreceğini ayırır. */
+    var istekler = [kararGonder({ tur: "tarih", yaziId: yazi.id, tarih: hedef })];
+    if (mevcut) istekler.push(kararGonder({ tur: "tarih", yaziId: mevcut.id, tarih: eski }));
+
+    Promise.all(istekler).then(function (sonuclar) {
+      if (sonuclar.some(function (s) { return !s; })) return;
+      if (mevcut) toast("İki yazı yer değiştirdi: " + trTarih(hedef) + " ↔ " + trTarih(eski));
+      else toast("Yazı " + trTarih(hedef) + " tarihine alındı.");
+    }).catch(function () {
+      yazi.tarih = eski;
+      if (mevcut) mevcut.tarih = hedef;
       cizHepsi();
-      toast("İki yazı yer değiştirdi: " + trTarih(hedef) + " ↔ " + trTarih(eski));
-    } else {
-      cizHepsi();
-      toast("Yazı " + trTarih(hedef) + " tarihine alındı.");
-    }
+    });
   });
 
   /* =======================================================================
@@ -1498,11 +1634,38 @@
     }
   });
 
-  cizHepsi();
-  konularCiz();
-  markamCiz();
-  destekCiz();
-  hesabimCiz();
-  window.addEventListener("hashchange", hashtanAc);
-  hashtanAc();
+  /* ---- açılış ----
+     Tek istek hem oturumu doğruluyor hem veriyi getiriyor: uç girişli
+     değilse 401 veriyor, o zaman giriş ekranına dönülüyor. Ayrı bir oturum
+     sorgusu fazladan gidiş dönüş olurdu. */
+  function ekranlariCiz() {
+    cizHepsi();
+    konularCiz();
+    markamCiz();
+    destekCiz();
+    hesabimCiz();
+    window.addEventListener("hashchange", hashtanAc);
+    hashtanAc();
+  }
+
+  fetch(VERI_UCU, {
+    credentials: "same-origin",
+    headers: { "Accept": "application/json" }
+  }).then(function (cevap) {
+    if (cevap.status === 401) { girisEkranina(); return null; }
+    if (!cevap.ok) throw new Error("veri alınamadı: " + cevap.status);
+    return cevap.json();
+  }).then(function (veri) {
+    if (!veri) return;
+    M = veri;
+    document.body.classList.remove("dogrulaniyor");
+    ekranlariCiz();
+    sonGuncellemeyiGoster();
+  }).catch(function (hata) {
+    /* Doğrulanmamış birine panel göstermektense hiç göstermemek doğrusu.
+       Ama giriş ekranına atmak da yanlış olur: oturum geçerli olabilir,
+       sorun veri ucunda olabilir. Sayfa açılır ve ne olduğu söylenir. */
+    document.body.classList.remove("dogrulaniyor");
+    veriYokEkrani(hata && hata.message);
+  });
 })();
