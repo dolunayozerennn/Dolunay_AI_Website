@@ -222,7 +222,9 @@
     if (!yazi || yazi.durum !== "bekliyor") return;
     yazi.durum = "planlandi";
     cizHepsi();
-    toast("Yazı onaylandı, " + trTarih(yazi.tarih) + " için yayın takvimine eklendi.");
+    /* "yayın takvimine eklendi" yerine "sıraya girdi": takvim panelin kendi
+       görüntüsü, gerçek yayın sırası motorun bir sonraki turunda kuruluyor. */
+    toast("Onayınız alındı. Yazı " + trTarih(yazi.tarih) + " için sıraya girdi.");
   }
 
   function yaziBul(id) {
@@ -444,7 +446,11 @@
 
       modalKapat();
       cizHepsi();
-      toast("Yazı güncellendi ve sitenize yansıtıldı.");
+      /* "sitenize yansıtıldı" DEMEZ. Panelden yapılan hiçbir şey anında
+         yayına gitmiyor: yazılar günde bir kez işleniyor. Olmamış bir şeyi
+         olmuş gibi söylemek, müşteri siteye bakıp değişikliği göremeyince
+         paneli bozuk sandırır. */
+      toast("Değişiklikleriniz kaydedildi. Sonraki güncellemede sitenize yansıyacak.");
     }, 450);
   }
 
