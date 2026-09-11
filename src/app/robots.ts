@@ -7,7 +7,10 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/api/', '/r/', '/r'],
+      // /panel: musteri paneli, arama sonuclarinda yeri yok. Sayfalarda ayrica
+      // <meta name="robots" content="noindex, nofollow"> ve netlify.toml'da
+      // /panel/* icin X-Robots-Tag basligi var.
+      disallow: ['/api/', '/r/', '/r', '/panel/'],
     },
     sitemap: 'https://dolunay.ai/sitemap.xml',
   }

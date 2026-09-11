@@ -75,3 +75,18 @@
   for = "/*.css"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# Musteri paneli. EN SONDA duruyor: yukaridaki uzanti kurallari (/*.js, /*.css,
+# /*.svg) panel dosyalarina da uyuyor ve bir yillik `immutable` onbellek veriyor.
+# Next.js kendi dosya adlarini hash'liyor, onlarda bu dogru; ama panel.js ve
+# stil.css sabit adli, bir yil onbelleklenirse guncelleme donen kullaniciya HIC
+# ulasmaz. Bu blok sonra geldigi icin panel yollarinda o kurali eziyor.
+#
+# X-Robots-Tag: sayfalarda zaten <meta name="robots" content="noindex, nofollow">
+# var; baslik, HTML disindaki dosyalari (js, css, svg, mock verisi) de kapsasin
+# diye burada tekrarlaniyor. robots.txt tarafi src/app/robots.ts icinde.
+[[headers]]
+  for = "/panel/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "no-store"

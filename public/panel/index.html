@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Giriş · dolunay.ai blog paneli</title>
+<link rel="icon" href="marka/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="stil.css">
+</head>
+<body>
+
+<main class="giris-sayfa">
+  <div class="giris-kutu">
+
+    <div class="giris-basi">
+      <span class="marka">
+        <img src="marka/dolunay-ay.svg" alt="">
+        <b>dolunay<i>.ai</i></b>
+      </span>
+      <h1>Blog panelinize girin</h1>
+      <p>Yazılarınızı görmek, düzenlemek ve onaylamak için giriş yapın.</p>
+    </div>
+
+    <div class="form-uyari" id="formUyari" role="alert"></div>
+
+    <form id="girisForm" novalidate>
+      <div class="alan" id="alanEposta">
+        <label for="eposta">E-posta</label>
+        <input type="email" id="eposta" name="eposta" autocomplete="username"
+               placeholder="ornek@buronuz.com" spellcheck="false">
+        <p class="hata" id="hataEposta"></p>
+      </div>
+
+      <div class="alan" id="alanSifre">
+        <label for="sifre">Şifre</label>
+        <input type="password" id="sifre" name="sifre" autocomplete="current-password"
+               placeholder="En az 6 karakter">
+        <p class="hata" id="hataSifre"></p>
+      </div>
+
+      <button type="submit" class="btn btn-birincil btn-tam">Giriş Yap</button>
+    </form>
+
+    <div class="giris-alt">
+      <p class="giris-ipucu">
+        Bu bir önizleme panelidir. <code>Herhangi bir e-posta</code> ve
+        <code>en az 6 karakterli</code> bir şifre ile girebilirsiniz.
+      </p>
+    </div>
+
+  </div>
+</main>
+
+<script src="data/mock.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  var form = document.getElementById("girisForm");
+  var uyari = document.getElementById("formUyari");
+
+  var alanlar = {
+    eposta: {
+      kutu: document.getElementById("alanEposta"),
+      girdi: document.getElementById("eposta"),
+      hata: document.getElementById("hataEposta"),
+      dogrula: function (v) {
+        if (!v) return "E-posta adresinizi yazın.";
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return "Geçerli bir e-posta adresi yazın.";
+        return null;
+      }
+    },
+    sifre: {
+      kutu: document.getElementById("alanSifre"),
+      girdi: document.getElementById("sifre"),
+      hata: document.getElementById("hataSifre"),
+      dogrula: function (v) {
+        if (!v) return "Şifrenizi yazın.";
+        if (v.length < 6) return "Şifre en az 6 karakter olmalı.";
+        return null;
+      }
+    }
+  };
+
+  function isaretle(alan, mesaj) {
+    if (mesaj) {
+      alan.kutu.classList.add("hatali");
+      alan.hata.textContent = mesaj;
+      alan.girdi.setAttribute("aria-invalid", "true");
+    } else {
+      alan.kutu.classList.remove("hatali");
+      alan.hata.textContent = "";
+      alan.girdi.removeAttribute("aria-invalid");
+    }
+    return !mesaj;
+  }
+
+  /* alandan çıkınca ve hata varken yazarken tekrar denetle */
+  Object.keys(alanlar).forEach(function (ad) {
+    var alan = alanlar[ad];
+    alan.girdi.addEventListener("blur", function () {
+      isaretle(alan, alan.dogrula(alan.girdi.value.trim()));
+    });
+    alan.girdi.addEventListener("input", function () {
+      if (alan.kutu.classList.contains("hatali")) {
+        isaretle(alan, alan.dogrula(alan.girdi.value.trim()));
+      }
+      uyari.classList.remove("acik");
+    });
+  });
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    uyari.classList.remove("acik");
+
+    var ilkHatali = null;
+    var tamam = true;
+
+    Object.keys(alanlar).forEach(function (ad) {
+      var alan = alanlar[ad];
+      var mesaj = alan.dogrula(alan.girdi.value.trim());
+      if (!isaretle(alan, mesaj)) {
+        tamam = false;
+        if (!ilkHatali) ilkHatali = alan.girdi;
+      }
+    });
+
+    if (!tamam) {
+      uyari.textContent = "Eksik ya da hatalı alanlar var. Aşağıda işaretledik.";
+      uyari.classList.add("acik");
+      if (ilkHatali) ilkHatali.focus();
+      return;
+    }
+
+    /* Sahte doğrulama. Gerçek kimlik doğrulama Netlify tarafında kurulacak;
+       burada sadece "giriş yapılmış" işareti bırakılıyor. */
+    try {
+      sessionStorage.setItem("dolunay_panel_oturum", alanlar.eposta.girdi.value.trim());
+    } catch (hata) {
+      /* gizli sekmede depolama kapalı olabilir — panel yine de açılsın */
+    }
+    window.location.href = "panel.html";
+  });
+})();
+</script>
+
+</body>
+</html>
