@@ -3,6 +3,17 @@
 Next.js ile statik uretilen dolunay.ai sitesi. Odeme/abonelik akisi Netlify
 Functions uzerinde ayri yasar (`netlify/functions`, `netlify/lib`).
 
+## Hyper3D ogrenci promptlari (2026-09-11)
+
+`public/hyper3d/index.html` -> `https://dolunay.ai/hyper3d/`. Tek dosya,
+iki secenek: Going Balls (`#going-balls`) ve baska oyunlar (`#genel`). Her
+secenek kendi promptunu kopyalar veya tarayicida TXT olarak indirir; harici
+dosya/API gerektirmez. Icerik kaynagi Antigravity deposundaki
+`_skills/senarist/isler/hyper3d-worldgen-yt/prompt-paylasimi.html` ve ilgili
+`master_prompt.txt` / `genel_oyun_promptu.txt` dosyalaridir. Metin yenilenirse
+iki kopya birlikte guncellenir. Yayin, sitenin mevcut GitHub -> Netlify build
+akisindan yapilir; yalniz bu klasoru deploy edip sitenin kalanini degistirme.
+
 ## Abonelik odeme akisi (iyzico) — 2026-09-03 itibariyle CANLI
 
 Musteri linki: `https://dolunay.ai/odeme/<paket-slug>`. Canli musteri paketi:

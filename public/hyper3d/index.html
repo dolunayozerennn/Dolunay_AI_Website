@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hyper3D · İki oyun promptu</title>
+<meta name="description" content="Hyper3D modelleriyle Claude Code’da oyun geliştirmek için iki hazır prompt: Going Balls çalışması ve kendi seçtiğin oyun. Kopyala veya TXT olarak indir.">
+<link rel="canonical" href="https://dolunay.ai/hyper3d/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Hyper3D · İki oyun promptu">
+<meta property="og:description" content="Going Balls çalışması veya kendi seçtiğin oyun için Claude Code promptunu kopyala ve indir.">
+<meta property="og:url" content="https://dolunay.ai/hyper3d/">
+<meta property="og:locale" content="tr_TR">
+<style>
+:root{color-scheme:dark;--bg:#0d1017;--card:#171d29;--ink:#f1f4fa;--muted:#b6bed0;--line:#30394d;--accent:#baadff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top right,#30224766,transparent 55%),var(--bg);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.6}
+main{max-width:1040px;margin:auto;padding:64px 28px 40px}.eyebrow{font-size:12px;letter-spacing:.12em;color:var(--accent);font-weight:700}h1{max-width:720px;font-size:clamp(34px,5vw,58px);line-height:1.09;letter-spacing:-.045em;margin:18px 0 20px}h2{font-size:23px;letter-spacing:-.025em;margin:0}p{color:var(--muted)}.lead{max-width:680px;font-size:19px}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:36px 0}.step{border:1px solid var(--line);border-radius:18px;padding:22px;background:var(--card)}.number{display:inline-grid;place-items:center;width:30px;height:30px;background:#baadff1a;color:var(--accent);border-radius:9px;font-weight:700}.step h3{font-size:17px;margin:14px 0 6px}.step p{font-size:14px;margin:0}.panel{border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#121722}.bar{padding:24px;display:flex;gap:20px;flex-wrap:wrap;align-items:center;justify-content:space-between}.meta{font-size:13px;margin:4px 0 0}.actions{display:flex;gap:10px;flex-wrap:wrap}button,.download{font:inherit;font-size:14px;font-weight:650;cursor:pointer;border:1px solid var(--line);border-radius:11px;padding:11px 16px;background:#242d40;color:var(--ink);text-decoration:none}.primary{color:#161123;background:var(--accent);border-color:var(--accent)}button:hover,.download:hover{filter:brightness(1.1)}button:focus-visible,a:focus-visible,textarea:focus-visible{outline:3px solid #e7dfff;outline-offset:4px}textarea{display:block;width:calc(100% - 48px);margin:0 24px;min-height:440px;max-height:70vh;resize:vertical;border:1px solid var(--line);border-radius:12px;padding:22px;background:#0d111a;color:#e0e5ee;font:14px/1.8 ui-monospace,SFMono-Regular,Consolas,monospace}.status{padding:10px 24px 18px;min-height:53px;font-size:13px;color:var(--accent);margin:0}.note{font-size:14px;max-width:760px;margin:24px 0}footer{border-top:1px solid var(--line);margin-top:34px;padding-top:20px;color:var(--muted);font-size:12px}a{color:var(--accent)}@media(max-width:680px){main{padding:34px 18px}.steps{grid-template-columns:1fr;margin:24px 0;gap:10px}.step{padding:18px}.step h3{display:inline;margin-left:10px}.step p{margin-top:10px}.bar{padding:20px}textarea{width:calc(100% - 32px);margin:0 16px;padding:15px;font-size:13px;min-height:350px}.actions{width:100%}.actions>*{flex:1;text-align:center}.lead{font-size:17px}}
+
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:28px 0 20px}.choice{padding:22px;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:16px;line-height:1.5}.choice strong{display:block;font-size:19px;letter-spacing:-.02em;margin:8px 0}.choice span{display:block;font-size:14px;font-weight:400;color:var(--muted)}.choice small{color:var(--accent);font-weight:700;letter-spacing:.05em}.choice[aria-pressed="true"]{border-color:var(--accent);background:#242038;box-shadow:inset 0 0 0 1px var(--accent)}.panel[hidden]{display:none}.panel-intro{padding:0 24px;margin:0 0 20px;max-width:760px;font-size:14px}@media(max-width:680px){.choices{grid-template-columns:1fr;gap:10px}.choice{padding:18px}.choice strong{font-size:17px}}
+</style>
+</head>
+<body><main>
+<div class="eyebrow">3B MODELLER × CLAUDE CODE</div>
+<h1>Hangi oyunu<br>yeniden yapıyorsun?</h1>
+<p class="lead">Videodaki Going Balls çalışmasını yapabilir veya kendi seçtiğin oyunu referans alabilirsin. İhtiyacına uygun tek promptu seç.</p>
+<div class="steps" aria-label="Başlamadan önce">
+<section class="step"><span class="number">1</span><h3>Dosyalarını hazırla</h3><p>Kaynak oyun görsellerini ve 3B modellerini aynı proje klasörüne koy. Genel prompt için oyunun adını ve nasıl oynandığını da paylaş.</p></section>
+<section class="step"><span class="number">2</span><h3>Claude Code’da aç</h3><p>Claude Code’u bu proje klasöründe kullan. Modellerin bilgisayarında erişilebilir olması gerekir; yalnız prompt yeterli değildir.</p></section>
+<section class="step"><span class="number">3</span><h3>Bir prompt seç</h3><p>Aşağıdaki iki seçenekten sana uygun olanı kopyalayıp Claude Code’a gönder. İkisini birlikte yapıştırmana gerek yok.</p></section>
+</div>
+<div class="choices" role="group" aria-label="Kullanacağın promptu seç"><button type="button" class="choice" data-choice="going-balls" aria-pressed="true" aria-controls="panel-going-balls"><small>PROMPT 01</small><strong>Videodaki Going Balls</strong><span>Top dengeleme oyunu için hazırlanmış ayrıntılı tarif. Videoyla aynı çalışmayı yapmak için bunu seç.</span></button><button type="button" class="choice" data-choice="genel" aria-pressed="false" aria-controls="panel-genel"><small>PROMPT 02</small><strong>Başka bir oyun</strong><span>Kendi seçtiğin oyunun görselleri ve 3B modelleriyle çalış. Kontroller ve oyun kuralları referansına göre belirlensin.</span></button></div>
+<section class="panel" id="panel-going-balls" data-key="going-balls" data-filename="Hyper3D-Going-Balls-Prompt.txt" aria-labelledby="title-going-balls">
+<div class="bar"><div><h2 id="title-going-balls">Videodaki Going Balls</h2><p class="meta">11 Eylül 2026 · 7.696 karakter · Türkçe</p></div><div class="actions"><button type="button" class="primary" data-copy aria-label="Videodaki Going Balls promptunu kopyala">Promptu kopyala</button><button type="button" data-download aria-label="Videodaki Going Balls promptunu TXT indir">TXT indir</button></div></div>
+<p class="panel-intro">Kaynak kare ve kendi Hyper3D dosyaların yeterli; oynanış videosu isteğe bağlı.</p>
+<textarea readonly spellcheck="false" aria-label="Videodaki Going Balls için tam prompt">Bu proje klasöründeki oyun ekran görüntüsünü ve Hyper3D WorldGen’den dışa aktardığım gerçek 3B modelleri kullanarak tarayıcıda oynanabilen, özenli bir top dengeleme oyunu yap. Görsel referans Going Balls; hedef, havadaki ahşap parkurda hızını ve yönünü serbestçe kontrol ettiğim, ağırlığı ve çarpışmaları hissedilen bir top. Kısa, bitirilebilir ve iyi ayarlanmış tek bölüm istiyorum. Önce çalışan oyunu kur, sonra görüntüyü ve kontrol hissini iyileştir; yalnız bir planla bırakma.
+
+GİRDİLERİ ANLA
+
+Önce bu klasördeki kaynak ekran görüntüsünü ve Hyper3D dosyalarını incele. ZIP içindeki USDZ dosyalarını da kontrol et. Ayrı nesneler veya tek sahne halinde dışa aktarım olabilir. Tek sahnenin nesne hiyerarşisini inceleyip ayrılabilen parçaları kullan. Geometri ayrıştırılamıyorsa ve gerekli nesneleri bağımsız kullanamıyorsan Separated Objects dışa aktarımını iste. Birden fazla farklı üretim varsa hangisini kullanacağını kısa bir soruyla netleştir; sürümleri karıştırma. Görsel veya 3B dosyalar eksikse yalnız eksik girdiyi iste; bilgisayarımdaki ilgisiz klasörleri tarama.
+
+Model adları doğru nesne adı olmayabilir: ana topu ve engelleri görünümleriyle tanı. Ekran görüntüsünün arayüzünden yanlışlıkla çıkarılmış simgeleri sahneye koyma. Gerçek modellerin dokularını ve ayırt edici biçimlerini koru. Dosyalar doğrudan yüklenemiyorsa uygun yerel araçla dönüştür; malzeme, doku, ölçek, eksen, merkez ve yerleşimi doğrula. Kaynakları koru. Kütle, sürtünme ve sekme bilgisi USDZ içinde bulunabilir; ayrı bir physics.json dosyası varmış gibi davranma. SimReady verilerini gerçekten okuyabildiğin ölçüde kullan; eksikse makul oyun değerleri seçip bunu belirt. Gaussian splat varsa görsel çevre olarak değerlendir; oynanabilir zemini ve çarpışmaları ayrıca doğrula.
+
+HAREKETİ REFERANSLA KARŞILAŞTIR
+
+Önce sağladığım yerel oynanış videolarını incele. Video yoksa geliştiricinin kısa Going Balls ön gösterimini kullanabilirsin: https://www.youtube.com/watch?v=qbwvNq_QQhQ . Görüntüye erişemiyorsan izlemiş gibi anlatma ve bütün işi durdurma; kaynak kareyi görsel hedef, aşağıdaki maddeleri oynanış hedefi kabul et. Tek fotoğrafın göstermediği parkur devamını sen tasarlayacaksın. Videoların özgün kontrol algoritmasını veya fizik katsayılarını ölçtüğünü iddia etme.
+
+TOPU BEN KONTROL EDEYİM
+
+Fareyi basılı tutup veya parmağı kaydırıp topu ileri, geri, sağa, sola ve çapraz yönde kesintisiz yönlendirebileyim. Kaydırmanın yönü ve miktarı kontrollü itiş versin; basılı ama hareketsiz tutmak gaz vermesin. Ters kaydırma önce frenlesin, devam edince geri yuvarlanabileyim. WASD ve ok tuşları da aynı hareket sistemini kontrollü ivmeyle çalıştırsın. Kamera virajda dönerken kontroller ekranda anlaşılır yönlerde kalsın; kamera dönüşü tek başına topa itiş vermesin.
+
+Üç şerit, şerit atlama, otomatik ortalama veya sabit ileri hız kullanma. Girdiyi bırakınca düz zeminde top kısa süre ataletiyle ilerleyip yavaşlasın; eğimde yerçekimi etkisini göreyim. Buz gibi kaymasın, aniden de durmasın. Topun ağırlığı ile oyuncunun hassas düzeltme yapabilmesi arasında denge kur. Kuvvet, tork veya itiş kullan; her karede konumunu ya da hızını yeniden yazarak çarpışma tepkisini silme. Fizik adımını tutarlı kur; farklı kare hızlarında ve farklı ekran boyutlarında benzer kontrol hissi ver. Görünen topun dönüşü gerçek hareketiyle uyumlu olsun. Sürükleme bitince itiş kesilsin; pencere odağı kaybolunca veya oyun yeniden başlayınca takılı tuş ve sürükleme kalmasın.
+
+KAYNAK KARENİN GÖRÜNTÜSÜNÜ YAKALA
+
+İlk oynanabilir bölümde kaynak karedeki kompozisyona yaklaş: açık ahşap dokulu, havada duran, yükselip alçalan parkur; açık mavi gökyüzü; mor-turuncu engeller; inandırıcı taşıyıcılar. Top-yol-engel oranlarını kaynakla karşılaştır. Top ve önemli engellerin gerçek Hyper3D modellerini kullan; onları basit küp ve kürelerle değiştirip bitmiş sayma. Eksik yol, bağlantı parçaları ve yardımcı kutular gibi ek geometrileri sen oluşturabilirsin.
+
+Kamera topu arkadan ve yukarıdan yumuşak izlesin; top alt-orta kadrajda belirgin büyüklükte kalsın, yaklaşan tehlike görülsün. Virajda yönü, rampada yüksekliği takip etsin; ani sıçrama, engelin içine girme ve topun kadrajdan kaybolması olmasın. Yumuşak gölgeler, doğru ışık, okunur ahşap dokusu ve temiz renklerle oyuncak hissini koru. Düz sarı otoyol, yol çizgileri ve rastgele süsler istemiyorum. Arayüz sade olsun: başlatma, kısa kontrol ipucu, yeniden başlatma ve bitiş; sahnenin önünü kapatmasın. Masaüstü ve telefon ekranına uyum sağlasın.
+
+KISA AMA GERÇEK BİR PARKUR KUR
+
+Yaklaşık 60–90 saniyede geçilebilen tek bölüm tasarla: güvenli başlangıç alanı, temasla dağılan hafif kutular, dar kirişte denge, gerçek bir viraj, zamanlamayla geçilen bağlı/asılı engel, hız kazanarak kısa boşluğu aştığım rampa ve belirgin bitiş. Sıra, kaynak kompozisyonunu koruyacak şekilde ayarlanabilir. Zıplama ayrı bir tuş veya görünmez fırlatıcıyla değil, rampa ve hızla oluşsun. Kontrol noktasından sonra da rampayı geçmek için yeterli hızlanma mesafesi bırak. Bütün geçişler normal kontrollerle ulaşılabilir olsun.
+
+Her teması otomatik kayıp yapma: hafif kutular savrulsun; ağır engeller topun hızını ve yönünü değiştirsin. Asılı parçaların bağlantıları korunsun. Kaynak karede görülmeyen sarkaç veya testere hareketleri tasarım tercihin olsun; bunları özgün oyundan doğrulanmış gibi anlatma. Hareketli engellerin görünen hareketi, çarpışma şekli ve temas etkisi eşleşsin. Delikli testerenin geçilebilir boşluğunu dolu bir kutuyla kapatma. Top için küresel, karmaşık engeller için uygun parçalardan oluşan çarpışma şekilleri kullanabilirsin; yüksek hızda ince engellerin içinden geçmeyi önle.
+
+Kenar ve boşluklar gerçek olsun: görünmez korkuluk veya zeminle topu yolda tutma. Düşüş kısa ve anlaşılır olsun, ardından son güvenli kontrol noktasına dönsün. Bir tuşla yeniden başlatma da bulunsun. Yeniden doğuş, topu engelin içinde bırakmasın; hareket ve kamera temiz başlangıç durumuna dönsün.
+
+VERİYİ VE OYUN AYARINI AYIR
+
+Hyper3D fizik değerleri tahmindir; oyun hissi için ayar yapabilirsin. Okuduğun özgün değerleri, uyguladığın değerleri ve kullandığın kaynak nesneyi küçük bir varlık listesinde kaydet. Özellikle topun sekmesi, tutuşu ve ağırlığını parkurla birlikte ayarla. Dışa aktarılan çarpışma yapısını gerçekten aktarmadıysan aktarmış gibi söyleme. Hyper3D’nin sağladığı modeller ve tahmini fizik bilgileriyle, senin yazdığın parkur ve oyun kuralları arasındaki ayrım açık kalsın.
+
+OYNA, KARŞILAŞTIR, DÜZELT
+
+Uygun araçları ve kütüphaneleri sen seç. Oyunu yerel sunucuda çalıştır; eksik model/doku ve çalışma zamanı hatalarını düzelt. Tarayıcı kontrol aracın varsa gerçekten oyna: çapraz hareket, gaz vermeden basılı tutma, fren ve geri sürüş, ataleti bırakma, kutuları dağıtma, ağır engelden savrulma, dar kiriş, viraj, rampa-boşluk geçişi, düşme, kontrol noktasından dönüş ve bitişi dene. Bölümü baştan sona normal kontrollerle tamamla. Araç erişimin yoksa yapabildiğin otomatik kontrolleri tamamla, tarayıcıda oynadığını iddia etme ve kullanıcıya kalan kısa kontrolü açıkça söyle.
+
+Kaynakla benzer açıdan oyun görüntüsü al; topun büyüklüğünü, yolun oranlarını, engel yerleşimini, renkleri ve kamerayı yan yana karşılaştırıp belirgin farkları düzelt. Erişebildiğin oynanış referansıyla hareketi de karşılaştır. Öncelik sırası: doğru çalışan serbest kontrol ve çarpışmalar, kaynağı hatırlatan sahne ve kamera, sonra küçük cilalar. Gerekirse bölümün uzunluğunu azalt; temel kontrolü ve gerçek modelleri feda etme. Proje göreli dosya yollarıyla taşınabilsin; bağımlılıkları ve kısa çalıştırma açıklamasını kaydet. Sonunda çalışan yerel oyun adresini, kontrolleri ve doğrulayamadığın noktaları kısaca ver; mümkünse oyunu tarayıcıda aç. Hedef gösterilebilir ve oynanabilir bir sonuç.
+</textarea>
+<p class="status" role="status" aria-live="polite">Kişisel dosya yolu veya önceki sohbet gerektirmez.</p>
+</section><section class="panel" id="panel-genel" data-key="genel" data-filename="3B-Modellerle-Genel-Oyun-Promptu.txt" aria-labelledby="title-genel" hidden>
+<div class="bar"><div><h2 id="title-genel">Başka bir oyun</h2><p class="meta">11 Eylül 2026 · 6.673 karakter · Türkçe</p></div><div class="actions"><button type="button" class="primary" data-copy aria-label="Başka bir oyun promptunu kopyala">Promptu kopyala</button><button type="button" data-download aria-label="Başka bir oyun promptunu TXT indir">TXT indir</button></div></div>
+<p class="panel-intro">Oyunun adını ve nasıl oynandığını paylaş. Kısa bir oynanış videosu, hareket ve kuralları anlamayı kolaylaştırır.</p>
+<textarea readonly spellcheck="false" aria-label="Başka bir oyun için tam prompt">Proje klasörüne koyduğum referansları ve gerçek 3B modelleri kullanarak, kaynak oyunun görünüşüne ve temel oynanışına yaklaşan, tarayıcıda çalışan küçük ama özenli bir oyun prototipi yap. Hedef yalnız modelleri ekranda göstermek değil; anlaşılır kontrolleri, oynanabilir bir döngüsü ve belirgin sonucu olan bir deneyim. Kaynak oyunun tamamını yeniden yaptığını vaat etme. Önce neyi yeniden kurduğunu anla, sonra uygulamayı bitir; yalnız plan veya öneri listesiyle bırakma.
+
+GİRDİLERİ ANLA
+
+Önce proje klasöründeki ekran görüntülerini, 3B modelleri, varsa oyun adını ve oynanış videolarını incele. Modeller Hyper3D’den veya başka bir kaynaktan gelebilir. ZIP içeriğini, USDZ ve GLB dosyalarını, glTF için gereken bağlantılı doku ve veri dosyalarını kontrol et. Bilgisayarımdaki ilgisiz klasörleri tarama. Birden fazla üretim veya sürüm varsa aynı nesnenin hangi dosyasını kullandığını belirle; farklı sürümleri sessizce karıştırma.
+
+Görsellerden ortamı, oyuncuyu, önemli nesneleri, ölçek ilişkilerini, renkleri ve kamera kompozisyonunu çıkar. Videoda gerçekten gördüğün hareketleri, kontrol işaretlerini ve olay sonuçlarını ayır. Oyun adı tek başına hangi bölümün veya sürümün istendiğini kesinleştirmeyebilir. Tek kare, hareketi ve oyun kurallarını kanıtlamaz; statik bir engelin nasıl hareket ettiğini ya da bir nesnenin görevini görünüşünden kesinmiş gibi söyleme.
+
+Oyun belliyse ve yerel referanslar yetersizse, araçların izin verdiğinde öncelikle geliştiricinin yayımladığı oynanış görüntülerini bulup incele. Kullanabildiğin kaynak bağlantılarını kaydet; yalnız başlık veya açıklamasını okuduğun videoyu izlemiş sayma. Referansa erişemiyorsan bunu belirt ve gerekli bilgiyi aşağıdaki kısa soruyla netleştir.
+
+Oyuncunun neyi kontrol ettiği, temel eylemi, hedefi veya başarı ve kayıp koşulları referanslardan anlaşılmıyorsa yalnız kritik eksikleri tek kısa soruda topla. Zaten açık olan bilgileri tekrar sorma. Yanıt beklerken dosyaları açma, modelleri hazırlama ve sahnenin görsel düzeni gibi bağımsız işleri sürdür; belirsiz temel mekaniği kendiliğinden kesinleştirme. İkincil ayrıntılarda kaynağa uygun makul kararları sen ver.
+
+KÜÇÜK OYUNUN SINIRINI BELİRLE
+
+Oyunu tanınır yapan en önemli iki veya üç mekaniği, oyuncunun hedefini, kontrol biçimini ve kamerayı birkaç cümleyle özetle. Gözlenen davranışları, kullanıcıdan gelen tercihleri ve kendi tasarım kararlarını karıştırma. Hedef yeterince açıksa bu özeti verdikten sonra uygulamaya devam et; kütüphane, mimari veya sıradan teknik seçimler için onay bekleme.
+
+Kapsamı tek kısa bölüm, bulmaca, yarış veya tekrar oynanabilir bir döngüye indir. Uzun hikaye, açık dünya, çevrimiçi ekonomi veya çok oyunculu yapı gerektiren referanslarda, ana deneyimi anlatan yerel bir kesit kur. Yerel rakip, sahte çevrimiçi durum veya basitleştirilmiş sistem kullanırsan bunları açıkça belirt. Olmayan sunucu bağlantısını çalışıyormuş gibi sunma. Oyuncu başlangıçtan sonuca normal kontrollerle ulaşabilsin.
+
+GERÇEK VARLIKLARI HAZIRLA
+
+Model adlarına güvenmek yerine dosyaları görerek tanı. Kullanılacak nesneleri kısa bir varlık listesine kaydet. Kaynak görüntünün arayüzünden yanlışlıkla çıkarılmış simgeleri oyun nesnesi sanma. Ana karakterin, aracın veya önemli nesnelerin gerçek modellerini ve ayırt edici dokularını koru; yüklenmeyen modeli sessizce basit bir şekille değiştirip tamamlandı deme.
+
+Gerekirse uygun yerel araçlarla dönüştür; özgün dosyaları değiştirme. Doku bağlantılarını, malzemeleri, saydamlığı, ölçeği, eksenleri, merkezi ve yerleşimi doğrula. Birleşik sahnede nesneler ayrılabiliyorsa ayır. Tek mesh içinde gereken parçalar güvenilir biçimde ayrılamıyorsa önce kullanılabilir kısmı hazırla, ardından yalnız gerekli ayrı nesne dışa aktarımını iste; ayırdığını varsayma.
+
+İskelet veya animasyon bulunup bulunmadığını kontrol et. Statik modele hazır yürüme animasyonu varmış gibi davranma. Gerekli basit hareketleri kodla veya uygun bir düzenekle oluşturabilirsin; kendi ürettiğin hareketi kaynaktan gelen animasyondan ayır. Eksik zemin, bağlantı parçası ve yardımcı geometriyi sahnenin görsel diline uyarak tamamla.
+
+KONTROLÜ VE FİZİĞİ TÜRE UYDUR
+
+Her oyuna aynı hareket sistemini uygulama. Kaynak gerektiriyorsa şerit değiştirme, otomatik ilerleme, serbest hareket, zıplama, sürükleme veya sıra tabanlı seçim doğru olabilir. Kontrol noktasını, can sistemini veya fizik simülasyonunu varsayılan olarak ekleme. Kontrolleri seçilen mekaniklerden türet; masaüstünde açık, dokunmatikte gerekiyorsa anlaşılır karşılıkları olsun.
+
+Fizik önemliyse ağırlık, sürtünme, hızlanma, temas ve engel hareketi birbirine uysun. Çarpışma tepkisini istemeden sürekli konum veya hız atamasıyla silme. Fizik gerekmeyen etkileşimi sırf modeller üç boyutlu diye karmaşık simülasyona dönüştürme. Kaynak dosyada fizik değerleri varsa okuyabildiğin ölçüde kullan; yoksa uygun değerler seç. Özgün değerleri ve oyun için yaptığın ayarları ayrı kaydet.
+
+Görünen yüzeylerle çarpışma alanları eşleşsin; açık geçitleri görünmez duvarlarla kapatma. Hareketli engeller gerçekten temas etsin. Farklı kare hızlarında tutarlı davranış kur. Tuş bırakma, sürüklemeyi bitirme, odak kaybı ve yeniden başlatma sonrasında takılı girdi kalmasın. Kamera hareketi oyuncuya istemeden hareket komutu vermesin.
+
+GÖRSEL KALİTEYİ YAKALA
+
+Kaynakla benzer açıdan bakınca karakter veya araç büyüklüğü, ortam oranları, önemli nesne yerleşimleri, renkler ve ışık tanınır olsun. Rastgele dekorla sahneyi doldurma. Kamera oynanacak alanı ve yaklaşan eylemi göstersin; hedefi kaybetmesin, gereksiz sarsılmasın. Arayüz oyunun önünü kapatmadan gerekli hedefi, durumu ve kontrolleri anlatsın. Farklı ekran oranlarında önemli içerik kırpılmasın.
+
+OYNA, KARŞILAŞTIR, TESLİM ET
+
+Uygun araçları sen seç, oyunu yerel sunucuda çalıştır ve hataları düzelt. Tarayıcı kontrol aracın varsa gerçek girdilerle oyna: temel mekanikleri, doğru ve yanlış eylemlerin sonuçlarını, başarıyı, varsa kaybı ve yeniden denemeyi sınayarak bir döngüyü tamamla. Yalnız model yüklenmesini başarı sayma.
+
+Kaynakla benzer açıda görüntü alıp görsel farkları karşılaştır. Video varsa kısa oynanış kaydını hareket, tepki, tempo ve kamera açısından da karşılaştır. Önemli kalite farklarını düzelt; gerekirse kapsamı küçült, temel mekanikleri ve gerçek varlıkları feda etme. Araçlarınla doğrulayamadığın davranışları denenmiş gibi sunma; kullanıcıya kalan kısa kontrolü belirt.
+
+Projeyi göreli dosya yollarıyla taşınabilir tut. Bağımlılıkları, kısa çalıştırma açıklamasını ve kullanılan varlıkları kaydet. Sonunda çalışan yerel adresi, kontrolleri, prototipin kapsamını ve varsa simüle edilen veya doğrulanamayan özellikleri kısaca bildir. Mümkünse oyunu tarayıcıda aç; sonuç gerçekten oynanabilir olsun.
+</textarea>
+<p class="status" role="status" aria-live="polite">Kişisel dosya yolu veya önceki sohbet gerektirmez.</p>
+</section>
+<p class="note">Her iki prompt da kendi bilgisayarındaki dosyalarla çalışmak için yazıldı. Ortaya çıkan oyunun görünümü ve oynanışı, verdiğin modeller, referanslar ve Claude Code’un uygulamasıyla şekillenir.</p>
+<footer>Dolunay Özeren · Oyun geliştirme eğitim kaynağı<br>İlk prompt Going Balls referansına özeldir; ikinci prompt, seçtiğin oyunun temel deneyimini yeniden kurmak içindir.</footer>
+</main><script>
+const panels=[...document.querySelectorAll('.panel')];
+const choices=[...document.querySelectorAll('[data-choice]')];
+function choose(key,updateHash=false){
+ if(!panels.some(p=>p.dataset.key===key))key='going-balls';
+ for(const p of panels)p.hidden=p.dataset.key!==key;
+ for(const b of choices)b.setAttribute('aria-pressed',String(b.dataset.choice===key));
+ if(updateHash)history.replaceState(null,'','#'+key);
+}
+choices.forEach(b=>b.addEventListener('click',()=>choose(b.dataset.choice,true)));
+window.addEventListener('hashchange',()=>choose(location.hash.slice(1)));
+choose(location.hash.slice(1));
+for(const panel of panels){
+ const field=panel.querySelector('textarea');
+ const status=panel.querySelector('.status');
+ const copy=panel.querySelector('[data-copy]');
+ copy.addEventListener('click',async()=>{
+  let copied=false;
+  try{await navigator.clipboard.writeText(field.value);copied=true}catch{
+   const y=window.scrollY;field.focus();field.select();field.setSelectionRange(0,field.value.length);
+   try{copied=document.execCommand('copy')}catch{}
+   if(copied){field.setSelectionRange(0,0);copy.focus();window.scrollTo(0,y)}
+  }
+  status.textContent=copied?'Prompt kopyalandı. Claude Code’a yapıştırabilirsin.':'Metin seçildi. Kopyala komutunu kullanabilir veya TXT olarak indirebilirsin.';
+ });
+ panel.querySelector('[data-download]').addEventListener('click',()=>{
+  const url=URL.createObjectURL(new Blob([field.value],{type:'text/plain;charset=utf-8'}));
+  const a=document.createElement('a');a.href=url;a.download=panel.dataset.filename;document.body.append(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),2000);
+  status.textContent='Seçtiğin prompt TXT dosyası olarak indiriliyor.';
+ });
+}
+</script></body></html>
