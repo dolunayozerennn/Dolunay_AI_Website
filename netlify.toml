@@ -8,6 +8,14 @@
 
 [functions]
   node_bundler = "esbuild"
+  # @netlify/blobs paketlenmiyor, fonksiyon paketine OLDUGU GIBI kopyalaniyor.
+  #
+  # Sebep olculdu: fonksiyonlar v2'ye (.mjs, ESM) gecince esbuild, is
+  # mantigindaki CommonJS `require('@netlify/blobs')` cagrisini bundle'a
+  # katmak yerine calisma anina birakti ve fonksiyon
+  # "Cannot find module '@netlify/blobs'" ile 502 verdi. v1 CommonJS
+  # ciktisinda ayni require sorunsuz bundle'lanıyordu.
+  external_node_modules = ["@netlify/blobs"]
 
 # Abonelik odeme akisi. iyzico token'i 30 dakikada oluyor, bu yuzden odeme
 # formu statik dosyadan degil her istekte fonksiyondan uretilir.
