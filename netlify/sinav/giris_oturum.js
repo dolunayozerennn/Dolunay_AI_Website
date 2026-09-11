@@ -264,6 +264,34 @@ vaka('G15_duz_sifre_hicbir_kayitta_yok', async () => {
   };
 });
 
+vaka('G17_hesabi_silinmis_oturum_gecersiz', async () => {
+  // Onizlemede olculdu: test hesabi silindikten sonra oturum ucu hala
+  // "girisli" diyordu. Hesap yoksa oturum da gecersiz sayilmali.
+  await hesapKur();
+  const g = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE });
+  const id = cerezDegeri(g);
+  for (const a of anahtarlar('hesap/')) kutu.delete(a);
+  const c = await cagir.oturum(id);
+  return {
+    gecti: c.statusCode === 401 && govde(c).girisli === false
+      && /Max-Age=0/.test(String(c.headers['Set-Cookie'] || '')),
+    not: `kod:${c.statusCode} govde:${c.body}`,
+  };
+});
+
+vaka('G18_hesap_okunamazsa_girisli_denmez', async () => {
+  await hesapKur();
+  const g = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE });
+  const id = cerezDegeri(g);
+  depoKapali = true;
+  const c = await cagir.oturum(id);
+  depoKapali = false;
+  return {
+    gecti: c.statusCode === 503 && govde(c).girisli !== true,
+    not: `kod:${c.statusCode}`,
+  };
+});
+
 vaka('G16_cevaplar_onbellege_alinmaz', async () => {
   await hesapKur();
   const g = await cagir.giris({ eposta: EPOSTA, sifre: SIFRE });

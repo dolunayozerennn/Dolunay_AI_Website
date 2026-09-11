@@ -33,15 +33,22 @@ exports.handler = async (event) => {
   try {
     hesap = await hesapOku(oturum.eposta)
   } catch (e) {
+    // Depo okunamiyor: hesabin DURDUGUNU da YOK oldugunu da soyleyemeyiz.
     console.error('hesap okunamadi', e && e.message)
+    return json(503, { hata: 'Oturum doğrulanamadı.' })
   }
+
+  // Hesap silinmisse oturum da gecersizdir. Aksi halde silinen bir hesabin
+  // oturumu suresi dolana kadar panele girmeye devam ederdi. Olculdu: test
+  // hesabi silindikten sonra oturum ucu hala "girisli" diyordu.
+  if (!hesap) return json(401, { girisli: false }, cerezSil())
 
   // Sifre ozeti ve fatura bilgisi BU CEVAPTA GECMEZ. Panelin basligi icin
   // gereken en az bilgi doner.
   return json(200, {
     girisli: true,
     eposta: oturum.eposta,
-    markaAdi: (hesap && hesap.markaAdi) || '',
-    webSitesi: (hesap && hesap.webSitesi) || '',
+    markaAdi: hesap.markaAdi || '',
+    webSitesi: hesap.webSitesi || '',
   })
 }
