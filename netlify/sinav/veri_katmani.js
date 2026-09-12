@@ -485,6 +485,99 @@ vaka('V29_ayarlar_ayri_kayitta_kararlari_bozmuyor', async () => {
   };
 });
 
+vaka('V30_konu_onerileri_motora_gidiyor', async () => {
+  await require(YAZ).handler(olay('POST', Object.assign({}, ORNEK, { eposta: EPOSTA })));
+  const cerez = await oturumKur();
+  const p = require(P_KARAR);
+  await p.handler(panelOlay('POST', { tur: 'konu-ekle', konu: 'Kat mulkiyetinde ortak gider' }, cerez));
+  await p.handler(panelOlay('POST', { tur: 'konu-cikar', konuId: 'k1' }, cerez));
+  const b = govde(await require(OKU).handler(olay('GET', null, { slug: SLUG })));
+  const ekle = b.bekleyen.find((k) => k.tur === 'konu-ekle');
+  const cikar = b.bekleyen.find((k) => k.tur === 'konu-cikar');
+  return {
+    gecti: !!ekle && ekle.veri.konu === 'Kat mulkiyetinde ortak gider' && ekle.yaziId === null
+      && !!cikar && cikar.veri.konuId === 'k1' && cikar.yaziId === null,
+    not: JSON.stringify(b.bekleyen),
+  };
+});
+
+vaka('V31_islenen_konu_karari_bir_daha_gelmez', async () => {
+  await require(YAZ).handler(olay('POST', Object.assign({}, ORNEK, { eposta: EPOSTA })));
+  const cerez = await oturumKur();
+  const p = require(P_KARAR);
+  await p.handler(panelOlay('POST', { tur: 'konu-ekle', konu: 'Bir oneri' }, cerez));
+  await p.handler(panelOlay('POST', { tur: 'konu-cikar', konuId: 'k1' }, cerez));
+  const ilk = govde(await require(OKU).handler(olay('GET', null, { slug: SLUG })));
+  await require(OKU).handler(olay('POST', { slug: SLUG, kimlikler: ilk.bekleyen.map((k) => k.kimlik) }));
+  const ikinci = govde(await require(OKU).handler(olay('GET', null, { slug: SLUG })));
+  return {
+    gecti: ilk.bekleyen.length === 2 && ikinci.bekleyen.length === 0,
+    not: `ilk:${ilk.bekleyen.length} ikinci:${ikinci.bekleyen.length}`,
+  };
+});
+
+vaka('V32_ikinci_oneri_yeni_is_ayni_cikarma_tek_is', async () => {
+  await require(YAZ).handler(olay('POST', Object.assign({}, ORNEK, { eposta: EPOSTA })));
+  const cerez = await oturumKur();
+  const p = require(P_KARAR);
+  await p.handler(panelOlay('POST', { tur: 'konu-ekle', konu: 'Birinci oneri' }, cerez));
+  const ilk = govde(await require(OKU).handler(olay('GET', null, { slug: SLUG })));
+  await require(OKU).handler(olay('POST', { slug: SLUG, kimlikler: ilk.bekleyen.map((k) => k.kimlik) }));
+  // Ikinci oneri ayri bir istir: kimligi zamanindan gelir.
+  await p.handler(panelOlay('POST', { tur: 'konu-ekle', konu: 'Ikinci oneri' }, cerez));
+  const ikinci = govde(await require(OKU).handler(olay('GET', null, { slug: SLUG })));
+  // Ayni konu iki kez cikarilirsa tek is: "listede yok" iki kez soylenmez.
+  await p.handler(panelOlay('POST', { tur: 'konu-cikar', konuId: 'k1' }, cerez));
+  await p.handler(panelOlay('POST', { tur: 'konu-cikar', konuId: 'k1' }, cerez));
+  const ucuncu = govde(await require(OKU).handler(olay('GET', null, { slug: SLUG })));
+  const cikarmalar = ucuncu.bekleyen.filter((k) => k.tur === 'konu-cikar');
+  return {
+    gecti: ikinci.bekleyen.length === 1 && ikinci.bekleyen[0].veri.konu === 'Ikinci oneri'
+      && cikarmalar.length === 1,
+    not: `ikinci:${ikinci.bekleyen.length} cikarma:${cikarmalar.length}`,
+  };
+});
+
+vaka('V33_konu_karari_yazi_kararlarini_bozmuyor', async () => {
+  await require(YAZ).handler(olay('POST', Object.assign({}, ORNEK, { eposta: EPOSTA })));
+  const cerez = await oturumKur();
+  const p = require(P_KARAR);
+  await p.handler(panelOlay('POST', { tur: 'onay', yaziId: 'y1' }, cerez));
+  await p.handler(panelOlay('POST', { tur: 'konu-ekle', konu: 'Bir oneri' }, cerez));
+  const b = govde(await require(OKU).handler(olay('GET', null, { slug: SLUG })));
+  const onay = b.bekleyen.find((k) => k.tur === 'onay');
+  // Yalniz konu kararlari isaretlenirse yazi karari bekliyor kalmali.
+  await require(OKU).handler(olay('POST', {
+    slug: SLUG, kimlikler: b.bekleyen.filter((k) => k.tur === 'konu-ekle').map((k) => k.kimlik),
+  }));
+  const sonra = govde(await require(OKU).handler(olay('GET', null, { slug: SLUG })));
+  return {
+    gecti: b.bekleyen.length === 2 && !!onay && onay.yaziId === 'y1'
+      && sonra.bekleyen.length === 1 && sonra.bekleyen[0].tur === 'onay',
+    not: `once:${b.bekleyen.length} sonra:${JSON.stringify(sonra.bekleyen.map((k) => k.tur))}`,
+  };
+});
+
+vaka('V34_bozuk_konu_kayitlari_atlanir', async () => {
+  const v = require(VERI);
+  await require(YAZ).handler(olay('POST', ORNEK));
+  await v.kararlarYaz(SLUG, {
+    yazilar: {},
+    konular: {
+      // id'si olmayan, nesne olmayan ve bos kayitlar cevabi bozmamali.
+      eklenen: [{ konu: 'id yok' }, null, 'metin', { id: 'panel-z', konu: 'saglam' }],
+      cikarilan: ['', null, 'k1'],
+    },
+  });
+  const b = govde(await require(OKU).handler(olay('GET', null, { slug: SLUG })));
+  return {
+    gecti: b.bekleyen.length === 2
+      && b.bekleyen.some((k) => k.tur === 'konu-ekle' && k.veri.konu === 'saglam')
+      && b.bekleyen.some((k) => k.tur === 'konu-cikar' && k.veri.konuId === 'k1'),
+    not: JSON.stringify(b.bekleyen),
+  };
+});
+
 async function main() {
   process.env.MOTOR_SIRRI = SIR;
   let gecen = 0;

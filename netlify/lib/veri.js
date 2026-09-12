@@ -267,14 +267,44 @@ function birlestir (girdi) {
 function bekleyenKararlar (kararlar, islenen) {
   const islenmis = new Set((islenen && islenen.kararlar) || [])
   const cikti = []
+  // Ayni kimlik iki kez uretilebiliyor (asagida cikarilanlara bak); ayni
+  // cevapta iki kez gonderilmesin.
+  const gorulen = new Set()
+  const ekle = (kimlik, yaziId, tur, veri) => {
+    if (islenmis.has(kimlik) || gorulen.has(kimlik)) return
+    gorulen.add(kimlik)
+    cikti.push({ kimlik, yaziId, tur, veri })
+  }
+
   for (const [id, k] of Object.entries((kararlar && kararlar.yazilar) || {})) {
     for (const tur of ['onay', 'ret', 'tarihDegisikligi', 'metinDegisikligi', 'duzeltmeNotu']) {
       if (!k[tur]) continue
-      const kimlik = `${id}:${tur}:${k[tur].zaman || ''}`
-      if (islenmis.has(kimlik)) continue
-      cikti.push({ kimlik, yaziId: id, tur, veri: k[tur] })
+      ekle(`${id}:${tur}:${k[tur].zaman || ''}`, id, tur, k[tur])
     }
   }
+
+  // Konu onerileri de panelin kararidir ve motora ulasmasi gerekir: musteri
+  // "sunu yaz" dediginde sirada o olacak. Yaziya bagli olmadiklari icin
+  // yaziId tasimazlar, kimlikleri kendi kayitlarindan cikar.
+  const konular = (kararlar && kararlar.konular) || {}
+
+  // Eklenenin id'si panel tarafinda 'panel-<zaman>' olarak uretiliyor, yani
+  // zaten tekil ve zamani iciyor: ayri bir zaman alanina gerek yok.
+  for (const k of Array.isArray(konular.eklenen) ? konular.eklenen : []) {
+    if (!k || typeof k !== 'object') continue
+    const id = typeof k.id === 'string' ? k.id : ''
+    if (!id) continue
+    ekle(`konu:eklenen:${id}`, null, 'konu-ekle', k)
+  }
+
+  // Cikarilanlar duz metin (konu kimligi) ve zaman tasimiyorlar. Kimligi
+  // konu kimliginden kurmak ayni konunun iki kez cikarilmasini tekile
+  // indiriyor; "bu konu listede yok" ikinci kez soylenmis olmuyor.
+  for (const konuId of Array.isArray(konular.cikarilan) ? konular.cikarilan : []) {
+    if (typeof konuId !== 'string' || !konuId) continue
+    ekle(`konu:cikarilan:${konuId}`, null, 'konu-cikar', { konuId })
+  }
+
   return cikti
 }
 
