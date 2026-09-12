@@ -19,6 +19,9 @@ const EN_COK_YAZI = 200
 const EN_COK_KONU = 500
 const ICERIK_TAVANI = 300 * 1024
 const ALAN_TAVANI = 500
+// Uyari musteriye gosterilecek bir cumle; uzun olmasi beklenmiyor ama
+// kesilmis yarim cumle de gostermeyelim diye alan tavanindan genis.
+const UYARI_TAVANI = 1000
 
 // Motorun sahibi olduklari. Listede olmayan alan ALINMAZ.
 const YAZI_ALANLARI = ['id', 'baslik', 'ozet', 'kategori', 'durum', 'tarih', 'okumaDk', 'kelime', 'kapak', 'adres']
@@ -100,6 +103,13 @@ exports.handler = async (event) => {
     motorZamani: metin(g.uretildi, 40) || null,
     blogAdresi: metin(g.blogAdresi, 300),
     baglantiDurumu: metin(g.baglantiDurumu, 60),
+    // Motor, musterinin sectigi yayin programini uygulayamadiysa sebebini
+    // burada bildiriyor. Yalniz uyari varken geliyor; gelmedigi durum
+    // "program uygulandi" demektir, bos metin de oyle.
+    //
+    // Neden motorun alani: programi uygulayan taraf motor, uygulanip
+    // uygulanmadigini da yalniz o biliyor. Panel bunu gosterir, yazmaz.
+    programUyarisi: metin(g.programUyarisi, UYARI_TAVANI),
     yazilar,
     konular,
   }

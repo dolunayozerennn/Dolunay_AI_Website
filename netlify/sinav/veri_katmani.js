@@ -578,6 +578,82 @@ vaka('V34_bozuk_konu_kayitlari_atlanir', async () => {
   };
 });
 
+const UYARI = 'Seçtiğiniz yayın programı uygulanmadı: yayın saati 13:00 sonrasında olmalı. '
+  + 'Yürürlükteki program: Pzt, Per 15:00.';
+
+vaka('V35_program_uyarisi_panele_geciyor', async () => {
+  const v = require(VERI);
+  const c = await require(YAZ).handler(olay('POST', Object.assign({}, ORNEK, { programUyarisi: UYARI })));
+  const b = v.birlestir({ motor: await v.motorListeOku(SLUG), kararlar: await v.kararlarOku(SLUG) });
+  return {
+    gecti: c.statusCode === 200 && b.programUyarisi === UYARI,
+    not: `kod:${c.statusCode} uyari:${JSON.stringify(b.programUyarisi)}`,
+  };
+});
+
+vaka('V36_uyari_yoksa_bos_gelir', async () => {
+  const v = require(VERI);
+  await require(YAZ).handler(olay('POST', ORNEK));
+  const b = v.birlestir({ motor: await v.motorListeOku(SLUG), kararlar: await v.kararlarOku(SLUG) });
+  return {
+    // Bos string: panel "uyari var mi" diye tek kontrolle bakabilsin.
+    gecti: b.programUyarisi === '', not: JSON.stringify(b.programUyarisi),
+  };
+});
+
+vaka('V37_uyari_gecince_temizleniyor', async () => {
+  const v = require(VERI);
+  await require(YAZ).handler(olay('POST', Object.assign({}, ORNEK, { programUyarisi: UYARI })));
+  // Motor programi uygulayabilir hale geldi: uyari gondermiyor.
+  await require(YAZ).handler(olay('POST', ORNEK));
+  const b = v.birlestir({ motor: await v.motorListeOku(SLUG), kararlar: await v.kararlarOku(SLUG) });
+  return {
+    // Eski uyari asili kalmamali; musteri duzelen bir sorunu okumaya devam etmesin.
+    gecti: b.programUyarisi === '', not: JSON.stringify(b.programUyarisi),
+  };
+});
+
+vaka('V38_uyari_panelin_programini_degistirmiyor', async () => {
+  await require(YAZ).handler(olay('POST', Object.assign({}, ORNEK, { eposta: EPOSTA })));
+  const cerez = await oturumKur();
+  await require(P_KARAR).handler(panelOlay('POST', {
+    tur: 'ayarlar', yayinProgrami: { saat: '10:00', gunler: ['Pzt', 'Per'] },
+  }, cerez));
+  await require(YAZ).handler(olay('POST', Object.assign({}, ORNEK, { programUyarisi: UYARI })));
+  const c = await require(P_VERI).handler(panelOlay('GET', null, cerez));
+  const b = govde(c);
+  return {
+    // Uyari motorun alani, program panelin: ikisi de kendi degerini korumali.
+    gecti: b.programUyarisi === UYARI && b.yayinProgrami.saat === '10:00'
+      && b.yayinProgrami.gunler.join(',') === 'Pzt,Per',
+    not: `uyari:${!!b.programUyarisi} saat:${b.yayinProgrami.saat}`,
+  };
+});
+
+vaka('V39_bilinmeyen_alan_400_dondurmuyor', async () => {
+  const c = await require(YAZ).handler(olay('POST', Object.assign({}, ORNEK, {
+    programUyarisi: UYARI, tanimadigimizAlan: { bir: 1 }, baskaAlan: 'x',
+  })));
+  const liste = JSON.parse(kutu.get(`motor/${SLUG}/liste`));
+  return {
+    // Tanimadigimiz alan istegi dusurmez, ama depoya da girmez.
+    gecti: c.statusCode === 200 && liste.programUyarisi === UYARI
+      && liste.tanimadigimizAlan === undefined && liste.baskaAlan === undefined,
+    not: `kod:${c.statusCode} anahtarlar:${Object.keys(liste).join(',')}`,
+  };
+});
+
+vaka('V40_uzun_uyari_kirpilyor', async () => {
+  const c = await require(YAZ).handler(olay('POST', Object.assign({}, ORNEK, {
+    programUyarisi: 'u'.repeat(5000),
+  })));
+  const liste = JSON.parse(kutu.get(`motor/${SLUG}/liste`));
+  return {
+    gecti: c.statusCode === 200 && liste.programUyarisi.length === 1000,
+    not: `kod:${c.statusCode} uzunluk:${liste.programUyarisi && liste.programUyarisi.length}`,
+  };
+});
+
 async function main() {
   process.env.MOTOR_SIRRI = SIR;
   let gecen = 0;

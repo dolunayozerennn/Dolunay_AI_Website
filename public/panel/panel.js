@@ -1194,6 +1194,16 @@
       '<div class="kart-bolum"><h3 class="ayrik">Yayın programı</h3>' +
         '<p class="bolum-alt">Yazılarınızın hangi saatte ve hangi günlerde yayınlanacağını ' +
           "buradan ayarlayabilirsiniz.</p>" +
+        /* Kaydedilen program her zaman uygulanamıyor. Uyarı buraya konuyor,
+           çünkü müşteri aksi hâlde kendi seçtiği değerleri ekranda görüp
+           yürürlükte sanırdı. Metni motor yazıyor, biz yalnız gösteriyoruz. */
+        (M.programUyarisi
+          ? '<div class="bilgi-serit sari">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" ' +
+              'stroke-linecap="round"><path d="M12 8v5M12 16.5h.01"/><circle cx="12" cy="12" r="8.5"/></svg>' +
+            "<span>" + esc(M.programUyarisi) + "</span>" +
+            "</div>"
+          : "") +
         '<div class="alan"><label for="hSaat">Yayın saati (Türkiye)</label>' +
           '<select id="hSaat">' + SAATLER.map(function (s) {
             return '<option value="' + s + '"' + (s === yp.saat ? " selected" : "") + ">" + s + "</option>";

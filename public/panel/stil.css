@@ -807,6 +807,11 @@ body.dogrulaniyor { visibility: hidden; }
   border-color: rgba(74, 222, 128, .24);
 }
 .bilgi-serit.yesil svg { color: var(--green); }
+.bilgi-serit.sari {
+  background: rgba(251, 191, 36, .08);
+  border-color: rgba(251, 191, 36, .26);
+}
+.bilgi-serit.sari svg { color: var(--amber); }
 
 /* --- takvim --- */
 

@@ -247,6 +247,11 @@ function birlestir (girdi) {
     abonelik: girdi.abonelik || {},
     paketler: girdi.paketler || {},
     yayinProgrami: ayarlar.yayinProgrami || { saat: '', gunler: [] },
+    // Motorun "sectiginiz programi uygulayamadim" bildirimi. Yalniz uyari
+    // varken doluyor. Panel bunu yayin programi ayarinin yaninda gosteriyor:
+    // musteri kaydettigi programin yurumedigini baska turlu anlayamazdi,
+    // ayar ekraninda kendi sectigi degerler duruyor olacakti.
+    programUyarisi: motor.programUyarisi || '',
     yazilar,
     konular,
     marka: markaSekli(ayarlar.marka),
