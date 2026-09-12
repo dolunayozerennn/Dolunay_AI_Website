@@ -7,6 +7,10 @@
 //
 // Motor "sunu isledim" demek zorunda ama PANELIN kaydina yazamaz (sahiplik).
 // Bu yuzden kendi imlecini kendi alaninda tutuyor: motor/<slug>/islenen.
+//
+// "bekleyen" yalniz yazi kararlarini degil KONU kararlarini da tasir
+// (konu-ekle / konu-cikar). Musterinin onerdigi konu motora ulasmazsa panelde
+// "sıradaki yazı olarak üretilecek" yazip hicbir sey yapmamis oluyorduk.
 const crypto = require('crypto')
 const veri = require('../veri')
 const { json, govdeCoz } = require('../oturum')
