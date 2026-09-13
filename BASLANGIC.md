@@ -53,8 +53,18 @@ JSON sekli:
       "tutar": "4.000 TL + KDV",
       "periyot": "ay",
       "notu": "Kartinizdan aylik toplam 4.800 TL cekilir.",
-      "kapsam": ["...", "..."]
+      "kapsam": ["...", "..."],
+      "aylikYazi": 8
     }}
+
+**`aylikYazi` blog paketlerinde ZORUNLUDUR (2026-09-13).** Panel aylik kotayi
+buradan okuyor (`netlify/lib/uclar/panel-veri.js`, `abonelik.aylikYazi`).
+Alan yoksa panel 0 yazar ve musteri ana sayfada "Bu ay 0/0 yazi" gorur. Uc
+blog paketinde su an 8 / 16 / 30. `carousel` yazi uretmedigi ve `web-sitesi`
+tek seferlik is oldugu icin onlarda alan YOKTUR; bu bir eksik degil.
+
+Bu alan yalnizca EKRANDAKI sayidir, tahsilati etkilemez; kotanin kendisini
+motor tarafi uygular.
 
 **Iki paket turu vardir ve ayrimi tek alan yapar.**
 
