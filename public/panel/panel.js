@@ -115,6 +115,14 @@
       .replace(/"/g, "&quot;");
   }
 
+  /* Müşterinin sitesi bağlı mı? Blog adresi yoksa yazılar ona dosya olarak
+     teslim ediliyor, hiçbir yerde yayınlanmıyor. Panel o durumda "yayın"
+     demez; olmayan bir sitede yayınlandığını söylemek müşteriyi yanıltır.
+     Tek yerden sorulur ki ekranlar birbirine ters düşmesin. */
+  function siteBagli() {
+    return Boolean(String(M.blogAdresi || "").trim());
+  }
+
   /* "2026-09-08" → "8 Eylül 2026" */
   function trTarih(iso) {
     if (!iso) return "";
@@ -239,7 +247,8 @@
     var html = '' +
       '<section class="kart karsilama">' +
         "<h2>Hoş geldiniz, " + esc(M.hesap ? M.hesap.markaAdi : "") + "</h2>" +
-        "<p>Bu ay <strong>" + buAy + "</strong> yazı yayınlandı" +
+        "<p>Bu ay <strong>" + buAy + "</strong> yazı " +
+          (siteBagli() ? "yayınlandı" : "teslim edildi") +
           (bekleyen.length
             ? ", <strong>" + bekleyen.length + "</strong> tanesi onayınızı bekliyor."
             : ". Onay bekleyen yazı yok.") +
@@ -269,10 +278,12 @@
 
     html +=
       '<div class="istatistikler">' +
-        '<div class="istatistik yesil"><b>' + yayinda.length + "</b><span>Yayında</span></div>" +
+        '<div class="istatistik yesil"><b>' + yayinda.length + "</b><span>" +
+          (siteBagli() ? "Yayında" : "Teslim edildi") + "</span></div>" +
         '<div class="istatistik sari"><b>' + bekleyen.length + "</b><span>Onay Bekliyor</span></div>" +
         '<div class="istatistik mavi"><b>' + sayi(Veri.yayinlananKelime()) +
-          "</b><span>Yayınlanan Kelime</span></div>" +
+          "</b><span>" + (siteBagli() ? "Yayınlanan kelime" : "Teslim edilen kelime") +
+          "</span></div>" +
       "</div>";
 
     kutu.innerHTML = html;
@@ -400,7 +411,10 @@
         kagitKapakHtml(y) +
         "<h1>" + esc(y.baslik) + "</h1>" +
         '<div class="kagit-meta">' +
-          esc(trTarih(y.tarih)) + (y.durum === "yayinda" ? " tarihinde yayınlandı" : " için planlandı") +
+          esc(trTarih(y.tarih)) +
+          (y.durum === "yayinda"
+            ? (siteBagli() ? " tarihinde yayınlandı" : " tarihinde teslim edildi")
+            : " için planlandı") +
           " · " + esc(y.kategori) + " · " + esc(y.okumaDk) + " dk" +
         "</div>" +
         '<div id="onizlemeGovde"><p class="yardim-metni">Yazı yükleniyor…</p></div>' +
@@ -687,14 +701,23 @@
   }
 
   function tabloSatiriYayinda(y) {
-    var adres = (M.blogAdresi || "") + "/" + (y.adres || "");
+    /* Görüntüle ancak GERÇEKTEN açılabilecek bir adres varsa çizilir.
+       İki ayrı eksik de bu düğmeyi boşa çıkarıyordu: site hiç bağlı değilse
+       adres "/yazi-adi" gibi yarım kalıyordu, site bağlı ama yazının kendi
+       adresi yoksa müşteri yazı yerine ana sayfaya düşüyordu. İkisinde de
+       düğme çizilmez; Önizle ve Düzenle yerinde kalır. */
+    var adres = siteBagli() && y.adres
+      ? String(M.blogAdresi).replace(/\/+$/, "") + "/" + String(y.adres).replace(/^\/+/, "")
+      : "";
     return "<tr>" +
       '<td class="baslik-hucre"><b>' + esc(y.baslik) + "</b></td>" +
       "<td><span class=\"rozet rozet-sade\">" + esc(y.kategori) + "</span></td>" +
       '<td class="tarih-hucre">' + esc(trTarih(y.tarih)) + "</td>" +
       '<td class="islem-hucre">' +
-        '<a class="btn btn-kucuk btn-ikincil" href="' + esc(adres) + '" target="_blank" rel="noopener">' +
-          'Görüntüle<span class="dis-ok">↗</span></a>' +
+        (adres
+          ? '<a class="btn btn-kucuk btn-ikincil" href="' + esc(adres) + '" target="_blank" rel="noopener">' +
+            'Görüntüle<span class="dis-ok">↗</span></a>'
+          : "") +
         '<button class="btn btn-kucuk btn-hayalet" data-eylem="onizle" data-yazi="' + esc(y.id) + '">Önizle</button>' +
         '<button class="btn btn-kucuk btn-hayalet" data-eylem="duzenle" data-yazi="' + esc(y.id) + '">Düzenle</button>' +
       "</td></tr>";
@@ -724,7 +747,8 @@
         '<h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" ' +
           'stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2"/>' +
           '<path d="M3.5 9.5h17M8 3.5v3M16 3.5v3"/></svg>Yayın Takvimi</h2>' +
-        '<span class="rozet rozet-yesil">' + ayYayinda.length + " yayınlandı</span>" +
+        '<span class="rozet rozet-yesil">' + ayYayinda.length +
+          (siteBagli() ? " yayınlandı" : " teslim edildi") + "</span>" +
         '<span class="rozet rozet-sari">' + ayBekliyor.length + " onay bekliyor</span>" +
         '<span class="rozet rozet-mavi">' + ayPlanli.length + " planlandı</span>" +
         (saat ? '<span class="rozet rozet-sade saat">' + esc(saat) + "</span>" : "") +
@@ -767,19 +791,31 @@
         "</div>";
     }
 
-    /* --- yayınlananlar --- */
-    html += '<h2 class="bolum-basligi" style="margin-top:30px">Yayınlanan yazılar ' +
+    /* --- yayınlananlar / teslim edilenler ---
+       Site bağlı değilken bu yazılar hiçbir yerde yayınlanmıyor, müşteriye
+       dosya olarak gidiyor. Başlık, sütun ve boş durum metni bu yüzden
+       birlikte değişiyor; biri "teslim" derken öteki "yayın" derse ekran
+       kendi kendisiyle çelişir. */
+    var bagli = siteBagli();
+    html += '<h2 class="bolum-basligi" style="margin-top:30px">' +
+      (bagli ? "Yayınlanan yazılar " : "Teslim edilen yazılar ") +
       '<span class="sayi">(' + yayinda.length + ")</span></h2>";
     if (yayinda.length) {
       html += '<div class="tablo-kutu"><div class="tablo-sar"><table class="tablo">' +
-        "<thead><tr><th>Başlık</th><th>Kategori</th><th>Yayın tarihi</th><th>İşlemler</th></tr></thead><tbody>" +
+        "<thead><tr><th>Başlık</th><th>Kategori</th><th>" +
+        (bagli ? "Yayın tarihi" : "Teslim tarihi") +
+        "</th><th>İşlemler</th></tr></thead><tbody>" +
         yayinda.map(tabloSatiriYayinda).join("") +
         "</tbody></table></div>" +
         '<div class="tablo-alt">Toplam ' + yayinda.length + " yazı</div></div>";
     } else {
       html += '<div class="bos-durum" style="margin-bottom:12px">' +
-        "<p>Henüz yayınlanmış yazı yok. Onayladığınız yazılar planlanan tarihlerinde " +
-        "sitenizde yayına girecek.</p></div>";
+        (bagli
+          ? "<p>Henüz yayınlanmış yazı yok. Onayladığınız yazılar planlanan tarihlerinde " +
+            "sitenizde yayına girecek.</p>"
+          : "<p>Henüz teslim edilen yazı yok. Onayladığınız yazılar hazır olduğunda " +
+            "size iletilecek.</p>") +
+        "</div>";
     }
 
     /* --- reddedilenler --- */
