@@ -101,13 +101,52 @@ Netlify API'sinde `PATCH .../env/<KEY>` **422 doner, calismaz**. Calisan yol
      "is_secret":false,"values":[{"value":"<json string>","context":"all"}]}
 
 `account_slug` → `GET /sites/<site_id>` cevabindaki `account_slug`.
-site_id: `93e952dd-4720-4bca-93e8-55ddcaa844f6`. Token: master.env icindeki
-`NETLIFY_AUTH_TOKEN`.
+site_id: `93e952dd-4720-4bca-93e8-55ddcaa844f6`.
+
+**NETLIFY_AUTH_TOKEN ARTIK master.env ICINDE YOK** (2026-09-13'te dogrulandi).
+Yukaridaki API yolu bu yuzden dogrudan kullanilamiyor. Calisan yollar:
+Netlify arayuzu ya da kimlik dogrulamis bir Netlify MCP baglantisi. Jeton
+yeniden uretilirse hesabin TAMAMINA erisim verdigi unutulmasin; ayni hesapta
+baska siteler de var.
 
 **Env degisikligi tek basina yetmez**, fonksiyonlar yeni degeri ancak yeniden
-deploy sonrasi gorur: `POST /api/v1/sites/<site_id>/builds` govde
-`{"clear_cache":false}`, sonra `deploy_id` ile `ready` olana kadar bekle
-(~40-50 sn). Sonra sayfayi curl ile ac ve yaziyi gozle dogrula.
+deploy sonrasi gorur. Deploy tetiklemenin yollari: Netlify arayuzunde
+Deploys > Trigger deploy, ya da `main`'e giden bir PR birlestirmek.
+`main`'e dogrudan itis KAPALI (dal korumasi; 2026-09-13'te 422 ile olculdu),
+yani bos commit atarak tetiklenemez.
+
+**`deploy-site` KULLANILMAZ.** Bulundugu klasoru yukler; yanlis klasorden
+calistirilirsa kimlik dosyalari dahil her sey internete acilir. Sitenin
+kaynagi zaten bu depo.
+
+### Ortam degiskenleri (2026-09-13)
+
+| Degisken | Kapsam | Gizli mi | Ne ise yarar |
+|---|---|---|---|
+| `IYZICO_API_KEY` | builds, functions | hayir | iyzico IYZWSv2 imzasi |
+| `IYZICO_SECRET_KEY` | builds, functions | hayir | ayni |
+| `IYZICO_BASE_URL` | builds, functions | hayir | canli: `https://api.iyzipay.com` |
+| `IYZICO_PAKETLER` | builds, functions | hayir | paket katalogu (yukariya bak) |
+| `PANEL_URL` | functions | hayir | basari sayfasindaki panel baglantisi; tanimsizsa baglanti cizilmez |
+| `MOTOR_SIRRI` | functions | EVET | `motor-yaz` ve `motor-oku` uclarinin tek amacli sirri |
+| `YONETIM_SIRRI` | functions | EVET | `hesap-ac` ucunun sirri; elle hesap acmak icin |
+
+`MOTOR_SIRRI` ve `YONETIM_SIRRI` **ayri tutulur**. Motorun sirri Savas Bey'in
+makinesinde duruyor ve yalnizca icerik yazmaya yetiyor; ayni sir hesap da
+acabilseydi sizinti cok daha agir olurdu.
+
+Iki sir da Production, Deploy Previews ve Branch deploys baglamlarinda
+tanimli; Local development ve Preview Server **bos birakilir**. Ikisi de
+"Contains secret values" isaretlidir, yani degerleri API'den maskelenmis
+doner ve okunamaz. Deger gerektiginde okunmaz, YENIDEN URETILIR.
+
+Iki tarafin (Netlify ve motorun `.env` dosyasi) ayni degeri tasiyip
+tasimadigi, degeri hic gostermeden olculur: `.env` degeriyle `motor-oku`
+ucuna salt okunur bir cagri yapilir. 200 ise esitler, 401 ise degil.
+
+`IYZICO_API_KEY` ve `IYZICO_SECRET_KEY` su an "secret" ISARETLI DEGIL, yani
+degerleri Netlify arayuzunde ve API cevaplarinda duz metin gorunuyor.
+Isaretlenmeleri iyi olur; degerleri Dolunay girdi.
 
 ### Tek seferlik odeme akisi
 
