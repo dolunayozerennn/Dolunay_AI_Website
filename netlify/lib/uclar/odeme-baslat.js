@@ -64,7 +64,7 @@ exports.handler = async (event, context) => {
     })
     if (!cevap || cevap.hataTipi) return html(503, formSayfasi(slug, paket, v, 'Ödeme hizmetine ulaşılamıyor. Kartınızdan tahsilat YAPILMADI.'))
     if (cevap.status !== 'success' || typeof cevap.checkoutFormContent !== 'string' || !cevap.checkoutFormContent.trim()) {
-      return html(400, formSayfasi(slug, paket, v, 'Kart formu açılamadı. Bilgileri kontrol edin; sorun sürerse dolunay@dolunay.ai adresine yazın.'))
+      return html(400, formSayfasi(slug, paket, v, 'Kart formu açılamadı. Bilgileri kontrol edin; sorun sürerse savas@dolunay.ai adresine yazın.'))
     }
     return html(200, sayfa({ baslik: 'Kart bilgileri', govde: `<span class="rozet">Tek seferlik ödeme</span><h1>Kart bilgileri</h1><p class="alt">${kacir(paket.ad || 'Hizmet')} · ${kacir(tutarGoster(paket.tutar_kurus))} TL, KDV dahil</p><div class="kart"><div id="iyzipay-checkout-form" class="responsive"></div></div>${cevap.checkoutFormContent}<p class="dip">Kartınızdan bir kez tahsil edilir.</p>` }))
   } catch {

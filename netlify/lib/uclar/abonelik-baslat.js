@@ -319,7 +319,7 @@ exports.handler = async (event) => {
       return bizim
     })
     if (varOlan) {
-      return html(409, formSayfasi(slug, paket, v, 'Bu e-posta için bu pakette zaten aktif bir abonelik var. İkinci kez tahsilat olmaması için yeni ödeme başlatılmadı. Sorunuz varsa dolunay@dolunay.ai adresine yazın.'))
+      return html(409, formSayfasi(slug, paket, v, 'Bu e-posta için bu pakette zaten aktif bir abonelik var. İkinci kez tahsilat olmaması için yeni ödeme başlatılmadı. Sorunuz varsa savas@dolunay.ai adresine yazın.'))
     }
     // `null` = tarama tamamlanamadi, yani mevcut bir abonelik OLMADIGINI bilmiyoruz.
     // Eskiden bu durum sessizce yutulup odeme aciliyordu; belirsiz sonuc ekranini gorup
@@ -409,7 +409,7 @@ exports.handler = async (event) => {
   if (cevap.status !== 'success' || !formIcerik) {
     // Saglayicinin ham hata metni musteriye gosterilmez; sunucu kaydinda kalir.
     console.error('iyzico initialize hatasi', cevap && cevap.errorCode, kayitIcin(cevap && cevap.errorMessage))
-    return html(400, formSayfasi(slug, paket, v, 'Ödeme sayfası açılamadı. Bilgileri kontrol edip tekrar deneyin; sorun sürerse dolunay@dolunay.ai adresine yazın.'))
+    return html(400, formSayfasi(slug, paket, v, 'Ödeme sayfası açılamadı. Bilgileri kontrol edip tekrar deneyin; sorun sürerse savas@dolunay.ai adresine yazın.'))
   }
 
   // Jeton isaretcisi: callback'te bekleyen kaydi kesin olarak bulmak icin.

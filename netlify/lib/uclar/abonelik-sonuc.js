@@ -30,7 +30,7 @@ function ciz(kod, baslik, kutuSinifi, mesaj, ek) {
       <h1>${kacir(baslik)}</h1>
       <div class="${kutuSinifi}">${kacir(mesaj)}</div>
       ${ek || ''}
-      <p class="dip">Sorularınız için <a href="mailto:dolunay@dolunay.ai">dolunay@dolunay.ai</a></p>`,
+      <p class="dip">Sorularınız için <a href="mailto:savas@dolunay.ai">savas@dolunay.ai</a></p>`,
   }))
 }
 
@@ -282,7 +282,7 @@ exports.handler = async (event) => {
     cevap = await formSonuc(token)
   } catch (e) {
     return ciz(502, 'Sonuç doğrulanamadı', 'uyari',
-      'Ödemeniz alınmış olabilir ama şu an teyit edemedik. Aynı ödemeyi tekrar denemeyin; dolunay@dolunay.ai adresine yazın, durumu kontrol edip size dönelim.')
+      'Ödemeniz alınmış olabilir ama şu an teyit edemedik. Aynı ödemeyi tekrar denemeyin; savas@dolunay.ai adresine yazın, durumu kontrol edip size dönelim.')
   }
 
   const veri = cevap && cevap.data ? cevap.data : cevap || {}
@@ -295,7 +295,7 @@ exports.handler = async (event) => {
        <p class="etiket">Ne yapabilirsiniz</p>
        <ul>
          <li>Aynı ödemeyi TEKRAR denemeyin; çift tahsilat oluşabilir.</li>
-         <li>dolunay@dolunay.ai adresine yazın; aboneliğinizin durumunu kontrol edip size dönelim.</li>
+         <li>savas@dolunay.ai adresine yazın; aboneliğinizin durumunu kontrol edip size dönelim.</li>
        </ul>
      </div>`)
 
