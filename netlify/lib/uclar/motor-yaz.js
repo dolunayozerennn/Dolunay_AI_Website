@@ -110,6 +110,10 @@ exports.handler = async (event) => {
     // Neden motorun alani: programi uygulayan taraf motor, uygulanip
     // uygulanmadigini da yalniz o biliyor. Panel bunu gosterir, yazmaz.
     programUyarisi: metin(g.programUyarisi, UYARI_TAVANI),
+    // Musteri profilindeki telefon. Motor bunu TOHUM olarak veriyor: panel
+    // bos gormesin diye. Panelde numara yazilmissa birlestirmede panelinki
+    // kazanir, buradaki onu ezmez (veri.js/birlestir).
+    telefon: metin(g.telefon, 40),
     yazilar,
     konular,
   }

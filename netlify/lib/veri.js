@@ -241,7 +241,14 @@ function birlestir (girdi) {
     hesap: {
       markaAdi: hesap.markaAdi || '',
       eposta: hesap.eposta || '',
-      telefon: (ayarlar.telefon !== undefined ? ayarlar.telefon : hesap.telefon) || '',
+      // Sira: PANEL -> motor -> hesap kaydi. Musteri panelde bir numara
+      // yazdiysa o kazanir (cakismada panel kazanir kurali); yazmadiysa
+      // motorun musteri profilindeki numara tohum olarak kullanilir.
+      // `!== undefined` bilerek: musteri alani BOSALTTIYSA o da bir karardir,
+      // motorunki geri gelmemeli.
+      telefon: (ayarlar.telefon !== undefined
+        ? ayarlar.telefon
+        : (motor.telefon || hesap.telefon)) || '',
     },
     blogAdresi: motor.blogAdresi || hesap.webSitesi || '',
     abonelik: girdi.abonelik || {},
@@ -261,7 +268,8 @@ function birlestir (girdi) {
       baglantiDurumu: motor.baglantiDurumu
         || 'Bağlantı durumu henüz bildirilmedi.',
       // Iletisim bilgisi sabit, veriden gelmiyor; panel dogrudan okuyor.
-      iletisim: { eposta: 'dolunay@dolunay.ai' },
+      // Musteri destegi bizde (Savas Bey), Dolunay'da degil.
+      iletisim: { eposta: 'savas@dolunay.ai' },
       talepler: ayarlar.destekTalepleri || [],
     },
     odemeGecmisi: girdi.odemeGecmisi || [],

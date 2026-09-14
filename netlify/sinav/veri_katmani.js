@@ -654,6 +654,63 @@ vaka('V40_uzun_uyari_kirpilyor', async () => {
   };
 });
 
+vaka('V41_motor_telefonu_tohum_olarak_veriyor', async () => {
+  const v = require(VERI);
+  await require(YAZ).handler(olay('POST', Object.assign({}, ORNEK, { telefon: '+905070452754' })));
+  const b = v.birlestir({ motor: await v.motorListeOku(SLUG), kararlar: await v.kararlarOku(SLUG) });
+  return {
+    gecti: b.hesap.telefon === '+905070452754',
+    not: `telefon:${JSON.stringify(b.hesap.telefon)}`,
+  };
+});
+
+vaka('V42_panelin_telefonu_motorunkini_eziyor', async () => {
+  const v = require(VERI);
+  await require(YAZ).handler(olay('POST', Object.assign({}, ORNEK, { telefon: '+900000000000' })));
+  await v.ayarlarYaz(SLUG, { telefon: '+905551112233' });
+  const b = v.birlestir({
+    motor: await v.motorListeOku(SLUG), kararlar: await v.kararlarOku(SLUG),
+    ayarlar: await v.ayarlarOku(SLUG),
+  });
+  return {
+    // Cakismada panel kazanir.
+    gecti: b.hesap.telefon === '+905551112233', not: b.hesap.telefon,
+  };
+});
+
+vaka('V43_musteri_telefonu_bosaltirsa_motorunki_geri_gelmez', async () => {
+  const v = require(VERI);
+  await require(YAZ).handler(olay('POST', Object.assign({}, ORNEK, { telefon: '+900000000000' })));
+  // Musteri alani bilerek bosaltti: bu da bir karardir.
+  await v.ayarlarYaz(SLUG, { telefon: '' });
+  const b = v.birlestir({
+    motor: await v.motorListeOku(SLUG), kararlar: await v.kararlarOku(SLUG),
+    ayarlar: await v.ayarlarOku(SLUG),
+  });
+  return { gecti: b.hesap.telefon === '', not: JSON.stringify(b.hesap.telefon) };
+});
+
+vaka('V44_motor_telefon_gondermezse_hesaptaki_kullanilir', async () => {
+  const v = require(VERI);
+  await require(YAZ).handler(olay('POST', ORNEK));
+  const b = v.birlestir({
+    motor: await v.motorListeOku(SLUG), kararlar: await v.kararlarOku(SLUG),
+    hesap: { telefon: '+905553334455' },
+  });
+  return { gecti: b.hesap.telefon === '+905553334455', not: b.hesap.telefon };
+});
+
+vaka('V45_destek_iletisimi_savas_adresine_gidiyor', async () => {
+  const v = require(VERI);
+  await require(YAZ).handler(olay('POST', ORNEK));
+  const b = v.birlestir({ motor: await v.motorListeOku(SLUG), kararlar: await v.kararlarOku(SLUG) });
+  return {
+    // Musteri destegi bizde; Dolunay'in adresi panelde gorunmemeli.
+    gecti: b.destek.iletisim.eposta === 'savas@dolunay.ai',
+    not: b.destek.iletisim.eposta,
+  };
+});
+
 async function main() {
   process.env.MOTOR_SIRRI = SIR;
   let gecen = 0;
