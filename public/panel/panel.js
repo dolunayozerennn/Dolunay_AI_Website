@@ -169,10 +169,31 @@
       if (!durum) return hepsi.slice();
       return hepsi.filter(function (y) { return y.durum === durum; });
     },
-    buAyYayinlanan: function () {
+    /* Motor ay için gün ayırıp konuyu sonra seçiyor. O kayıtlar takvimde
+       "Konu seçilecek" diye duruyor ama içlerinde yazı yok: ne kelime
+       sayıları var ne okuma süreleri. Boş slotu üretilmiş yazı saymak
+       müşteriye ayı dolmuş gibi gösterirdi. */
+    uretilmisMi: function (y) {
+      if (!y) return false;
+      return (Number(y.kelime) || 0) > 0 || (Number(y.okumaDk) || 0) > 0;
+    },
+    /* Bu ay teslim edilenler (sitesi bağlıysa yayınlananlar). Kotadan
+       ayrıdır: kota üretimi sayar, bu sayı işin tamamlanmışını. */
+    buAyTeslim: function () {
       var ay = (M.bugun || "").slice(0, 7);
       return Veri.yazilar("yayinda").filter(function (y) {
         return y.tarih && y.tarih.slice(0, 7) === ay;
+      }).length;
+    },
+    /* Bu ay gerçekten üretilenler. Teslim edilmiş olması şart değil, onay
+       bekleyen de üretilmiştir; kotayı harcayan şey üretimdir.
+       Reddedilenler sayılmaz: kotadan düşmemeleri baştan beri kural, zaten
+       ret tarihi de boşaltıyor. */
+    buAyUretilen: function () {
+      var ay = (M.bugun || "").slice(0, 7);
+      return (M.yazilar || []).filter(function (y) {
+        return Veri.uretilmisMi(y) && y.durum !== "reddedildi" &&
+          y.tarih && y.tarih.slice(0, 7) === ay;
       }).length;
     },
     yayinlananKelime: function () {
@@ -240,20 +261,23 @@
 
     var bekleyen = Veri.yazilar("bekliyor");
     var yayinda = Veri.yazilar("yayinda");
-    var buAy = Veri.buAyYayinlanan();
+    /* İki ayrı sayı: cümle TAMAMLANMIŞ işi, kota çubuğu ÜRETİLMİŞ olanı
+       söyler. Onay bekleyen yazı üretilmiştir ama teslim edilmemiştir. */
+    var buAyTeslim = Veri.buAyTeslim();
+    var buAy = Veri.buAyUretilen();
     var kota = (M.abonelik && M.abonelik.aylikYazi) || 0;
     var oran = kota ? Math.min(100, Math.round((buAy / kota) * 100)) : 0;
 
     var html = '' +
       '<section class="kart karsilama">' +
         "<h2>Hoş geldiniz, " + esc(M.hesap ? M.hesap.markaAdi : "") + "</h2>" +
-        "<p>Bu ay <strong>" + buAy + "</strong> yazı " +
+        "<p>Bu ay <strong>" + buAyTeslim + "</strong> yazı " +
           (siteBagli() ? "yayınlandı" : "teslim edildi") +
           (bekleyen.length
             ? ", <strong>" + bekleyen.length + "</strong> tanesi onayınızı bekliyor."
             : ". Onay bekleyen yazı yok.") +
         "</p>" +
-        '<div class="ilerleme-ust"><span>Bu ay</span>' +
+        '<div class="ilerleme-ust"><span>Bu ay üretilen</span>' +
           "<b>" + buAy + "/" + kota + " yazı</b></div>" +
         '<div class="ilerleme-yol"><div class="ilerleme-dolu" style="width:' + oran + '%"></div></div>' +
       "</section>";
