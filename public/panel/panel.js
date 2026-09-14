@@ -89,7 +89,7 @@
       '<div class="bos-durum">' +
       "<p>Panel verileriniz şu an okunamadı. Oturumunuz açık, sorun bizde.</p>" +
       "<p class=\"yardim-metni\">Birazdan sayfayı yenileyin; sürerse " +
-      '<a href="mailto:dolunay@dolunay.ai">dolunay@dolunay.ai</a> adresine yazın.</p>' +
+      '<a href="mailto:savas@dolunay.ai">savas@dolunay.ai</a> adresine yazın.</p>' +
       "</div>";
     if (sebep) console.error("panel verisi alinamadi:", sebep);
   }
@@ -994,18 +994,39 @@
       '<p class="hata"></p></div>';
   }
 
+  /* Marka profilinde doldurulmuş bir şey var mı? Renkler bu hesaba KATILMAZ:
+     onların varsayılanı var, hiç dokunulmasa bile dolu görünürler. */
+  function markaDoluMu(m) {
+    if (!m) return false;
+    var ak = m.anahtarKelimeler || {};
+    return [m.sektor, m.tonStili, m.markaKisiligi, m.birincilKitle, m.ikincilKitle,
+      m.hizmetler, m.rakipler, m.yasakli, ak.birincil, ak.ikincil, ak.uzunKuyruk]
+      .some(function (d) { return String(d || "").trim() !== ""; });
+  }
+
   function markamCiz() {
     var kutu = document.getElementById("b-brand");
     if (!kutu || !M.marka) return;
     var m = M.marka;
 
+    /* "Bu bilgiler sitenizden otomatik çıkarıldı" cümlesi ancak GERÇEKTEN
+       çıkarılmışsa doğru. Alanlar boşken müşteri, doldurulmuş bir profil
+       olduğunu sanıp ekranı kapatıyor; sonra da yazıların neden markasına
+       benzemediğini anlamıyor. Boşken davet ediyoruz. */
+    var doluProfil = markaDoluMu(m);
+
     kutu.innerHTML =
-      '<div class="bilgi-serit">' +
+      '<div class="bilgi-serit' + (doluProfil ? "" : " sari") + '">' +
         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" ' +
           'stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4"/></svg>' +
-        "<span><strong>Marka profiliniz yazı üretiminin temelidir.</strong> Bu bilgiler " +
-        "sitenizden otomatik çıkarıldı. Değişiklik yaparsanız sonraki yazılar yeni bilgilere " +
-        "göre üretilir; <strong>mevcut yazılarda geçerli olmaz</strong>.</span>" +
+        "<span><strong>Marka profiliniz yazı üretiminin temelidir.</strong> " +
+        (doluProfil
+          ? "Değişiklik yaparsanız sonraki yazılar yeni bilgilere göre üretilir; " +
+            "<strong>mevcut yazılarda geçerli olmaz</strong>."
+          : "Bu alanlar <strong>henüz doldurulmadı</strong>. Doldurdukça yazılar " +
+            "markanızın diline ve kitlesine daha çok benzer. Girdikleriniz sonraki " +
+            "yazılarda geçerli olur; <strong>mevcut yazılarda geçerli olmaz</strong>.") +
+        "</span>" +
       "</div>" +
 
       '<div class="kart-bolum"><h3>Genel bilgiler</h3>' +
