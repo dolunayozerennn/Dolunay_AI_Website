@@ -3,7 +3,7 @@ const { tekSeferSonuc } = require('../iyzico')
 const { kacir, sayfa, html } = require('../sayfa')
 
 function ciz (kod, baslik, sinif, mesaj) {
-  return html(kod, sayfa({ baslik, govde: `<span class="rozet">Tek seferlik ödeme</span><h1>${kacir(baslik)}</h1><div class="${sinif}">${kacir(mesaj)}</div><p class="dip">Sorularınız için <a href="mailto:dolunay@dolunay.ai">dolunay@dolunay.ai</a></p>` }))
+  return html(kod, sayfa({ baslik, govde: `<span class="rozet">Tek seferlik ödeme</span><h1>${kacir(baslik)}</h1><div class="${sinif}">${kacir(mesaj)}</div><p class="dip">Sorularınız için <a href="mailto:savas@dolunay.ai">savas@dolunay.ai</a></p>` }))
 }
 
 function kurus (v) {
@@ -28,7 +28,7 @@ function tokenBul (event) {
 }
 
 exports.handler = async (event) => {
-  const belirsiz = () => ciz(502, 'Sonuç teyit edilemedi', 'uyari', 'Tahsilat yapılmış olabilir. Aynı ödemeyi tekrar denemeyin; dolunay@dolunay.ai adresine yazın.')
+  const belirsiz = () => ciz(502, 'Sonuç teyit edilemedi', 'uyari', 'Tahsilat yapılmış olabilir. Aynı ödemeyi tekrar denemeyin; savas@dolunay.ai adresine yazın.')
   if (!['GET', 'POST'].includes(event.httpMethod)) return ciz(405, 'Geçersiz istek', 'uyari', 'İstek yöntemi desteklenmiyor.')
 
   let token, kimlik, tutar
@@ -43,13 +43,13 @@ exports.handler = async (event) => {
     if (!Array.isArray(d) || d.length !== 2 || typeof d[0] !== 'string' || typeof d[1] !== 'string' || kurus(d[1]) === null || kurus(d[1]) <= 0n) throw new Error('baglam')
     ;[kimlik, tutar] = d
   } catch {
-    return ciz(400, 'Sonuç doğrulanamadı', 'uyari', 'Ödeme bilgisi doğrulanamadı. Tahsilat yapılmış olabilir; aynı ödemeyi tekrar denemeden dolunay@dolunay.ai adresine yazın.')
+    return ciz(400, 'Sonuç doğrulanamadı', 'uyari', 'Ödeme bilgisi doğrulanamadı. Tahsilat yapılmış olabilir; aynı ödemeyi tekrar denemeden savas@dolunay.ai adresine yazın.')
   }
 
   let cevap
   try { cevap = await tekSeferSonuc(token) } catch { return belirsiz() }
   if (!cevap || cevap.hataTipi || cevap.status !== 'success' || cevap.token !== token || cevap.basketId !== kimlik) return belirsiz()
-  if (cevap.paymentStatus === 'FAILURE') return ciz(200, 'Ödeme tamamlanmadı', 'uyari', 'Ödeme tamamlanmadı. Durumu kontrol etmek için dolunay@dolunay.ai adresine yazın.')
+  if (cevap.paymentStatus === 'FAILURE') return ciz(200, 'Ödeme tamamlanmadı', 'uyari', 'Ödeme tamamlanmadı. Durumu kontrol etmek için savas@dolunay.ai adresine yazın.')
   if (cevap.paymentStatus !== 'SUCCESS' || ![1, '1'].includes(cevap.fraudStatus) || !['string', 'number'].includes(typeof cevap.paymentId) || !/^[1-9]\d*$/.test(String(cevap.paymentId)) || cevap.currency !== 'TRY' || kurus(cevap.price) !== kurus(tutar) || kurus(cevap.paidPrice) !== kurus(tutar)) return belirsiz()
   return ciz(200, 'Ödemeniz alındı', 'iyi', `Tek seferlik ödemeniz dogrulandi. Islem numaraniz: ${cevap.paymentId}.`)
 }
