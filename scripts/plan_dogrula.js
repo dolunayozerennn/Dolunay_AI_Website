@@ -25,8 +25,8 @@ async function get(uriPath) {
   try { return JSON.parse(t) } catch { return { status: 'okunamadi', httpDurum: r.status } }
 }
 
-// Sayfada "2.980 TL + KDV" yazarken iyzico 3576 tahsil eder. Ikisi ayni sey
-// olmadigi icin kiyas KDV'li tutar uzerinden yapilir.
+// 2026-09-16'dan beri sayfadaki tutar KDV'siz ve iyzico ayni tutari ceker.
+// Eski "+ KDV" yazimi gelirse kiyas yine KDV'li tutar uzerinden yapilir.
 const KDV = 1.20
 function sayfaKurusu(metin) {
   const m = String(metin || '').replace(/\./g, '').match(/\d+/)

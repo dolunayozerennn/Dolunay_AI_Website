@@ -85,7 +85,7 @@ export default async function AbonelikPage({
               </span>
               <span className="text-gray-500 text-lg">/ {abonelik.periyot}</span>
             </div>
-            <p className="text-gray-500 text-sm mb-6">+ KDV</p>
+            <div className="mb-6" />
 
             <div className="h-px bg-white/5 mb-6" />
 

@@ -34,7 +34,7 @@ export const ABONELIK_KOSULLARI: { etiket: string; deger: string }[] = [
   },
   {
     etiket: 'Vergi',
-    deger: 'Belirtilen bedellere KDV dahil değildir, faturada ayrıca gösterilir.',
+    deger: 'Belirtilen bedel ödenecek toplam tutardır, üzerine ayrıca KDV eklenmez.',
   },
 ]
 

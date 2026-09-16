@@ -50,9 +50,9 @@ JSON sekli:
     {"carousel": {
       "ad": "Instagram Carousel Otomasyonu",
       "plan": "<iyzico pricingPlanReferenceCode>",
-      "tutar": "4.000 TL + KDV",
+      "tutar": "4.000 TL",
       "periyot": "ay",
-      "notu": "Kartinizdan aylik toplam 4.800 TL cekilir.",
+      "notu": "Kartinizdan aylik 4.000 TL cekilir.",
       "kapsam": ["...", "..."],
       "aylikYazi": 8
     }}
@@ -70,15 +70,15 @@ motor tarafi uygular.
 
 - **Abonelik paketi:** `plan` alani DOLU. Yukaridaki sekildir; `/odeme/<slug>` istegi
   `abonelik-baslat.js`e gider. `periyot` bos ise `ay` varsayilir.
-- **Tek seferlik paket:** `plan` alani YOK, yerine `tutar_kurus` (KDV DAHIL, pozitif
+- **Tek seferlik paket:** `plan` alani YOK, yerine `tutar_kurus` (musterinin odedigi toplam, pozitif
   tamsayi, kurus cinsinden) vardir. Istek `odeme-baslat.js`e gider.
 
 Tek seferlik sekli:
 
     {"web-sitesi": {
       "ad": "Web Sitesi Tasarimi",
-      "tutar_kurus": 1800000,
-      "notu": "15.000 TL + KDV, toplam 18.000 TL tek seferde tahsil edilir.",
+      "tutar_kurus": 1500000,
+      "notu": "15.000 TL tek seferde tahsil edilir.",
       "kapsam": ["...", "..."]
     }}
 
@@ -93,12 +93,16 @@ tutari belirleyen tek sey iyzico'daki `plan` kodudur.
 Bu yuzden **ekrandaki yazi ile cekilen para birbirinden bagimsizdir**. `tutar`
 alanini degistirmek tahsilati DEGISTIRMEZ. Gercek tutari degistirmek icin
 iyzico panelinde yeni fiyatlandirma plani acilir ve `plan` kodu guncellenir.
-Ekranda vergi harici rakam yaziyorsa (bugunku hali), toplamin yanindaki notta
-acikca yazili olmasi sarttir, yoksa sayfa yalan soyler.
+**KDV (2026-09-16):** Artifex Teknopark kuluckasindan cikti, otomasyon abonelikleri ve
+web sitesi satisi KDV'siz satilir. Ekranda yazan rakam = karttan cekilen tutar. Eski
+"+KDV" planlari (3.576 / 7.176 / 11.976 / 4.800) iyzico'da duruyor, mevcut aboneler
+onlarda kalir; yeni satis yeni planlardan gecer. Kurumsal egitim sayfalari (bankalar,
+kurumsal-egitim, r/kurumsal-paketler) bilerek hala "+ KDV" yazar: egitim hizmeti
+muafiyet kapsaminda sayilmadi (Dolunay'in karari).
 
 **Tek seferlik pakette bu kural TERSINE isler.** Orada ekranda gorunen tutari da,
 karttan cekilen tutari da AYNI alan belirler: `tutar_kurus`. Serbest metin yoktur,
-KDV dahil tek sayi vardir; `tutar_kurus` degistiginde tahsilat da degisir. iyzico
+odenecek toplam tek sayi vardir; `tutar_kurus` degistiginde tahsilat da degisir. iyzico
 panelinde acilacak bir plan YOKTUR.
 
 ### Env degiskenini guncelleme (calisan yontem)
@@ -315,7 +319,8 @@ iyzico'da gercekten var oldugunu ve tahsil edilecek bedelin sayfada yazan bedell
 ortustugunu olcer. Tek seferlik paketlerde iyzico'da plan olmadigi icin yalnizca
 `tutar_kurus` alaninin gecerli oldugu denetlenir; o paketler tek satirda listelenir
 ve bulgu sayilmaz.
-Sayfada "+KDV" yazdigi icin kiyas KDV'li tutar uzerinden yapilir (2.980 -> 3576).
+2026-09-16'dan beri sayfa tutari KDV'sizdir ve iyzico ayni tutari ceker; "+KDV" yazan
+eski bir kayit gelirse kiyas KDV'li tutar uzerinden yapilir.
 
 Tahsilat yapmaz, abonelik acmaz, iptal etmez; yalniz `GET /v2/subscription/pricing-plans/<ref>`.
 Yeni paket acildiktan sonra ve fiyat degisiminde kosulur. Canli test odemesinin YERINE
