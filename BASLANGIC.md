@@ -196,6 +196,16 @@ alanli slug eklenir (adim 2), sonra 3 ve 4 aynidir. Tutar KDV DAHIL girilir.
 
 Slug'i katalogdan silmek sayfayi 404 yapar; test paketleri boyle kapatilir.
 
+## Web sitesi bakim aboneligi (2026-09-16)
+
+Sayfa `public/web-sitesi-bakim/index.html` -> `https://dolunay.ai/web-sitesi-bakim/`,
+odeme `/odeme/web-sitesi-bakim` (katalog slug'i `web-sitesi-bakim`, iyzico urunu
+`1e3bc964-...`, plan `33e59f3d-0814-4c02-a14d-d431df5015fd`, aylik 1.000 TRY, KDV yok).
+15.000 TL'lik tek seferlik satistan AYRI odemedir. Dolunay'in karari: link musteriye
+site TESLIMINDEN BIR AY SONRA elden gonderilir; yapim surerken bakim cekilmez.
+`web-sitesi` sayfasindaki fiyat kartinda bu ucret yazili. Kapsam alti madde, Dolunay'in
+verdigi liste; genisletilmez.
+
 ## Tuzaklar (canlida yasandi)
 
 - **Abonelikte yalniz KREDI KARTI calisir.** Banka karti iyzico tarafindan
