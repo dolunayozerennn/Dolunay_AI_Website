@@ -30,7 +30,7 @@ Yeni bir SEO/GEO görevi alan ajan ÖNCE burayı okur, işi bitince "DURUM" tabl
 | F3 | /cozumler/hizmetler canonical'ı /cozumler'i gösteriyor | 293 kelimelik kendi içeriği var, kendi adına sıralanamaz | Faz 1'de |
 | F4 | Blog meta description kelime ortasından kesik | 9 yazıda 160 karakterde ham kesim ("...v", "...yep") | Faz 1'de |
 | F5 | Sitemap'te 7 sözleşme sayfası + /cozumler/hizmetler yok | sitemap 18 URL | Faz 1'de |
-| F6 | Mobil LCP eşiğin üstünde | ana sayfa 3,1 sn / ai-factory 4,0 sn (Google eşiği 2,5). Masaüstü 0,6 / 1,2 | Faz 1'de |
+| F6 | Mobil LCP eşiğin üstünde | ana sayfa 3,1 sn / ai-factory 4,0 sn (Google eşiği 2,5). Masaüstü 0,6 / 1,2 | AÇIK — 2 tur denendi (görsel + animasyon), ikisi de ölçülebilir kazanç vermedi; ayrıntı aşağıda |
 | F7 | Sitemap lastmod = derleme tarihi | 9 statik sayfanın hepsi 2026-09-16; her yayında hepsi değişmiş görünüyor, Google sinyali çöpe atar | TAMAM — git commit tarihine bağlandı, fallback: mtime -> now |
 | F8 | 18 sayfanın 7'si Google'da yok | 11 indexli, 4 keşfedildi-indexlenmedi, 3 "URL is unknown to Google" | AÇIK |
 | F9 | 4 dil görünüyor, gerçekte 1 dil var | dil değiştirici sadece localStorage; hreflang yok; arama motoru yalnız TR görüyor | AÇIK — karar: EN gerçek yapılacak |
@@ -45,6 +45,34 @@ Yeni bir SEO/GEO görevi alan ajan ÖNCE burayı okur, işi bitince "DURUM" tabl
 - /egitimler/ai-factory LCP elemanı: Cloudinary `<video>` (poster 114 KB jpg).
   Faz: TTFB 612ms · Load Delay 533ms · Load Time 947ms · **Render Delay 1924ms (%48)**
 - Her iki sayfa: 88 KB + 44 KB iki woff2 font (132 KB). Render-blocking CSS ~150-160ms.
+
+### F6 — 2026-09-17 hız turu (`hiz-mobil` dalı, kendi lokal build+Lighthouse@12 mobil simulate, 3-6 koşu medyanı)
+- Metodoloji notu: `npx serve out -s` (SPA fallback) TÜM rotalara `index.html` döndürüyor —
+  ai-factory ölçümü yanlışlıkla ana sayfayı ölçüyordu. `-s` bayrağı OLMADAN doğrulandı.
+- Ana sayfa baseline (6 koşu): LCP medyan 3754ms, **Render Delay medyan 2632ms (%70)**. LCP
+  elemanı yine hero görseli. TTFB Lighthouse'ta sabit ~452ms (throttle profilinin tabanı).
+  Gerçek (throttle'sız) ana thread işi: scriptEval 204ms, styleLayout 111ms, bootup 213ms.
+- **Denendi ve GERİ ALINDI:** HeroSectionElevate'teki 6 adet framer-motion `<Reveal>`
+  (motion.div, initial/animate) saf CSS keyframe'e (`.hero-reveal`, globals.css) çevrildi —
+  LCP elemanının kendisi zaten animasyonun dışında ama hydration'da 6 motion.div'in
+  ölçüm/stil işi ana thread'i meşgul ediyordu. Sonuç: gerçek ana thread işi düştü
+  (scriptEval 204→153ms, styleLayout 111→79ms, bootup 213→130ms, %25-39 kazanç) AMA
+  Lighthouse'un simüle LCP faz hesabında **Render Delay medyanı 2632→2820ms'ye çıktı**
+  (6/6 koşu regresyon yönünde, gürültü değil). Sebep: Lantern'in simülasyonu CSS dosya
+  boyutu/ağ bağımlılık grafiğine gerçek ana-thread kazancından daha duyarlı davranıyor;
+  gerçek kullanıcı deneyimi muhtemelen iyileşti ama ÖLÇÜLEBİLİR LCP kazancı çıkmadı, KATI
+  bütçe kuralına göre geri alındı (`git stash drop`, kod baseline'a döndü).
+- /egitimler/ai-factory baseline (aynı yöntem): yerel testte darboğaz **Render Delay değil,
+  Load Time** (~2,5-3s) — video/poster gerçek Cloudinary CDN'inden çekiliyor, bu da yerel
+  headless testte dış ağ gecikmesine bağlı ve önceki turun `preload`+`fetchPriority`
+  denemesiyle (BULGULAR'daki "ölçülebilir kazanç ÇIKMADI" notu) aynı alanı tekrar yokluyor.
+  Bu turda tekrar denenmedi.
+- **Kalan gerçek darboğaz:** ana sayfanın render-blocking Tailwind CSS'i (~14,8 KB, tek
+  dosya) + next/font @font-face CSS'i (~1,3 KB, gerekli/dokunulmaz). İkisi de sayfa için
+  zorunlu; ucuza küçültülemiyor (critical-CSS inline etme gibi bir çözüm gerekir, bu ölçekte
+  "ucuz" değil). **Sonraki turun ai-factory'nin ANA SAYFAYI ÖLÇMEDİĞİNDEN emin olması
+  şart** (yukarıdaki `-s` bayrağı tuzağı).
+- Durum: **AÇIK** — F6 hedefe ulaşmadı, 80/20 sınırı içinde kaldı, kovalanmadı.
 
 ### F8 teşhisi — teknik engel YOK
 - /egitimler/ai-factory ve /blog/lawchat-3: "URL is unknown to Google", 7 haftadır hiç taranmamış
