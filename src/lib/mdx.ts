@@ -5,6 +5,22 @@ import readingTime from 'reading-time'
 
 const postsDirectory = path.join(process.cwd(), 'src/content/blog')
 
+// Meta description sinirini asan excerpt'i KELIME SINIRINDA kesip "..." ekler.
+// Frontmatter'a elle 160 karakterde ham kesilmis bir excerpt yazilirsa (ör.
+// "...v", "...yep" gibi kelime ortasi kesimler) canliya boyle cikiyordu; bu
+// fonksiyon hem gecmisteki hem gelecekteki uzun excerpt'leri guvenli hale
+// getirir.
+function truncateExcerpt(excerpt: string, maxLen = 155): string {
+  const trimmed = excerpt.trim()
+  if (trimmed.length <= maxLen) {
+    return trimmed
+  }
+  const cut = trimmed.slice(0, maxLen)
+  const lastSpace = cut.lastIndexOf(' ')
+  const safeCut = lastSpace > 0 ? cut.slice(0, lastSpace) : cut
+  return `${safeCut.replace(/[.,;:\s]+$/, '')}...`
+}
+
 export interface Post {
   slug: string
   title: string
@@ -50,7 +66,7 @@ export function getPosts(): Post[] {
         title: matterResult.data.title || slug.replace(/-/g, ' '),
         date: matterResult.data.date || new Date().toISOString(),
         coverImage: matterResult.data.coverImage,
-        excerpt: matterResult.data.excerpt || '',
+        excerpt: truncateExcerpt(matterResult.data.excerpt || ''),
         tags: matterResult.data.tags || [],
         content: matterResult.content,
         readingMinutes: Math.ceil(stats.minutes),
@@ -88,7 +104,7 @@ export function getPostBySlug(slug: string): Post | null {
       title: matterResult.data.title || slug.replace(/-/g, ' '),
       date: matterResult.data.date || new Date().toISOString(),
       coverImage: matterResult.data.coverImage,
-      excerpt: matterResult.data.excerpt || '',
+      excerpt: truncateExcerpt(matterResult.data.excerpt || ''),
       tags: matterResult.data.tags || [],
       content: matterResult.content,
       readingMinutes: Math.ceil(stats.minutes),
