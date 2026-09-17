@@ -4,6 +4,7 @@ import { useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowUpRight, Check, X, Download, Users, Video, MessageCircle, Wrench, Send, Play } from 'lucide-react'
 import { useTranslation } from '@/i18n/i18n'
+import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema'
 
 // İçerik kaynağı: Skool topluluk sayfasının kendi metni (skool.com/yapay-zeka-factory/about).
 // Buradaki hiçbir vaat uydurulmadı; sayısal bilgiler (fiyat, üye sayısı, yayın sıklığı)
@@ -56,6 +57,12 @@ export default function AIFactoryPage() {
 
   return (
     <div className="relative">
+      <BreadcrumbSchema
+        items={[
+          { name: 'Ana Sayfa', url: 'https://dolunay.ai' },
+          { name: 'AI Factory' },
+        ]}
+      />
       {/* React 19 <link> etiketini otomatik <head>'e tasir. Video poster'i
           tarayicinin dogal <video poster> yuklemesiyle DUSUK oncelikte
           iniyordu, LCP'yi geciktiriyordu; preload + fetchPriority ile

@@ -101,6 +101,9 @@ export default function RootLayout({
             __html: JSON.stringify({
               '@context': 'https://schema.org',
               '@type': 'Organization',
+              // F11: WebSite/Service/Article gibi diger sayfalardaki semalar
+              // bu Organization'i COGALTMAK yerine bu @id'ye referansla baglanir.
+              '@id': 'https://dolunay.ai/#organization',
               name: 'dolunay.ai',
               url: 'https://dolunay.ai',
               logo: 'https://dolunay.ai/favicon.svg',

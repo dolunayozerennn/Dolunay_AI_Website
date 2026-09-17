@@ -5,6 +5,7 @@ import { Bot, ArrowRight, Briefcase, Sparkles, GraduationCap } from 'lucide-reac
 import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslation } from '@/i18n/i18n';
+import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 50, filter: 'blur(4px)' },
@@ -111,6 +112,12 @@ export default function AboutV3() {
   const { t } = useTranslation();
   return (
     <div className="pt-24 pb-12">
+      <BreadcrumbSchema
+        items={[
+          { name: 'Ana Sayfa', url: 'https://dolunay.ai' },
+          { name: 'Hakkımızda' },
+        ]}
+      />
       <section className="py-12 relative">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#4F8BFF]/5 blur-[150px] rounded-full pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#4F8BFF]/5 blur-[120px] rounded-full pointer-events-none" />

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { PromptExperience } from './PromptExperience'
+import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema'
 
 export const metadata: Metadata = {
   title: '3 Mini Ürün · ScrapeUnblocker Master Promptları',
@@ -18,5 +19,15 @@ export const metadata: Metadata = {
 }
 
 export default function ScrapeUnblockerResourcesPage() {
-  return <PromptExperience />
+  return (
+    <>
+      <BreadcrumbSchema
+        items={[
+          { name: 'Ana Sayfa', url: 'https://dolunay.ai' },
+          { name: 'ScrapeUnblocker' },
+        ]}
+      />
+      <PromptExperience />
+    </>
+  )
 }

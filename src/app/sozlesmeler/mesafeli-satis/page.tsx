@@ -1,10 +1,17 @@
 'use client';
 
 import { TurkishOnlyDocument } from '@/components/LegalNotice';
+import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema';
 
 export default function MesafeliSatisSozlesmesiPage() {
   return (
     <div className="pt-32 pb-20 min-h-screen">
+      <BreadcrumbSchema
+        items={[
+          { name: 'Ana Sayfa', url: 'https://dolunay.ai' },
+          { name: 'Mesafeli Satış Sözleşmesi' },
+        ]}
+      />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <TurkishOnlyDocument />
         <h1 className="text-3xl md:text-4xl font-bold mb-8 text-white">Mesafeli Satış Sözleşmesi</h1>

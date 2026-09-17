@@ -10,6 +10,7 @@ import {
   Globe, BarChart3, Activity, PieChart, Sparkles
 } from 'lucide-react';
 import { useTranslation, type Language } from '@/i18n/i18n';
+import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema';
 
 // Rakamlar dile gore bicimlenir: 250.000+ (tr/es) ↔ 250,000+ (en/zh).
 const NUMBER_LOCALE: Record<Language, string> = {
@@ -374,6 +375,12 @@ export default function CollaborationsPage() {
 
   return (
     <div>
+      <BreadcrumbSchema
+        items={[
+          { name: 'Ana Sayfa', url: 'https://dolunay.ai' },
+          { name: 'İş Birlikleri' },
+        ]}
+      />
 
       {/* ══════════════════════════════════════════════════════════════════════ */}
       {/*  HERO — MEDIA KIT BANNER                                            */}

@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import Image from 'next/image'
 import { BackToBlog, PostMetaLine, PostCta, TurkishOnlyNotice } from '@/components/blog/BlogChrome'
+import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema'
 import type { Metadata } from 'next'
 
 // Next.js params type for Next.js 15+ dynamic routes (often requires resolution)
@@ -122,9 +123,28 @@ export default async function BlogPost(
               '@type': 'Person',
               name: 'Dolunay Özeren',
               url: 'https://dolunay.ai/hakkimizda'
-            }]
+            }],
+            // F12: publisher, kok layout'taki Organization ile AYNI @id'yi tasir
+            // (JSON-LD ayni @id'li dugumleri sayfa genelinde birlestirir), ustune
+            // Article'in kendi ihtiyaci olan logo alani eklenir; ayrica cogaltma yok.
+            publisher: {
+              '@id': 'https://dolunay.ai/#organization',
+              '@type': 'Organization',
+              name: 'dolunay.ai',
+              logo: {
+                '@type': 'ImageObject',
+                url: 'https://dolunay.ai/favicon.svg',
+              },
+            },
           })
         }}
+      />
+      <BreadcrumbSchema
+        items={[
+          { name: 'Ana Sayfa', url: 'https://dolunay.ai' },
+          { name: 'Blog', url: 'https://dolunay.ai/blog' },
+          { name: post.title },
+        ]}
       />
       {/* Blog Article Progress Bar Component (Optional for future) */}
       
