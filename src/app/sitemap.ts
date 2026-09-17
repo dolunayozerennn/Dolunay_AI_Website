@@ -22,7 +22,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/kaynaklar/scrapeunblocker',
     '/cozumler',
     '/cozumler/otomasyon-abonelik',
-    // '/cozumler/hizmetler' bilerek YOK: govdesi /cozumler'in kopyasi, canonical oraya bakiyor.
+    // '/cozumler/hizmetler' artik kendi canonical'ina sahip (layout.tsx'teki
+    // 2026-09-17 duzeltmesi), o yuzden sitemap'e de girdi.
+    '/cozumler/hizmetler',
     // '/abonelik/<musteri>' bilerek YOK: musteriye ozel bedel iceriyor, noindex.
     '/egitimler/ai-factory',
     '/egitimler/kurumsal-egitimler',
@@ -35,5 +37,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: route === '' ? 1 : 0.9,
   }))
 
-  return [...staticUrls, ...blogUrls]
+  // Sozlesme sayfalari (KVKK, mesafeli satis vb.): Google'da zaten gorunuyor,
+  // dusuk oncelikle sitemap'e eklenir ki tarama onlari da kapsasin.
+  const legalUrls = [
+    '/sozlesmeler/kvkk',
+    '/sozlesmeler/mesafeli-satis',
+    '/sozlesmeler/artifex-kosullar',
+    '/sozlesmeler/artifex-gizlilik',
+    '/sozlesmeler/artifex-acik-riza',
+    '/sozlesmeler/artifex-veri-silme',
+    '/sozlesmeler/artifex-kvkk-aydinlatma',
+  ].map((route) => ({
+    url: `${baseUrl}${route}`,
+    lastModified: new Date(),
+    changeFrequency: 'yearly' as const,
+    priority: 0.3,
+  }))
+
+  return [...staticUrls, ...blogUrls, ...legalUrls]
 }
