@@ -19,7 +19,10 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin', 'latin-ext'],
   variable: '--font-jetbrains-mono',
   display: 'swap',
-  weight: ['400', '500', '600'],
+  // 500/600 kaldirildi: repoda font-mono hicbir yerde bir agirlik utility'siyle
+  // (font-medium/font-semibold) birlikte kullanilmiyor, hep varsayilan 400
+  // agirlikta cagriliyor. Kullanilmayan iki agirlik indirilen woff2'yi sisiriyordu.
+  weight: ['400'],
 })
 
 export const metadata: Metadata = {
@@ -84,6 +87,9 @@ export default function RootLayout({
     <html lang="tr" className={`${interTight.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
       <head>
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        {/* .ico fallback: bazi tarayici/bot'lar svg destegi olsa bile hala
+            /favicon.ico'yu dogrudan ister, o adres yoksa 404 loglanir. */}
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="32x32" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.webmanifest" />
         <meta name="theme-color" content="#08090C" />
@@ -95,6 +101,9 @@ export default function RootLayout({
             __html: JSON.stringify({
               '@context': 'https://schema.org',
               '@type': 'Organization',
+              // F11: WebSite/Service/Article gibi diger sayfalardaki semalar
+              // bu Organization'i COGALTMAK yerine bu @id'ye referansla baglanir.
+              '@id': 'https://dolunay.ai/#organization',
               name: 'dolunay.ai',
               url: 'https://dolunay.ai',
               logo: 'https://dolunay.ai/favicon.svg',

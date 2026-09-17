@@ -32,6 +32,12 @@ export function HeroSectionElevate({ bgImage }: { bgImage: string }) {
         alt="Dolunay AI Hero"
         fill
         priority
+        // fetchPriority next/image'de priority=true ile zaten "high" oluyor,
+        // burada acikca da yazildi. sizes yoktu: fill modunda tarayici hangi
+        // genislikte gosterecegini bilmeden en buyuk varyanti indiriyordu,
+        // bu da mobil LCP'yi (Google esigi 2,5sn) 3,1sn'ye kadar sisiriyordu.
+        fetchPriority="high"
+        sizes="100vw"
         className="object-cover object-center absolute inset-0 z-0"
       />
       {/* darken + cool blue tint to harmonize portrait with night/ash palette */}

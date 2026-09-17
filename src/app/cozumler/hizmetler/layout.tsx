@@ -1,9 +1,9 @@
-// KOPYA ICERIK KONSOLIDASYONU: bu sayfanin govde metninin tamami /cozumler
-// icinde de aynen var (17 cumlenin 15'i ortak). Ikisi de indekslenirse Google
-// birini kopya sayip eler ve siralama sinyali ikiye bolunur. Bu yuzden asil
-// adres /cozumler ilan edilir. Sayfa ziyaretciye acik kalir, sadece arama
-// motoru ikisini tek sayfa sayar. Kendi basina siralanmasi isteniyorsa
-// once govde metninin /cozumler'den FARKLILASMASI gerekir.
+// DUZELTME (2026-09-17): bu sayfa kendi H1'ine, kendi basligina ve 293
+// kelimelik kendi govde metnine sahip; canonical'i /cozumler'e gosterince
+// Google bu adresi hic kendi adina siralamiyordu. Kendi kanonikligini alsin
+// diye canonical KENDI adresine cevrildi. './' relative kalibi projede
+// varsayilan (bkz. kok layout.tsx) — metadataBase + o anki yol olarak
+// cozulup https://dolunay.ai/cozumler/hizmetler verir.
 import { Metadata } from 'next'
 
 // Not: '/cozumler' layout'u kendi title'ini duz metin olarak tanimladigi icin
@@ -12,7 +12,7 @@ import { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Yapay Zeka Danışmanlık ve Otomasyon Hizmetleri | dolunay.ai',
   description: 'Dolunay.ai işletmelere yönelik profesyonel yapay zeka çözümleri ve hizmetleri.',
-  alternates: { canonical: '/cozumler' },
+  alternates: { canonical: './' },
   openGraph: {
     title: 'Hizmetler | dolunay.ai',
     description: 'Dolunay.ai işletmelere yönelik profesyonel yapay zeka çözümleri ve hizmetleri.',

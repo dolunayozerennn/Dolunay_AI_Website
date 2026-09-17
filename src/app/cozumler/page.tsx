@@ -9,6 +9,7 @@ import {
 import { ServicesSection } from '@/components/sections/ServicesSection';
 import { AbonelikSeridi } from '@/components/AbonelikSeridi';
 import { useTranslation } from '@/i18n/i18n';
+import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema';
 
 function SkoolIcon({ className }: { className?: string }) {
   return (
@@ -97,6 +98,28 @@ export default function SolutionsPage() {
 
   return (
     <div className="pt-24 pb-12">
+      <BreadcrumbSchema
+        items={[
+          { name: 'Ana Sayfa', url: 'https://dolunay.ai' },
+          { name: 'Çözümler' },
+        ]}
+      />
+      {/* F11: sayfadaki GERCEK metinden (solutions.customItemTitle/Desc) alinir,
+          uydurma alan yok. provider Organization'i cogaltmiyor, @id ile bagli. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Service',
+            name: 'Danışmanlık & Özel Çözümler',
+            description: 'Kurumsal firmalar ve hacimli operasyonlar için terzi işi yapay zeka altyapıları. Şirketinize özel AI otomasyon ve danışmanlık hizmetleri.',
+            serviceType: 'Yapay Zeka Danışmanlığı ve Otomasyonu',
+            provider: { '@id': 'https://dolunay.ai/#organization' },
+            areaServed: { '@type': 'Country', name: 'Türkiye' },
+          }),
+        }}
+      />
       {/* ÇÖZÜMLER */}
       <section className="py-12 relative" id="solutions">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

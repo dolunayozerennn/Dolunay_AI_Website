@@ -1,5 +1,6 @@
 import { getPosts } from '@/lib/mdx'
 import { BlogIndex } from '@/components/blog/BlogIndex'
+import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -19,6 +20,12 @@ export default function BlogPage() {
 
   return (
     <div className="min-h-screen bg-[#08090C] relative pt-12 pb-24">
+      <BreadcrumbSchema
+        items={[
+          { name: 'Ana Sayfa', url: 'https://dolunay.ai' },
+          { name: 'Blog' },
+        ]}
+      />
       {/* Background Glows */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[#4F8BFF]/5 blur-[120px] rounded-[100%] pointer-events-none" />
 

@@ -93,7 +93,10 @@ export function Footer() {
               {t('footer.securePayment')}
             </span>
             <Image
-              src="/odeme/iyzico-logo-band.svg"
+              // Dosya /brand/ altinda: /odeme/* netlify.toml'da force=true ile
+              // odeme-baslat fonksiyonuna yonleniyor, statik dosyayi da yutup
+              // logoyu 404'e dusuruyordu. Odeme akisina dokunmadan cozum bu.
+              src="/brand/iyzico-logo-band.svg"
               alt="iyzico ile Öde · Mastercard · Visa · American Express · troy"
               width={456}
               height={32}

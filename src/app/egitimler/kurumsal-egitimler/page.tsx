@@ -6,6 +6,7 @@ import type { MouseEvent } from 'react'
 import Image from 'next/image'
 import { GraduationCap, Building, Target, Presentation, Briefcase, Zap, CheckCircle2 } from 'lucide-react'
 import { useTranslation } from '@/i18n/i18n'
+import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 50, filter: 'blur(4px)' },
@@ -156,6 +157,12 @@ export default function CorporateTrainingsPage() {
 
   return (
     <div className="pt-32 pb-24 relative min-h-screen bg-[#08090C] overflow-hidden">
+      <BreadcrumbSchema
+        items={[
+          { name: 'Ana Sayfa', url: 'https://dolunay.ai' },
+          { name: 'Kurumsal Eğitimler' },
+        ]}
+      />
       {/* Background Header Glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-[#4F8BFF]/5 blur-[120px] rounded-[100%] pointer-events-none" />
 

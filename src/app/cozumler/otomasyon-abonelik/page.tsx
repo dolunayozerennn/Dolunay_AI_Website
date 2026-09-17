@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { RefreshCw, CreditCard, XCircle, Check, Mail, Star } from 'lucide-react'
 import { AbonelikKosullari } from '@/components/AbonelikKosullari'
+import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema'
 
 export const metadata: Metadata = {
   title: 'Otomasyon Aboneliği | dolunay.ai',
@@ -66,6 +67,29 @@ const rozetler = [
 export default function OtomasyonAbonelikPage() {
   return (
     <div className="pt-32 pb-28 relative min-h-screen bg-[#08090C] overflow-hidden">
+      <BreadcrumbSchema
+        items={[
+          { name: 'Ana Sayfa', url: 'https://dolunay.ai' },
+          { name: 'Çözümler', url: 'https://dolunay.ai/cozumler' },
+          { name: 'Otomasyon Aboneliği' },
+        ]}
+      />
+      {/* F11: sayfadaki gercek metinden (H1 + giris paragrafi), fiyat beyan
+          edilmez — sayfa da "sabit bir liste fiyati yayinlamiyoruz" diyor. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Service',
+            name: 'Yapay Zeka Otomasyon Aboneliği',
+            description: 'Kurulan yapay zeka otomasyonlarının aylık izlenmesi, güncellenmesi ve geliştirilmesi hizmeti.',
+            serviceType: 'Otomasyon Bakım ve Yönetim Aboneliği',
+            provider: { '@id': 'https://dolunay.ai/#organization' },
+            areaServed: { '@type': 'Country', name: 'Türkiye' },
+          }),
+        }}
+      />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-[#4F8BFF]/5 blur-[120px] rounded-[100%] pointer-events-none" />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">

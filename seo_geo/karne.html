@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>dolunay.ai · SEO + GEO Karne</title>
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiMyMmM1NWUiLz48dGV4dCB4PSIzMiIgeT0iNDQiIGZvbnQtc2l6ZT0iMzQiIHRleHQtYW5jaG9yPSJtaWRkbGUiPvCflI08L3RleHQ+PC9zdmc+">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0b1120;color:#e2e8f0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif;padding:40px 28px 80px;line-height:1.5}
+.wrap{max-width:1180px;margin:0 auto}
+h1{font-size:40px;font-weight:700;color:#f1f5f9;letter-spacing:-.02em}
+.sub{color:#94a3b8;font-size:15px;margin-top:6px}
+.verdict{margin:28px 0 44px;background:#1e293b;border:1px solid #334155;border-left:5px solid #22c55e;border-radius:12px;padding:22px 26px}
+.verdict b{color:#f1f5f9;font-size:23px;font-weight:600;display:block}
+.verdict span{color:#94a3b8;font-size:15px;display:block;margin-top:7px}
+h2{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#94a3b8;font-weight:600;margin:52px 0 20px}
+.rings{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+.ring{background:#1e293b;border:1px solid #334155;border-radius:14px;padding:20px 12px;text-align:center}
+.ring svg{display:block;margin:0 auto 10px}
+.ring .num{font-size:30px;font-weight:700;fill:#f1f5f9}
+.ring .lbl{font-size:13px;color:#cbd5e1;font-weight:500;line-height:1.35}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.card{background:#1e293b;border:1px solid #334155;border-radius:14px;padding:24px 26px}
+.card.red{border-left:5px solid #ef4444}
+.card.grn{border-left:5px solid #22c55e}
+.card h3{font-size:16px;color:#f1f5f9;margin-bottom:16px;font-weight:600}
+.card ul{list-style:none}
+.card li{padding:8px 0 8px 28px;position:relative;font-size:15px;border-top:1px solid #253044}
+.card li:first-child{border-top:none}
+.card li:before{position:absolute;left:0;font-weight:700}
+.grn li:before{content:"✓";color:#22c55e}
+.red li:before{content:"×";color:#ef4444;font-size:19px;line-height:1.2}
+.card li small{display:block;color:#94a3b8;font-size:13px;margin-top:2px}
+.bars{background:#1e293b;border:1px solid #334155;border-radius:14px;padding:28px 30px;position:relative}
+.bar{display:grid;grid-template-columns:190px 1fr 74px;align-items:center;gap:16px;margin-bottom:14px}
+.bar .n{font-size:14px;color:#cbd5e1}
+.track{height:26px;background:#0b1120;border-radius:6px;position:relative;overflow:hidden}
+.fill{height:100%;border-radius:6px}
+.bar .v{font-size:17px;font-weight:700;text-align:right}
+.ok{color:#22c55e}.bad{color:#ef4444}
+.limit{position:absolute;top:0;bottom:0;width:2px;background:#f59e0b;z-index:2}
+.limitlbl{color:#f59e0b;font-size:12px;margin-top:14px;text-align:center}
+.q{display:grid;grid-template-columns:230px 1fr 54px;align-items:center;gap:14px;margin-bottom:9px;font-size:14px}
+.q .qt{color:#cbd5e1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q .qv{text-align:right;color:#94a3b8;font-size:13px}
+.qbar{height:20px;background:#3b82f6;border-radius:4px}
+.qbar.brand{background:#3b82f6}
+.qbar.gen{background:#475569}
+.callout{margin-top:22px;padding:16px 20px;background:#0b1120;border:1px solid #334155;border-radius:10px;color:#f1f5f9;font-size:16px}
+.callout span{color:#94a3b8;font-size:14px;display:block;margin-top:5px}
+.acts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+.act{background:#1e293b;border:1px solid #334155;border-radius:14px;padding:22px 24px}
+.act h4{font-size:15px;font-weight:600;margin-bottom:4px}
+.act .when{font-size:12px;color:#94a3b8;margin-bottom:16px;letter-spacing:.06em;text-transform:uppercase}
+.act ol{list-style:none;counter-reset:a}
+.act li{counter-increment:a;padding:11px 0 11px 30px;position:relative;font-size:14.5px;border-top:1px solid #253044}
+.act li:first-child{border-top:none}
+.act li:before{content:counter(a);position:absolute;left:0;top:11px;width:20px;height:20px;border-radius:50%;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.a1 li:before{background:#ef4444;color:#fff}
+.a2 li:before{background:#f59e0b;color:#0b1120}
+.a3 li:before{background:#334155;color:#94a3b8;content:"×"}
+.act li small{display:block;color:#94a3b8;font-size:12.5px;margin-top:3px}
+.a1 h4{color:#ef4444}.a2 h4{color:#f59e0b}.a3 h4{color:#94a3b8}
+.foot{margin-top:56px;padding-top:22px;border-top:1px solid #253044;color:#94a3b8;font-size:13px}
+@media(max-width:1000px){.rings{grid-template-columns:repeat(3,1fr)}.cols,.acts{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>dolunay.ai · SEO + GEO</h1>
+<div class="sub">17 Eylül 2026 · canlı siteden ölçüldü · Lighthouse + Search Console + kaynak kodu</div>
+
+<div class="verdict">
+  <b>Teknik taraf sağlam. Eksik olan teknik değil, içerik.</b>
+  <span>Google teknik SEO'ya üç sayfada da 100/100 verdi. Ama site 90 günde neredeyse yalnız kendi adıyla arananlara çıktı — konu bazlı arama trafiği yok denecek kadar az.</span>
+</div>
+
+<h2>Karne</h2>
+<div class="rings">
+  <div class="ring">
+    <svg width="86" height="86" viewBox="0 0 86 86"><circle cx="43" cy="43" r="36" fill="none" stroke="#0b1120" stroke-width="9"/><circle cx="43" cy="43" r="36" fill="none" stroke="#22c55e" stroke-width="9" stroke-dasharray="226" stroke-dashoffset="23" stroke-linecap="round" transform="rotate(-90 43 43)"/><text class="num" x="43" y="53" text-anchor="middle">9</text></svg>
+    <div class="lbl">Teknik<br>temel</div>
+  </div>
+  <div class="ring">
+    <svg width="86" height="86" viewBox="0 0 86 86"><circle cx="43" cy="43" r="36" fill="none" stroke="#0b1120" stroke-width="9"/><circle cx="43" cy="43" r="36" fill="none" stroke="#22c55e" stroke-width="9" stroke-dasharray="226" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 43 43)"/><text class="num" x="43" y="53" text-anchor="middle">10</text></svg>
+    <div class="lbl">AI botlara<br>erişim</div>
+  </div>
+  <div class="ring">
+    <svg width="86" height="86" viewBox="0 0 86 86"><circle cx="43" cy="43" r="36" fill="none" stroke="#0b1120" stroke-width="9"/><circle cx="43" cy="43" r="36" fill="none" stroke="#f59e0b" stroke-width="9" stroke-dasharray="226" stroke-dashoffset="90" stroke-linecap="round" transform="rotate(-90 43 43)"/><text class="num" x="43" y="53" text-anchor="middle">6</text></svg>
+    <div class="lbl">Yapılandırılmış<br>veri</div>
+  </div>
+  <div class="ring">
+    <svg width="86" height="86" viewBox="0 0 86 86"><circle cx="43" cy="43" r="36" fill="none" stroke="#0b1120" stroke-width="9"/><circle cx="43" cy="43" r="36" fill="none" stroke="#f59e0b" stroke-width="9" stroke-dasharray="226" stroke-dashoffset="68" stroke-linecap="round" transform="rotate(-90 43 43)"/><text class="num" x="43" y="53" text-anchor="middle">7</text></svg>
+    <div class="lbl">Hız<br>(mobil zayıf)</div>
+  </div>
+  <div class="ring">
+    <svg width="86" height="86" viewBox="0 0 86 86"><circle cx="43" cy="43" r="36" fill="none" stroke="#0b1120" stroke-width="9"/><circle cx="43" cy="43" r="36" fill="none" stroke="#ef4444" stroke-width="9" stroke-dasharray="226" stroke-dashoffset="158" stroke-linecap="round" transform="rotate(-90 43 43)"/><text class="num" x="43" y="53" text-anchor="middle">3</text></svg>
+    <div class="lbl">GEO içerik<br>biçimi</div>
+  </div>
+  <div class="ring">
+    <svg width="86" height="86" viewBox="0 0 86 86"><circle cx="43" cy="43" r="36" fill="none" stroke="#0b1120" stroke-width="9"/><circle cx="43" cy="43" r="36" fill="none" stroke="#ef4444" stroke-width="9" stroke-dasharray="226" stroke-dashoffset="181" stroke-linecap="round" transform="rotate(-90 43 43)"/><text class="num" x="43" y="53" text-anchor="middle">2</text></svg>
+    <div class="lbl">Çok dillilik<br>(sahte)</div>
+  </div>
+</div>
+
+<h2>Ne çalışıyor · ne kırık</h2>
+<div class="cols">
+  <div class="card grn">
+    <h3>Zaten doğru yapılmış</h3>
+    <ul>
+      <li>Google teknik SEO skoru 100/100<small>ana sayfa, eğitim sayfası, blog yazısı — üçü de</small></li>
+      <li>Her sayfanın kendi başlığı, açıklaması, paylaşım görseli</li>
+      <li>Canonical her sayfada doğru<small>tek istisna hizmetler sayfası</small></li>
+      <li>ChatGPT, Claude, Perplexity botlarının hepsi açık<small>yanlışlıkla engellenen hiçbir bot yok</small></li>
+      <li>Site JavaScript'siz de tam okunuyor<small>AI botları içeriği eksiksiz görüyor — kritik</small></li>
+      <li>Organizasyon, kişi, kurs, makale şeması kurulu</li>
+      <li>Sitemap canlı, 18 adres, hepsi tarihli</li>
+      <li>Gizli sayfalar bilerek dizin dışı<small>panel, ödeme, video sayfaları</small></li>
+      <li>Görseller webp ve hafif, kırık yönlendirme yok</li>
+    </ul>
+  </div>
+  <div class="card red">
+    <h3>Kırık ya da eksik</h3>
+    <ul>
+      <li>Ödeme logosu her sayfada 404<small>iyzico güven bandı hiçbir sayfada görünmüyor</small></li>
+      <li>Mobilde açılış hızı sınırın üstünde<small>Google eşiği 2,5 sn — biz 3,1 ve 4,0</small></li>
+      <li>4 dil görünüyor, gerçekte 1 dil var<small>dil değiştirici arama motoruna hiç yansımıyor</small></li>
+      <li>Hizmetler sayfası kendi adına yarışmıyor<small>canonical'ı başka sayfayı işaret ediyor</small></li>
+      <li>18 sayfanın 7'si Google'da yok<small>çoğu blog yazısı</small></li>
+      <li>Blog açıklamaları kelime ortasından kesik<small>"...v", "...yep" diye bitiyor</small></li>
+      <li>Blog yazılarında soru-cevap yapısı yok<small>AI motorlarının alıntıladığı biçim bu</small></li>
+      <li>Breadcrumb, hizmet ve site şeması yok</li>
+      <li>favicon.ico 404</li>
+    </ul>
+  </div>
+</div>
+
+<h2>Hız · masaüstü mükemmel, mobil sınıfta kaldı</h2>
+<div class="bars">
+  <div class="bar"><div class="n">Ana sayfa · masaüstü</div><div class="track"><div class="fill" style="width:12%;background:#22c55e"></div><div class="limit" style="left:50%"></div></div><div class="v ok">0,6 sn</div></div>
+  <div class="bar"><div class="n">Eğitim sayfası · masaüstü</div><div class="track"><div class="fill" style="width:24%;background:#22c55e"></div><div class="limit" style="left:50%"></div></div><div class="v ok">1,2 sn</div></div>
+  <div class="bar"><div class="n">Ana sayfa · mobil</div><div class="track"><div class="fill" style="width:62%;background:#ef4444"></div><div class="limit" style="left:50%"></div></div><div class="v bad">3,1 sn</div></div>
+  <div class="bar"><div class="n">Eğitim sayfası · mobil</div><div class="track"><div class="fill" style="width:80%;background:#ef4444"></div><div class="limit" style="left:50%"></div></div><div class="v bad">4,0 sn</div></div>
+  <div class="limitlbl">sarı çizgi = Google'ın 2,5 sn eşiği · Google mobili baz alır</div>
+</div>
+
+<h2>Aramada gerçekte neredeyiz · son 90 gün</h2>
+<div class="bars">
+  <div class="q"><div class="qt">dolunay özeren</div><div><div class="qbar brand" style="width:100%"></div></div><div class="qv">97</div></div>
+  <div class="q"><div class="qt">dolunay ai</div><div><div class="qbar brand" style="width:36%"></div></div><div class="qv">35</div></div>
+  <div class="q"><div class="qt">ai factory dolunay</div><div><div class="qbar brand" style="width:33%"></div></div><div class="qv">32</div></div>
+  <div class="q"><div class="qt">ai factory dolunay özeren</div><div><div class="qbar brand" style="width:10%"></div></div><div class="qv">10</div></div>
+  <div class="q"><div class="qt">dolunay ozeren</div><div><div class="qbar brand" style="width:9%"></div></div><div class="qv">9</div></div>
+  <div class="q"><div class="qt">dolunay özeren ekşi</div><div><div class="qbar brand" style="width:8%"></div></div><div class="qv">8</div></div>
+  <div class="q"><div class="qt">scrapeunblocker</div><div><div class="qbar gen" style="width:1%"></div></div><div class="qv">1</div></div>
+  <div class="q"><div class="qt">yapay zeka otomasyonu · eğitimi · ajans…</div><div><div class="qbar gen" style="width:0.4%"></div></div><div class="qv">0</div></div>
+  <div class="callout">
+    275 tıklamanın 268'i adını arayanlardan geldi.
+    <span>Yani site seni zaten tanıyanı karşılıyor, seni tanımayanı bulmuyor. Teknik SEO bunu çözmez — bunu içerik çözer.</span>
+  </div>
+</div>
+
+<h2>Plan</h2>
+<div class="acts">
+  <div class="act a1">
+    <h4>Önce bunlar</h4>
+    <div class="when">Yarım gün · asıl kazanç</div>
+    <ol>
+      <li>Ödeme logosunu düzelt<small>satış yapan sitede kırık güven bandı</small></li>
+      <li>Mobil hızı eşiğin altına indir<small>tek ölçüm başarısızlığı bu</small></li>
+      <li>Dil değiştiriciyi ya gerçek yap ya kaldır<small>senin ürün kararın</small></li>
+      <li>Hizmetler sayfasını kendine bağla</li>
+      <li>Blog açıklamalarının kesilmesini durdur</li>
+      <li>Dizine girmeyen 7 sayfayı Google'a bildir</li>
+    </ol>
+  </div>
+  <div class="act a2">
+    <h4>Sonra bunlar</h4>
+    <div class="when">GEO · asıl fark burada</div>
+    <ol>
+      <li>Blog başlıklarını soruya çevir<small>altına 2-3 cümle doğrudan cevap</small></li>
+      <li>İçeriğe somut sayı ve kaynak koy<small>ölçülmüş: alıntılanmayı %30-40 artırıyor</small></li>
+      <li>Breadcrumb, hizmet, site şeması ekle</li>
+      <li>Yazar ve güncelleme tarihi bilgisini gerçek veriye bağla</li>
+      <li>Search Console'un yeni AI raporunu aç<small>Haziran 2026'da geldi, ücretsiz</small></li>
+    </ol>
+  </div>
+  <div class="act a3">
+    <h4>Yapmayacağız</h4>
+    <div class="when">Zaman kaybı · kanıtlı</div>
+    <ol>
+      <li>llms.txt<small>hiçbir büyük motor okumuyor, Google "gerekli değil" diyor</small></li>
+      <li>Yeni FAQ şeması<small>Google Mayıs 2026'da bu sonucu kaldırdı</small></li>
+      <li>HowTo şeması<small>tamamen ölü</small></li>
+      <li>Anahtar kelime doldurma<small>AI motorları akıcılığı ödüllendiriyor</small></li>
+      <li>Eğitim botlarını topluca engelleme<small>arama botunu da kapatıp görünmez olursun</small></li>
+    </ol>
+  </div>
+</div>
+
+<div class="foot">Ölçüm: Lighthouse 12 (yerel, masaüstü + mobil) · Google Search Console API (17 Haz – 15 Eyl) · canlı HTTP denetimi · kaynak kodu taraması. Google PageSpeed servisi kota verdiği için hız yerel Lighthouse ile ölçüldü.</div>
+
+</div>
+</body>
+</html>
