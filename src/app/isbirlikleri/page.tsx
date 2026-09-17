@@ -12,12 +12,10 @@ import {
 import { useTranslation, type Language } from '@/i18n/i18n';
 import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema';
 
-// Rakamlar dile gore bicimlenir: 250.000+ (tr/es) ↔ 250,000+ (en/zh).
+// Rakamlar dile gore bicimlenir: 250.000+ (tr) ↔ 250,000+ (en).
 const NUMBER_LOCALE: Record<Language, string> = {
   tr: 'tr-TR',
   en: 'en-US',
-  es: 'es-ES',
-  zh: 'zh-CN',
 };
 
 // ─── Custom Icons ──────────────────────────────────────────────────────────────

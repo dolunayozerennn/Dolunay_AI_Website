@@ -7,7 +7,15 @@ export const metadata: Metadata = {
     title: 'Kurumsal Yapay Zeka Eğitimleri | dolunay.ai',
     description: 'Şirketiniz için sıfırdan yapay zeka entegrasyonu, verimlilik artışı ve departman bazlı uygulamalı kurumsal AI eğitimleri.',
     url: 'https://dolunay.ai/egitimler/kurumsal-egitimler',
-  }
+  },
+  alternates: {
+    canonical: './',
+    languages: {
+      tr: 'https://dolunay.ai/egitimler/kurumsal-egitimler',
+      en: 'https://dolunay.ai/en/egitimler/kurumsal-egitimler',
+      'x-default': 'https://dolunay.ai/egitimler/kurumsal-egitimler',
+    },
+  },
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {

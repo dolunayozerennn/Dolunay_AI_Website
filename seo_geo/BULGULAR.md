@@ -5,7 +5,7 @@ Yeni bir SEO/GEO görevi alan ajan ÖNCE burayı okur, işi bitince "DURUM" tabl
 ## Site künyesi
 - Kök: `Projeler/Dolunay_AI_Website` (KENDİ git deposu, monorepo'dan ayrı)
 - Next.js 15 App Router, `output: 'export'` (statik), Netlify, build `npm run build` -> `out/`
-- Çalışma dalı: `seo-geo-duzeltme`. `main`'e doğrudan yazılmaz.
+- Faz 1+2 `main`e girdi ve CANLIDA doğrulandı (595e81f). Yeni iş kendi dalında açılır.
 - Çıktı Nöbeti kaydı YOK.
 
 ## ÖLÇÜLMÜŞ GERÇEKLER (tekrar ölçme, bunlara güven)
@@ -33,7 +33,7 @@ Yeni bir SEO/GEO görevi alan ajan ÖNCE burayı okur, işi bitince "DURUM" tabl
 | F6 | Mobil LCP eşiğin üstünde | ana sayfa 3,1 sn / ai-factory 4,0 sn (Google eşiği 2,5). Masaüstü 0,6 / 1,2 | AÇIK — 2 tur denendi (görsel + animasyon), ikisi de ölçülebilir kazanç vermedi; ayrıntı aşağıda |
 | F7 | Sitemap lastmod = derleme tarihi | 9 statik sayfanın hepsi 2026-09-16; her yayında hepsi değişmiş görünüyor, Google sinyali çöpe atar | TAMAM — git commit tarihine bağlandı, fallback: mtime -> now |
 | F8 | 18 sayfanın 7'si Google'da yok | 11 indexli, 4 keşfedildi-indexlenmedi, 3 "URL is unknown to Google" | AÇIK |
-| F9 | 4 dil görünüyor, gerçekte 1 dil var | dil değiştirici sadece localStorage; hreflang yok; arama motoru yalnız TR görüyor | AÇIK — karar: EN gerçek yapılacak |
+| F9 | 4 dil görünüyor, gerçekte 1 dil var | dil değiştirici sadece localStorage; hreflang yok; arama motoru yalnız TR görüyor | TAMAM (dal: `en-dil`, henüz main'e girmedi) — EN 7 sayfada gerçek statik rota oldu, ES/ZH değiştiriciden kaldırıldı |
 | F10 | GEO içerik biçimi yok | blog yazılarında soru-başlık, doğrudan cevap, istatistik/kaynak yapısı yok | AÇIK |
 | F11 | Breadcrumb / WebSite / Service şeması yok | grep | TAMAM — BreadcrumbList tüm iç sayfalarda (5 tane Artifex hukuki sayfası HARİÇ: `Projeler/Artifex_Hukuki_Sayfalar/uret_nextjs.py` ile üretiliyor, elle dokunulmaz), WebSite ana sayfada, Service /cozumler + /cozumler/hizmetler + /cozumler/otomasyon-abonelik'te |
 | F12 | Article'da publisher yok, Course'ta aggregateRating yok | opsiyonel alanlar | Article publisher TAMAM; Course aggregateRating ATLANDI — gerçek puanlama verisi yok, uydurma risk |
@@ -115,6 +115,27 @@ Yeni bir SEO/GEO görevi alan ajan ÖNCE burayı okur, işi bitince "DURUM" tabl
 - Sıra: **önce site düzelir, sonra öğrenci kutusu hazırlanır.**
 - 80/20: elzem olan yapılır, son %20 kovalanmaz.
 
+### F9 uygulaması (dal: `en-dil`)
+- Yaklaşım: fiziksel `/en` klasörü + `usePathname`'den dil türeten `LanguageProvider`. `[locale]`
+  dinamik segmentine ya da route-group'a GİDİLMEDİ; NON-GOAL dosyalara (sozlesmeler, blog, panel,
+  abonelik, r) hiç dokunmadan yürüyen tek yol buydu.
+- EN cevirisi olan 7 sayfa gercek statik rota oldu: `/en`, `/en/cozumler`,
+  `/en/cozumler/hizmetler`, `/en/egitimler/ai-factory`, `/en/egitimler/kurumsal-egitimler`,
+  `/en/hakkimizda`, `/en/isbirlikleri`. Her biri kendi title/canonical/hreflang'ini tasir (tr/en/
+  x-default ucu), sitemap'e girdi, build `out/` altinda fiziksel HTML uretiyor.
+- Dil degistirici artik gercek `<Link>` navigasyonu (TR<->EN eslemesi `src/i18n/routes.ts`); ES ve
+  ZH yalnizca degistirici listesinden cikti, `es.json`/`zh.json` diskte DOKUNULMADAN duruyor.
+  Navbar/Footer/sayfa icindeki tum ic linkler (ornegin ana sayfadaki "Isbirlikleri" karti,
+  hakkimizda'daki uc sutun) EN tarafinda TR'ye sizmayacak sekilde /en altina baglandi.
+  Ceviri iceriginde YENI string YAZILMADI (`en.json` zaten tamdi); eksik cikan tek sey meta
+  keywords alaniydi, o da mevcut TR listenin sade Ingilizce karsiligiyla dolduruldu.
+- Bilerek YAPILMAYAN: `/cozumler/otomasyon-abonelik` sayfasi ve ana sayfadaki abonelik serit
+  bileseni (`AbonelikSeridi`) EN'de de Turkce kaliyor, cunku bu ikisinin cevirisi `en.json`'da
+  hic yok ve uydurma metin yazilmadi; bu sayfaya EN rota da acilmadi. `BreadcrumbSchema` gibi
+  gorunmez JSON-LD etiketlerindeki bazi Turkce alan adlari da degistirilmedi (kullanicidan
+  gizli, tiklanamaz).
+- Sonuc henuz `main`de degil; Dolunay inceleyip birlestirecek.
+
 ## NİHAİ AMAÇ
 Bu iş yalnız dolunay.ai'yi düzeltmek için değil: çıkan yöntem `ogrenci-kiti` ajanıyla
 öğrencilere satılabilir "her siteye uygulanabilir SEO/GEO/hız optimizasyon paketi" olacak.
@@ -123,6 +144,6 @@ Mevcut `Paylasilan_Projeler/Web_Sitesi_Starter` kutusu aynı teknolojide — pak
 ## DURUM
 - Faz 1 (F1-F6): ajan koşuyor
 - Faz 2 (F7, F11, F12): TAMAM (F12'de Course aggregateRating bilerek ATLANDI)
-- Faz 3 (F9 İngilizce): açık
+- Faz 3 (F9 İngilizce): TAMAM, dal `en-dil`'de bekliyor (main'e henüz girmedi)
 - Faz 4 (F10 GEO içerik): açık
 - Faz 5 (öğrenci kutusu): site bitince

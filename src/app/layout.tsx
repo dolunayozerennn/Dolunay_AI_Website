@@ -75,6 +75,15 @@ export const metadata: Metadata = {
     // canonical gösterir. Sabit 'https://dolunay.ai' yazılırsa tüm alt sayfalar
     // Google'a "asıl adres ana sayfa" der ve dizinden düşer.
     canonical: './',
+    // F9 (seo_geo/BULGULAR.md): /en artik GERCEK bir adres. Bu satir kok
+    // metadata'da yalniz ANA SAYFA icin dogru; /en/... altindaki her rota
+    // kendi layout.tsx'inde AYNI deseni kendi adresiyle tekrarlar (canonical
+    // gibi bu da miras almiyor, her seviye acikca yazar).
+    languages: {
+      tr: 'https://dolunay.ai/',
+      en: 'https://dolunay.ai/en',
+      'x-default': 'https://dolunay.ai/',
+    },
   },
 }
 

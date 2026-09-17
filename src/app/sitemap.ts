@@ -72,6 +72,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: route === '' ? 1 : 0.9,
   }))
 
+  // F9 (seo_geo/BULGULAR.md): Ingilizce artik gercek statik rotalar
+  // (/en/...). Cevirisi olan yedi sayfa burada; otomasyon-abonelik ve blog
+  // gibi EN karsiligi olmayan sayfalar BILEREK yok.
+  const englishUrls = [
+    '/en',
+    '/en/cozumler',
+    '/en/cozumler/hizmetler',
+    '/en/egitimler/ai-factory',
+    '/en/egitimler/kurumsal-egitimler',
+    '/en/isbirlikleri',
+    '/en/hakkimizda',
+  ].map((route) => ({
+    url: `${baseUrl}${route}`,
+    lastModified: getLastModified(route),
+    changeFrequency: route === '/en' ? 'weekly' as const : 'monthly' as const,
+    priority: route === '/en' ? 0.9 : 0.8,
+  }))
+
   // Sozlesme sayfalari (KVKK, mesafeli satis vb.): Google'da zaten gorunuyor,
   // dusuk oncelikle sitemap'e eklenir ki tarama onlari da kapsasin.
   const legalUrls = [
@@ -89,5 +107,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.3,
   }))
 
-  return [...staticUrls, ...blogUrls, ...legalUrls]
+  return [...staticUrls, ...englishUrls, ...blogUrls, ...legalUrls]
 }

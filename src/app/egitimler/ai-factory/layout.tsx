@@ -7,7 +7,18 @@ export const metadata: Metadata = {
     title: 'AI Factory Topluluğu | dolunay.ai',
     description: 'Yapay zeka otomasyonlarını kopyala ve çalıştır. Hazır sistemler, haftada iki canlı yayın, birebir soru cevap.',
     url: 'https://dolunay.ai/egitimler/ai-factory',
-  }
+  },
+  // F9: alternates bu sayfada tanimli degildi, kokteki './' inherit
+  // ediyordu (dogru sonuc veriyordu, deger AYNI birakildi). languages ayni
+  // mirasla gelmiyor, acikca yazildi.
+  alternates: {
+    canonical: './',
+    languages: {
+      tr: 'https://dolunay.ai/egitimler/ai-factory',
+      en: 'https://dolunay.ai/en/egitimler/ai-factory',
+      'x-default': 'https://dolunay.ai/egitimler/ai-factory',
+    },
+  },
 }
 
 // Sayfadaki sorularin AYNISI. Google, yapilandirilmis veride gecen sorunun sayfada
