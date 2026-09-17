@@ -14,7 +14,11 @@ const SKOOL_URL = 'https://www.skool.com/yapay-zeka-factory/about?ref=044f39496d
 // Supabase Storage'a video yuklenmez). Kaynak dosya Drive'daki
 // "skool tanitim 13 agustos.mp4"; web icin 1080p30 / ~39 MB'a indirildi.
 const TANITIM_VIDEO = 'https://res.cloudinary.com/ddh9eoasc/video/upload/v1788604237/ai-factory/tanitim-2025-08.mp4'
-const TANITIM_KAPAK = 'https://res.cloudinary.com/ddh9eoasc/image/upload/v1788604751/ai-factory/tanitim-2025-08-kapak-v2.jpg'
+// f_auto,q_auto,w_1280: Cloudinary'nin kendi optimizasyonu. Ham jpg 114 KB'ti
+// ve bu sayfada mobil LCP elemaniydi (poster, video preload="none" oldugu
+// icin ilk boyanan gorsel budur); tarayiciya gore WebP/AVIF + kucuk boyut
+// verince ayni gorunumle cok daha hafif iner.
+const TANITIM_KAPAK = 'https://res.cloudinary.com/ddh9eoasc/image/upload/f_auto,q_auto,w_1280/v1788604751/ai-factory/tanitim-2025-08-kapak-v2.jpg'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40, filter: 'blur(4px)' },
@@ -52,6 +56,11 @@ export default function AIFactoryPage() {
 
   return (
     <div className="relative">
+      {/* React 19 <link> etiketini otomatik <head>'e tasir. Video poster'i
+          tarayicinin dogal <video poster> yuklemesiyle DUSUK oncelikte
+          iniyordu, LCP'yi geciktiriyordu; preload + fetchPriority ile
+          erken ve yuksek oncelikli istek atiliyor. */}
+      <link rel="preload" as="image" href={TANITIM_KAPAK} fetchPriority="high" />
       {/* ── Hero ─────────────────────────────────────────────── */}
       <section className="pt-32 pb-24 relative flex flex-col items-center justify-center">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/10 blur-[120px] rounded-full pointer-events-none" />
