@@ -5,6 +5,7 @@
 import { ServicesSection } from '@/components/sections/ServicesSection'
 import { AbonelikSeridi } from '@/components/AbonelikSeridi'
 import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema'
+import { HizmetlerGeoContent } from '@/components/sections/HizmetlerGeoContent'
 import type { Metadata } from 'next'
 
 // Not: '/cozumler' layout'u kendi title'ini duz metin olarak tanimladigi icin
@@ -54,6 +55,9 @@ export default function ServicesPage() {
       {/* Sayfanın tek içeriği bu blok, o yüzden başlığı h1 olarak render edilir. */}
       <ServicesSection asHeading="h1" />
       <AbonelikSeridi />
+
+      {/* GEO icerik (F10, 2. parti) — yalniz TR, tum satis CTA'larinin ALTINDA */}
+      <HizmetlerGeoContent />
     </div>
   )
 }

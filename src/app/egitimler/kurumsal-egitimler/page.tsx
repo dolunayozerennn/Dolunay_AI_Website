@@ -7,6 +7,8 @@ import Image from 'next/image'
 import { GraduationCap, Building, Target, Presentation, Briefcase, Zap, CheckCircle2 } from 'lucide-react'
 import { useTranslation } from '@/i18n/i18n'
 import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema'
+import { GeoContentSection } from '@/components/sections/GeoContentSection'
+import { kurumsalEgitimlerGeoBlocks } from '@/data/geoContent'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 50, filter: 'blur(4px)' },
@@ -80,7 +82,7 @@ function RefCard({ client, index }: { client: any; index: number }) {
 }
 
 export default function CorporateTrainingsPage() {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
 
   const educationClients = [
     {
@@ -348,6 +350,9 @@ export default function CorporateTrainingsPage() {
         </div>
 
       </div>
+
+      {/* GEO icerik (F10, 2. parti) — yalniz TR, tum satis CTA'larinin ALTINDA */}
+      {language === 'tr' && <GeoContentSection blocks={kurumsalEgitimlerGeoBlocks} />}
     </div>
   )
 }

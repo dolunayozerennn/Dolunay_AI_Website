@@ -167,3 +167,120 @@ Not: Kurumsal otomasyon fiyatlandırması (maliyet aralığı) için de bir ista
 - "AI otomasyon projesi ortalama X haftada/ayda tamamlanır" ve "otomasyon kurmak X-Y dolara mal olur" rakamları onlarca pazarlama/ajans blogunda geçiyor ama hiçbiri gerçek bir ankete/kuruma dayanmıyor, kaynaksız aralıklar. Kullanılmadı.
 - Visa'nın "küçük işletmelerin %90'ı AI ve otomasyon hizmetlerini değerlendiriyor" istatistiği Zapier üzerinden görüldü ama "kullanıyor" değil "değerlendiriyor" diyor, zayıf ve hedef kitleye (kurumsal) tam uymuyor. Kullanılmadı.
 - AI otomasyon pazarının büyüklüğü/CAGR'ı için Grand View Research sayfası HTTP 403 ile erişime kapalıydı, doğrulanamadığı için hiçbir pazar büyüklüğü rakamı taslağa girmedi.
+
+---
+
+# 2. parti GEO blokları (2026-09-18) — ince kalan iki sayfa
+
+Sebep: `/cozumler/hizmetler` (293 görünür kelime) ve `/egitimler/kurumsal-egitimler`
+(267 görünür kelime) Google'a hiç girmemişti. İç linkleme sorunu yoktu (ikisi de 6
+sayfadan linkli), sorun ince içerikti. Karşılaştırma: indekslenen `/cozumler` 1256,
+`/egitimler/ai-factory` 1064 kelime. Dolunay iki sayfaya da aynı GEO bloklarını onayladı.
+
+**Üstteki 7 blokla çakışma yok:** altı sorunun hiçbiri yukarıda cevaplanmadı.
+**Yeni istatistik YOK:** yüzdeli her cümle yukarıda zaten kullanılan ve kaynağı
+doğrulanmış üç rapordan geliyor (Upwork Temmuz 2026, McKinsey Kasım 2025, WEF Ocak 2025).
+
+## Sayfa 3 - /cozumler/hizmetler
+
+**Şu anki durum:**
+- Görünür metin 293 kelime, Google'da "Discovered - currently not indexed".
+- Soru başlığı YOK, dış istatistik YOK. Gövde `ServicesSection` + `AbonelikSeridi`.
+- Sorular hizmet kapsamı / fiyatlandırma / çalışma biçimi ekseninde seçildi.
+
+### Önerilen blok: Yapay zeka otomasyonu kurmak ne kadara mal oluyor?
+
+## Yapay zeka otomasyonu kurmak ne kadara mal oluyor?
+
+Tek bir liste fiyatım yok, çünkü iki işletmenin süreci hiç aynı çıkmıyor. Fiyatı üç şey belirliyor: kaç süreç otomatikleşecek, kaç sisteme bağlanacak, ekip kaç kişi. Bu üçü netleşmeden verilen rakam ya seni ya beni yanıltıyor. Bu yüzden ilk görüşmede fiyat değil kapsam konuşuyoruz. Kapsam netleşince teklif kalem kalem çıkıyor. Hangi sürecin ne kadar tuttuğunu tek tek görüyorsun.
+
+Aradaki farkı kendi işlerimden örnekle anlatayım. Bir otelde kurduğum WhatsApp botu tek bir iş akışıydı, tek kalemden ibaretti. Bir e-ticaret firmasında ise stok takibi raporlamaya da bağlandı, kalem sayısı arttı. Bir klinikte sadece randevu hatırlatması kuruldu, o da ikisinin altında kaldı. Üçü aynı fiyatta olamaz, çünkü üçü aynı iş değil. Teklifi bu yüzden hazır paket olarak değil, süreç başına yazıyorum.
+
+Bütçeyi en çok şişiren şey her şeyi aynı anda kurmaya çalışmak. Ben tek bir süreçle başlamayı öneriyorum, sonucu birlikte görüyoruz. Bir muhasebe bürosunda önce sadece tekrar eden rapor otomatikleşti, gerisi sonra geldi. Küçük başlayınca hem ilk maliyet düşük kalıyor hem karar vermek kolaylaşıyor. İşe yaradığını gördükten sonra genişletmek çok daha rahat oluyor. Bu sırayı neredeyse bütün müşterilerimde aynı şekilde uyguluyorum.
+
+Kurulum bedelinin dışında aylık bir araç maliyeti de var, onu baştan söylüyorum. Bot çalıştığı sürece mesajlaşma altyapısı ve model kullanımı için ödeme yapılıyor. Bu kalemi teklifte ayrı satır olarak gösteriyorum, sonradan sürpriz çıkmıyor. Sistemleri Claude Code ile kurduğum için ayrıca bir yazılım ekibi maliyeti taşımıyorsun. Kurulumdan sonra devam eden bakım da ayrı bir kalem, aylık abonelik olarak yürüyor.
+
+*Gerekçe: Teklif oncesi sorulan ilk soru; fiyat verilemedigi icin fiyati NEYIN belirledigi anlatiliyor.*
+
+### Önerilen blok: Otomasyon kurulduktan sonra bakımını kim yapıyor?
+
+## Otomasyon kurulduktan sonra bakımını kim yapıyor?
+
+Bakımı ben yapıyorum, teslimle birlikte ortadan kaybolmuyorum. Kurduğum her sistem dışarıdaki bir araca bağlı ve o araçlar sürekli değişiyor. WhatsApp tarafında bir kural değişince ya da bir arayüz güncellenince sistem etkileniyor. Bu değişikliği ben takip ediyorum, senin fark etmen gerekmiyor. Böyle bir durumda bağlantıyı yeniden kuruyorum ve sistem kaldığı yerden devam ediyor. Bu takip aylık abonelik içinde, ayrıca ücretlendirilmiyor.
+
+Bakımın ikinci yarısı işin kendisiyle ilgili. Bir otelde kurduğum botun cevap vermesi gereken sorular zamanla değişti. Yeni bir kampanya çıkınca ya da fiyat güncellenince bot da güncelleniyor. Bir e-ticaret firmasında stok eşiği sezona göre değişti, uyarı kuralını ben değiştirdim. Bunlar küçük dokunuşlar, yeni bir kural eklemek ya da mesaj şablonunu düzeltmek gibi. Sistemi baştan kurmaya gerek kalmıyor, tek bir satır değişiyor.
+
+Bir şey bozulduğunda haber vermeni beklemiyorum. Kurduğum sistemler kendi durumlarını kontrol ediyor ve susan bir akış bana bildiriliyor. Bir e-ticaret firmasında uyarı akışı sustuğunda haber benim tarafıma düşüyor. Bu yüzden arıza genelde sen fark etmeden kapanıyor. Yine de bir şey gözüne çarparsa doğrudan bana yazıyorsun. Arada bir çağrı merkezi ya da destek bileti sistemi yok.
+
+Bu bakım aylık bir abonelik olarak yürüyor, tek seferlik bir iş değil. Abonelik kademeli: en alt kademe sistemin çalışır kalmasını kapsıyor. Üst kademede sunucu ve model kullanım bedeli de abonelik içinde. Süreç değişirse otomasyonu yeni sürece uyduruyoruz, eskisini zorla kullanmıyorsun. Otomasyon canlı bir şey, kurulduğu gün donmuyor. Bakımsız bırakılan bir otomasyon birkaç ay içinde sessizce işe yaramaz hale geliyor.
+
+*Gerekçe: Satin almayi durduran asil itiraz: kuran kisi gidince sistem sahipsiz kalir mi.*
+
+### Önerilen blok: Hazır bir yapay zeka aracı almak yerine neden özel kurulum yaptırayım?
+
+## Hazır bir yapay zeka aracı almak yerine neden özel kurulum yaptırayım?
+
+Hazır araçlar iyi bir başlangıç, ama senin sürecini bilmiyorlar. Piyasadaki hazır bot sana genel bir cevap veriyor, çünkü kendi verine bakmıyor. Benim kurduğum sistemler senin kendi kaynağından okuyor, tahmin etmiyor. Aradaki fark cevabın akıcılığında değil, kimin verisiyle konuştuğunda ortaya çıkıyor. Müşteri yanlış bir fiyat duyduğunda bunun bedelini hazır araç değil sen ödüyorsun.
+
+Bunu bir otelde açıkça gördüm. Hazır bir sohbet aracı oda tiplerini ve iptal koşullarını bilmiyordu, genel cevaplar veriyordu. Kurduğumuz bot aynı soruları otelin kendi bilgisinden okuyarak cevapladı. Karmaşık bir soru geldiğinde ise kendi kafasından uydurmadı, resepsiyona yönlendirdi. Bu sınırı çizmek hazır araçta mümkün olmuyor, kurulumda oluyor. Müşteri de ne zaman botla ne zaman insanla konuştuğunu biliyor.
+
+İkinci fark bağlantı tarafında. Hazır araç genelde kendi panelinde yaşıyor, ekibin bir ekran daha açmak zorunda kalıyor. Bir e-ticaret firmasında yeni bir ekran açmadık, mevcut stok programının verisine bağlandık. Bir muhasebe bürosunda da tekrar eden rapor, kullanılan programın çıktısından derlendi. Ekip yeni bir arayüz öğrenmedi, sadece işini daha az elle yaptı. Veri tek yerde kaldı, ikinci bir kopya oluşmadı.
+
+Bu tercih pazarda da görülüyor. Upwork'ün Temmuz 2026 Future Workforce Index raporu bunu doğruluyor. Üretken yapay zeka içerikli sözleşmeler yıllık yüzde 90 arttı. Kendi uzmanlığına yapay zekayı ekleyen profesyonel hizmetler yüzde 72 hacim artışı gösterdi. Yani değer aracın kendisinde değil, işe uyarlanmış kurulumunda toplanıyor. Ben de Claude Code ile bu uyarlamayı senin sürecine göre yapıyorum.
+
+Kaynak: Upwork, Temmuz 2026.
+
+*Gerekçe: Hazir chatbot ile ozel kurulum arasinda karar veren musterinin gercek sorusu.*
+
+## Sayfa 4 - /egitimler/kurumsal-egitimler
+
+**Şu anki durum:**
+- Görünür metin 267 kelime, Google'da "URL is unknown to Google".
+- Soru başlığı YOK, dış istatistik YOK. Gövde referans kartları + özellik kartları.
+- Sorular kurum içi eğitim ekseninde seçildi.
+
+### Önerilen blok: Kurumsal yapay zeka eğitimi kaç saat sürmeli ve nasıl planlanıyor?
+
+## Kurumsal yapay zeka eğitimi kaç saat sürmeli ve nasıl planlanıyor?
+
+Tek bir doğru süre yok, ama tek seferlik uzun bir gün en kötü seçenek. Kendi eğitimlerimde en iyi sonucu bölünmüş programlarda aldım. Bir bankada aynı ekiple iki ayrı blok çalıştık, arada uygulama süresi vardı. Katılımcı ilk bloktan sonra kendi işinde deneme şansı buldu. İkinci blokta gelen sorular çok daha somuttu, çünkü herkes bir yerde takılmıştı. Tek blokta bitirseydik o sorular hiç sorulmayacaktı.
+
+Online eğitimde süreyi daha da kısa tutuyorum. Bir kurumda bütün programı tek oturumda değil, birkaç kısa seansa böldük. Ekranın karşısında dikkat iki saatten sonra hızla düşüyor, bunu her seferinde görüyorum. Kısa seanslar katılımı da artırıyor, çünkü kimse bütün gününü bloke etmiyor. Yüz yüze atölyede ise yarım günlük bloklar daha rahat çalışıyor. Aynı içerik iki formatta aynı sürede anlatılmıyor.
+
+Planlamayı katılımcı sayısına göre de değiştiriyorum. Yüz kişilik bir online seansta herkesin ekranını tek tek göremiyorum, anlatım ağırlıklı ilerliyor. Yirmi kişilik bir atölyede ise herkes kendi bilgisayarında aynı anda uyguluyor. Bu ikisi aynı program olamaz, çünkü ikisinde öğrenme biçimi farklı. Kalabalık gruplarda ardından bire bir danışmanlık ekliyorum. Gerçek sorular çoğunlukla o görüşmelerde çıkıyor.
+
+Süreyi belirleyen asıl şey içerik değil, ekibin başlangıç seviyesi. Aynı şirkette bir departman araçları hiç açmamışken başka bir departman zaten kullanıyor olabiliyor. Bu yüzden eğitimden önce kısa bir seviye sorusu gönderiyorum. Cevaplara göre programı sadeleştiriyorum ya da derinleştiriyorum. Böylece kimse bildiği bir şeyi dinlemiyor, kimse de geride kalmıyor. Müfredatı şirkete göre yazmanın asıl anlamı da bu.
+
+*Gerekçe: Kurumsal egitim talebinde ilk sorulan operasyonel soru: kac saat, kac oturum.*
+
+### Önerilen blok: Hangi departmanlar yapay zeka eğitiminden en çok fayda görüyor?
+
+## Hangi departmanlar yapay zeka eğitiminden en çok fayda görüyor?
+
+Eğitim verdiğim kurumlarda en hızlı sonucu üç departmanda gördüm. Müşteri ilişkileri, operasyon ve raporlama yapan ekipler. Üçünün ortak noktası aynı: işlerinin büyük kısmı tekrar eden metin işi. Tekrar eden bir iş varsa, eğitimin karşılığı ertesi hafta görülüyor. Karar ağırlıklı ve ilişki ağırlıklı ekiplerde fayda daha yavaş çıkıyor. Orada da çıkıyor, ama ölçmesi haftalar alıyor.
+
+Somut örnek vereyim. Bir bankada iki günlük atölyeyi aynı ekiple iki kez tekrarladık. Uygulama hep rapor ve sunum işleri üstünden gitti. Başka bir bankada yüzü aşkın kişiyle online çalıştık, ardından bire bir danışmanlık yaptık. Bir üniversitede de eğitim verdim, e-ticaret tarafında satıcı ekipleriyle çalıştım. Hepsinde aynı şey oldu: en hızlı ilerleyen kişi, işi zaten her hafta tekrar edendi.
+
+Bu tablo geniş araştırmalarda da aynı çıkıyor. McKinsey Global Institute'un Kasım 2025 raporu buna işaret ediyor. ABD'deki iş saatlerinin yüzde 57'si bugünkü teknolojiyle otomatikleştirilebilir potansiyele sahip. Rapor hangi mesleğin biteceğini değil, hangi görevin devredilebileceğini söylüyor. Departman seçerken ben de aynı soruyu soruyorum: burada hangi görev tekrar ediyor. Cevap netse eğitimin nereden başlayacağı da netleşiyor.
+
+Yine de tek bir departmanla başlamayı öneriyorum. Bütün şirketi aynı anda eğitmek kulağa verimli geliyor ama sonuç dağılıyor. Tek departmanla başlayınca o ekip iç örnek üretiyor, diğerleri onu görüyor. Bir kurumda bu iç örnek, benim anlattığım her şeyden daha ikna edici oldu. Claude Code ile kurulan küçük bir otomasyon, sunumdan çok daha hızlı yayıldı. Sonraki departmanların eğitimi de o örnek üstünden çok daha kolay geçti.
+
+Kaynak: McKinsey Global Institute, Kasım 2025.
+
+*Gerekçe: Butceyi onaylayan yonetici once hangi ekipten baslayacagini bilmek ister.*
+
+### Önerilen blok: Eğitimden sonra ekip öğrendiğini gerçekten kullanmaya devam ediyor mu?
+
+## Eğitimden sonra ekip öğrendiğini gerçekten kullanmaya devam ediyor mu?
+
+Dürüst cevap şu: kendiliğinden devam etmiyor. Eğitim bittikten sonra hiçbir şey değişmezse ekip eski alışkanlığına dönüyor. Bunu ilk yıllarda birkaç kurumda yaşadım, sunum güzeldi ama takip yoktu. O yüzden artık programı tek başına bir eğitimle bitirmiyorum. Son bölümde herkes kendi işinden gerçek bir görev seçiyor ve onu canlıya alıyor. Eğitim odasından çıkarken elde çalışan bir şey oluyor.
+
+Kalıcılığı belirleyen şey eğitimin kendisi değil, eğitimden sonraki ilk iki hafta. Ekip o iki hafta içinde bir işi yeni yöntemle bitirirse alışkanlık oturuyor. Bitiremezse eski yönteme dönüyor ve eğitim raftaki bir sunuma dönüşüyor. Bu yüzden eğitim sonrasına kısa bir takip oturumu koyuyorum. Orada herkes ne denedi, nerede takıldı, onu konuşuyoruz. Takıldığı yer çoğunlukla araçta değil, kendi sürecinde oluyor.
+
+Bire bir danışmanlık bu noktada en çok işe yarayan parça. Grup önünde soru sormayan kişi, bire bir görüşmede asıl takıldığı yeri söylüyor. Bir kurumda takip görüşmelerinde çıkan sorular, eğitimdeki sorulardan tamamen farklıydı. Çünkü artık kimse aracı merak etmiyordu, herkes kendi işini soruyordu. O sorular sayesinde hangi otomasyonun kurulacağı da netleşti. Eğitim böylece kurulum kararının da girdisi oluyor.
+
+Bu konuyu kurumların ciddiye aldığını geniş veride de görüyoruz. Dünya Ekonomik Forumu Ocak 2025'te Future of Jobs raporunu yayınladı. İşverenlerin yüzde 58'i otomasyonun işletmelerini 2030'a kadar dönüştüreceğini bekliyor. Böyle bir beklentinin karşılığı tek seferlik bir eğitim olamaz. Bu yüzden ben eğitimi bir gün değil, bir başlangıç olarak planlıyorum. Sonrasında ekip isterse kurulum tarafında da yanında oluyorum.
+
+Kaynak: World Economic Forum, Ocak 2025.
+
+*Gerekçe: Egitim satin almanin en buyuk suphesi: para harcanir, ekip eski yontemine doner.*
