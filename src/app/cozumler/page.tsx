@@ -10,6 +10,7 @@ import { ServicesSection } from '@/components/sections/ServicesSection';
 import { AbonelikSeridi } from '@/components/AbonelikSeridi';
 import { useTranslation } from '@/i18n/i18n';
 import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema';
+import { withLocale } from '@/i18n/routes';
 
 function SkoolIcon({ className }: { className?: string }) {
   return (
@@ -57,14 +58,16 @@ function BentoCard({ children, className = '', custom = 0 }: { children: React.R
 }
 
 export default function SolutionsPage() {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
 
   const customSolutions = [
     {
       title: t('solutions.customItemTitle'),
       description: t('solutions.customItemDesc'),
       features: [t('solutions.customItemFeature1'), t('solutions.customItemFeature2'), t('solutions.customItemFeature3'), t('solutions.customItemFeature4')],
-      href: '/cozumler/hizmetler',
+      // F9: sabit TR adresi /en'de acilinca disariya sizmasin diye
+      // withLocale ile karsilikli EN adresine tasinir (bu yol EN'de MEVCUT).
+      href: withLocale('/cozumler/hizmetler', language === 'en'),
       accentColor: '#4F8BFF',
       icon: <TrendingUp className="w-6 h-6" />,
       external: false,

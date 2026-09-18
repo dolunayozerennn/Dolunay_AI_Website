@@ -6,6 +6,7 @@ import type { MouseEvent } from 'react'
 import Image from 'next/image'
 import { ArrowRight, ExternalLink } from 'lucide-react'
 import { useTranslation } from '@/i18n/i18n'
+import { withLocale } from '@/i18n/routes'
 import Link from 'next/link'
 
 const fadeUp = {
@@ -150,7 +151,8 @@ function ProductCard({ headline, description, tag, buttonLabel, href, external, 
 }
 
 export function ProductsSection() {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
+  const isEnglish = language === 'en';
 
   const products = [
     {
@@ -158,7 +160,9 @@ export function ProductsSection() {
       description: t('products.card2Desc'),
       tag: t('products.card2Tag'),
       buttonLabel: t('products.card2Button'),
-      href: '/cozumler#services',
+      // F9: hash'li adres icin withLocale yalniz yol kismina uygulanir,
+      // '#services' aynen korunur.
+      href: `${withLocale('/cozumler', isEnglish)}#services`,
       external: false,
       accentColor: '#4F8BFF',
       glowColor: 'rgba(79, 139, 255, 0.22)',
@@ -170,7 +174,7 @@ export function ProductsSection() {
       description: t('products.card4Desc'),
       tag: t('products.card4Tag'),
       buttonLabel: t('products.card4Button'),
-      href: '/isbirlikleri',
+      href: withLocale('/isbirlikleri', isEnglish),
       external: false,
       accentColor: '#EDEAE3',
       glowColor: 'rgba(237, 234, 227, 0.10)',

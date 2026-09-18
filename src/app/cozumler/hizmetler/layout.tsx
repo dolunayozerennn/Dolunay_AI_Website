@@ -12,7 +12,15 @@ import { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Yapay Zeka Danışmanlık ve Otomasyon Hizmetleri | dolunay.ai',
   description: 'Dolunay.ai işletmelere yönelik profesyonel yapay zeka çözümleri ve hizmetleri.',
-  alternates: { canonical: './' },
+  alternates: {
+    canonical: './',
+    // F9: hreflang eklendi, canonical DEGERI degismedi.
+    languages: {
+      tr: 'https://dolunay.ai/cozumler/hizmetler',
+      en: 'https://dolunay.ai/en/cozumler/hizmetler',
+      'x-default': 'https://dolunay.ai/cozumler/hizmetler',
+    },
+  },
   openGraph: {
     title: 'Hizmetler | dolunay.ai',
     description: 'Dolunay.ai işletmelere yönelik profesyonel yapay zeka çözümleri ve hizmetleri.',

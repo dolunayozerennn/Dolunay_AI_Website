@@ -8,8 +8,6 @@ import { useTranslation, type Language } from '@/i18n/i18n'
 const DATE_LOCALE: Record<Language, string> = {
   tr: 'tr-TR',
   en: 'en-US',
-  es: 'es-ES',
-  zh: 'zh-CN',
 }
 
 export function useDateFormatter() {

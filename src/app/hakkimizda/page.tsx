@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslation } from '@/i18n/i18n';
 import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema';
+import { withLocale } from '@/i18n/routes';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 50, filter: 'blur(4px)' },
@@ -109,7 +110,7 @@ function MemberCard({ member }: { member: Member }) {
 }
 
 export default function AboutV3() {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   return (
     <div className="pt-24 pb-12">
       <BreadcrumbSchema
@@ -191,7 +192,7 @@ export default function AboutV3() {
                       <h3 className="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight">{t(pillar.titleKey)}</h3>
                       <p className="text-gray-400 leading-relaxed mb-6">{t(pillar.descKey)}</p>
                       <Link
-                        href={pillar.href}
+                        href={withLocale(pillar.href, language === 'en')}
                         className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-200 text-sm font-medium transition-colors"
                       >
                         {t('about.detailBtn')} <ArrowRight className="w-4 h-4" />

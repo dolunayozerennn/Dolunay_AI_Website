@@ -4,12 +4,18 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, ChevronDown } from 'lucide-react'
 import { useTranslation } from '@/i18n/i18n'
+import { withLocale } from '@/i18n/routes'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import Link from 'next/link'
 import Image from 'next/image'
 
 export function Navbar() {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
+  // F9: /en/... uzerindeyken menu linkleri de /en altinda kalir, TR'ye
+  // sizmaz. EN cevirisi olmayan adresler (ornegin otomasyon-abonelik, blog)
+  // withLocale() icinde bilerek degismeden kalir.
+  const isEnglish = language === 'en';
+  const nl = (href: string) => withLocale(href, isEnglish);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -87,7 +93,7 @@ export function Navbar() {
         {/* Left Side: Logo + Links */}
         <div className="flex items-center gap-8 lg:gap-12">
           {/* Logo — D11 Ash mark + wordmark */}
-          <Link href="/" className="flex items-center gap-2.5 group shrink-0 pl-1">
+          <Link href={nl('/')} className="flex items-center gap-2.5 group shrink-0 pl-1">
             <span className="relative inline-flex h-8 w-8 items-center justify-center transition-transform duration-500 group-hover:rotate-[8deg]">
               <Image
                 src="/brand/01-mark-light-transparent.svg"
@@ -133,7 +139,7 @@ export function Navbar() {
                   >
                     {/* /cozumler menude hic yoktu; tek girisi altbilgideki linkti. */}
                     <Link
-                      href="/cozumler"
+                      href={nl('/cozumler')}
                       onClick={() => setIsDropdownOpen(false)}
                       className="flex flex-col px-5 py-3.5 hover:bg-white/[0.04] transition-all duration-300 border-b border-white/[0.04]"
                     >
@@ -141,7 +147,7 @@ export function Navbar() {
                       <span className="text-xs text-gray-500 mt-0.5">{t('nav.allSolutionsDesc')}</span>
                     </Link>
                     <Link
-                      href="/cozumler/hizmetler"
+                      href={nl('/cozumler/hizmetler')}
                       onClick={() => setIsDropdownOpen(false)}
                       className="flex flex-col px-5 py-3.5 hover:bg-white/[0.04] transition-all duration-300 border-b border-white/[0.04]"
                     >
@@ -149,7 +155,7 @@ export function Navbar() {
                       <span className="text-xs text-gray-500 mt-0.5">{t('nav.servicesDesc')}</span>
                     </Link>
                     <Link
-                      href="/cozumler/otomasyon-abonelik"
+                      href={nl('/cozumler/otomasyon-abonelik')}
                       onClick={() => setIsDropdownOpen(false)}
                       className="flex flex-col px-5 py-3.5 hover:bg-white/[0.04] transition-all duration-300"
                     >
@@ -188,7 +194,7 @@ export function Navbar() {
                     className="absolute top-full left-0 mt-2 w-64 bg-[#0E0F14]/95 backdrop-blur-xl border border-white/[0.08] rounded-xl overflow-hidden shadow-2xl shadow-black/40"
                   >
                     <Link
-                      href="/egitimler/ai-factory"
+                      href={nl('/egitimler/ai-factory')}
                       onClick={() => setIsTrainingDropdownOpen(false)}
                       className="flex flex-col px-5 py-3.5 hover:bg-white/[0.04] transition-all duration-300 border-b border-white/[0.04]"
                     >
@@ -196,7 +202,7 @@ export function Navbar() {
                       <span className="text-xs text-gray-500 mt-0.5">{t('nav.aiFactoryDesc')}</span>
                     </Link>
                     <Link
-                      href="/egitimler/kurumsal-egitimler"
+                      href={nl('/egitimler/kurumsal-egitimler')}
                       onClick={() => setIsTrainingDropdownOpen(false)}
                       className="flex flex-col px-5 py-3.5 hover:bg-white/[0.04] transition-all duration-300"
                     >
@@ -210,7 +216,7 @@ export function Navbar() {
 
             {/* İş Birlikleri */}
             <Link 
-              href="/isbirlikleri"
+              href={nl('/isbirlikleri')}
               className="text-sm font-medium text-gray-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/[0.04] transition-all duration-300"
             >
               {t('nav.collaborations')}
@@ -218,7 +224,7 @@ export function Navbar() {
 
             {/* Hakkımızda */}
             <Link 
-              href="/hakkimizda"
+              href={nl('/hakkimizda')}
               className="text-sm font-medium text-gray-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/[0.04] transition-all duration-300"
             >
               {t('nav.about')}
@@ -226,7 +232,7 @@ export function Navbar() {
 
             {/* Blog */}
             <Link 
-              href="/blog"
+              href={nl('/blog')}
               className="text-sm font-medium text-gray-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/[0.04] transition-all duration-300"
             >
               {t('nav.blog')}
@@ -268,14 +274,14 @@ export function Navbar() {
             <div className="flex flex-col space-y-1">
               <div className="px-3 py-2 text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]">{t('nav.solutions')}</div>
               <Link 
-                href="/cozumler/hizmetler"
+                href={nl('/cozumler/hizmetler')}
                 className="text-gray-300 hover:text-white font-medium px-4 py-2.5 rounded-lg hover:bg-white/[0.04] transition-all"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {t('nav.services')}
               </Link>
               <Link 
-                href="/cozumler/otomasyon-abonelik"
+                href={nl('/cozumler/otomasyon-abonelik')}
                 className="text-gray-300 hover:text-white font-medium px-4 py-2.5 rounded-lg hover:bg-white/[0.04] transition-all"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -286,14 +292,14 @@ export function Navbar() {
 
               <div className="px-3 py-2 text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]">{t('nav.trainings')}</div>
               <Link 
-                href="/egitimler/ai-factory"
+                href={nl('/egitimler/ai-factory')}
                 className="text-gray-300 hover:text-white font-medium px-4 py-2.5 rounded-lg hover:bg-white/[0.04] transition-all"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 AI Factory
               </Link>
               <Link 
-                href="/egitimler/kurumsal-egitimler"
+                href={nl('/egitimler/kurumsal-egitimler')}
                 className="text-gray-300 hover:text-white font-medium px-4 py-2.5 rounded-lg hover:bg-white/[0.04] transition-all"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -303,14 +309,14 @@ export function Navbar() {
               <div className="h-px bg-white/[0.08] my-3 mx-2" />
 
               <Link 
-                href="/isbirlikleri"
+                href={nl('/isbirlikleri')}
                 className="text-gray-300 hover:text-white font-medium px-4 py-2.5 rounded-lg hover:bg-white/[0.04] transition-all"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {t('nav.collaborations')}
               </Link>
               <Link 
-                href="/hakkimizda"
+                href={nl('/hakkimizda')}
                 className="text-gray-300 hover:text-white font-medium px-4 py-2.5 rounded-lg hover:bg-white/[0.04] transition-all"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -320,7 +326,7 @@ export function Navbar() {
               <div className="h-px bg-white/[0.08] my-3 mx-2" />
 
               <Link 
-                href="/blog"
+                href={nl('/blog')}
                 className="text-gray-300 hover:text-white font-medium px-4 py-2.5 rounded-lg hover:bg-white/[0.04] transition-all"
                 onClick={() => setIsMobileMenuOpen(false)}
               >

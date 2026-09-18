@@ -1,29 +1,16 @@
-import type { Metadata } from 'next'
 import dynamic from 'next/dynamic'
 import { HeroSectionElevate } from '@/components/sections/HeroSectionElevate'
 
 const ProductsSection = dynamic(() => import('@/components/sections/ProductsSection').then(mod => mod.ProductsSection))
 const LogoStrip = dynamic(() => import('@/components/sections/LogoStrip').then(mod => mod.LogoStrip))
 
-// F9: TR ana sayfa <-> /en esi. Kok layout'ta DEGIL burada duruyor; kokte
-// olsaydi Ingilizce karsiligi olmayan butun sayfalara miras kalirdi.
-export const metadata: Metadata = {
-  alternates: {
-    canonical: './',
-    languages: {
-      tr: 'https://dolunay.ai/',
-      en: 'https://dolunay.ai/en',
-      'x-default': 'https://dolunay.ai/',
-    },
-  },
-}
-
-export default function Home() {
+// F9: TR anasayfasinin (src/app/page.tsx) birebir aynisi; tek fark WebSite
+// semasinin dili ve adresi. Govde metni zaten HeroSectionElevate/LogoStrip/
+// ProductsSection icindeki useTranslation() ile geliyor -- bu sayfa /en
+// altinda oldugu icin i18n.tsx artik otomatik 'en' cevirisini basar.
+export default function EnglishHome() {
   return (
     <>
-      {/* F11 (seo_geo/BULGULAR.md): WebSite semasi YALNIZ ana sayfaya girer.
-          Sitede calisan bir arama kutusu olmadigi icin potentialAction/
-          SearchAction BILEREK eklenmedi — olmayan bir ozelligi beyan etmeyiz. */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -31,8 +18,8 @@ export default function Home() {
             '@context': 'https://schema.org',
             '@type': 'WebSite',
             name: 'dolunay.ai',
-            url: 'https://dolunay.ai',
-            inLanguage: 'tr-TR',
+            url: 'https://dolunay.ai/en',
+            inLanguage: 'en-US',
             publisher: { '@id': 'https://dolunay.ai/#organization' },
           }),
         }}

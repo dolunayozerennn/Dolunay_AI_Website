@@ -1,31 +1,32 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 import { useTranslation, type Language } from '@/i18n/i18n';
+import { counterpartPaths } from '@/i18n/routes';
 import { Globe, Check, ChevronDown } from 'lucide-react';
 
+// F9 (seo_geo/BULGULAR.md): ES ve ZH sahte kaldigi (URL yok, hreflang yok,
+// bot gormuyordu) icin kaldirildi. Locale dosyalari (es.json/zh.json)
+// SILINMEDI, sadece bu listeden cikti. EN artik GERCEK bir adres (/en/...),
+// bu yuzden secim bir client state degil GERCEK bir <Link> navigasyonu.
 const languages: { code: Language; name: string; flag: string }[] = [
   { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
   { code: 'en', name: 'English', flag: '🇬🇧' },
-  { code: 'zh', name: '中文', flag: '🇨🇳' },
-  { code: 'es', name: 'Español', flag: '🇪🇸' },
 ];
 
 export function LanguageSwitcher({ mobile = false }: { mobile?: boolean }) {
-  const { language, setLanguage, t } = useTranslation();
+  const { language, t } = useTranslation();
+  const pathname = usePathname();
+  const { tr: trHref, en: enHref } = counterpartPaths(pathname || '/');
+  const hrefFor = (code: Language) => (code === 'tr' ? trHref : enHref);
+
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Sunucu HTML'i her zaman tr uretir; ilk cizimde de tr gosterilir ki
-  // hydration uyusmazligi olmasin, sonra gercek dile gecilir.
-  // ONEMLI: bu bir useRef DEGIL, useState. useRef ile yazildiginda deger
-  // degisse bile yeniden cizim tetiklenmiyordu; secici Ingilizce gezerken bile
-  // "Türkçe" yazili kaliyor ve yanlis dili secili gosteriyordu.
-  const [mounted, setMounted] = useState(false);
-
   useEffect(() => {
-    setMounted(true);
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsOpen(false);
@@ -51,11 +52,6 @@ export function LanguageSwitcher({ mobile = false }: { mobile?: boolean }) {
     }, 200);
   };
 
-  const handleLanguageSelect = (code: Language) => {
-    setLanguage(code);
-    setIsOpen(false);
-  };
-
   const currentLang = languages.find(l => l.code === language) || languages[0];
 
   if (mobile) {
@@ -63,15 +59,16 @@ export function LanguageSwitcher({ mobile = false }: { mobile?: boolean }) {
       <div className="py-2">
         <div className="flex items-center gap-2 px-4 py-2 text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-1">
           <Globe className="w-3.5 h-3.5" />
-          <span>{t('nav.language')}: {mounted ? currentLang.name : 'Türkçe'}</span>
+          <span>{t('nav.language')}: {currentLang.name}</span>
         </div>
         <div className="grid grid-cols-2 gap-2 px-3">
           {languages.map((lang) => (
-            <button
+            <Link
               key={lang.code}
-              onClick={() => handleLanguageSelect(lang.code)}
+              href={hrefFor(lang.code)}
+              onClick={() => setIsOpen(false)}
               className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-all ${
-                (mounted ? language === lang.code : lang.code === 'tr')
+                language === lang.code
                   ? 'bg-[#4F8BFF]/10 text-[#4F8BFF] border border-[#4F8BFF]/20'
                   : 'text-gray-400 hover:text-white hover:bg-white/[0.04] border border-transparent'
               }`}
@@ -80,7 +77,7 @@ export function LanguageSwitcher({ mobile = false }: { mobile?: boolean }) {
                 <span className="text-base">{lang.flag}</span>
                 <span className="font-medium">{lang.name}</span>
               </div>
-            </button>
+            </Link>
           ))}
         </div>
       </div>
@@ -89,8 +86,8 @@ export function LanguageSwitcher({ mobile = false }: { mobile?: boolean }) {
 
   // Desktop Version
   return (
-    <div 
-      className="relative" 
+    <div
+      className="relative"
       ref={dropdownRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -102,28 +99,29 @@ export function LanguageSwitcher({ mobile = false }: { mobile?: boolean }) {
         className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white hover:bg-white/[0.04] transition-all duration-300"
       >
         <Globe className="w-4 h-4 opacity-70" />
-        <span className="uppercase">{mounted ? language : 'TR'}</span>
+        <span className="uppercase">{language}</span>
         <ChevronDown className={`w-3.5 h-3.5 opacity-50 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {isOpen && (
         <div className="absolute right-0 top-full mt-2 w-48 bg-[#0E0F14]/95 backdrop-blur-xl border border-white/[0.08] rounded-xl shadow-2xl py-2 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
           {languages.map((lang) => (
-            <button
+            <Link
               key={lang.code}
-              onClick={() => handleLanguageSelect(lang.code)}
+              href={hrefFor(lang.code)}
+              onClick={() => setIsOpen(false)}
               className="w-full flex items-center justify-between px-4 py-2.5 text-sm transition-colors hover:bg-white/[0.04]"
             >
               <div className="flex items-center gap-3">
                 <span className="text-lg leading-none">{lang.flag}</span>
-                <span className={`font-medium ${(mounted ? language === lang.code : lang.code === 'tr') ? 'text-white' : 'text-gray-400'}`}>
+                <span className={`font-medium ${language === lang.code ? 'text-white' : 'text-gray-400'}`}>
                   {lang.name}
                 </span>
               </div>
-              {(mounted ? language === lang.code : lang.code === 'tr') && (
+              {language === lang.code && (
                 <Check className="w-4 h-4 text-[#4F8BFF]" />
               )}
-            </button>
+            </Link>
           ))}
         </div>
       )}

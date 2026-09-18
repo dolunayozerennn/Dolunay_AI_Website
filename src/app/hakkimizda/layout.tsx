@@ -7,7 +7,15 @@ export const metadata: Metadata = {
     title: 'Hakkımda & Ekibimiz | dolunay.ai',
     description: 'Dolunay Özeren kimdir? Antigravity yapay zeka takımı, otonom AI ajanlarımız ve ekibimizin arkasındaki vizyon.',
     url: 'https://dolunay.ai/hakkimizda',
-  }
+  },
+  alternates: {
+    canonical: './',
+    languages: {
+      tr: 'https://dolunay.ai/hakkimizda',
+      en: 'https://dolunay.ai/en/hakkimizda',
+      'x-default': 'https://dolunay.ai/hakkimizda',
+    },
+  },
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {

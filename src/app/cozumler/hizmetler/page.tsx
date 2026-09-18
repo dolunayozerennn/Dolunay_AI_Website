@@ -13,7 +13,17 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Yapay Zeka Danışmanlık ve Otomasyon Hizmetleri | dolunay.ai',
   description: 'İşletmeniz için özel yapay zeka ajanları ve otomasyon hizmetleri tasarlıyoruz.',
-  alternates: { canonical: './' },
+  // F9: page.tsx kendi metadata'sini tasidigi icin ayni klasordeki
+  // layout.tsx'in alternates'i buraya miras kalmayabilir -- languages burada
+  // da ayni deger ile tekrarlanir (bkz. layout.tsx'teki ayni not).
+  alternates: {
+    canonical: './',
+    languages: {
+      tr: 'https://dolunay.ai/cozumler/hizmetler',
+      en: 'https://dolunay.ai/en/cozumler/hizmetler',
+      'x-default': 'https://dolunay.ai/cozumler/hizmetler',
+    },
+  },
 }
 
 export default function ServicesPage() {

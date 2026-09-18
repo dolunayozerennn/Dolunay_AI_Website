@@ -3,12 +3,15 @@
 import { motion } from 'framer-motion'
 import { Instagram, Linkedin, Twitter, Youtube, Mail } from 'lucide-react'
 import { useTranslation } from '@/i18n/i18n'
+import { withLocale } from '@/i18n/routes'
 import Link from 'next/link'
 import Image from 'next/image'
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
+  const isEnglish = language === 'en';
+  const nl = (href: string) => withLocale(href, isEnglish);
 
   const socialLinks = [
     { icon: <Linkedin className="w-5 h-5" />, href: "https://www.linkedin.com/in/dolunayozeren/", label: "LinkedIn" },
@@ -27,7 +30,7 @@ export function Footer() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12">
 
           <div className="flex flex-col items-center md:items-start text-center md:text-left gap-4">
-            <Link href="/" className="flex items-center gap-3 text-2xl font-semibold tracking-tight text-[#F4F2EC] group">
+            <Link href={nl('/')} className="flex items-center gap-3 text-2xl font-semibold tracking-tight text-[#F4F2EC] group">
               <Image src="/brand/01-mark-light-transparent.svg" alt="" width={36} height={36} className="h-9 w-9" />
               <span>dolunay<span className="text-[#4F8BFF]">.ai</span></span>
             </Link>
@@ -56,24 +59,24 @@ export function Footer() {
             <div className="flex flex-col gap-3">
               <span className="text-white font-semibold mb-1">{t('footer.colTrainings')}</span>
 
-              <Link href="/egitimler/ai-factory" className="hover:text-white transition-colors">AI Factory</Link>
-              <Link href="/egitimler/kurumsal-egitimler" className="hover:text-white transition-colors">{t('nav.corporateTrainings')}</Link>
+              <Link href={nl('/egitimler/ai-factory')} className="hover:text-white transition-colors">AI Factory</Link>
+              <Link href={nl('/egitimler/kurumsal-egitimler')} className="hover:text-white transition-colors">{t('nav.corporateTrainings')}</Link>
             </div>
 
             <div className="flex flex-col gap-3">
               <span className="text-white font-semibold mb-1">{t('footer.colSolutions')}</span>
 
-              <Link href="/cozumler" className="hover:text-white transition-colors">{t('nav.allSolutions')}</Link>
-              <Link href="/cozumler/hizmetler" className="hover:text-white transition-colors">{t('nav.services')}</Link>
-              <Link href="/cozumler/otomasyon-abonelik" className="hover:text-white transition-colors">{t('nav.automationSubscription')}</Link>
-              <Link href="/isbirlikleri" className="hover:text-white transition-colors">{t('nav.collaborations')}</Link>
+              <Link href={nl('/cozumler')} className="hover:text-white transition-colors">{t('nav.allSolutions')}</Link>
+              <Link href={nl('/cozumler/hizmetler')} className="hover:text-white transition-colors">{t('nav.services')}</Link>
+              <Link href={nl('/cozumler/otomasyon-abonelik')} className="hover:text-white transition-colors">{t('nav.automationSubscription')}</Link>
+              <Link href={nl('/isbirlikleri')} className="hover:text-white transition-colors">{t('nav.collaborations')}</Link>
             </div>
 
             <div className="flex flex-col gap-3">
               <span className="text-white font-semibold mb-1">{t('footer.colCorporate')}</span>
 
-              <Link href="/hakkimizda" className="hover:text-white transition-colors">{t('nav.about')}</Link>
-              <Link href="/blog" className="hover:text-white transition-colors">{t('nav.blog')}</Link>
+              <Link href={nl('/hakkimizda')} className="hover:text-white transition-colors">{t('nav.about')}</Link>
+              <Link href={nl('/blog')} className="hover:text-white transition-colors">{t('nav.blog')}</Link>
               <Link href="/sozlesmeler/mesafeli-satis" className="hover:text-white transition-colors">{t('footer.distanceSales')}</Link>
               <Link href="/sozlesmeler/kvkk" className="hover:text-white transition-colors">{t('footer.privacy')}</Link>
             </div>
