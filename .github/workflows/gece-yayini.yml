@@ -1,0 +1,33 @@
+# Gece toplu yayin (2026-09-18). Gun ici push'lar Netlify'da iptal edilir
+# (scripts/netlify_yayin_kapisi.sh); bu is her gece canli surum ile main'i
+# karsilastirir, fark varsa TEK yayin tetikler. Fark yoksa kredi harcanmaz.
+#
+# Elle yayin (acil is, env degisikligi sonrasi yeniden yayin): GitHub'da
+# Actions > Gece yayini > Run workflow. Karsilastirma yapmadan yayinlar.
+name: Gece yayini
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # 03:00 Turkiye (GitHub zamanlamasi birkac dakika gecikebilir)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gece-yayini
+  cancel-in-progress: false
+
+jobs:
+  yayin:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Canli surum ile main'i karsilastir, fark varsa yayinla
+        env:
+          HOOK: ${{ secrets.NETLIFY_GECE_HOOK }}
+          ELLE: ${{ github.event_name == 'workflow_dispatch' }}
+        run: bash scripts/gece_yayini.sh

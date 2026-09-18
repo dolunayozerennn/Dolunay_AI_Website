@@ -3,6 +3,27 @@
 Next.js ile statik uretilen dolunay.ai sitesi. Odeme/abonelik akisi Netlify
 Functions uzerinde ayri yasar (`netlify/functions`, `netlify/lib`).
 
+## YAYIN GECE TOPLU CIKAR (2026-09-18) — push'un hemen canliya cikmaz
+
+Basarili her Netlify production yayini 15 kredi yakar; 18 Eylul'de kredi bitti,
+Dolunay ek odeme istemiyor. Bu yuzden:
+
+- `main`'e giden push'lar yayina CIKMAZ, Netlify'da iptal gorunur (iptal bedava).
+- Her gece 03:00 (TR) GitHub Actions "Gece yayini" canli surum ile `main`'i
+  karsilastirir; fark varsa TEK yayin cikar, yoksa hic cikmaz. Yalniz `seo_geo/`
+  degistiyse de cikmaz.
+- **Acil is:** commit mesajina `[yayinla]` yaz (PR'da birlestirme basligina).
+  O push hemen yayina cikar. Ya da GitHub > Actions > Gece yayini > Run workflow
+  (karsilastirmadan yayinlar).
+- **Netlify arayuzundeki "Trigger deploy" ATLANIR**, kullanma.
+- Onizleme ve dal yayinlari etkilenmez.
+- Kapi: `scripts/netlify_yayin_kapisi.sh`. Gece isi: `scripts/gece_yayini.sh`,
+  `.github/workflows/gece-yayini.yml`. Hook adresi repo secret'i
+  `NETLIFY_GECE_HOOK` (Netlify build hook "gece-yayini"). Canli surum
+  `https://dolunay.ai/surum.txt` (build yazar).
+- Gun icindeki kucuk duzeltmeler (7 Eylul'de tek gunde 19 yayin olmustu) birikip
+  gece tek yayin olur; acil degilse etiket koyma.
+
 ## Hyper3D ogrenci promptlari (2026-09-11)
 
 `public/hyper3d/index.html` -> `https://dolunay.ai/hyper3d/`. Tek dosya,
@@ -117,17 +138,19 @@ Netlify API'sinde `PATCH .../env/<KEY>` **422 doner, calismaz**. Calisan yol
 `account_slug` → `GET /sites/<site_id>` cevabindaki `account_slug`.
 site_id: `93e952dd-4720-4bca-93e8-55ddcaa844f6`.
 
-**NETLIFY_AUTH_TOKEN ARTIK master.env ICINDE YOK** (2026-09-13'te dogrulandi).
-Yukaridaki API yolu bu yuzden dogrudan kullanilamiyor. Calisan yollar:
+**NETLIFY_AUTH_TOKEN** 2026-09-13'te master.env'de yoktu; 2026-09-18'de yine
+ORADA ve calisiyor (build hook bununla acildi). Once kontrol et. Calisan yollar:
 Netlify arayuzu ya da kimlik dogrulamis bir Netlify MCP baglantisi. Jeton
 yeniden uretilirse hesabin TAMAMINA erisim verdigi unutulmasin; ayni hesapta
 baska siteler de var.
 
 **Env degisikligi tek basina yetmez**, fonksiyonlar yeni degeri ancak yeniden
-deploy sonrasi gorur. Deploy tetiklemenin yollari: Netlify arayuzunde
-Deploys > Trigger deploy, ya da `main`'e giden bir PR birlestirmek.
-`main`'e dogrudan itis KAPALI (dal korumasi; 2026-09-13'te 422 ile olculdu),
-yani bos commit atarak tetiklenemez.
+deploy sonrasi gorur. Deploy tetiklemenin yolu (2026-09-18'den beri):
+GitHub > Actions > Gece yayini > Run workflow. Netlify arayuzundeki
+Trigger deploy ve etiketsiz PR birlestirmesi artik yayina CIKMAZ (yukarida
+"YAYIN GECE TOPLU CIKAR"). Acele yoksa gece yayini da alir.
+`main`'e dogrudan itis dal korumali ama yonetici (Dolunay hesabi) atlayabiliyor;
+2026-09-18'de dogrudan push'lar calisiyordu.
 
 **`deploy-site` KULLANILMAZ.** Bulundugu klasoru yukler; yanlis klasorden
 calistirilirsa kimlik dosyalari dahil her sey internete acilir. Sitenin

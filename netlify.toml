@@ -3,22 +3,24 @@
   # kendi git gecmisinden okunuyor; sig klonda tum dosyalar tek commit tarihine yapisir
   # ve tarih sinyali yine anlamsizlasir. Bu yuzden build oncesi tam gecmis cekilir.
   # Cekilemezse build DURMAZ, sitemap kendi yedek zincirine (mtime -> simdi) duser.
-  command = "git fetch --unshallow --quiet || true; npm run build"
+  #
+  # surum.txt: canlidaki commit. Gece yayini (scripts/gece_yayini.sh) main ile
+  # bunu karsilastirip fark yoksa yayin tetiklemez.
+  command = "git fetch --unshallow --quiet || true; npm run build && printf '%s\\n' \"$COMMIT_REF\" > out/surum.txt"
 
-  # Yalniz `seo_geo/` degisen commit siteyi yeniden KURMAZ. O klasor SEO/GEO
-  # calisma defteri; hicbir dosyasi derlemeye girmiyor (yalniz yorum satirlarinda
-  # adi geciyor), ama her dokumantasyon commit'i tam bir build yakiyordu ve
-  # Netlify kredisi build DAKIKASINDAN dusuyor -- 18 Eylul'de kredi bu yuzden
-  # bitip yayin komple durdu.
+  # GECE TOPLU YAYIN (2026-09-18). Basarili her production yayini 15 Netlify
+  # kredisi yakar (build dakikasi degil); 18 Eylul'de kredi bu yuzden bitip
+  # yayin komple durdu. Artik gun ici push'lar yayina CIKMAZ: kapi onlari iptal
+  # eder (iptal bedava), gece 03:00'te .github/workflows/gece-yayini.yml canli
+  # surum ile main'i karsilastirir ve fark varsa TEK yayin tetikler. Yalniz
+  # `seo_geo/` degistiyse o gece de yayin olmaz.
   #
-  # Netlify sozlesmesi TERS: cikis 0 = build ATLANIR, sifir disi = build KOSAR.
-  # `git diff --quiet` fark yoksa 0 doner, yani "seo_geo disinda hicbir sey
-  # degismemis" demek build atlanir demektir. Sig klonda eski commit bulunamazsa
-  # git hata verir, cikis sifir disi olur ve build KOSAR -- yanlis tarafa dusmez.
+  # ACIL IS: commit mesajina (PR'da birlestirme basligina) `[yayinla]` yaz, o
+  # push hemen yayina cikar. Ya da GitHub'da Actions > Gece yayini > Run workflow.
+  # Netlify arayuzundeki "Trigger deploy" ATLANIR, kullanma.
   #
-  # Sinandi (iki yonde, gercek commit'lerle): 4b08b73 ve edbeda5 (yalniz seo_geo)
-  # ATLA; 08aee0e, 60f7341 ve 3a0a0e6 (src degisikligi) KUR. 5/5.
-  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- . ':(exclude)seo_geo'"
+  # Onizleme ve dal yayinlari etkilenmez (bedava). Kural ayrintisi kapinin icinde.
+  ignore = "bash scripts/netlify_yayin_kapisi.sh"
   publish = "out"
   functions = "netlify/functions"
 
