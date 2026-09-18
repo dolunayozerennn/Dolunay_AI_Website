@@ -11,6 +11,8 @@ import { AbonelikSeridi } from '@/components/AbonelikSeridi';
 import { useTranslation } from '@/i18n/i18n';
 import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema';
 import { withLocale } from '@/i18n/routes';
+import { GeoContentSection } from '@/components/sections/GeoContentSection';
+import { cozumlerGeoBlocks } from '@/data/geoContent';
 
 function SkoolIcon({ className }: { className?: string }) {
   return (
@@ -262,6 +264,9 @@ export default function SolutionsPage() {
 
       {/* ABONELIK — kurulan otomasyonun aylik surdurulmesi */}
       <AbonelikSeridi />
+
+      {/* GEO icerik (F10) — yalniz TR, tum satis CTA'larinin ALTINDA */}
+      {language === 'tr' && <GeoContentSection blocks={cozumlerGeoBlocks} />}
     </div>
   );
 }

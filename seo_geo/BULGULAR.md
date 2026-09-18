@@ -34,7 +34,7 @@ Yeni bir SEO/GEO görevi alan ajan ÖNCE burayı okur, işi bitince "DURUM" tabl
 | F7 | Sitemap lastmod = derleme tarihi | 9 statik sayfanın hepsi 2026-09-16; her yayında hepsi değişmiş görünüyor, Google sinyali çöpe atar | TAMAM — git commit tarihine bağlandı, fallback: mtime -> now |
 | F8 | 18 sayfanın 7'si Google'da yok | 11 indexli, 4 keşfedildi-indexlenmedi, 3 "URL is unknown to Google" | AÇIK |
 | F9 | 4 dil görünüyor, gerçekte 1 dil var | dil değiştirici sadece localStorage; hreflang yok; arama motoru yalnız TR görüyor | TAMAM — /en altinda 7 gercek sayfa, karsilikli hreflang, gercek link switcher; ES/ZH kaldirildi |
-| F10 | GEO içerik biçimi yok | blog yazılarında soru-başlık, doğrudan cevap, istatistik/kaynak yapısı yok | AÇIK |
+| F10 | GEO içerik biçimi yok | blog yazılarında soru-başlık, doğrudan cevap, istatistik/kaynak yapısı yok | TAMAM — `geo-icerik` dalı: 7 onaylı blok (3 `/egitimler/ai-factory`, 4 `/cozumler`) `src/data/geoContent.ts`'te, `GeoContentSection` ile yalnız TR'de (`language === 'tr'`) render ediliyor; EN sayfalarda görünmüyor (doğrulandı). "Ortalama teslim süresi" cümlesi Dolunay'dan sayı gelene kadar dışarıda. Main'e henüz girmedi. |
 | F11 | Breadcrumb / WebSite / Service şeması yok | grep | TAMAM — BreadcrumbList tüm iç sayfalarda (5 tane Artifex hukuki sayfası HARİÇ: `Projeler/Artifex_Hukuki_Sayfalar/uret_nextjs.py` ile üretiliyor, elle dokunulmaz), WebSite ana sayfada, Service /cozumler + /cozumler/hizmetler + /cozumler/otomasyon-abonelik'te |
 | F12 | Article'da publisher yok, Course'ta aggregateRating yok | opsiyonel alanlar | Article publisher TAMAM; Course aggregateRating ATLANDI — gerçek puanlama verisi yok, uydurma risk |
 | F13 | AI bot trafiği ölçülemiyor | Netlify Analytics kapalı, log drain yok | AÇIK |
@@ -145,7 +145,7 @@ Mevcut `Paylasilan_Projeler/Web_Sitesi_Starter` kutusu aynı teknolojide — pak
 - Faz 1 (F1-F6): ajan koşuyor
 - Faz 2 (F7, F11, F12): TAMAM (F12'de Course aggregateRating bilerek ATLANDI)
 - Faz 3 (F9 İngilizce): TAMAM, dal `en-dil`'de bekliyor (main'e henüz girmedi)
-- Faz 4 (F10 GEO içerik): açık
+- Faz 4 (F10 GEO içerik): TAMAM, dal `geo-icerik`'te bekliyor (main'e henüz girmedi)
 - Faz 5 (öğrenci kutusu): site bitince
 
 ### F9 uygulamasi — 2026-09-18
