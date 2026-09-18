@@ -32,9 +32,9 @@ Yeni bir SEO/GEO görevi alan ajan ÖNCE burayı okur, işi bitince "DURUM" tabl
 | F5 | Sitemap'te 7 sözleşme sayfası + /cozumler/hizmetler yok | sitemap 18 URL | Faz 1'de |
 | F6 | Mobil LCP eşiğin üstünde | ana sayfa 3,1 sn / ai-factory 4,0 sn (Google eşiği 2,5). Masaüstü 0,6 / 1,2 | AÇIK — 2 tur denendi (görsel + animasyon), ikisi de ölçülebilir kazanç vermedi; ayrıntı aşağıda |
 | F7 | Sitemap lastmod = derleme tarihi | 9 statik sayfanın hepsi 2026-09-16; her yayında hepsi değişmiş görünüyor, Google sinyali çöpe atar | TAMAM — git commit tarihine bağlandı, fallback: mtime -> now |
-| F8 | 18 sayfanın 7'si Google'da yok | 11 indexli, 4 keşfedildi-indexlenmedi, 3 "URL is unknown to Google" | AÇIK |
+| F8 | 7 sayfa Google'da yok | 11 indexli, 4 keşfedildi-indexlenmedi, 3 "URL is unknown to Google" | AÇIK — Search Console arayüzünden elle indeksleme isteği; API yolu yok |
 | F9 | 4 dil görünüyor, gerçekte 1 dil var | dil değiştirici sadece localStorage; hreflang yok; arama motoru yalnız TR görüyor | TAMAM — /en altinda 7 gercek sayfa, karsilikli hreflang, gercek link switcher; ES/ZH kaldirildi |
-| F10 | GEO içerik biçimi yok | blog yazılarında soru-başlık, doğrudan cevap, istatistik/kaynak yapısı yok | TAMAM — `geo-icerik` dalı: 7 onaylı blok (3 `/egitimler/ai-factory`, 4 `/cozumler`) `src/data/geoContent.ts`'te, `GeoContentSection` ile yalnız TR'de (`language === 'tr'`) render ediliyor; EN sayfalarda görünmüyor (doğrulandı). "Ortalama teslim süresi" cümlesi Dolunay'dan sayı gelene kadar dışarıda. Main'e henüz girmedi. |
+| F10 | GEO içerik biçimi yok | blog yazılarında soru-başlık, doğrudan cevap, istatistik/kaynak yapısı yok | TAMAM — `geo-icerik` dalı: 7 onaylı blok (3 `/egitimler/ai-factory`, 4 `/cozumler`) `src/data/geoContent.ts`'te, `GeoContentSection` ile yalnız TR'de (`language === 'tr'`) render ediliyor; EN sayfalarda görünmüyor (doğrulandı). "Ortalama teslim süresi" cümlesi Dolunay'dan sayı gelene kadar dışarıda. 2026-09-18'de `main`e girdi ve CANLIDA doğrulandı: TR sayfalarda 7 blok `<h2>` olarak var, 7 İngilizce sayfanın hiçbirinde yok. |
 | F11 | Breadcrumb / WebSite / Service şeması yok | grep | TAMAM — BreadcrumbList tüm iç sayfalarda (5 tane Artifex hukuki sayfası HARİÇ: `Projeler/Artifex_Hukuki_Sayfalar/uret_nextjs.py` ile üretiliyor, elle dokunulmaz), WebSite ana sayfada, Service /cozumler + /cozumler/hizmetler + /cozumler/otomasyon-abonelik'te |
 | F12 | Article'da publisher yok, Course'ta aggregateRating yok | opsiyonel alanlar | Article publisher TAMAM; Course aggregateRating ATLANDI — gerçek puanlama verisi yok, uydurma risk |
 | F13 | AI bot trafiği ölçülemiyor | Netlify Analytics kapalı, log drain yok | AÇIK |
@@ -141,12 +141,38 @@ Bu iş yalnız dolunay.ai'yi düzeltmek için değil: çıkan yöntem `ogrenci-k
 öğrencilere satılabilir "her siteye uygulanabilir SEO/GEO/hız optimizasyon paketi" olacak.
 Mevcut `Paylasilan_Projeler/Web_Sitesi_Starter` kutusu aynı teknolojide — paket onun üstüne oturur.
 
-## DURUM
-- Faz 1 (F1-F6): ajan koşuyor
+## DURUM (2026-09-18)
+- Faz 1 (F1-F6): TAMAM ve canlıda
 - Faz 2 (F7, F11, F12): TAMAM (F12'de Course aggregateRating bilerek ATLANDI)
-- Faz 3 (F9 İngilizce): TAMAM, dal `en-dil`'de bekliyor (main'e henüz girmedi)
-- Faz 4 (F10 GEO içerik): TAMAM, dal `geo-icerik`'te bekliyor (main'e henüz girmedi)
-- Faz 5 (öğrenci kutusu): site bitince
+- Faz 3 (F9 İngilizce): TAMAM, `main`de ve CANLIDA
+- Faz 4 (F10 GEO içerik): TAMAM, `main`de ve CANLIDA
+- Faz 5 (öğrenci kutusu): SIRADAKİ
+- AÇIK KALAN TEK İŞ: F8 (Search Console'dan elle indeksleme isteği) + Dolunay'dan
+  "ortalama teslim süresi" cümlesi.
+
+### Yayın engeli — Netlify kredisi (2026-09-18, çözüldü)
+17 Eylül akşamından 18 Eylül öğlenine kadar HİÇBİR değişiklik yayına çıkamadı:
+`Skipped due to account credit usage exceeded`. Site ayaktaydı, yalnız yeni deploy
+reddediliyordu. Ölçüldü: dönemde 260,5 build dakikası yandı (önceki dönem 64,7) ve
+bunun 200,4 dakikası Yumu'nun İKİ Netlify sitesinden geliyordu — ikisi de aynı depoya
+bağlı, her commit ikisini birden kuruyor, YumuClip'in 202 build'inin 199'u "değişen bir
+şey yok" diye iptal olup dakikayı yine de yakıyordu. dolunay.ai kendi payı 60 dakika.
+Yapay zeka / Agent Runner ve trafik sebep DEĞİL (ölçüldü). Dolunay 10 dolar kredi
+yükledi, yayın açıldı; israfın kaynağı Yumu tarafında ayrıca kısılıyor.
+
+### Canlı doğrulama — 2026-09-18
+- `/en`, `/en/cozumler`, `/en/hakkimizda` ve diğer 4 İngilizce sayfa 200 dönüyor.
+- Sitemap 26 -> 33 adres.
+- hreflang taşıyan sayfa: tam 14 (7 TR + 7 EN), hepsi karşılıklı, x-default TR.
+- GEO blokları: `/egitimler/ai-factory` 3, `/cozumler` 4, hepsi gerçek `<h2>`.
+- **Sonradan yakalanan sızıntı:** abonelik şeridi bileşeni sabit Türkçe metinle
+  yazılmıştı; `/en/cozumler` ve `/en/cozumler/hizmetler` sayfalarında Türkçe duruyordu.
+  Metin bileşen içinde iki dilli sözlüğe alındı — locale JSON'una DEĞİL, çünkü `en.json`'da
+  eksik anahtar `tr.json`'a düşüp İngilizce sayfaya Türkçe sızdırıyor. 7 İngilizce sayfanın
+  tamamı yeniden tarandı, başka kalıntı yok.
+- Karnede kırık diye duran dört madde canlıda ölçüldü ve artık kırık DEĞİL: favicon.ico ve
+  iyzico güven bandı 200, hizmetler canonical'ı kendini gösteriyor, 9 blog meta açıklamasının
+  hiçbiri kelime ortasından kesilmiyor. `karne.html` buna göre güncellendi.
 
 ### F9 uygulamasi — 2026-09-18
 - Yaklasim: dinamik `[locale]` segmenti DEGIL, fiziksel `/en` klasoru. Sebep: sozlesme sayfalari,
