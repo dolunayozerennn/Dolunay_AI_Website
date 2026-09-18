@@ -15,6 +15,10 @@ Dolunay ek odeme istemiyor. Bu yuzden:
 - **Acil is:** commit mesajina `[yayinla]` yaz (PR'da birlestirme basligina).
   O push hemen yayina cikar. Ya da GitHub > Actions > Gece yayini > Run workflow
   (karsilastirmadan yayinlar).
+- **Etiket mesajin HERHANGI bir yerinde gecerse yayin cikar** (baslik ya da
+  govde, buyuk-kucuk harf fark etmez). Bu duzeni ANLATAN commit'te koseli
+  parantezli etiketi yazma, "yayinla etiketi" de; 1558002 bu yuzden 15 kredilik
+  yayin yapti.
 - **Netlify arayuzundeki "Trigger deploy" ATLANIR**, kullanma.
 - Onizleme ve dal yayinlari etkilenmez.
 - Kapi: `scripts/netlify_yayin_kapisi.sh`. Gece isi: `scripts/gece_yayini.sh`,
