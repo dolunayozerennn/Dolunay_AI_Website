@@ -32,7 +32,7 @@ Yeni bir SEO/GEO görevi alan ajan ÖNCE burayı okur, işi bitince "DURUM" tabl
 | F5 | Sitemap'te 7 sözleşme sayfası + /cozumler/hizmetler yok | sitemap 18 URL | Faz 1'de |
 | F6 | Mobil LCP eşiğin üstünde | ana sayfa 3,1 sn / ai-factory 4,0 sn (Google eşiği 2,5). Masaüstü 0,6 / 1,2 | AÇIK — 2 tur denendi (görsel + animasyon), ikisi de ölçülebilir kazanç vermedi; ayrıntı aşağıda |
 | F7 | Sitemap lastmod = derleme tarihi | 9 statik sayfanın hepsi 2026-09-16; her yayında hepsi değişmiş görünüyor, Google sinyali çöpe atar | TAMAM — git commit tarihine bağlandı, fallback: mtime -> now |
-| F8 | 7 sayfa Google'da yok | 11 indexli, 4 keşfedildi-indexlenmedi, 3 "URL is unknown to Google" | AÇIK — Search Console arayüzünden elle indeksleme isteği; API yolu yok |
+| F8 | Satış sayfaları Google'da yok | 33 adresin 13'ü indexli, 13'ü "URL is unknown to Google", 7'si "Discovered - currently not indexed" (URL Inspection API, 2026-09-18) | KISMEN — asıl sebep bulundu ve düzeltildi: ince içerik. `/cozumler/hizmetler` 293→1013, `/egitimler/kurumsal-egitimler` 267→999 kelime, üçer GEO bloğu canlıda. Site haritası yeniden gönderildi. AÇIK KALAN: tek tek "Request Indexing" yalnız arayüzde var, bu kokpitte tarayıcı bağlı değil |
 | F9 | 4 dil görünüyor, gerçekte 1 dil var | dil değiştirici sadece localStorage; hreflang yok; arama motoru yalnız TR görüyor | TAMAM — /en altinda 7 gercek sayfa, karsilikli hreflang, gercek link switcher; ES/ZH kaldirildi |
 | F10 | GEO içerik biçimi yok | blog yazılarında soru-başlık, doğrudan cevap, istatistik/kaynak yapısı yok | TAMAM — `geo-icerik` dalı: 7 onaylı blok (3 `/egitimler/ai-factory`, 4 `/cozumler`) `src/data/geoContent.ts`'te, `GeoContentSection` ile yalnız TR'de (`language === 'tr'`) render ediliyor; EN sayfalarda görünmüyor (doğrulandı). "Ortalama teslim süresi" cümlesi Dolunay'dan sayı gelene kadar dışarıda. 2026-09-18'de `main`e girdi ve CANLIDA doğrulandı: TR sayfalarda 7 blok `<h2>` olarak var, 7 İngilizce sayfanın hiçbirinde yok. |
 | F11 | Breadcrumb / WebSite / Service şeması yok | grep | TAMAM — BreadcrumbList tüm iç sayfalarda (5 tane Artifex hukuki sayfası HARİÇ: `Projeler/Artifex_Hukuki_Sayfalar/uret_nextjs.py` ile üretiliyor, elle dokunulmaz), WebSite ana sayfada, Service /cozumler + /cozumler/hizmetler + /cozumler/otomasyon-abonelik'te |
@@ -79,6 +79,17 @@ Yeni bir SEO/GEO görevi alan ajan ÖNCE burayı okur, işi bitince "DURUM" tabl
 - Menüden linkli (7 sayfanın hepsinden), sitemap'te, robots.txt engellemiyor, noindex yok, canonical doğru
 - Yani sebep teknik değil: site otoritesi düşük, Google ana sayfadan öteye geçmiyor
 - Çözüm: F7 düzeltmesi + GSC'den elle "Request Indexing" (yalnız arayüzde var, API yok)
+
+### F8 ikinci tur teşhis — sebep incelik (2026-09-18)
+- 33 sitemap adresinin tamamı URL Inspection ile okundu: 13 indexed, 13 unknown, 7 discovered-not-indexed
+- Teşhis sırası: (1) iç linkleme, (2) sayfa ağırlığı. İlki elendi, ikincisi tuttu.
+- Orphan DEĞİL: `/egitimler/ai-factory`, `/egitimler/kurumsal-egitimler`, `/cozumler/hizmetler` üçü de
+  6 ayrı sayfadan linkli (`/`, `/cozumler`, `/egitimler/ai-factory`, `/hakkimizda`, `/isbirlikleri`, `/blog`)
+- Görünür kelime sayısı: Google'ın ALDIĞI `/cozumler` 1256, `/egitimler/ai-factory` 1064;
+  ALMADIĞI `/cozumler/hizmetler` 293, `/egitimler/kurumsal-egitimler` 267
+- Hüküm: teknik engel değil ince içerik. Aynı GEO blok biçimi bu iki sayfaya da yazıldı.
+- URL Inspection ucu `/webmasters/v3` DEĞİL: `https://searchconsole.googleapis.com/v1/urlInspection/index:inspect` (POST)
+- Indexing API normal sayfaları kabul etmiyor (yalnız JobPosting/BroadcastEvent); API'den yapılabilen tek adım sitemap yeniden gönderimi
 
 ## ARAMADA GERÇEK DURUM (Search Console, 17 Haz - 15 Eyl)
 - 275 tıklama / 3272 gösterim / CTR %8,4 / ort. pozisyon 5,7
@@ -146,9 +157,12 @@ Mevcut `Paylasilan_Projeler/Web_Sitesi_Starter` kutusu aynı teknolojide — pak
 - Faz 2 (F7, F11, F12): TAMAM (F12'de Course aggregateRating bilerek ATLANDI)
 - Faz 3 (F9 İngilizce): TAMAM, `main`de ve CANLIDA
 - Faz 4 (F10 GEO içerik): TAMAM, `main`de ve CANLIDA
-- Faz 5 (öğrenci kutusu): SIRADAKİ
-- AÇIK KALAN TEK İŞ: F8 (Search Console'dan elle indeksleme isteği) + Dolunay'dan
-  "ortalama teslim süresi" cümlesi.
+- Faz 5 (öğrenci kutusu): TAMAM — `Paylasilan_Projeler/SEO_GEO_AEO_Site_Kiti.zip`
+- Faz 6 (F8 ince içerik düzeltmesi): TAMAM, `main`de ve CANLIDA doğrulandı
+- AÇIK KALAN: (a) Search Console arayüzünden tek tek "Request Indexing" — bu kokpitte
+  tarayıcı bağlı değil, Dolunay'a bildirildi; (b) Dolunay'dan "ortalama teslim süresi"
+  cümlesi; (c) eğitim anekdotlarının doğruluğu Dolunay'a soruldu, cevap gelene kadar
+  metin yalnız referans listesindeki belgeli işle sınırlı tutuldu.
 
 ### Yayın engeli — Netlify kredisi (2026-09-18, çözüldü)
 17 Eylül akşamından 18 Eylül öğlenine kadar HİÇBİR değişiklik yayına çıkamadı:
@@ -189,3 +203,33 @@ yükledi, yayın açıldı; israfın kaynağı Yumu tarafında ayrıca kısılı
   (7 TR + 7 EN, hepsi karsilikli). Defter kaydi `_olcum_defteri.jsonl`.
 - Bilerek disarida: `/cozumler/otomasyon-abonelik` (EN cevirisi yok), blog yazilari, 7 sozlesme
   sayfasi. ES ve ZH switcher'dan kalkti, locale JSON dosyalari diskte duruyor.
+
+### Canlı doğrulama — 2026-09-18, ince sayfa turu
+Ölçüm komutu: `bash seo_geo/olc_canli.sh` (ölçüm defterine yazıldı).
+
+| Adres | Kod | Görünür kelime | TR blok |
+|---|---|---|---|
+| /cozumler | 200 | 1256 | 0 |
+| /egitimler/ai-factory | 200 | 1064 | 0 |
+| /cozumler/hizmetler | 200 | 1013 (önce 293) | 1 |
+| /egitimler/kurumsal-egitimler | 200 | 995 (önce 267) | 1 |
+| /en/cozumler | 200 | 426 | 0 |
+| /en/egitimler/ai-factory | 200 | 567 | 0 |
+| /en/cozumler/hizmetler | 200 | 316 | 0 |
+| /en/egitimler/kurumsal-egitimler | 200 | 281 | 0 |
+
+Yeni 6 sorunun 6'sı da gerçek `<h2>`. Yeni metinde em-dash 0, şapkalı harf 0,
+15 kelimeyi geçen cümle 0.
+
+**RSC sızıntısı (yakalandı, düzeltildi).** `/cozumler/hizmetler` server component olduğu için
+dil kapısı ince bir client sarmala taşındı. Bloklar sarmala PROP olarak geçilince, EN sayfa
+aynı bileşeni `export { default }` ile yeniden dışa aktardığı için Türkçe metnin tamamı EN
+sayfanın RSC yüküne serileşti (HTML'de görünmüyor, kaynakta duruyor; ölçüldü: 3 iz). Düzeltme:
+sarmal prop almaz, veriyi kendisi import eder. Ders: çalışma anındaki koşul build anındaki
+serileştirmeyi engellemez.
+
+**Metin düzeltmeleri (ana kokpit).** (1) Abonelik kapsamı `/cozumler/otomasyon-abonelik`
+kademeleriyle hizalandı: taslak "araç maliyeti abonelik içinde" diyordu, o üst kademede.
+(2) Eğitim anekdotu referans listesindeki belgeli işle sınırlandı (Türkiye Finans iki kez iki
+günlük atölye, Misyon Bankası 5 seans 120 katılımcı + bire bir danışmanlık, Başkent Üniversitesi,
+e-ticaret satıcı eğitimleri). Doğrulanamayan mikro anekdotlar çıkarıldı.
