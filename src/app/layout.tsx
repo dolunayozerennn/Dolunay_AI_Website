@@ -75,15 +75,12 @@ export const metadata: Metadata = {
     // canonical gösterir. Sabit 'https://dolunay.ai' yazılırsa tüm alt sayfalar
     // Google'a "asıl adres ana sayfa" der ve dizinden düşer.
     canonical: './',
-    // F9 (seo_geo/BULGULAR.md): /en artik GERCEK bir adres. Bu satir kok
-    // metadata'da yalniz ANA SAYFA icin dogru; /en/... altindaki her rota
-    // kendi layout.tsx'inde AYNI deseni kendi adresiyle tekrarlar (canonical
-    // gibi bu da miras almiyor, her seviye acikca yazar).
-    languages: {
-      tr: 'https://dolunay.ai/',
-      en: 'https://dolunay.ai/en',
-      'x-default': 'https://dolunay.ai/',
-    },
+    // F9: hreflang BURAYA YAZILMAZ. Kok metadata'daki alternates, kendi
+    // alternates'ini tanimlamayan HER sayfaya miras kalir; blog, sozlesmeler,
+    // /r ve abonelik sayfalari da "benim Ingilizce surumum /en" demeye baslar.
+    // Bu sayfalarin Ingilizce karsiligi YOK, o yuzden hreflang yalniz gercekten
+    // iki dilde var olan 7 sayfada, kendi layout/page dosyasinda tanimlanir
+    // (TR ana sayfa icin src/app/page.tsx).
   },
 }
 

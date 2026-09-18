@@ -33,7 +33,7 @@ Yeni bir SEO/GEO görevi alan ajan ÖNCE burayı okur, işi bitince "DURUM" tabl
 | F6 | Mobil LCP eşiğin üstünde | ana sayfa 3,1 sn / ai-factory 4,0 sn (Google eşiği 2,5). Masaüstü 0,6 / 1,2 | AÇIK — 2 tur denendi (görsel + animasyon), ikisi de ölçülebilir kazanç vermedi; ayrıntı aşağıda |
 | F7 | Sitemap lastmod = derleme tarihi | 9 statik sayfanın hepsi 2026-09-16; her yayında hepsi değişmiş görünüyor, Google sinyali çöpe atar | TAMAM — git commit tarihine bağlandı, fallback: mtime -> now |
 | F8 | 18 sayfanın 7'si Google'da yok | 11 indexli, 4 keşfedildi-indexlenmedi, 3 "URL is unknown to Google" | AÇIK |
-| F9 | 4 dil görünüyor, gerçekte 1 dil var | dil değiştirici sadece localStorage; hreflang yok; arama motoru yalnız TR görüyor | TAMAM (dal: `en-dil`, henüz main'e girmedi) — EN 7 sayfada gerçek statik rota oldu, ES/ZH değiştiriciden kaldırıldı |
+| F9 | 4 dil görünüyor, gerçekte 1 dil var | dil değiştirici sadece localStorage; hreflang yok; arama motoru yalnız TR görüyor | TAMAM — /en altinda 7 gercek sayfa, karsilikli hreflang, gercek link switcher; ES/ZH kaldirildi |
 | F10 | GEO içerik biçimi yok | blog yazılarında soru-başlık, doğrudan cevap, istatistik/kaynak yapısı yok | AÇIK |
 | F11 | Breadcrumb / WebSite / Service şeması yok | grep | TAMAM — BreadcrumbList tüm iç sayfalarda (5 tane Artifex hukuki sayfası HARİÇ: `Projeler/Artifex_Hukuki_Sayfalar/uret_nextjs.py` ile üretiliyor, elle dokunulmaz), WebSite ana sayfada, Service /cozumler + /cozumler/hizmetler + /cozumler/otomasyon-abonelik'te |
 | F12 | Article'da publisher yok, Course'ta aggregateRating yok | opsiyonel alanlar | Article publisher TAMAM; Course aggregateRating ATLANDI — gerçek puanlama verisi yok, uydurma risk |
@@ -147,3 +147,19 @@ Mevcut `Paylasilan_Projeler/Web_Sitesi_Starter` kutusu aynı teknolojide — pak
 - Faz 3 (F9 İngilizce): TAMAM, dal `en-dil`'de bekliyor (main'e henüz girmedi)
 - Faz 4 (F10 GEO içerik): açık
 - Faz 5 (öğrenci kutusu): site bitince
+
+### F9 uygulamasi — 2026-09-18
+- Yaklasim: dinamik `[locale]` segmenti DEGIL, fiziksel `/en` klasoru. Sebep: sozlesme sayfalari,
+  blog ve panel gibi dokunulmamasi gereken alanlara hic el surmeden yuruyen tek yol.
+- TR<->EN adres eslemesi TEK kaynakta: `src/i18n/routes.ts` (`EN_MIRRORED_PATHS`). Navbar, Footer
+  ve LanguageSwitcher ayni listeyi okur; yeni sayfa EN'e acilinca tek yerden acilir.
+- Dil degistirici artik `<Link>`, localStorage toggle degil. Sayfa bazli: `/cozumler` uzerindeyken
+  EN'e basinca `/en/cozumler` acilir.
+- **TUZAK (bu turda yakalandi, tekrar etmesin):** hreflang'i kok `src/app/layout.tsx` metadata'sina
+  yazmak YANLIS. Kok `alternates`, kendi `alternates`'ini tanimlamayan HER sayfaya miras kalir;
+  blog, sozlesmeler, `/r` ve abonelik sayfalari da "benim Ingilizce surumum /en" demeye basladi
+  (20 sayfa, hepsi tek yonlu ve karsiliksiz vaat). Duzeltme: kokten `languages` kaldirildi, TR ana
+  sayfa kendi hreflang'ini `src/app/page.tsx`'te yaziyor. Olculdu: hreflang tasiyan sayfa 34 -> 14
+  (7 TR + 7 EN, hepsi karsilikli). Defter kaydi `_olcum_defteri.jsonl`.
+- Bilerek disarida: `/cozumler/otomasyon-abonelik` (EN cevirisi yok), blog yazilari, 7 sozlesme
+  sayfasi. ES ve ZH switcher'dan kalkti, locale JSON dosyalari diskte duruyor.

@@ -1,8 +1,22 @@
+import type { Metadata } from 'next'
 import dynamic from 'next/dynamic'
 import { HeroSectionElevate } from '@/components/sections/HeroSectionElevate'
 
 const ProductsSection = dynamic(() => import('@/components/sections/ProductsSection').then(mod => mod.ProductsSection))
 const LogoStrip = dynamic(() => import('@/components/sections/LogoStrip').then(mod => mod.LogoStrip))
+
+// F9: TR ana sayfa <-> /en esi. Kok layout'ta DEGIL burada duruyor; kokte
+// olsaydi Ingilizce karsiligi olmayan butun sayfalara miras kalirdi.
+export const metadata: Metadata = {
+  alternates: {
+    canonical: './',
+    languages: {
+      tr: 'https://dolunay.ai/',
+      en: 'https://dolunay.ai/en',
+      'x-default': 'https://dolunay.ai/',
+    },
+  },
+}
 
 export default function Home() {
   return (
