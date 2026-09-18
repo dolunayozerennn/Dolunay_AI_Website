@@ -15,6 +15,7 @@ h1{font-size:40px;font-weight:700;color:#f1f5f9;letter-spacing:-.02em}
 .verdict{margin:28px 0 44px;background:#1e293b;border:1px solid #334155;border-left:5px solid #22c55e;border-radius:12px;padding:22px 26px}
 .verdict b{color:#f1f5f9;font-size:23px;font-weight:600;display:block}
 .verdict span{color:#94a3b8;font-size:15px;display:block;margin-top:7px}
+.verdict.warn{border-left-color:#f59e0b}
 h2{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#94a3b8;font-weight:600;margin:52px 0 20px}
 .rings{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
 .ring{background:#1e293b;border:1px solid #334155;border-radius:14px;padding:20px 12px;text-align:center}
@@ -71,11 +72,16 @@ h2{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#94a3b8;fo
 <div class="wrap">
 
 <h1>dolunay.ai · SEO + GEO</h1>
-<div class="sub">17 Eylül 2026 · canlı siteden ölçüldü · Lighthouse + Search Console + kaynak kodu</div>
+<div class="sub">18 Eylül 2026 · canlı siteden ölçüldü · Lighthouse + Search Console + kaynak kodu</div>
 
 <div class="verdict">
   <b>Teknik taraf sağlam. Eksik olan teknik değil, içerik.</b>
   <span>Google teknik SEO'ya üç sayfada da 100/100 verdi. Ama site 90 günde neredeyse yalnız kendi adıyla arananlara çıktı — konu bazlı arama trafiği yok denecek kadar az.</span>
+</div>
+
+<div class="verdict warn">
+  <b>İngilizce sayfalar ve GEO içerik main'de hazır, siteye çıkamadı</b>
+  <span>Netlify kredisi bitti, yayın durdu. Site ayakta ve çalışıyor, sadece yeni değişiklikler canlıya inmiyor. Gereken tek şey: Netlify'a kredi yükle.</span>
 </div>
 
 <h2>Karne</h2>
@@ -89,7 +95,7 @@ h2{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#94a3b8;fo
     <div class="lbl">AI botlara<br>erişim</div>
   </div>
   <div class="ring">
-    <svg width="86" height="86" viewBox="0 0 86 86"><circle cx="43" cy="43" r="36" fill="none" stroke="#0b1120" stroke-width="9"/><circle cx="43" cy="43" r="36" fill="none" stroke="#f59e0b" stroke-width="9" stroke-dasharray="226" stroke-dashoffset="90" stroke-linecap="round" transform="rotate(-90 43 43)"/><text class="num" x="43" y="53" text-anchor="middle">6</text></svg>
+    <svg width="86" height="86" viewBox="0 0 86 86"><circle cx="43" cy="43" r="36" fill="none" stroke="#0b1120" stroke-width="9"/><circle cx="43" cy="43" r="36" fill="none" stroke="#22c55e" stroke-width="9" stroke-dasharray="226" stroke-dashoffset="23" stroke-linecap="round" transform="rotate(-90 43 43)"/><text class="num" x="43" y="53" text-anchor="middle">9</text></svg>
     <div class="lbl">Yapılandırılmış<br>veri</div>
   </div>
   <div class="ring">
@@ -97,12 +103,12 @@ h2{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#94a3b8;fo
     <div class="lbl">Hız<br>(mobil zayıf)</div>
   </div>
   <div class="ring">
-    <svg width="86" height="86" viewBox="0 0 86 86"><circle cx="43" cy="43" r="36" fill="none" stroke="#0b1120" stroke-width="9"/><circle cx="43" cy="43" r="36" fill="none" stroke="#ef4444" stroke-width="9" stroke-dasharray="226" stroke-dashoffset="158" stroke-linecap="round" transform="rotate(-90 43 43)"/><text class="num" x="43" y="53" text-anchor="middle">3</text></svg>
+    <svg width="86" height="86" viewBox="0 0 86 86"><circle cx="43" cy="43" r="36" fill="none" stroke="#0b1120" stroke-width="9"/><circle cx="43" cy="43" r="36" fill="none" stroke="#f59e0b" stroke-width="9" stroke-dasharray="226" stroke-dashoffset="90" stroke-linecap="round" transform="rotate(-90 43 43)"/><text class="num" x="43" y="53" text-anchor="middle">6</text></svg>
     <div class="lbl">GEO içerik<br>biçimi</div>
   </div>
   <div class="ring">
-    <svg width="86" height="86" viewBox="0 0 86 86"><circle cx="43" cy="43" r="36" fill="none" stroke="#0b1120" stroke-width="9"/><circle cx="43" cy="43" r="36" fill="none" stroke="#ef4444" stroke-width="9" stroke-dasharray="226" stroke-dashoffset="181" stroke-linecap="round" transform="rotate(-90 43 43)"/><text class="num" x="43" y="53" text-anchor="middle">2</text></svg>
-    <div class="lbl">Çok dillilik<br>(sahte)</div>
+    <svg width="86" height="86" viewBox="0 0 86 86"><circle cx="43" cy="43" r="36" fill="none" stroke="#0b1120" stroke-width="9"/><circle cx="43" cy="43" r="36" fill="none" stroke="#f59e0b" stroke-width="9" stroke-dasharray="226" stroke-dashoffset="45" stroke-linecap="round" transform="rotate(-90 43 43)"/><text class="num" x="43" y="53" text-anchor="middle">8</text></svg>
+    <div class="lbl">Çok dillilik<br>(main'de)</div>
   </div>
 </div>
 
@@ -113,38 +119,34 @@ h2{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#94a3b8;fo
     <ul>
       <li>Google teknik SEO skoru 100/100<small>ana sayfa, eğitim sayfası, blog yazısı — üçü de</small></li>
       <li>Her sayfanın kendi başlığı, açıklaması, paylaşım görseli</li>
-      <li>Canonical her sayfada doğru<small>tek istisna hizmetler sayfası</small></li>
+      <li>Canonical her sayfada doğru<small>hizmetler sayfası da kendine bağlandı</small></li>
       <li>ChatGPT, Claude, Perplexity botlarının hepsi açık<small>yanlışlıkla engellenen hiçbir bot yok</small></li>
       <li>Site JavaScript'siz de tam okunuyor<small>AI botları içeriği eksiksiz görüyor — kritik</small></li>
-      <li>Organizasyon, kişi, kurs, makale şeması kurulu</li>
-      <li>Sitemap canlı, 18 adres, hepsi tarihli</li>
+      <li>Organizasyon, kişi, kurs, makale, breadcrumb, site ve hizmet şeması kurulu</li>
+      <li>Hreflang artık yalnız gerçek çift dilli sayfalarda<small>önce 34 sayfaya yanlış yayılıyordu, şimdi 14</small></li>
+      <li>Sitemap canlı, 26 adres, hepsi tarihli</li>
       <li>Gizli sayfalar bilerek dizin dışı<small>panel, ödeme, video sayfaları</small></li>
       <li>Görseller webp ve hafif, kırık yönlendirme yok</li>
+      <li>Ödeme güven bandı ve favicon canlıda çalışıyor<small>ikisi de 404 veriyordu</small></li>
+      <li>Blog açıklamaları artık kelime ortasından kesilmiyor</li>
     </ul>
   </div>
   <div class="card red">
     <h3>Kırık ya da eksik</h3>
     <ul>
-      <li>Ödeme logosu her sayfada 404<small>iyzico güven bandı hiçbir sayfada görünmüyor</small></li>
-      <li>Mobilde açılış hızı sınırın üstünde<small>Google eşiği 2,5 sn — biz 3,1 ve 4,0</small></li>
-      <li>4 dil görünüyor, gerçekte 1 dil var<small>dil değiştirici arama motoruna hiç yansımıyor</small></li>
-      <li>Hizmetler sayfası kendi adına yarışmıyor<small>canonical'ı başka sayfayı işaret ediyor</small></li>
-      <li>18 sayfanın 7'si Google'da yok<small>çoğu blog yazısı</small></li>
-      <li>Blog açıklamaları kelime ortasından kesik<small>"...v", "...yep" diye bitiyor</small></li>
-      <li>Blog yazılarında soru-cevap yapısı yok<small>AI motorlarının alıntıladığı biçim bu</small></li>
-      <li>Breadcrumb, hizmet ve site şeması yok</li>
-      <li>favicon.ico 404</li>
+      <li>7 sayfa Google'da hiç yok<small>çoğu blog yazısı — tek çözüm elle bildirmek</small></li>
+      <li>Blog yazılarında soru-cevap yapısı yok<small>9 yazıdaki 51 başlığın hiçbiri soru değil</small></li>
     </ul>
   </div>
 </div>
 
-<h2>Hız · masaüstü mükemmel, mobil sınıfta kaldı</h2>
+<h2>Hız · masaüstü mükemmel, mobil bilerek bırakıldı</h2>
 <div class="bars">
   <div class="bar"><div class="n">Ana sayfa · masaüstü</div><div class="track"><div class="fill" style="width:12%;background:#22c55e"></div><div class="limit" style="left:50%"></div></div><div class="v ok">0,6 sn</div></div>
   <div class="bar"><div class="n">Eğitim sayfası · masaüstü</div><div class="track"><div class="fill" style="width:24%;background:#22c55e"></div><div class="limit" style="left:50%"></div></div><div class="v ok">1,2 sn</div></div>
-  <div class="bar"><div class="n">Ana sayfa · mobil</div><div class="track"><div class="fill" style="width:62%;background:#ef4444"></div><div class="limit" style="left:50%"></div></div><div class="v bad">3,1 sn</div></div>
-  <div class="bar"><div class="n">Eğitim sayfası · mobil</div><div class="track"><div class="fill" style="width:80%;background:#ef4444"></div><div class="limit" style="left:50%"></div></div><div class="v bad">4,0 sn</div></div>
-  <div class="limitlbl">sarı çizgi = Google'ın 2,5 sn eşiği · Google mobili baz alır</div>
+  <div class="bar"><div class="n">Ana sayfa · mobil</div><div class="track"><div class="fill" style="width:62%;background:#f59e0b"></div><div class="limit" style="left:50%"></div></div><div class="v bad">3,1 sn</div></div>
+  <div class="bar"><div class="n">Eğitim sayfası · mobil</div><div class="track"><div class="fill" style="width:80%;background:#f59e0b"></div><div class="limit" style="left:50%"></div></div><div class="v bad">4,0 sn</div></div>
+  <div class="limitlbl">sarı çizgi = Google'ın 2,5 sn eşiği · mobil eşiğin üstünde kalıyor, kovalamama kararı verildi</div>
 </div>
 
 <h2>Aramada gerçekte neredeyiz · son 90 gün</h2>
@@ -167,13 +169,9 @@ h2{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#94a3b8;fo
 <div class="acts">
   <div class="act a1">
     <h4>Önce bunlar</h4>
-    <div class="when">Yarım gün · asıl kazanç</div>
+    <div class="when">Kalan iki iş</div>
     <ol>
-      <li>Ödeme logosunu düzelt<small>satış yapan sitede kırık güven bandı</small></li>
-      <li>Mobil hızı eşiğin altına indir<small>tek ölçüm başarısızlığı bu</small></li>
-      <li>Dil değiştiriciyi ya gerçek yap ya kaldır<small>senin ürün kararın</small></li>
-      <li>Hizmetler sayfasını kendine bağla</li>
-      <li>Blog açıklamalarının kesilmesini durdur</li>
+      <li>Netlify'a kredi yükle<small>İngilizce sayfalar ve GEO içerik hazır, bunu bekliyor</small></li>
       <li>Dizine girmeyen 7 sayfayı Google'a bildir</li>
     </ol>
   </div>
@@ -181,9 +179,8 @@ h2{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#94a3b8;fo
     <h4>Sonra bunlar</h4>
     <div class="when">GEO · asıl fark burada</div>
     <ol>
-      <li>Blog başlıklarını soruya çevir<small>altına 2-3 cümle doğrudan cevap</small></li>
+      <li>Blog yazılarına da GEO biçimini uygula<small>satış sayfalarında var (7 blok), blog'da yok</small></li>
       <li>İçeriğe somut sayı ve kaynak koy<small>ölçülmüş: alıntılanmayı %30-40 artırıyor</small></li>
-      <li>Breadcrumb, hizmet, site şeması ekle</li>
       <li>Yazar ve güncelleme tarihi bilgisini gerçek veriye bağla</li>
       <li>Search Console'un yeni AI raporunu aç<small>Haziran 2026'da geldi, ücretsiz</small></li>
     </ol>
@@ -197,6 +194,7 @@ h2{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#94a3b8;fo
       <li>HowTo şeması<small>tamamen ölü</small></li>
       <li>Anahtar kelime doldurma<small>AI motorları akıcılığı ödüllendiriyor</small></li>
       <li>Eğitim botlarını topluca engelleme<small>arama botunu da kapatıp görünmez olursun</small></li>
+      <li>Mobil hızı daha fazla zorlama<small>iki tur denendi, ölçülebilir kazanç çıkmadı</small></li>
     </ol>
   </div>
 </div>
