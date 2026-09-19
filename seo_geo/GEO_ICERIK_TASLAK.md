@@ -170,10 +170,10 @@ Not: Kurumsal otomasyon fiyatlandırması (maliyet aralığı) için de bir ista
 
 # 2. parti GEO blokları (2026-09-18) — ince kalan iki sayfa
 
-Sebep: `/cozumler/hizmetler` (293 görünür kelime) ve `/egitimler/kurumsal-egitimler`
-(267 görünür kelime) Google'a hiç girmemişti. İç linkleme sorunu yoktu (ikisi de 6
-sayfadan linkli), sorun ince içerikti. Karşılaştırma: indekslenen `/cozumler` 1256,
-`/egitimler/ai-factory` 1064 kelime. Dolunay iki sayfaya da aynı GEO bloklarını onayladı.
+Başlangıç hükmü: `/cozumler/hizmetler` (293 görünür kelime) ve `/egitimler/kurumsal-egitimler`
+(267) Google'a girmemişti, iç linkleme temizdi, sebep ince içerik sanıldı.
+**2026-09-19 düzeltmesi:** iki sayfanın da son tarama tarihi yok. Google içeriği hiç okumadı,
+incelik sebep olamaz (BULGULAR, F8 üçüncü tur). Bloklar yine doğru iş: sayfa taranınca ağır gelir. Dolunay iki sayfaya da aynı GEO bloklarını onayladı.
 
 **Üstteki 7 blokla çakışma yok:** altı sorunun hiçbiri yukarıda cevaplanmadı.
 **Yeni istatistik YOK:** yüzdeli her cümle yukarıda zaten kullanılan ve kaynağı
