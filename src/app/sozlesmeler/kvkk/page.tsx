@@ -72,6 +72,7 @@ export default function KVKKPolitikasiPage() {
             <li><strong className="text-white">Zorunlu Çerezler:</strong> Site&apos;nin düzgün çalışması için gerekli temel çerezler</li>
             <li><strong className="text-white">Analitik Çerezler:</strong> Ziyaretçi istatistikleri ve kullanım analizi (Google Analytics vb.)</li>
             <li><strong className="text-white">Tercih Çerezleri:</strong> Dil seçimi gibi kullanıcı tercihlerinin saklanması</li>
+            <li><strong className="text-white">Reklam Çerezleri:</strong> ChatGPT (OpenAI) reklamlarından gelen ziyaretlerin ve bu ziyaretlerin sonuçlarının ölçülmesi</li>
           </ul>
           <p>Tarayıcı ayarlarınızdan çerezleri devre dışı bırakabilirsiniz.</p>
 

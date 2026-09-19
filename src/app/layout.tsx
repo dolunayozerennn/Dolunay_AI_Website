@@ -3,10 +3,17 @@ import { Inter_Tight, JetBrains_Mono } from 'next/font/google'
 import { LanguageProvider } from '@/i18n/i18n'
 import { Navbar } from '@/components/layout/Navbar'
 import dynamic from 'next/dynamic'
+import { ReklamPikseli } from '@/components/ReklamPikseli'
 import './globals.css'
 
 const Footer = dynamic(() => import('@/components/layout/Footer').then(mod => mod.Footer))
 const CookieBanner = dynamic(() => import('@/components/CookieBanner').then(mod => mod.CookieBanner))
+
+// ChatGPT reklamlari (OpenAI olcum pikseli). OpenAI'nin verdigi yukleyici;
+// debug yalniz adrese ?oaiq_debug=1 eklenince acilir (ziyaretci konsolu temiz
+// kalsin). Olay gonderimi: src/components/ReklamPikseli.tsx. CSP'de
+// bzrcdn.openai.com ve bzr.openai.com izni netlify.toml + public/_headers'ta.
+const OPENAI_PIKSEL = `!function(w,d,s,u){if(w.oaiq)return;var q=function(){q.q.push(arguments)};q.q=[];w.oaiq=q;var j=d.createElement(s);j.async=1;j.src=u;var f=d.getElementsByTagName(s)[0];f.parentNode.insertBefore(j,f)}(window,document,"script","https://bzrcdn.openai.com/sdk/oaiq.min.js");oaiq("init",{pixelId:"74dDn5nf8u1UMYWLg9ykpA",debug:/[?&]oaiq_debug=1/.test(location.search)});`
 
 const interTight = Inter_Tight({
   subsets: ['latin', 'latin-ext'],
@@ -92,6 +99,8 @@ export default function RootLayout({
   return (
     <html lang="tr" className={`${interTight.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
       <head>
+        {/* Head'in basinda: reklam tiklamasiyla gelen oppref sayfa yuklenirken kaybolmasin. */}
+        <script dangerouslySetInnerHTML={{ __html: OPENAI_PIKSEL }} />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         {/* .ico fallback: bazi tarayici/bot'lar svg destegi olsa bile hala
             /favicon.ico'yu dogrudan ister, o adres yoksa 404 loglanir. */}
@@ -134,6 +143,7 @@ export default function RootLayout({
           </main>
           <Footer />
           <CookieBanner />
+          <ReklamPikseli />
         </LanguageProvider>
       </body>
     </html>
