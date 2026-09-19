@@ -12,6 +12,9 @@ import { usePathname } from 'next/navigation'
 // donusum sitenin herhangi bir sayfasini da sayardi. SDK init'te kendiliginden
 // page_viewed gondermiyor, site de istemci tarafinda sayfa degistiriyor; bu
 // yuzden yol degisimini izleyip elle gonderiyoruz.
+// Donusum 2 = ayni sayfada Skool'a giden butonlara ("Topluluga Katil", ust ve
+// alt) tiklama. Olay adi Ads Manager'daki donusumle birebir: skoolgitti (ozel
+// olay). Butonlar yeni sekmede acildigi icin sayfa kapanmadan olay gider.
 // Dokuman: https://developers.openai.com/ads/measurement-pixel
 
 declare global {
@@ -36,6 +39,19 @@ export function ReklamPikseli() {
   useEffect(() => {
     if (pathname.replace(/\/$/, '') !== AI_FACTORY) return
     olc('measure', 'page_viewed', { type: 'contents' })
+
+    const dinle = (e: MouseEvent) => {
+      const link = (e.target as Element | null)?.closest?.('a[href]') as HTMLAnchorElement | null
+      if (!link?.href.includes('skool.com/')) return
+      olc('measure', 'custom', { type: 'custom' }, { custom_event_name: 'skoolgitti' })
+    }
+    // auxclick: orta tusla yeni sekmede acma da sayilsin
+    document.addEventListener('click', dinle, true)
+    document.addEventListener('auxclick', dinle, true)
+    return () => {
+      document.removeEventListener('click', dinle, true)
+      document.removeEventListener('auxclick', dinle, true)
+    }
   }, [pathname])
 
   return null
