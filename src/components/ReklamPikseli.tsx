@@ -15,6 +15,9 @@ import { usePathname } from 'next/navigation'
 // Donusum 2 = ayni sayfada Skool'a giden butonlara ("Topluluga Katil", ust ve
 // alt) tiklama. Olay adi Ads Manager'daki donusumle birebir: skoolgitti (ozel
 // olay). Butonlar yeni sekmede acildigi icin sayfa kapanmadan olay gider.
+// Sayfa goruntulemesi basina EN FAZLA BIR kez gider (cift tik, iki butona
+// arka arkaya basma, geri donup tekrar tiklama tek donusum); ayni event_id
+// OpenAI tarafinda da tekrari eler. Sag tik sayilmaz.
 // Dokuman: https://developers.openai.com/ads/measurement-pixel
 
 declare global {
@@ -40,12 +43,16 @@ export function ReklamPikseli() {
     if (pathname.replace(/\/$/, '') !== AI_FACTORY) return
     olc('measure', 'page_viewed', { type: 'contents' })
 
+    const eventId = `skoolgitti-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`
+    let gitti = false
     const dinle = (e: MouseEvent) => {
+      if (gitti || e.button === 2) return
       const link = (e.target as Element | null)?.closest?.('a[href]') as HTMLAnchorElement | null
       if (!link?.href.includes('skool.com/')) return
-      olc('measure', 'custom', { type: 'custom' }, { custom_event_name: 'skoolgitti' })
+      gitti = true
+      olc('measure', 'custom', { type: 'custom' }, { custom_event_name: 'skoolgitti', event_id: eventId })
     }
-    // auxclick: orta tusla yeni sekmede acma da sayilsin
+    // auxclick: orta tusla yeni sekmede acma da sayilsin (sag tik yukarida elenir)
     document.addEventListener('click', dinle, true)
     document.addEventListener('auxclick', dinle, true)
     return () => {
