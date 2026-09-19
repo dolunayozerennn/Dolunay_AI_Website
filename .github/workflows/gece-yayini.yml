@@ -8,7 +8,10 @@ name: Gece yayini
 
 on:
   schedule:
-    - cron: "0 0 * * *" # 03:00 Turkiye (GitHub zamanlamasi birkac dakika gecikebilir)
+    # 03:23 Turkiye. Saat basi (:00) GitHub'in en yogun ani: 19.09 gecesi bu is
+    # 2 saat 13 dk gec kostu, ayni saatteki Yumu pano isi hic kosmadi. Zamanlanmis
+    # is yogunlukta dusurulebilir; dakikayi yuvarlak saatten uzak tut.
+    - cron: "23 0 * * *"
   workflow_dispatch:
 
 permissions:

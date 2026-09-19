@@ -9,9 +9,11 @@ Basarili her Netlify production yayini 15 kredi yakar; 18 Eylul'de kredi bitti,
 Dolunay ek odeme istemiyor. Bu yuzden:
 
 - `main`'e giden push'lar yayina CIKMAZ, Netlify'da iptal gorunur (iptal bedava).
-- Her gece 03:00 (TR) GitHub Actions "Gece yayini" canli surum ile `main`'i
-  karsilastirir; fark varsa TEK yayin cikar, yoksa hic cikmaz. Yalniz `seo_geo/`
-  degistiyse de cikmaz.
+- Her gece 03:23 (TR) GitHub Actions "Gece yayini" canli surum ile `main`'i
+  karsilastirir; fark varsa TEK yayin cikar, yoksa hic cikmaz. Siteye girmeyen
+  yollar (`seo_geo/`, `.github/`, `scripts/`, kokteki `.md`, `filo.json`)
+  degistiyse de cikmaz. Zamanlama dakikasi yuvarlak saatten uzak tutulur:
+  GitHub saat basinda yogunlukta zamanlanmis isi geciktirir ya da dusurur.
 - **Acil is:** commit mesajina `[yayinla]` yaz (PR'da birlestirme basligina).
   O push hemen yayina cikar. Ya da GitHub > Actions > Gece yayini > Run workflow
   (karsilastirmadan yayinlar).

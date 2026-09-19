@@ -26,7 +26,10 @@ SEBEP="canlidaki surum okunamadi"
 if [ "${ELLE:-}" = "true" ]; then
   SEBEP="elle tetiklendi"
 elif [ -n "$CANLI" ] && git cat-file -e "${CANLI}^{commit}" 2>/dev/null; then
-  if git diff --quiet "$CANLI" "$MAIN" -- . ':(exclude)seo_geo'; then
+  # Siteye girmeyen yollar yayin sebebi degildir: seo_geo defteri, is akislari,
+  # betikler, kokteki belgeler (yalniz kok; src altindaki .md sayilir).
+  if git diff --quiet "$CANLI" "$MAIN" -- . ':(exclude)seo_geo' ':(exclude).github' \
+      ':(exclude)scripts' ':(exclude,glob)*.md' ':(exclude)filo.json'; then
     KARAR=atla
     SEBEP="canlidan beri yayina girecek degisiklik yok"
   else
