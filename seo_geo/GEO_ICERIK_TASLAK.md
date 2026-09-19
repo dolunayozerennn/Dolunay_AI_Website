@@ -19,9 +19,7 @@ yerine gerçek bir teklif-öncesi soru (mevcut sistemlerle entegrasyon) geldi.
 - **CIKARILDI (olculmemis performans iddiasi, geri EKLENMEZ):** "uc kisinin yaptigi isi
   karsiliyor" ve "sorularin COGUNU insansiz cevapliyor" gibi oran/rakam iddialari. Bot
   neyi yaptigi anlatilir, ne kadarini yaptigi OLCULMEDEN yazilmaz.
-- **HALA BEKLIYOR:** `/cozumler` "ne kadar surer" blogundaki ortalama teslim suresi.
-  Dolunay'dan sayi gelene kadar o TEK CUMLE ("Benim ortalama teslim surem <...>.")
-  sayfaya GIRMEZ; blogun geri kalani girer.
+- **KAPANDI (2026-09-19):** Dolunay ortalama teslim suresini 1 hafta verdi, cumle eklendi.
 
 ---
 
@@ -91,7 +89,7 @@ Bu da öğrenme süresini kısaltıyor. Sıfırdan deneyen kişi hatanın nerede
 
 ## AI otomasyon kurmak ne kadar sürer?
 
-Tek bir iş akışını kurmak birkaç haftada bitiyor. Benim ortalama teslim sürem <Dolunay'ın ortalama teslim süresi buraya eklenecek>. WhatsApp'a otomatik cevap veren bir bot ya da stok uyarısı tek başına küçük bir proje. Instagram ve WhatsApp'ı tek panelden yöneten bir sistem de benzer bir sürede tamamlanıyor. Birden fazla sistemi birbirine bağlayan işler daha uzun sürüyor. Stok takibini raporlamayla ve satın almayla tek sistemde birleştirmek buna örnek.
+Benim ortalama teslim sürem bir hafta. WhatsApp'a otomatik cevap veren bir bot ya da stok uyarısı tek başına küçük bir proje. Instagram ve WhatsApp'ı tek panelden yöneten bir sistem de benzer bir sürede tamamlanıyor. Birden fazla sistemi birbirine bağlayan işler daha uzun sürüyor. Stok takibini raporlamayla ve satın almayla tek sistemde birleştirmek buna örnek.
 
 Süreci dört adımda yürütüyorum. Önce mevcut iş akışını birlikte inceliyoruz, hangi adım tekrar ediyor ve zaman yiyor onu buluyoruz. Sonra hangi aracın hangi işi yapacağına karar veriyorum. Sistemi kurup test ediyorum, son olarak ekibe nasıl kullanılacağını gösteriyorum. Teslimden sonra sistem kendi başına çalışıyor.
 
@@ -151,7 +149,7 @@ Kaynak: World Economic Forum, Ocak 2025.
 
 ## Sahibinden alınacak veriler
 
-1. `/cozumler` sayfası, blok "AI otomasyon kurmak ne kadar sürer?" içinde: Dolunay'ın tipik/ortalama otomasyon kurulum süresi (kaç hafta/ay, kapsam bazında değişiyorsa aralık olarak). Şu an `<Dolunay'ın ortalama teslim süresi buraya eklenecek>` yer tutucusu duruyor.
+1. KAPANDI (2026-09-19): Dolunay ortalama teslim süresini 1 hafta verdi, cümle eklendi.
 
 Not: Kurumsal otomasyon fiyatlandırması (maliyet aralığı) için de bir istatistik aranmıştı; internet üzerindeki "otomasyon şu kadar dolara kurulur" rakamları kaynaksız pazarlama blog yazılarıydı (stealthagents.com, qbsglobal.blog, ustechautomations.com vb.), gerçek bir ankete dayanmıyordu. Bu yüzden maliyetle ilgili hiçbir sayı taslağa girmedi ve blok da açılmadı. Dolunay isterse kendi fiyatlandırma mantığını (sabit mi, teklif bazlı mı) ayrı bir blok olarak eklenebilir.
 
@@ -259,7 +257,7 @@ Süreyi belirleyen asıl şey içerik değil, ekibin başlangıç seviyesi. Ayn�
 
 Eğitim verdiğim kurumlarda en hızlı sonucu üç departmanda gördüm. Müşteri ilişkileri, operasyon ve raporlama yapan ekipler. Üçünün ortak noktası aynı: işlerinin büyük kısmı tekrar eden metin işi. Tekrar eden bir iş varsa, eğitimin karşılığı ertesi hafta görülüyor. Karar ağırlıklı ve ilişki ağırlıklı ekiplerde fayda daha yavaş çıkıyor. Orada da çıkıyor, ama ölçmesi haftalar alıyor.
 
-Somut örnek vereyim. Bir bankada iki günlük atölyeyi aynı ekiple iki kez tekrarladık. Uygulama hep rapor ve sunum işleri üstünden gitti. Başka bir bankada yüzü aşkın kişiyle online çalıştık, ardından bire bir danışmanlık yaptık. Bir üniversitede de eğitim verdim, e-ticaret tarafında satıcı ekipleriyle çalıştım. Hepsinde aynı şey oldu: en hızlı ilerleyen kişi, işi zaten her hafta tekrar edendi.
+Somut örnek vereyim. Bir bankada iki günlük atölyeyi aynı ekiple iki kez tekrarladık. Uygulama hep rapor ve sunum işleri üstünden gitti. Aynı raporu her hafta elle yazan biri, ilk günün sonunda kendi şablonunu kurmuştu. Bir üniversitede ders materyali hazırlayan akademisyenler aynı hızı yakaladı. E-ticaret satıcı eğitimlerinde ürün açıklaması yazanlar ilk gün somut çıktı aldı. Başka bir bankada yüzü aşkın kişiyle online çalıştık, ardından bire bir danışmanlık yaptık. Hepsinde aynı şey oldu: en hızlı ilerleyen kişi, işi zaten her hafta tekrar edendi.
 
 Bu tablo geniş araştırmalarda da aynı çıkıyor. McKinsey Global Institute'un Kasım 2025 raporu buna işaret ediyor. ABD'deki iş saatlerinin yüzde 57'si bugünkü teknolojiyle otomatikleştirilebilir potansiyele sahip. Rapor hangi mesleğin biteceğini değil, hangi görevin devredilebileceğini söylüyor. Departman seçerken ben de aynı soruyu soruyorum: burada hangi görev tekrar ediyor. Cevap netse eğitimin nereden başlayacağı da netleşiyor.
 

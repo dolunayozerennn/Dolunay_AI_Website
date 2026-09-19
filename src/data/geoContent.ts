@@ -5,10 +5,7 @@
 // dusen fallback'i EN sayfada Turkce metin sizdirir. Bu yuzden sayfalarda
 // yalniz `language === 'tr'` iken render edilir, hic t() uzerinden okunmaz.
 //
-// /cozumler "AI otomasyon kurmak ne kadar surer?" blogundaki sadece su cumle
-// BILEREK atlandi (Dolunay'in ortalama teslim suresi henuz onda yok):
-// "Benim ortalama teslim surem <Dolunay'in ortalama teslim suresi buraya
-// eklenecek>." Blogun geri kalani aynen duruyor.
+// Ortalama teslim suresi cumlesi Dolunay'in 2026-09-19 cevabiyla ("1 hafta") eklendi.
 
 export interface GeoBlock {
   title: string
@@ -52,7 +49,7 @@ export const cozumlerGeoBlocks: GeoBlock[] = [
   {
     title: "AI otomasyon kurmak ne kadar sürer?",
     paragraphs: [
-      "Tek bir iş akışını kurmak birkaç haftada bitiyor. WhatsApp'a otomatik cevap veren bir bot ya da stok uyarısı tek başına küçük bir proje. Instagram ve WhatsApp'ı tek panelden yöneten bir sistem de benzer bir sürede tamamlanıyor. Birden fazla sistemi birbirine bağlayan işler daha uzun sürüyor. Stok takibini raporlamayla ve satın almayla tek sistemde birleştirmek buna örnek.",
+      "Benim ortalama teslim sürem bir hafta. WhatsApp'a otomatik cevap veren bir bot ya da stok uyarısı tek başına küçük bir proje. Instagram ve WhatsApp'ı tek panelden yöneten bir sistem de benzer bir sürede tamamlanıyor. Birden fazla sistemi birbirine bağlayan işler daha uzun sürüyor. Stok takibini raporlamayla ve satın almayla tek sistemde birleştirmek buna örnek.",
       "Süreci dört adımda yürütüyorum. Önce mevcut iş akışını birlikte inceliyoruz, hangi adım tekrar ediyor ve zaman yiyor onu buluyoruz. Sonra hangi aracın hangi işi yapacağına karar veriyorum. Sistemi kurup test ediyorum, son olarak ekibe nasıl kullanılacağını gösteriyorum. Teslimden sonra sistem kendi başına çalışıyor.",
       "Süreyi en çok uzatan şey belirsiz kapsam. Hangi verinin nereden geleceği ilk görüşmede netleşmezse entegrasyon zaman alıyor. Eski bir programın API'si yoksa alternatif bir bağlantı kurmak gerekiyor, bu ek gün demek. Kullandığın program bulut tabanlı değilse veriyi çekmek için ek bir adım gerekiyor. Bu yüzden ilk görüşmede mevcut araçları birlikte gözden geçiriyorum.",
       "Kurulumdan sonra da yanında kalıyorum. Kullandığın araç güncellenince ya da iş süreci değişince sistemi ben güncelliyorum. Bu bakım genelde küçük dokunuşlar, yeni bir kural eklemek ya da mesaj şablonunu güncellemek gibi. Küçük bir otomasyon birkaç günde denenip erken sonuç veriyor. Bu da büyük projeye geçme kararını kolaylaştırıyor.",
@@ -143,7 +140,7 @@ export const kurumsalEgitimlerGeoBlocks: GeoBlock[] = [
     title: "Hangi departmanlar yapay zeka eğitiminden en çok fayda görüyor?",
     paragraphs: [
       "Eğitim verdiğim kurumlarda en hızlı sonucu üç departmanda gördüm. Müşteri ilişkileri, operasyon ve raporlama yapan ekipler. Üçünün ortak noktası aynı: işlerinin büyük kısmı tekrar eden metin işi. Tekrar eden bir iş varsa, eğitimin karşılığı ertesi hafta görülüyor. Karar ağırlıklı ve ilişki ağırlıklı ekiplerde fayda daha yavaş çıkıyor. Orada da çıkıyor, ama ölçmesi haftalar alıyor.",
-      "Somut örnek vereyim. Bir bankada iki günlük atölyeyi aynı ekiple iki kez tekrarladık. Uygulama hep rapor ve sunum işleri üstünden gitti. Başka bir bankada yüzü aşkın kişiyle online çalıştık, ardından bire bir danışmanlık yaptık. Bir üniversitede de eğitim verdim, e-ticaret tarafında satıcı ekipleriyle çalıştım. Hepsinde aynı şey oldu: en hızlı ilerleyen kişi, işi zaten her hafta tekrar edendi.",
+      "Somut örnek vereyim. Bir bankada iki günlük atölyeyi aynı ekiple iki kez tekrarladık. Uygulama hep rapor ve sunum işleri üstünden gitti. Aynı raporu her hafta elle yazan biri, ilk günün sonunda kendi şablonunu kurmuştu. Bir üniversitede ders materyali hazırlayan akademisyenler aynı hızı yakaladı. E-ticaret satıcı eğitimlerinde ürün açıklaması yazanlar ilk gün somut çıktı aldı. Başka bir bankada yüzü aşkın kişiyle online çalıştık, ardından bire bir danışmanlık yaptık. Hepsinde aynı şey oldu: en hızlı ilerleyen kişi, işi zaten her hafta tekrar edendi.",
       "Bu tablo geniş araştırmalarda da aynı çıkıyor. McKinsey Global Institute'un Kasım 2025 raporu buna işaret ediyor. ABD'deki iş saatlerinin yüzde 57'si bugünkü teknolojiyle otomatikleştirilebilir potansiyele sahip. Rapor hangi mesleğin biteceğini değil, hangi görevin devredilebileceğini söylüyor. Departman seçerken ben de aynı soruyu soruyorum: burada hangi görev tekrar ediyor. Cevap netse eğitimin nereden başlayacağı da netleşiyor.",
       "Yine de tek bir departmanla başlamayı öneriyorum. Bütün şirketi aynı anda eğitmek kulağa verimli geliyor ama sonuç dağılıyor. Tek departmanla başlayınca o ekip iç örnek üretiyor, diğerleri onu görüyor. Bir kurumda bu iç örnek, benim anlattığım her şeyden daha ikna edici oldu. Claude Code ile kurulan küçük bir otomasyon, sunumdan çok daha hızlı yayıldı. Sonraki departmanların eğitimi de o örnek üstünden çok daha kolay geçti.",
     ],
