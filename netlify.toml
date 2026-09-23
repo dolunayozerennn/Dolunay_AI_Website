@@ -111,3 +111,23 @@
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
     Cache-Control = "no-store"
+
+# Yonetim ekrani (Savas'in musteri listesi). Musteri panelinden ayri, ayni
+# gerekceyle en sonda: sayfa sabit adli, onbellege alinmamali. Sayfada
+# musteri verisi yok; veri YONETIM_SIRRI isteyen yonetim-veri ucundan gelir.
+# Baska bir siteye cerceve olarak gomulmez, yonlendiren adresi sizdirmaz.
+[[headers]]
+  for = "/yonetim"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+    Cache-Control = "no-store"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "no-referrer"
+
+[[headers]]
+  for = "/yonetim/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+    Cache-Control = "no-store"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "no-referrer"

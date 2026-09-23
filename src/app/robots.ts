@@ -9,8 +9,8 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       // /panel: musteri paneli, arama sonuclarinda yeri yok. Sayfalarda ayrica
       // <meta name="robots" content="noindex, nofollow"> ve netlify.toml'da
-      // /panel/* icin X-Robots-Tag basligi var.
-      disallow: ['/api/', '/r/', '/r', '/panel/'],
+      // /panel/* icin X-Robots-Tag basligi var. /yonetim/ ayni duzenle kapali.
+      disallow: ['/api/', '/r/', '/r', '/panel/', '/yonetim/'],
     },
     sitemap: 'https://dolunay.ai/sitemap.xml',
   }

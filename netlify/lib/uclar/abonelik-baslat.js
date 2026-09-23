@@ -6,6 +6,31 @@
 const { formBaslat, paketBul, abonelikleriTara } = require('../iyzico')
 const { kacir, sayfa, html, hataSayfasi, kayitIcin } = require('../sayfa')
 const { sifreOzetle, bekleyenYaz, jetonYaz } = require('../hesap')
+const { bildir } = require('../bildirim')
+
+// Musteri formu eksiksiz doldurdu ama kart adimina gecemedi. Tahsilat yok,
+// ama bir satis kaciyor ve musteri bunu bize soylemeyebilir. Dogrulama
+// hatalari (eksik alan, hatali TCKN) buraya GELMEZ: onlar musterinin kendi
+// duzeltecegi seyler ve her tus hatasinda e-posta gondermek gurultu olurdu.
+// Sifre ve TCKN bildirime girmez.
+function baslatmaSorunu (v, paket, slug, sebep, onem = 'dikkat') {
+  return bildir({
+    tur: 'odeme-baslatilamadi',
+    onem,
+    baslik: `Ödeme başlatılamadı: ${v.markaAdi || v.eposta}`,
+    eposta: v.eposta,
+    satirlar: [
+      ['Ad soyad', `${v.ad} ${v.soyad}`.trim()],
+      ['Marka adı', v.markaAdi],
+      ['E-posta', v.eposta],
+      ['Telefon', v.telefon],
+      ['Paket', paket.ad || slug],
+      ['Tutar', paket.tutar ? `${paket.tutar} / ${paket.periyot || 'ay'}` : ''],
+      ['Sebep', sebep],
+    ],
+    not: 'Müşteri formu doldurdu ama kart adımına geçemedi. Karttan tahsilat YAPILMADI. Müşteriye dönüp tekrar denemesini isteyebilirsiniz.',
+  })
+}
 
 // Zorunlu metin alanlari. Sira, hata mesajindaki siralamayi da belirler;
 // formdaki sirayla ayni tutuldu ki musteri asagi dogru okurken kaybolmasin.
@@ -319,6 +344,8 @@ exports.handler = async (event) => {
       return bizim
     })
     if (varOlan) {
+      await baslatmaSorunu(v, paket, slug,
+        'Bu e-posta için bu pakette zaten ACTIVE bir abonelik var; mükerrer tahsilat kapısı ödemeyi durdurdu.', 'bilgi')
       return html(409, formSayfasi(slug, paket, v, 'Bu e-posta için bu pakette zaten aktif bir abonelik var. İkinci kez tahsilat olmaması için yeni ödeme başlatılmadı. Sorunuz varsa savas@dolunay.ai adresine yazın.'))
     }
     // `null` = tarama tamamlanamadi, yani mevcut bir abonelik OLMADIGINI bilmiyoruz.
@@ -326,13 +353,16 @@ exports.handler = async (event) => {
     // formu tekrar gonderen musteride ikinci tahsilat riski buradan doguyordu.
     // Bilinmeyeni "yok" saymak yerine duruyoruz: kacan bir satis, mukerrer tahsilattan iyidir.
     if (okunamayanKayit) {
+      await baslatmaSorunu(v, paket, slug, 'iyzico\'da bu müşteriye ait bir aboneliğin durumu okunamadı; mükerrer tahsilat kapısı ödemeyi durdurdu.')
       return html(503, formSayfasi(slug, paket, v, 'Mevcut aboneliğiniz olup olmadığını şu an doğrulayamıyoruz. İkinci kez tahsilat olmaması için ödeme başlatılmadı. Birkaç dakika sonra tekrar deneyin.'))
     }
     if (varOlan === null) {
+      await baslatmaSorunu(v, paket, slug, 'iyzico abonelik listesi taranamadı; mükerrer tahsilat kapısı ödemeyi durdurdu.')
       return html(503, formSayfasi(slug, paket, v, 'Mevcut aboneliğiniz olup olmadığını şu an doğrulayamıyoruz. İkinci kez tahsilat olmaması için ödeme başlatılmadı. Birkaç dakika sonra tekrar deneyin.'))
     }
   } catch (e) {
     console.error('mukerrer taramasi hata verdi', e && e.message)
+    await baslatmaSorunu(v, paket, slug, `Mükerrer abonelik taraması hata verdi: ${kayitIcin(e && e.message)}`)
     return html(503, formSayfasi(slug, paket, v, 'Mevcut aboneliğiniz olup olmadığını şu an doğrulayamıyoruz. İkinci kez tahsilat olmaması için ödeme başlatılmadı. Birkaç dakika sonra tekrar deneyin.'))
   }
 
@@ -367,6 +397,7 @@ exports.handler = async (event) => {
     // Hata metni kayda gider, musteriye gosterilmez. `v` LOGLANMAZ: icinde
     // sifre var.
     console.error('bekleyen kayit yazilamadi', e && e.message)
+    await baslatmaSorunu(v, paket, slug, `Hesap bilgileri depoya yazılamadı: ${kayitIcin(e && e.message)}`)
     return html(503, formSayfasi(slug, paket, v, 'Hesabınız hazırlanamadı, bu yüzden ödeme başlatılmadı. Kartınızdan tahsilat YAPILMADI. Birkaç dakika sonra tekrar deneyin.'))
   }
 
@@ -392,12 +423,14 @@ exports.handler = async (event) => {
     })
   } catch (e) {
     console.error('iyzico initialize firlatti', e && e.message)
+    await baslatmaSorunu(v, paket, slug, `iyzico ödeme formu açılamadı: ${kayitIcin(e && e.message)}`)
     return html(500, formSayfasi(slug, paket, v, 'Ödeme sayfası şu an açılamadı. Kartınızdan tahsilat YAPILMADI. Birazdan tekrar deneyin.'))
   }
 
   // iyzico'ya hic ulasilamadiysa bu bir ret degil belirsizliktir; kart hic denenmedi.
   if (!cevap || cevap.hataTipi) {
     console.error('iyzico initialize ulasilamadi', cevap && cevap.hataTipi)
+    await baslatmaSorunu(v, paket, slug, `iyzico'ya ulaşılamadı (${(cevap && cevap.hataTipi) || 'cevap yok'})`)
     return html(503, formSayfasi(slug, paket, v, 'Ödeme hizmetine şu an ulaşılamıyor. Kartınızdan tahsilat YAPILMADI. Birkaç dakika sonra tekrar deneyin.'))
   }
 
@@ -409,6 +442,8 @@ exports.handler = async (event) => {
   if (cevap.status !== 'success' || !formIcerik) {
     // Saglayicinin ham hata metni musteriye gosterilmez; sunucu kaydinda kalir.
     console.error('iyzico initialize hatasi', cevap && cevap.errorCode, kayitIcin(cevap && cevap.errorMessage))
+    await baslatmaSorunu(v, paket, slug,
+      `iyzico ödeme formunu reddetti: ${kayitIcin(`${(cevap && cevap.errorCode) || ''} ${(cevap && cevap.errorMessage) || ''}`.trim() || 'boş form')}`)
     return html(400, formSayfasi(slug, paket, v, 'Ödeme sayfası açılamadı. Bilgileri kontrol edip tekrar deneyin; sorun sürerse savas@dolunay.ai adresine yazın.'))
   }
 

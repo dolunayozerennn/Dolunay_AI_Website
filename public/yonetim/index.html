@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="no-referrer">
+<title>Yönetim · dolunay.ai</title>
+<link rel="icon" href="/panel/marka/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Yonetim ekrani. Musteri panelinden (/panel/) BILEREK ayri: ortak stil
+   dosyasi, ortak oturum, ortak betik yok. Renkler dolunay.ai paletinden. */
+:root {
+  --zemin: #08090C; --zemin2: #0E0F14; --kart: #14161D;
+  --vurgu: #4F8BFF; --vurgu-acik: #7AA8FF;
+  --yesil: #4ADE80; --turuncu: #F5A524; --kirmizi: #F87171;
+  --metin: #F4F2EC; --ikincil: #C9CCD4; --soluk: #8A8E99;
+  --cizgi: rgba(255,255,255,.08); --cam: rgba(255,255,255,.03);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--zemin); color: var(--metin); }
+body { font: 15px/1.5 "Inter Tight", Inter, -apple-system, "Segoe UI", Roboto, sans-serif; }
+button, input { font: inherit; color: inherit; }
+a { color: var(--vurgu-acik); }
+.gizli { display: none !important; }
+
+/* giris */
+.kapi { min-height: 100vh; display: grid; place-items: center; padding: 24px 16px; }
+.kapi-kutu { width: 100%; max-width: 400px; background: var(--kart); border: 1px solid var(--cizgi); border-radius: 14px; padding: 28px; }
+.marka { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; font-size: 17px; letter-spacing: -.3px; }
+.marka img { width: 26px; height: 26px; }
+.marka i { font-style: normal; color: var(--vurgu); }
+.kapi h1 { font-size: 24px; letter-spacing: -.8px; margin: 18px 0 6px; }
+.kapi p { color: var(--soluk); margin: 0 0 18px; font-size: 14px; }
+label { display: block; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--soluk); margin-bottom: 6px; }
+input[type=password], input[type=search] {
+  width: 100%; background: var(--cam); border: 1px solid rgba(255,255,255,.12); border-radius: 10px;
+  padding: 11px 13px; outline: none;
+}
+input:focus { border-color: var(--vurgu); box-shadow: 0 0 0 3px rgba(79,139,255,.2); }
+.hata { color: var(--kirmizi); font-size: 13px; min-height: 18px; margin: 6px 0 0; }
+.btn { border: 0; border-radius: 10px; padding: 10px 16px; font-weight: 700; cursor: pointer; }
+.btn-ana { background: linear-gradient(135deg, var(--vurgu), var(--vurgu-acik)); color: var(--zemin); width: 100%; margin-top: 14px; padding: 12px; }
+.btn-ikincil { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.16); font-weight: 600; }
+.btn:disabled { opacity: .6; cursor: default; }
+
+/* kabuk */
+.ust { position: sticky; top: 0; z-index: 5; background: rgba(8,9,12,.85); backdrop-filter: blur(8px); border-bottom: 1px solid var(--cizgi); }
+.ust-ic { max-width: 1240px; margin: 0 auto; padding: 12px 20px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.ust .etiket { font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--vurgu-acik); background: rgba(79,139,255,.14); border: 1px solid rgba(122,168,255,.25); border-radius: 7px; padding: 3px 8px; }
+.ust .bosluk { flex: 1; }
+.ust .zaman { color: var(--soluk); font-size: 13px; }
+main { max-width: 1240px; margin: 0 auto; padding: 24px 20px 64px; }
+h2 { font-size: 18px; letter-spacing: -.4px; margin: 34px 0 12px; display: flex; align-items: baseline; gap: 4px 10px; flex-wrap: wrap; }
+h2 small { color: var(--soluk); font-weight: 500; font-size: 13px; letter-spacing: 0; }
+
+.serit { border-radius: 12px; padding: 12px 14px; margin: 0 0 14px; font-size: 14px; border: 1px solid; }
+.serit.dikkat { background: rgba(245,165,36,.08); border-color: rgba(245,165,36,.35); color: #FCD9A0; }
+.serit.iyi { background: rgba(74,222,128,.08); border-color: rgba(74,222,128,.35); color: #BBF7D0; }
+.serit.kotu { background: rgba(248,113,113,.08); border-color: rgba(248,113,113,.35); color: #FECACA; }
+
+.sayilar { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.sayi { background: var(--kart); border: 1px solid var(--cizgi); border-radius: 12px; padding: 16px; }
+.sayi b { display: block; font-size: 30px; font-weight: 800; letter-spacing: -1.2px; line-height: 1.1; }
+.sayi span { color: var(--soluk); font-size: 13px; }
+.sayi.dikkat b { color: var(--turuncu); }
+
+.kart { background: var(--kart); border: 1px solid var(--cizgi); border-radius: 12px; overflow: hidden; }
+.arac { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+.arac input { max-width: 340px; }
+.hap { background: var(--cam); border: 1px solid var(--cizgi); color: var(--soluk); border-radius: 999px; padding: 6px 12px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.hap.secili { background: rgba(79,139,255,.18); border-color: rgba(122,168,255,.35); color: var(--metin); }
+
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--soluk); padding: 11px 14px; border-bottom: 1px solid var(--cizgi); white-space: nowrap; }
+td { padding: 12px 14px; border-bottom: 1px solid var(--cizgi); vertical-align: top; font-size: 14px; }
+tr:last-child td { border-bottom: 0; }
+td .ana { font-weight: 700; }
+td .alt { color: var(--soluk); font-size: 13px; word-break: break-all; }
+.rozet { display: inline-block; border-radius: 7px; padding: 2px 8px; font-size: 12px; font-weight: 700; white-space: nowrap; border: 1px solid; }
+.rozet.iyi { color: var(--yesil); border-color: rgba(74,222,128,.35); background: rgba(74,222,128,.08); }
+.rozet.dikkat { color: var(--turuncu); border-color: rgba(245,165,36,.35); background: rgba(245,165,36,.08); }
+.rozet.kotu { color: var(--kirmizi); border-color: rgba(248,113,113,.35); background: rgba(248,113,113,.08); }
+.rozet.notr { color: var(--ikincil); border-color: rgba(255,255,255,.16); background: var(--cam); }
+.bos { padding: 22px 16px; color: var(--soluk); text-align: center; }
+.devam { display: block; margin: 12px auto 0; }
+
+.olay { border-bottom: 1px solid var(--cizgi); }
+.olay:last-child { border-bottom: 0; }
+.olay summary { list-style: none; cursor: pointer; padding: 12px 14px; display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.olay summary::-webkit-details-marker { display: none; }
+.olay summary .baslik { font-weight: 600; flex: 1; min-width: 200px; }
+.olay summary .z { color: var(--soluk); font-size: 13px; white-space: nowrap; }
+.olay dl { margin: 0; padding: 0 14px 14px; display: grid; grid-template-columns: max-content 1fr; gap: 4px 14px; font-size: 13px; }
+.olay dt { color: var(--soluk); }
+.olay dd { margin: 0; word-break: break-word; }
+.olay .not { grid-column: 1 / -1; color: var(--ikincil); margin-top: 6px; }
+
+/* Dar ekranda tablo satiri karta doner; yatay kaydirma yok. */
+@media (max-width: 760px) {
+  .sayilar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  thead { display: none; }
+  table, tbody, tr, td { display: block; width: 100%; }
+  tr { border-bottom: 1px solid var(--cizgi); padding: 8px 0; }
+  td { border: 0; padding: 4px 14px; }
+  td[data-ad]::before { content: attr(data-ad); display: block; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--soluk); }
+  .ust-ic, main { padding-left: 16px; padding-right: 16px; }
+}
+</style>
+</head>
+<body>
+
+<section class="kapi" id="kapi">
+  <form class="kapi-kutu" id="kapiForm" novalidate autocomplete="off">
+    <span class="marka"><img src="/panel/marka/dolunay-ay.svg" alt=""><b>dolunay<i>.ai</i></b></span>
+    <h1>Yönetim ekranı</h1>
+    <p>Bu ekran yalnız dolunay.ai ekibi içindir. Müşteri paneli <a href="/panel/">/panel/</a> adresindedir.</p>
+    <label for="sir">Yönetim anahtarı</label>
+    <input type="password" id="sir" autocomplete="off" spellcheck="false">
+    <p class="hata" id="kapiHata" role="alert"></p>
+    <button class="btn btn-ana" type="submit">Aç</button>
+  </form>
+</section>
+
+<div id="ekran" class="gizli">
+  <header class="ust">
+    <div class="ust-ic">
+      <span class="marka"><img src="/panel/marka/dolunay-ay.svg" alt=""><b>dolunay<i>.ai</i></b></span>
+      <span class="etiket">Yönetim</span>
+      <span class="bosluk"></span>
+      <span class="zaman" id="zaman"></span>
+      <button class="btn btn-ikincil" id="testPosta" type="button" title="savas@dolunay.ai adresine tek bir test e-postası gönderir">Test e-postası</button>
+      <button class="btn btn-ikincil" id="yenile" type="button">Yenile</button>
+      <button class="btn btn-ikincil" id="cikis" type="button">Kapat</button>
+    </div>
+  </header>
+
+  <main>
+    <div id="seritler"></div>
+
+    <div class="sayilar" id="sayilar"></div>
+
+    <div id="dikkatBolumu"></div>
+
+    <h2>Müşteriler <small id="musteriSayisi"></small></h2>
+    <div class="arac">
+      <input type="search" id="ara" placeholder="Marka, e-posta ya da telefon ara" aria-label="Müşteri ara">
+      <button class="hap secili" type="button" data-suzgec="hepsi">Tümü</button>
+      <button class="hap" type="button" data-suzgec="motorsuz">Motor bağlı değil</button>
+      <button class="hap" type="button" data-suzgec="sorun">Ödeme sorunu</button>
+    </div>
+    <div class="kart">
+      <table>
+        <thead>
+          <tr><th>Müşteri</th><th>Paket</th><th>Ödeme</th><th>Kayıt</th><th>Sonraki çekim</th><th>Motor</th></tr>
+        </thead>
+        <tbody id="musteriler"></tbody>
+      </table>
+    </div>
+    <button class="btn btn-ikincil devam gizli" id="dahaFazla" type="button"></button>
+
+    <h2>Son olaylar <small>bildirimler ve e-posta durumu</small></h2>
+    <div class="kart" id="olaylar"></div>
+  </main>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var UC = "/.netlify/functions/yonetim-veri";
+  var ANAHTAR = "dolunayYonetimSirri";
+  var SAYFA = 50;
+
+  /* Anahtar yalniz bu sekmenin oturumunda durur (sessionStorage): sekme
+     kapaninca gider. localStorage'a yazilmaz; paylasilan bir bilgisayarda
+     kalici iz birakmasin. */
+  function sirOku() { try { return sessionStorage.getItem(ANAHTAR) || ""; } catch (e) { return ""; } }
+  function sirYaz(s) { try { if (s) sessionStorage.setItem(ANAHTAR, s); else sessionStorage.removeItem(ANAHTAR); } catch (e) {} }
+
+  var $ = function (id) { return document.getElementById(id); };
+  var durum = { veri: null, suzgec: "hepsi", ara: "", goster: SAYFA };
+
+  function el(etiket, sinif, metin) {
+    var e = document.createElement(etiket);
+    if (sinif) e.className = sinif;
+    if (metin !== undefined && metin !== null) e.textContent = String(metin);
+    return e;
+  }
+
+  var TARIH = new Intl.DateTimeFormat("tr-TR", { timeZone: "Europe/Istanbul", day: "2-digit", month: "2-digit", year: "numeric" });
+  var SAAT = new Intl.DateTimeFormat("tr-TR", { timeZone: "Europe/Istanbul", day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+  function tarih(x) { if (!x) return ""; var d = new Date(x); return isNaN(d) ? String(x) : TARIH.format(d); }
+  function saatli(x) { if (!x) return ""; var d = new Date(x); return isNaN(d) ? String(x) : SAAT.format(d); }
+  function tutar(t, pb) {
+    if (t === null || t === undefined || t === "") return "";
+    var n = Number(t);
+    if (!isFinite(n)) return String(t);
+    return n.toLocaleString("tr-TR", { minimumFractionDigits: 0, maximumFractionDigits: 2 }) + " " + (pb || "TRY");
+  }
+
+  function kapiGoster(mesaj) {
+    $("ekran").classList.add("gizli");
+    $("kapi").classList.remove("gizli");
+    $("kapiHata").textContent = mesaj || "";
+    $("sir").value = "";
+    $("sir").focus();
+  }
+
+  function yukle(sir, dugme) {
+    if (dugme) { dugme.disabled = true; }
+    return fetch(UC, { headers: { "X-Yonetim-Sirri": sir, "Accept": "application/json" }, cache: "no-store" })
+      .then(function (c) {
+        return c.json().catch(function () { return {}; }).then(function (v) { return { kod: c.status, veri: v }; });
+      })
+      .then(function (s) {
+        if (dugme) dugme.disabled = false;
+        if (s.kod === 401) { sirYaz(""); kapiGoster("Anahtar geçersiz."); return; }
+        if (s.kod !== 200) {
+          if (!durum.veri) { kapiGoster((s.veri && s.veri.hata) || "Veriler okunamadı (" + s.kod + ")."); }
+          else seritCiz([["kotu", "Yenilenemedi: " + ((s.veri && s.veri.hata) || s.kod) + ". Ekrandaki veri eski."]]);
+          return;
+        }
+        sirYaz(sir);
+        durum.veri = s.veri;
+        $("kapi").classList.add("gizli");
+        $("ekran").classList.remove("gizli");
+        ciz();
+      })
+      .catch(function () {
+        if (dugme) dugme.disabled = false;
+        if (!durum.veri) kapiGoster("Sunucuya ulaşılamadı.");
+        else seritCiz([["kotu", "Sunucuya ulaşılamadı. Ekrandaki veri eski."]]);
+      });
+  }
+
+  function seritCiz(liste) {
+    var kutu = $("seritler");
+    kutu.textContent = "";
+    liste.forEach(function (s) { kutu.appendChild(el("div", "serit " + s[0], s[1])); });
+  }
+
+  function ciz() {
+    var v = durum.veri;
+    $("zaman").textContent = "Güncellendi: " + saatli(v.zaman);
+
+    var seritler = [];
+    if (!v.iyzicoOkundu) seritler.push(["dikkat", "iyzico abonelik listesi okunamadı. Ödeme durumu ve sonraki çekim sütunları yalnız bizim kayıtlarımızdan geliyor."]);
+    seritCiz(seritler);
+
+    var s = $("sayilar"); s.textContent = "";
+    [["Müşteri", v.ozet.musteri, ""], ["Aktif abonelik", v.ozet.aktif, ""], ["Motor bağlı", v.ozet.motorBagli, ""],
+     ["Dikkat isteyen", v.ozet.dikkat, v.ozet.dikkat ? "dikkat" : ""]].forEach(function (x) {
+      var k = el("div", "sayi " + x[2]); k.appendChild(el("b", "", x[1])); k.appendChild(el("span", "", x[0])); s.appendChild(k);
+    });
+
+    dikkatCiz(v);
+    musterileriCiz();
+    olaylariCiz(v.olaylar || []);
+  }
+
+  function tablo(basliklar, satirlar) {
+    var k = el("div", "kart");
+    var t = el("table"); var th = el("thead"); var tr = el("tr");
+    basliklar.forEach(function (b) { tr.appendChild(el("th", "", b)); });
+    th.appendChild(tr); t.appendChild(th);
+    var tb = el("tbody");
+    satirlar.forEach(function (sat) {
+      var r = el("tr");
+      sat.forEach(function (h, i) {
+        var td = el("td"); td.setAttribute("data-ad", basliklar[i]);
+        if (h instanceof Node) td.appendChild(h); else td.textContent = h || "-";
+        r.appendChild(td);
+      });
+      tb.appendChild(r);
+    });
+    t.appendChild(tb); k.appendChild(t);
+    return k;
+  }
+
+  function ikiSatir(ana, alt) {
+    var f = document.createDocumentFragment();
+    f.appendChild(el("div", "ana", ana || "-"));
+    if (alt) f.appendChild(el("div", "alt", alt));
+    var d = el("div"); d.appendChild(f); return d;
+  }
+
+  function dikkatCiz(v) {
+    var kutu = $("dikkatBolumu"); kutu.textContent = "";
+    var yetimler = (v.yetimler || []).filter(function (y) { return !y.cozuldu; });
+    if (v.hesapsizAbonelikler && v.hesapsizAbonelikler.length) {
+      var h = el("h2", "", "iyzico'da aktif, panelde hesabı yok"); h.appendChild(el("small", "", "hesap-ac ile açılmalı"));
+      kutu.appendChild(h);
+      kutu.appendChild(tablo(["E-posta", "Paket", "Başlangıç", "Sonraki çekim", "Referans"],
+        v.hesapsizAbonelikler.map(function (a) {
+          return [ikiSatir(a.eposta, a.telefon), a.paket, tarih(a.baslangic), tarih(a.sonrakiCekim), a.referans];
+        })));
+    }
+    if (yetimler.length) {
+      var y = el("h2", "", "Ödeme alındı, hesap açılamadı"); y.appendChild(el("small", "", "yetim kayıtlar"));
+      kutu.appendChild(y);
+      kutu.appendChild(tablo(["E-posta", "Paket", "Zaman", "Referans", "Hata"],
+        yetimler.map(function (a) { return [a.eposta, a.paket, saatli(a.zaman), a.referans, a.hata]; })));
+    }
+    if (v.yarimKalanlar && v.yarimKalanlar.length) {
+      var z = el("h2", "", "Yarım kalan ödemeler"); z.appendChild(el("small", "", "son 7 gün, karttan tahsilat yapılmadı"));
+      kutu.appendChild(z);
+      kutu.appendChild(tablo(["Müşteri", "Paket", "Formu doldurduğu an"],
+        v.yarimKalanlar.map(function (a) {
+          return [ikiSatir(a.markaAdi || a.eposta, [a.adSoyad, a.eposta, a.telefon].filter(Boolean).join(" · ")), a.paket, saatli(a.zaman)];
+        })));
+    }
+  }
+
+  function uyuyor(m) {
+    if (durum.suzgec === "motorsuz" && m.motor.bagli) return false;
+    if (durum.suzgec === "sorun" && m.odemeDurumu.ton === "iyi") return false;
+    if (!durum.ara) return true;
+    var q = durum.ara.toLocaleLowerCase("tr-TR");
+    return [m.markaAdi, m.eposta, m.telefon, m.paket].some(function (x) {
+      return String(x || "").toLocaleLowerCase("tr-TR").indexOf(q) !== -1;
+    });
+  }
+
+  function musterileriCiz() {
+    var hepsi = durum.veri.musteriler || [];
+    var liste = hepsi.filter(uyuyor);
+    $("musteriSayisi").textContent = liste.length === hepsi.length ? hepsi.length + " kayıt, en yeni üstte" : liste.length + " / " + hepsi.length + " kayıt";
+    var tb = $("musteriler"); tb.textContent = "";
+    if (!liste.length) {
+      var r = el("tr"); var td = el("td", "bos", hepsi.length ? "Bu aramayla eşleşen müşteri yok." : "Henüz kayıtlı müşteri yok.");
+      td.colSpan = 6; r.appendChild(td); tb.appendChild(r);
+    }
+    liste.slice(0, durum.goster).forEach(function (m) {
+      var r = el("tr");
+      function hucre(ad, icerik) { var td = el("td"); td.setAttribute("data-ad", ad); td.appendChild(icerik); r.appendChild(td); }
+
+      hucre("Müşteri", ikiSatir(m.markaAdi || m.eposta, [m.markaAdi ? m.eposta : "", m.telefon].filter(Boolean).join(" · ")));
+      hucre("Paket", ikiSatir(m.paket || "-", m.acilisYolu === "elle" ? "elle açıldı" : ""));
+
+      var od = el("div"); od.appendChild(el("span", "rozet " + m.odemeDurumu.ton, m.odemeDurumu.etiket));
+      if (m.sonOdeme && m.sonOdeme.zaman) {
+        od.appendChild(el("div", "alt", "Son ödeme " + tarih(m.sonOdeme.zaman) + (m.sonOdeme.tutar ? ", " + tutar(m.sonOdeme.tutar, m.sonOdeme.paraBirimi) : "")));
+      }
+      hucre("Ödeme", od);
+
+      hucre("Kayıt", ikiSatir(tarih(m.kayitTarihi) || "-", ""));
+
+      var sc = m.sonrakiCekim;
+      hucre("Sonraki çekim", ikiSatir(sc ? tarih(sc.zaman) : "-",
+        sc ? (sc.kaynak === "iyzico" ? "iyzico" + (sc.tutar ? ", " + tutar(sc.tutar) : "") : sc.kaynak === "hesaplanan" ? "hesaplanan, iyzico'da doğrulanmadı" : "elle girilen") : ""));
+
+      var mo = el("div");
+      mo.appendChild(el("span", "rozet " + (m.motor.bagli ? (m.motor.yazdi ? "iyi" : "dikkat") : "kotu"),
+        m.motor.bagli ? (m.motor.yazdi ? "Bağlı" : "Bağlı, henüz yazmadı") : "Bağlı değil"));
+      if (m.motor.yazdi) mo.appendChild(el("div", "alt", m.motor.yaziSayisi + " yazı, son " + saatli(m.motor.sonYazim)));
+      hucre("Motor", mo);
+
+      tb.appendChild(r);
+    });
+    var kalan = liste.length - durum.goster;
+    var d = $("dahaFazla");
+    d.classList.toggle("gizli", kalan <= 0);
+    d.textContent = "Daha fazla göster (" + kalan + " kayıt daha)";
+  }
+
+  var GONDERIM = {
+    "gonderildi": ["iyi", "e-posta gitti"],
+    "zaten": ["notr", "daha önce bildirildi"],
+    "anahtar-yok": ["dikkat", "e-posta gitmedi: anahtar yok"],
+    "hata": ["kotu", "e-posta gönderilemedi"]
+  };
+
+  function olaylariCiz(liste) {
+    var kutu = $("olaylar"); kutu.textContent = "";
+    if (!liste.length) { kutu.appendChild(el("div", "bos", "Henüz olay yok.")); return; }
+    liste.forEach(function (o) {
+      var d = el("details", "olay");
+      var s = el("summary");
+      s.appendChild(el("span", "rozet " + (o.onem === "dikkat" ? "dikkat" : "notr"), o.tur === "test" ? "Test" : o.onem === "dikkat" ? "Dikkat" : "Bilgi"));
+      s.appendChild(el("span", "baslik", o.baslik));
+      var g = GONDERIM[o.gonderim] || ["notr", o.gonderim || ""];
+      s.appendChild(el("span", "rozet " + g[0], g[1]));
+      s.appendChild(el("span", "z", saatli(o.zaman)));
+      d.appendChild(s);
+      var dl = el("dl");
+      (o.satirlar || []).forEach(function (x) { dl.appendChild(el("dt", "", x[0])); dl.appendChild(el("dd", "", x[1])); });
+      if (o.not) dl.appendChild(el("dd", "not", o.not));
+      d.appendChild(dl);
+      kutu.appendChild(d);
+    });
+  }
+
+  $("kapiForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var s = $("sir").value.trim();
+    if (!s) { $("kapiHata").textContent = "Anahtarı yazın."; return; }
+    $("kapiHata").textContent = "";
+    yukle(s, e.target.querySelector("button"));
+  });
+  $("yenile").addEventListener("click", function () { yukle(sirOku(), this); });
+
+  /* Test e-postasi: Resend anahtarinin Netlify'da dogru durdugunu, bildirimin
+     kendi yolundan gonderip gosterir. Sonuc serit olarak yazilir; alert yok. */
+  $("testPosta").addEventListener("click", function () {
+    var d = this; d.disabled = true; d.textContent = "Gönderiliyor…";
+    fetch("/.netlify/functions/yonetim-test", { method: "POST", headers: { "X-Yonetim-Sirri": sirOku(), "Accept": "application/json" }, cache: "no-store" })
+      .then(function (c) { return c.json().catch(function () { return {}; }).then(function (v) { return { kod: c.status, veri: v }; }); })
+      .then(function (s) {
+        d.disabled = false; d.textContent = "Test e-postası";
+        if (s.kod === 401) { sirYaz(""); kapiGoster("Anahtar geçersiz."); return; }
+        var v = s.veri || {};
+        if (v.gonderim === "gonderildi") seritCiz([["iyi", "Test e-postası savas@dolunay.ai adresine gönderildi. Gelen kutusunu kontrol edin."]]);
+        else if (v.gonderim === "anahtar-yok") seritCiz([["kotu", "Gönderilmedi: Netlify'da RESEND_API_KEY bu ortam için tanımlı değil."]]);
+        else seritCiz([["kotu", "Gönderilemedi" + (v.kod ? " (Resend " + v.kod + ")" : "") + (v.ayrinti ? ": " + v.ayrinti : ".")]]);
+      })
+      .catch(function () { d.disabled = false; d.textContent = "Test e-postası"; seritCiz([["kotu", "Sunucuya ulaşılamadı."]]); });
+  });
+  $("cikis").addEventListener("click", function () { sirYaz(""); durum.veri = null; kapiGoster(""); });
+  $("ara").addEventListener("input", function () { durum.ara = this.value.trim(); durum.goster = SAYFA; musterileriCiz(); });
+  $("dahaFazla").addEventListener("click", function () { durum.goster += SAYFA; musterileriCiz(); });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-suzgec]"), function (b) {
+    b.addEventListener("click", function () {
+      durum.suzgec = b.getAttribute("data-suzgec"); durum.goster = SAYFA;
+      Array.prototype.forEach.call(document.querySelectorAll("[data-suzgec]"), function (x) { x.classList.toggle("secili", x === b); });
+      musterileriCiz();
+    });
+  });
+
+  var kayitli = sirOku();
+  if (kayitli) yukle(kayitli); else kapiGoster("");
+})();
+</script>
+</body>
+</html>
