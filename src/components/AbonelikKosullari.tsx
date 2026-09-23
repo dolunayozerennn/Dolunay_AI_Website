@@ -30,7 +30,7 @@ export const ABONELIK_KOSULLARI: { etiket: string; deger: string }[] = [
   {
     etiket: 'İptal',
     deger:
-      'dolunay@dolunay.ai adresine yazmanız yeterlidir. İptal talebi alındığında sonraki tahsilat durdurulur, hizmet ödemesi yapılmış dönemin sonuna kadar devam eder.',
+      'savas@dolunay.ai adresine yazmanız yeterlidir. İptal talebi alındığında sonraki tahsilat durdurulur, hizmet ödemesi yapılmış dönemin sonuna kadar devam eder.',
   },
   {
     etiket: 'Vergi',

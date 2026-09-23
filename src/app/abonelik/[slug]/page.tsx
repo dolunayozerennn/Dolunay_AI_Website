@@ -132,8 +132,8 @@ export default async function AbonelikPage({
 
         <p className="text-center text-gray-500 text-sm mt-10 leading-relaxed">
           Aboneliğinizle ilgili her soru için{' '}
-          <a href="mailto:dolunay@dolunay.ai" className="text-[#4F8BFF] hover:underline">
-            dolunay@dolunay.ai
+          <a href="mailto:savas@dolunay.ai" className="text-[#4F8BFF] hover:underline">
+            savas@dolunay.ai
           </a>{' '}
           adresine yazabilirsiniz.
         </p>
