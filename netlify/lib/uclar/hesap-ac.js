@@ -17,6 +17,8 @@
 const crypto = require('crypto')
 const { hesapOku, hesapAc, sifreOzetle, odemeYaz } = require('../hesap')
 const { json, govdeCoz } = require('../oturum')
+const { sirDogru, sirBasligi } = require('../yonetim')
+const { bildir, paketAdi } = require('../bildirim')
 
 const EPOSTA_KALIBI = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const ALAN_TAVANI = 300
@@ -25,15 +27,6 @@ const ALAN_TAVANI = 300
 const ALFABE = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
 const GRUP = 5
 const GRUP_SAYISI = 4
-
-function sirDogru (gelen) {
-  const beklenen = process.env.YONETIM_SIRRI || ''
-  // Sir tanimli degilse uc KAPALI. Bos sir "herkese acik" anlamina gelmemeli.
-  if (!beklenen || !gelen) return false
-  const oa = crypto.createHash('sha256').update(Buffer.from(String(gelen))).digest()
-  const ob = crypto.createHash('sha256').update(Buffer.from(beklenen)).digest()
-  return crypto.timingSafeEqual(oa, ob)
-}
 
 function sifreUret () {
   const gruplar = []
@@ -53,8 +46,7 @@ function metin (v, tavan) {
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return json(405, { hata: 'Yöntem desteklenmiyor.' })
 
-  const basliklar = event.headers || {}
-  if (!sirDogru(basliklar['x-yonetim-sirri'])) return json(401, { hata: 'Yetkisiz.' })
+  if (!sirDogru(sirBasligi(event))) return json(401, { hata: 'Yetkisiz.' })
 
   const g = govdeCoz(event)
   const eposta = metin(g.eposta, 200).trim().toLowerCase()
@@ -158,8 +150,33 @@ exports.handler = async (event) => {
     }
   }
 
+  // Odeme akisindan acilan hesapla ayni bildirim. Sifre bildirime GIRMEZ.
+  // Ad ve telefon bu ucun kaydina yazilmiyor; yalniz bildirimde kullanilir.
+  const paketAnahtari = metin(g.slug, 100) || metin(g.plan, 200)
+  const bildirim = await bildir({
+    tur: 'yeni-musteri-elle',
+    baslik: `Yeni müşteri (elle açıldı): ${kayit.markaAdi || eposta}`,
+    eposta,
+    tekil: `hesap-acildi/${eposta}`,
+    satirlar: [
+      ['Ad soyad', metin(g.ad, 120)],
+      ['Marka adı', kayit.markaAdi],
+      ['E-posta', eposta],
+      ['Telefon', metin(g.telefon, 30)],
+      ['Paket', paketAdi(paketAnahtari)],
+      ['Tutar', metin(g.tutar, 40) ? `${metin(g.tutar, 40)} ${metin(g.paraBirimi, 10) || 'TRY'}` : ''],
+      ['Ödeme tarihi', metin(g.odemeTarihi, 40)],
+      ['Abonelik referansı', referans],
+      ['Sonraki çekim', metin(g.sonrakiCekim, 40)],
+      ['Ödeme kaynağı', metin(g.odemeKaynagi, 100)],
+      ['Motor', kayit.motorSlug || 'bağlı değil'],
+      ['Ödeme kaydı', odeme],
+    ],
+  })
+
   // Sifre YALNIZ BURADA, yalniz bir kez doner. Kayda yazilmaz, loglanmaz.
   return json(200, {
+    bildirim: bildirim.gonderim,
     acildi: true,
     eposta,
     sifre,
