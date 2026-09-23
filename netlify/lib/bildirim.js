@@ -166,6 +166,11 @@ async function bildir ({ tur, onem = 'bilgi', baslik, satirlar = [], not = '', e
       g = { durum: 'hata', ayrinti: kayitIcin(e && e.message) }
     }
     sonuc.gonderim = g.durum
+    // Yonetim ekranindaki test dugmesi "neden gitmedi" sorusunu cevaplayabilsin.
+    // Ayrinti saglayicinin kisaltilmis hata metni; anahtar icermez.
+    if (g.kod) sonuc.kod = g.kod
+    if (g.ayrinti) sonuc.ayrinti = g.ayrinti
+    if (g.id) sonuc.id = g.id
     if (g.durum === 'hata') console.error('bildirim gonderilemedi', tur, g.kod || '', g.ayrinti || '')
     if (g.durum === 'anahtar-yok') console.error('bildirim gonderilmedi: RESEND_API_KEY tanimli degil', tur)
 

@@ -59,6 +59,7 @@ h2 small { color: var(--soluk); font-weight: 500; font-size: 13px; letter-spacin
 
 .serit { border-radius: 12px; padding: 12px 14px; margin: 0 0 14px; font-size: 14px; border: 1px solid; }
 .serit.dikkat { background: rgba(245,165,36,.08); border-color: rgba(245,165,36,.35); color: #FCD9A0; }
+.serit.iyi { background: rgba(74,222,128,.08); border-color: rgba(74,222,128,.35); color: #BBF7D0; }
 .serit.kotu { background: rgba(248,113,113,.08); border-color: rgba(248,113,113,.35); color: #FECACA; }
 
 .sayilar { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
@@ -131,6 +132,7 @@ td .alt { color: var(--soluk); font-size: 13px; word-break: break-all; }
       <span class="etiket">Yönetim</span>
       <span class="bosluk"></span>
       <span class="zaman" id="zaman"></span>
+      <button class="btn btn-ikincil" id="testPosta" type="button" title="savas@dolunay.ai adresine tek bir test e-postası gönderir">Test e-postası</button>
       <button class="btn btn-ikincil" id="yenile" type="button">Yenile</button>
       <button class="btn btn-ikincil" id="cikis" type="button">Kapat</button>
     </div>
@@ -378,7 +380,7 @@ td .alt { color: var(--soluk); font-size: 13px; word-break: break-all; }
     liste.forEach(function (o) {
       var d = el("details", "olay");
       var s = el("summary");
-      s.appendChild(el("span", "rozet " + (o.onem === "dikkat" ? "dikkat" : "notr"), o.onem === "dikkat" ? "Dikkat" : "Bilgi"));
+      s.appendChild(el("span", "rozet " + (o.onem === "dikkat" ? "dikkat" : "notr"), o.tur === "test" ? "Test" : o.onem === "dikkat" ? "Dikkat" : "Bilgi"));
       s.appendChild(el("span", "baslik", o.baslik));
       var g = GONDERIM[o.gonderim] || ["notr", o.gonderim || ""];
       s.appendChild(el("span", "rozet " + g[0], g[1]));
@@ -400,6 +402,23 @@ td .alt { color: var(--soluk); font-size: 13px; word-break: break-all; }
     yukle(s, e.target.querySelector("button"));
   });
   $("yenile").addEventListener("click", function () { yukle(sirOku(), this); });
+
+  /* Test e-postasi: Resend anahtarinin Netlify'da dogru durdugunu, bildirimin
+     kendi yolundan gonderip gosterir. Sonuc serit olarak yazilir; alert yok. */
+  $("testPosta").addEventListener("click", function () {
+    var d = this; d.disabled = true; d.textContent = "Gönderiliyor…";
+    fetch("/.netlify/functions/yonetim-test", { method: "POST", headers: { "X-Yonetim-Sirri": sirOku(), "Accept": "application/json" }, cache: "no-store" })
+      .then(function (c) { return c.json().catch(function () { return {}; }).then(function (v) { return { kod: c.status, veri: v }; }); })
+      .then(function (s) {
+        d.disabled = false; d.textContent = "Test e-postası";
+        if (s.kod === 401) { sirYaz(""); kapiGoster("Anahtar geçersiz."); return; }
+        var v = s.veri || {};
+        if (v.gonderim === "gonderildi") seritCiz([["iyi", "Test e-postası savas@dolunay.ai adresine gönderildi. Gelen kutusunu kontrol edin."]]);
+        else if (v.gonderim === "anahtar-yok") seritCiz([["kotu", "Gönderilmedi: Netlify'da RESEND_API_KEY bu ortam için tanımlı değil."]]);
+        else seritCiz([["kotu", "Gönderilemedi" + (v.kod ? " (Resend " + v.kod + ")" : "") + (v.ayrinti ? ": " + v.ayrinti : ".")]]);
+      })
+      .catch(function () { d.disabled = false; d.textContent = "Test e-postası"; seritCiz([["kotu", "Sunucuya ulaşılamadı."]]); });
+  });
   $("cikis").addEventListener("click", function () { sirYaz(""); durum.veri = null; kapiGoster(""); });
   $("ara").addEventListener("input", function () { durum.ara = this.value.trim(); durum.goster = SAYFA; musterileriCiz(); });
   $("dahaFazla").addEventListener("click", function () { durum.goster += SAYFA; musterileriCiz(); });

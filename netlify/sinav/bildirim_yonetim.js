@@ -28,7 +28,7 @@ const YV = L('uclar/yonetim-veri.js');
 const YARIM = L('uclar/yarim-odeme.js');
 const HESAP = L('hesap.js');
 const BILDIRIM = L('bildirim.js');
-const DOSYALAR = [SONUC, BASLAT, AC, YV, YARIM, HESAP, BILDIRIM, L('iyzico.js'), L('sayfa.js'), L('veri.js'), L('yonetim.js'), L('oturum.js')];
+const DOSYALAR = [SONUC, BASLAT, AC, YV, YARIM, HESAP, BILDIRIM, L('uclar/yonetim-test.js'), L('iyzico.js'), L('sayfa.js'), L('veri.js'), L('yonetim.js'), L('oturum.js')];
 
 // --- sahte depo -----------------------------------------------------------
 const kutu = new Map();
@@ -391,6 +391,25 @@ vaka('B16_anahtar_yokken_olay_yine_yaziliyor', async () => {
   return {
     gecti: s.gonderim === 'anahtar-yok' && cagrilar.length === once && ol.length === 1 && ol[0].gonderim === 'anahtar-yok',
     not: `gonderim:${s.gonderim} olay:${ol.length}`,
+  };
+});
+
+vaka('B17_test_epostasi_yetkili_tek_posta_anahtarsizsa_502', async () => {
+  const uc = require(L('uclar/yonetim-test.js')).handler;
+  const post = (sir) => ({ httpMethod: 'POST', headers: sir ? { 'x-yonetim-sirri': sir } : {}, body: '', isBase64Encoded: false });
+  const sirsiz = await uc(post(null));
+  const motor = await uc(post(MOTOR));
+  const get = await uc(Object.assign(post(SIR), { httpMethod: 'GET' }));
+  const once = postalar.length;
+  const iyi = await uc(post(SIR));
+  const tekPosta = postalar.length === once + 1 && /^Test: /.test(postalar[postalar.length - 1].konu);
+  require(BILDIRIM).gondericiAyarla(null); // gercek yol, anahtar yok
+  const yok = await uc(post(SIR));
+  return {
+    gecti: sirsiz.statusCode === 401 && motor.statusCode === 401 && get.statusCode === 405 && postalar.length === once + 1
+      && iyi.statusCode === 200 && govde(iyi).gonderim === 'gonderildi' && tekPosta
+      && yok.statusCode === 502 && govde(yok).gonderim === 'anahtar-yok' && olaylar().every((o) => o.tur === 'test'),
+    not: `sirsiz:${sirsiz.statusCode} motor:${motor.statusCode} get:${get.statusCode} iyi:${iyi.statusCode}/${govde(iyi).gonderim} tek:${tekPosta} yok:${yok.statusCode}`,
   };
 });
 
