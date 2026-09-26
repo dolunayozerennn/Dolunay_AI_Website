@@ -16,7 +16,8 @@ const SKOOL_URL = 'https://www.skool.com/yapay-zeka-factory/about?ref=044f39496d
 // Tanitim videosu Cloudinary'de durur (repo karari: video barindirma Cloudinary,
 // Supabase Storage'a video yuklenmez). Kaynak dosya Drive'daki
 // "skool tanitim 13 agustos.mp4"; web icin 1080p30 / ~39 MB'a indirildi.
-const TANITIM_VIDEO = 'https://res.cloudinary.com/ddh9eoasc/video/upload/v1788604237/ai-factory/tanitim-2025-08.mp4'
+// Geri donus: ayni dosya Cloudinary'de duruyor (v1788604237/ai-factory/tanitim-2025-08.mp4, SILINMEDI).
+const TANITIM_VIDEO = 'https://medya.dolunay.ai/ai-factory/tanitim-2025-08.mp4' // video-deposu: istisna, Dolunay onayı 2026-09-26, Cloudinary kotası
 // f_auto,q_auto,w_1280: Cloudinary'nin kendi optimizasyonu. Ham jpg 114 KB'ti
 // ve bu sayfada mobil LCP elemaniydi (poster, video preload="none" oldugu
 // icin ilk boyanan gorsel budur); tarayiciya gore WebP/AVIF + kucuk boyut
