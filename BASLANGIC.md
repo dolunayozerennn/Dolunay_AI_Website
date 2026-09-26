@@ -30,6 +30,17 @@ Dolunay ek odeme istemiyor. Bu yuzden:
 - Gun icindeki kucuk duzeltmeler (7 Eylul'de tek gunde 19 yayin olmustu) birikip
   gece tek yayin olur; acil degilse etiket koyma.
 
+## AI Factory tanitim videosu R2'de (2026-09-26)
+
+`/egitimler/ai-factory` tanitim videosu Cloudflare R2'den servis edilir: kova `dolunay-medya`,
+adres `https://medya.dolunay.ai/ai-factory/tanitim-2025-08.mp4` (ozel alan adi, ileri sarma calisir).
+Sebep: Cloudinary Free bant kotasi. Bu, "video = Cloudinary" kuralinin YALNIZ bu site videosu icin
+istisnasidir (Dolunay onayi 2026-09-26); bot, DM ve paylasim videolari Cloudinary'de kalir.
+CSP `media-src` iki yerde (`netlify.toml`, `public/_headers`) medya.dolunay.ai'yi tasir. Geri donus:
+page.tsx'teki `TANITIM_VIDEO` satirini Cloudinary adresine cevir; Cloudinary kopyasi silinmedi.
+Bu makineden Cloudflare API'ye buyuk dosya yuklemesi TLS'te kopuyor; yeni dosyayi gecici bir
+Worker'a R2 baglamasiyla kaynaktan cektir, sonra Worker'i sil.
+
 ## Hyper3D ogrenci promptlari (2026-09-11)
 
 `public/hyper3d/index.html` -> `https://dolunay.ai/hyper3d/`. Tek dosya,
