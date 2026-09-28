@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="Roca AI Agent">
+<meta property="og:description" content="Her broker'ın yanında 7/24 çalışan asistan. WhatsApp'tan konuşur, CRM'i kendisi tutar.">
+<title>Roca AI Agent</title>
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiMwZjFmM2QiLz48dGV4dCB4PSIzMiIgeT0iNDQiIGZvbnQtc2l6ZT0iMzQiIHRleHQtYW5jaG9yPSJtaWRkbGUiPvCfj6A8L3RleHQ+PC9zdmc+">
+<style>
+  :root{
+    --navy:#0f1f3d; --navy2:#16284d; --gold:#c9a24b; --gold-soft:#f6efdd;
+    --ink:#0f172a; --body:#334155; --mute:#64748b; --line:#e2e8f0;
+    --bg:#f8fafc; --card:#ffffff; --wa-dark:#075e54; --wa-bg:#efeae2; --wa-out:#d9fdd3;
+    --red:#dc2626; --red-soft:#fef2f2;
+    --mus:#2563eb; --mus-s:#eff6ff; --bro:#a16207; --bro-s:#fef7e0; --yon:#7c3aed; --yon-s:#f5f3ff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--body);line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+  section{padding:88px 0}
+  h1,h2,h3{color:var(--ink);letter-spacing:-.02em}
+  h2{font-size:40px;line-height:1.1;margin-bottom:12px}
+  .kicker{display:inline-block;font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+  .lead{font-size:20px;color:var(--mute);max-width:680px}
+  .white{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+
+  /* HERO */
+  .hero{background:radial-gradient(1200px 600px at 80% -10%,#2a4378 0%,transparent 60%),var(--navy);color:#fff;padding:110px 0 120px}
+  .hero .brand{font-size:15px;letter-spacing:.3em;font-weight:700;color:var(--gold);margin-bottom:28px}
+  .hero h1{color:#fff;font-size:76px;line-height:1;margin-bottom:22px}
+  .hero h1 span{color:var(--gold)}
+  .hero p{font-size:24px;color:#cbd5e1;max-width:620px}
+  .pills{display:flex;gap:10px;flex-wrap:wrap;margin-top:40px}
+  .pill{border:1px solid #334a78;background:#16284d;color:#e2e8f0;padding:10px 18px;border-radius:999px;font-size:15px;font-weight:600}
+
+  /* BUGÜN */
+  .flow{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:28px;margin-top:40px}
+  .flow-tag{font-size:14px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin-bottom:18px}
+  .steps{display:flex;align-items:stretch;flex-wrap:wrap}
+  .step{flex:1;min-width:150px;text-align:center;padding:6px 8px}
+  .step .ic{width:62px;height:62px;border-radius:18px;display:grid;place-items:center;font-size:30px;margin:0 auto 10px;background:#f1f5f9}
+  .step b{display:block;color:var(--ink);font-size:16px}
+  .step small{color:var(--mute);font-size:14px}
+  .arrow{align-self:center;color:#cbd5e1;font-size:26px}
+  .gap{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+  .gap span{font-size:14px;padding:6px 12px;border-radius:8px;background:var(--red-soft);color:var(--red);font-weight:600}
+
+  /* SİSTEM HARİTASI */
+  .map{background:var(--card);border:2px solid var(--gold);border-radius:26px;padding:26px 26px 22px;margin-top:40px;box-shadow:0 30px 60px -40px rgba(201,162,75,.7)}
+  .map-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+  .map-top .flow-tag{color:var(--gold);margin:0}
+  .ctl{border:1px solid var(--line);background:#fff;border-radius:10px;padding:7px 14px;font-size:14px;font-weight:700;color:var(--ink);cursor:pointer}
+  .ctl:hover{border-color:var(--gold)}
+  #mapsvg{width:100%;height:auto;display:block}
+  #mapsvg .edge{stroke:#e2e8f0;stroke-width:3;fill:none}
+  #mapsvg .act{fill:none;stroke-width:4;stroke-linecap:round}
+  #mapsvg .node rect{fill:#fff;stroke:#e2e8f0;stroke-width:2;transition:all .35s}
+  #mapsvg .node .lbl{font-weight:700;fill:var(--ink)}
+  #mapsvg .node .sub{fill:var(--mute)}
+  #mapsvg .node.ai rect{fill:var(--navy);stroke:var(--navy)}
+  #mapsvg .node.ai .lbl{fill:#fff}
+  #mapsvg .node.ai .sub{fill:#cbd5e1}
+  #mapsvg .node text{transition:opacity .35s}
+  #mapsvg .node:not(.on) text{opacity:.38}
+  #mapsvg .node.ai:not(.on) rect{fill:#3b4a66;stroke:#3b4a66}
+  #mapsvg .node.on rect{stroke:var(--gold);stroke-width:3;filter:url(#glow)}
+  #mapsvg .node.mus.on rect{stroke:var(--mus)}
+  #mapsvg .node.bro.on rect{stroke:var(--gold)}
+  #mapsvg .node.yon.on rect{stroke:var(--yon)}
+  #mapsvg .node.crm.on rect{stroke:#059669}
+  .map-cap{display:flex;align-items:center;gap:18px;margin-top:14px;min-height:64px}
+  .mc-n{flex-shrink:0;width:54px;height:54px;border-radius:16px;background:var(--navy);color:var(--gold);display:grid;place-items:center;font-weight:800;font-size:22px}
+  .mc-t{font-size:22px;font-weight:700;color:var(--ink);line-height:1.3}
+  .chips{display:flex;gap:6px;margin-top:16px;flex-wrap:wrap}
+  .chip{width:34px;height:8px;border-radius:4px;background:#e2e8f0;border:0;cursor:pointer;transition:background .3s}
+  .chip.on{background:var(--gold)}
+
+  /* KİMLE KONUŞUR */
+  .who{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:40px}
+  .wc{border-radius:20px;padding:24px;background:var(--rs);border:2px solid var(--rc)}
+  .wc .wh{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+  .wc .wh span{font-size:30px}
+  .wc h3{font-size:24px;color:var(--rc)}
+  .wc .via{font-size:14px;color:var(--mute);margin-bottom:14px}
+  .wc ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+  .wc li{font-size:16px;color:var(--ink);display:flex;gap:8px}
+  .wc li::before{content:"•";color:var(--rc);font-weight:900}
+  .mus{--rc:var(--mus);--rs:var(--mus-s)} .bro{--rc:var(--bro);--rs:var(--bro-s)} .yon{--rc:var(--yon);--rs:var(--yon-s)}
+
+  /* SAHNELER */
+  .grp{display:inline-flex;align-items:center;gap:8px;margin:64px 0 4px;color:var(--rc);font-weight:800;font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+  .grp:first-of-type{margin-top:36px}
+  .grp .gd{width:12px;height:12px;border-radius:50%;background:var(--rc)}
+  .scene{background:#fff;border:1px solid var(--line);border-radius:24px;padding:26px;margin-top:18px}
+  .sc-h{display:flex;align-items:center;gap:16px;margin-bottom:24px}
+  .sc-h .num{width:48px;height:48px;border-radius:50%;background:var(--navy);color:var(--gold);display:grid;place-items:center;font-weight:800;font-size:22px;flex-shrink:0}
+  .sc-h h3{font-size:34px;line-height:1.15;letter-spacing:-.025em}
+  .sc-h .ctl{margin-left:auto;flex-shrink:0;border:0;background:none;color:#94a3b8;font-size:20px;padding:6px}
+  .sc-body{display:grid;grid-template-columns:390px 1fr;gap:28px;align-items:start}
+  .sc-body.two{grid-template-columns:320px 320px 1fr}
+
+  .owner{display:flex;align-items:center;gap:10px;font-size:21px;margin-bottom:14px;padding:12px 16px;border-radius:14px;background:var(--rc);color:#fff;font-weight:800;letter-spacing:-.01em}
+  .owner .od{font-size:22px}
+  .owner em{margin-left:auto;font-style:normal;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:rgba(255,255,255,.22);color:#fff;padding:4px 9px;border-radius:6px}
+  .phone{background:#111;border-radius:34px;padding:9px;box-shadow:0 0 0 3px var(--rc),0 30px 60px -30px rgba(15,31,61,.5)}
+  .screen{background:var(--wa-bg);border-radius:26px;overflow:hidden;height:580px;display:flex;flex-direction:column}
+  .wa-top{background:var(--wa-dark);color:#fff;padding:13px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+  .wa-top b{display:block;font-size:15px}
+  .wa-top small{font-size:12px;opacity:.8}
+  .av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:16px;font-weight:800;flex-shrink:0}
+  .av.ai{background:var(--gold);color:var(--navy)}
+  .av.p{background:#94a3b8;color:#fff}
+  .msgs{padding:14px 12px;display:flex;flex-direction:column;gap:8px;flex:1;overflow-y:auto;scrollbar-width:none;scroll-behavior:smooth}
+  .msgs::-webkit-scrollbar{display:none}
+  .m{max-width:88%;padding:8px 11px 6px;border-radius:10px;font-size:14px;color:#111;box-shadow:0 1px 1px rgba(0,0,0,.08);animation:pop .35s ease-out}
+  .m.in{background:#fff;align-self:flex-start;border-top-left-radius:2px}
+  .m.out{background:var(--wa-out);align-self:flex-end;border-top-right-radius:2px}
+  .m .t{display:block;text-align:right;font-size:11px;color:#667781;margin-top:2px}
+  .aitag{display:block;font-size:11px;font-weight:800;color:#8a6a1f;margin-bottom:2px}
+  .m.alert{border-left:4px solid var(--red)}
+  .m.card{border-left:4px solid var(--gold)}
+  .kv{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding:3px 0;border-bottom:1px dashed #e5e7eb}
+  .kv:last-of-type{border-bottom:0}
+  .kv span{color:#667781}
+  .lsc{display:flex;align-items:baseline;gap:6px;margin:8px 0 6px;padding:8px 10px;border-radius:8px;background:#fff7ed}
+  .lsc b{font-size:28px;color:#c2410c;line-height:1}
+  .lsc span{color:#9a3412;font-size:13px}
+  .lsc em{margin-left:auto;font-style:normal;font-weight:800;color:#c2410c;font-size:13px}
+  .bars{display:flex;flex-direction:column;gap:4px;margin-bottom:8px}
+  .bars div{display:flex;align-items:center;gap:8px;font-size:12px;color:#667781}
+  .bars span{width:52px}
+  .bars i{flex:1;height:6px;border-radius:3px;background:#f1f5f9;position:relative;overflow:hidden}
+  .bars i::after{content:"";position:absolute;inset:0;width:var(--v);background:#f59e0b;border-radius:3px}
+  .voice{display:flex;align-items:center;gap:8px;min-width:190px}
+  .voice .play{width:28px;height:28px;border-radius:50%;background:var(--wa-dark);color:#fff;display:grid;place-items:center;font-size:11px}
+  .voice .wave{flex:1;height:22px;background:repeating-linear-gradient(90deg,#8696a0 0 2px,transparent 2px 5px);opacity:.7}
+  .sys{align-self:center;background:#fff7d6;color:#54410f;font-size:12px;padding:5px 10px;border-radius:8px;text-align:center;animation:pop .35s}
+  .typing{align-self:flex-start;background:#fff;border-radius:10px;padding:10px 14px;display:flex;gap:4px}
+  .typing i{width:7px;height:7px;border-radius:50%;background:#94a3b8;animation:blink 1s infinite}
+  .typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+  .cap{font-size:13px;color:var(--mute);text-align:center;margin-top:10px}
+
+  /* ARKA PLAN PANELİ */
+  .bg{background:var(--navy);border-radius:20px;padding:20px;color:#e2e8f0;min-height:640px;display:flex;flex-direction:column;gap:14px}
+  .bg-h{display:flex;align-items:center;gap:10px;font-weight:700;font-size:13px;color:#94a3b8;letter-spacing:.08em;text-transform:uppercase}
+  .bg-h .pulse{width:10px;height:10px;border-radius:50%;background:#34d399;box-shadow:0 0 0 0 rgba(52,211,153,.6);animation:pulse 1.6s infinite}
+  .bg-h small{margin-left:auto;font-size:12px;color:#94a3b8;font-weight:600}
+  .crm{background:var(--navy2);border:1px solid #2b4170;border-radius:14px;padding:14px}
+  .crm-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:13px;color:#94a3b8;font-weight:700;letter-spacing:.04em}
+  .crm-h b{color:#fff;font-size:17px;letter-spacing:0}
+  .crm-rows{display:flex;flex-direction:column;gap:2px;min-height:40px}
+  .crm-empty{font-size:14px;color:#64748b;padding:8px 10px}
+  .r2{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:7px 10px;border-radius:8px;font-size:14px;position:relative;animation:slide .4s ease-out}
+  .r2 span{color:#94a3b8}
+  .r2 b{color:#fff;font-weight:700;text-align:right}
+  .r2 s{color:#64748b;font-weight:500;margin-right:6px}
+  .r2.fw{animation:fw 1.6s ease-out}
+  .r2.fr{animation:fr 1.6s ease-out}
+  .badge{display:inline-block;margin-left:8px;font-size:10px;font-weight:800;padding:2px 7px;border-radius:5px;vertical-align:1px;animation:fade 1.6s forwards}
+  .badge.w{background:#10b981;color:#052e1f}
+  .badge.r{background:#60a5fa;color:#0b1d3d}
+  .score{display:flex;align-items:center;gap:14px;background:var(--navy2);border:1px solid #2b4170;border-radius:14px;padding:12px 14px}
+  .ring{position:relative;width:62px;height:62px;flex-shrink:0}
+  .ring svg{transform:rotate(-90deg)}
+  .ring circle{fill:none;stroke-width:7}
+  .ring .rb{stroke:#2b4170}
+  .ring .rf{stroke:#f59e0b;stroke-linecap:round;transition:stroke-dashoffset 1.2s ease-out}
+  .ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:19px;color:#fff}
+  .score .sl{font-size:13px;color:#94a3b8;display:block}
+  .score .st{font-size:17px;font-weight:800;color:#fbbf24}
+  .log{display:flex;flex-direction:column;gap:6px;margin-top:auto;border-top:1px solid #2b4170;padding-top:12px;min-height:150px;justify-content:flex-end}
+  .ll{font-size:13px;color:#cbd5e1;display:flex;gap:8px;animation:slide .4s ease-out}
+  .ll.w{color:#6ee7b7}.ll.r{color:#93c5fd}.ll.a{color:#fca5a5}.ll.q{color:#fde68a;font-style:italic}
+
+  @keyframes pop{from{opacity:0;transform:translateY(6px) scale(.98)}to{opacity:1;transform:none}}
+  @keyframes slide{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}
+  @keyframes blink{0%,100%{opacity:.3}50%{opacity:1}}
+  @keyframes pulse{70%{box-shadow:0 0 0 10px rgba(52,211,153,0)}100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}}
+  @keyframes fw{0%{background:rgba(16,185,129,.45)}100%{background:transparent}}
+  @keyframes fr{0%{background:rgba(96,165,250,.45)}100%{background:transparent}}
+  @keyframes fade{0%,70%{opacity:1}100%{opacity:0}}
+
+  /* NUMARA */
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:44px}
+  .opt{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:28px}
+  .opt.best{border:2px solid var(--gold)}
+  .opt .obadge{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;border-radius:6px;margin-bottom:14px;background:#f1f5f9;color:var(--mute)}
+  .opt.best .obadge{background:var(--gold);color:var(--navy)}
+  .opt h3{font-size:26px;margin-bottom:4px}
+  .opt .sub{color:var(--mute);font-size:16px;margin-bottom:20px}
+  .feat{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px}
+  .feat div{font-size:15px;display:flex;gap:8px;align-items:flex-start;color:var(--ink)}
+  .feat .y::before{content:"✓";color:#059669;font-weight:800}
+  .feat .x{color:#94a3b8}
+  .feat .x::before{content:"✕";color:var(--red);font-weight:800}
+  .mini{margin-top:24px}
+  .mini .phone{border-radius:24px;padding:7px}
+  .mini .screen{height:auto;min-height:230px;border-radius:18px}
+  .mini .msgs{overflow:visible}
+  .inbox-top{background:#fff;border-bottom:1px solid var(--line);padding:10px 12px;font-weight:700;color:var(--ink);font-size:14px}
+  .lst{background:#fff;flex:1}
+  .it{display:flex;gap:9px;align-items:center;padding:10px 12px;border-bottom:1px solid #f1f5f9}
+  .it .av{width:30px;height:30px;font-size:13px}
+  .it b{font-size:13px;color:var(--ink);display:block}
+  .it small{font-size:11px;color:var(--mute)}
+  .tag{margin-left:auto;font-size:10px;font-weight:700;padding:3px 7px;border-radius:5px;background:var(--gold-soft);color:#8a6a1f;white-space:nowrap}
+  .tag.me{background:#dbeafe;color:#1d4ed8}
+
+  /* FİYAT */
+  .price-sec{background:var(--navy);color:#e2e8f0}
+  .price-sec h2{color:#fff}
+  .price-sec .lead{color:#94a3b8}
+  .plans{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:44px}
+  .plan{background:#16284d;border:1px solid #2b4170;border-radius:24px;padding:34px}
+  .plan.buy{background:linear-gradient(160deg,#1f355f,#16284d);border:2px solid var(--gold)}
+  .plan .ptag{font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+  .plan .big{font-size:64px;font-weight:800;color:#fff;letter-spacing:-.03em;line-height:1}
+  .plan .big small{font-size:22px;color:#94a3b8;font-weight:600;letter-spacing:0}
+  .plan .zero{display:inline-block;margin-top:14px;background:#0f3d2e;color:#6ee7b7;font-weight:700;font-size:15px;padding:7px 12px;border-radius:8px}
+  .plan ul{list-style:none;margin-top:26px;display:flex;flex-direction:column;gap:12px}
+  .plan li{font-size:17px;color:#e2e8f0;display:flex;gap:10px}
+  .plan li::before{content:"✓";color:var(--gold);font-weight:800}
+  .calc{margin-top:14px;font-size:16px;color:#94a3b8}
+  .plus{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:26px}
+  .plus div{background:#0f1f3d;border-radius:14px;padding:16px}
+  .plus b{display:block;color:#fff;font-size:18px;margin-bottom:2px}
+  .plus span{font-size:14px;color:#94a3b8}
+  .fine{margin-top:22px;font-size:14px;color:#94a3b8;border-top:1px solid #2b4170;padding-top:16px}
+  footer{padding:40px 0;text-align:center;color:var(--mute);font-size:14px}
+
+  @media (max-width:960px){
+    .hero h1{font-size:52px}
+    h2{font-size:32px}
+    .who,.opts,.plans{grid-template-columns:1fr}
+    .sc-body,.sc-body.two{grid-template-columns:1fr}
+    .bg{min-height:0}
+    .arrow{display:none}
+    .mc-t{font-size:18px}
+    .map{padding:16px 12px}
+    .sc-h h3{font-size:26px}
+    .sc-h .num{width:40px;height:40px;font-size:18px}
+    .scene{padding:18px}
+    .owner{font-size:18px}
+    .feat{grid-template-columns:1fr}
+    .plan{padding:24px}
+    .plan .big{font-size:48px}
+    .plus{grid-template-columns:1fr}
+    section{padding:64px 0}
+    .wrap{padding:0 16px}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="brand">ROCA REAL ESTATE</div>
+    <h1>Roca <span>AI Agent</span></h1>
+    <p>Her broker'ın yanında 7/24 çalışan asistan. WhatsApp'tan konuşur, CRM'i kendisi tutar.</p>
+    <div class="pills">
+      <div class="pill">💬 Lead'i ilk mesajda karşılar</div>
+      <div class="pill">🗂️ CRM'e kendisi yazar</div>
+      <div class="pill">⏰ Aramayı unutturmaz</div>
+      <div class="pill">📊 Yöneticiye rapor verir</div>
+    </div>
+  </div>
+</header>
+
+<!-- HUNİ -->
+<section>
+  <div class="wrap">
+    <div class="kicker">Huni</div>
+    <h2>Reklamdan satışa giden yol</h2>
+    <p class="lead">Reklam aynı kalıyor. Değişen, mesaj geldikten sonrası.</p>
+
+    <div class="flow">
+      <div class="flow-tag">Bugün</div>
+      <div class="steps">
+        <div class="step"><div class="ic">📸</div><b>Instagram gönderisi</b><small>Şirket + broker ortak</small></div>
+        <div class="arrow">→</div>
+        <div class="step"><div class="ic">📣</div><b>Meta reklamı</b><small>Butona tıklanır</small></div>
+        <div class="arrow">→</div>
+        <div class="step"><div class="ic">💬</div><b>WhatsApp</b><small>Broker'ın numarası</small></div>
+        <div class="arrow">→</div>
+        <div class="step"><div class="ic">🧑‍💼</div><b>Broker</b><small>Her şeyi tek başına yürütür</small></div>
+      </div>
+      <div class="gap"><span>Gece gelen lead bekler</span><span>CRM'e girmeyen görüşme</span><span>Unutulan geri arama</span><span>Yönetici göremez</span></div>
+    </div>
+
+    <div class="map">
+      <div class="map-top">
+        <div class="flow-tag">Roca AI Agent ile</div>
+        <button class="ctl" id="mapPlay">⏸ Durdur</button>
+      </div>
+      <svg id="mapsvg" viewBox="0 0 1000 590" aria-label="Sistem haritası"></svg>
+      <div class="map-cap"><div class="mc-n" id="mcN">1</div><div class="mc-t" id="mcT"></div></div>
+      <div class="chips" id="chips"></div>
+    </div>
+  </div>
+</section>
+
+<!-- KİMLE KONUŞUR -->
+<section class="white">
+  <div class="wrap">
+    <div class="kicker">Üç kişi, üç ayrı konuşma</div>
+    <h2>Roca AI kiminle ne konuşur?</h2>
+    <div class="who">
+      <div class="wc mus"><div class="wh"><span>🙋</span><h3>Müşteri</h3></div><div class="via">Broker'ın numarasından yazar</div>
+        <ul><li>İlk mesajı karşılar</li><li>Ön eleme sorularını sorar</li><li>Broker devralınca susar</li></ul></div>
+      <div class="wc bro"><div class="wh"><span>🧑‍💼</span><h3>Broker</h3></div><div class="via">Roca AI numarasından yazar</div>
+        <ul><li>Yeni lead'i skoruyla haber verir</li><li>Zamanı gelen aramayı hatırlatır</li><li>Sesli notu alır, CRM'i doldurur</li></ul></div>
+      <div class="wc yon"><div class="wh"><span>👔</span><h3>Yönetici</h3></div><div class="via">Roca AI numarasından yazar</div>
+        <ul><li>Düzenli ekip özeti</li><li>Takip edilmeyen müşteri alarmı</li><li>Sıklığı yönetici seçer</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- SAHNELER -->
+<section>
+  <div class="wrap">
+    <div class="kicker">Bir günün içinden</div>
+    <h2>Solda telefon, sağda arka plan</h2>
+
+    <div class="grp mus"><span class="gd"></span>Roca AI ↔ Müşteri</div>
+    <div class="scene" data-sc="s1"></div>
+
+    <div class="grp bro"><span class="gd"></span>Roca AI ↔ Broker</div>
+    <div class="scene" data-sc="s2"></div>
+    <div class="scene" data-sc="s3"></div>
+    <div class="scene" data-sc="s4"></div>
+    <div class="scene" data-sc="s5"></div>
+
+    <div class="grp yon"><span class="gd"></span>Roca AI ↔ Yönetici</div>
+    <div class="scene" data-sc="s6"></div>
+    <div class="scene" data-sc="s7"></div>
+  </div>
+</section>
+
+<!-- NUMARA -->
+<section class="white">
+  <div class="wrap">
+    <div class="kicker">Numaralar</div>
+    <h2>Broker'lar hangi numarayı kullanır?</h2>
+    <div class="opts">
+      <div class="opt best">
+        <div class="obadge">Önerilen</div>
+        <h3>Mevcut numara</h3>
+        <div class="sub">Numara ve WhatsApp aynı kalır, AI yanına eklenir.</div>
+        <div class="feat">
+          <div class="y">Aynı numara</div>
+          <div class="y">Aynı WhatsApp arayüzü</div>
+          <div class="y">Sesli ve görüntülü arama</div>
+          <div class="y">Durum (hikaye) paylaşımı</div>
+          <div class="y">Son 6 ayın yazışmaları aktarılır</div>
+          <div class="y">Broker yazınca AI susar</div>
+          <div class="x">Toplu mesaj listeleri</div>
+          <div class="x">Kaybolan mesajlar</div>
+          <div class="x">Canlı konum</div>
+          <div class="x">Tek seferlik görüntüleme</div>
+        </div>
+        <div class="mini bro">
+          <div class="owner"><span class="od">📱</span>Cengiz'in telefonu<em>WhatsApp Business</em></div>
+          <div class="phone"><div class="screen">
+            <div class="wa-top"><div class="av p">A</div><div><b>Ahmet Kaya</b><small>müşteri</small></div><span style="margin-left:auto;font-size:18px">📞</span></div>
+            <div class="msgs">
+              <div class="m in">Yatırım, 300 bin $ civarı<span class="t">23:16</span></div>
+              <div class="m out" style="background:#fff7d6"><span class="aitag">🤖 Roca AI yazdı</span>Teşekkürler! Cengiz Bey yarın dönüş yapacak.<span class="t">23:17</span></div>
+              <div class="m out">Günaydın Ahmet Bey, Cengiz ben 👋<span class="t">09:30</span></div>
+            </div>
+          </div></div>
+        </div>
+      </div>
+
+      <div class="opt">
+        <div class="obadge">Alternatif</div>
+        <h3>Yeni numara</h3>
+        <div class="sub">Her broker'a yeni bir kurumsal numara açılır.</div>
+        <div class="feat">
+          <div class="y">Kurumsal numara şirkette kalır</div>
+          <div class="y">Ekip mesaj uygulaması</div>
+          <div class="y">Broker yazınca AI susar</div>
+          <div class="y">Yönetici tüm sohbetleri görür</div>
+          <div class="x">WhatsApp uygulaması</div>
+          <div class="x">Sesli arama</div>
+          <div class="x">Durum (hikaye) paylaşımı</div>
+          <div class="x">Eski müşteriler eski numarada kalır</div>
+        </div>
+        <div class="mini bro">
+          <div class="owner"><span class="od">📱</span>Cengiz'in telefonu<em>Ekip uygulaması</em></div>
+          <div class="phone"><div class="screen">
+            <div class="inbox-top">Gelen kutusu</div>
+            <div class="lst">
+              <div class="it"><div class="av p">A</div><div><b>Ahmet Kaya</b><small>300 bin $ civarı...</small></div><span class="tag">🤖 AI</span></div>
+              <div class="it"><div class="av p">S</div><div><b>Selin Aydın</b><small>Teşekkürler, bekliyorum</small></div><span class="tag me">Bende</span></div>
+              <div class="it"><div class="av p">B</div><div><b>Burak Demir</b><small>Fotoğraf</small></div><span class="tag me">Bende</span></div>
+              <div class="it"><div class="av p">E</div><div><b>Elif Şahin</b><small>Merhaba, bilgi...</small></div><span class="tag">🤖 AI</span></div>
+            </div>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FİYAT -->
+<section class="price-sec">
+  <div class="wrap">
+    <div class="kicker">Fiyat</div>
+    <h2>Aylık çalışın ya da tamamen sahip olun</h2>
+    <p class="lead">Taahhüt yok. İstediğiniz an sistemi devralabilirsiniz.</p>
+    <div class="plans">
+      <div class="plan">
+        <div class="ptag">Aylık</div>
+        <div class="big">1.100 $<small> / ay</small></div>
+        <div class="zero">Kurulum ücreti: 0 $</div>
+        <ul>
+          <li>Sistem kurulur ve çalıştırılır</li>
+          <li>Bakım bizde</li>
+          <li>Revizeler bizde</li>
+          <li>Yeni geliştirmeler bizde</li>
+        </ul>
+      </div>
+      <div class="plan buy">
+        <div class="ptag">Devral</div>
+        <div class="big">26.400 $<small> tek sefer</small></div>
+        <div class="calc">24 aylık bedel. Önceki ödemeler bu tutardan düşülmez.</div>
+        <ul>
+          <li>Sistem tamamen size geçer</li>
+          <li>Kendi bilgisayarınızda çalışır</li>
+          <li>Aylık ödeme biter</li>
+        </ul>
+        <div class="plus">
+          <div><b>🔒 Gizlilik</b><span>Verilerinize biz dahil kimse erişemez.</span></div>
+          <div><b>🎛️ Kontrol</b><span>Kimseye bağlı kalmadan kendi kendine çalışır.</span></div>
+        </div>
+        <div class="fine">Sistem yalnız Roca bünyesinde kullanılır. Kopyalanıp satılmaması için lisans sözleşmesi yapılır.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>Roca AI Agent · Artifex</footer>
+
+<script>
+const STATIC = location.search.includes('static') || matchMedia('(prefers-reduced-motion: reduce)').matches;
+const wait = ms => new Promise(r => setTimeout(r, STATIC ? 0 : ms));
+
+/* ================= SİSTEM HARİTASI ================= */
+const NODES = {
+  IG:  {t:'📸 Instagram', s:'Şirket + broker ortak'},
+  META:{t:'📣 Meta reklamı', s:'Gönderi reklama çıkar'},
+  MUS: {t:'🙋 Müşteri', s:'Reklamı görür, tıklar', c:'mus'},
+  WA:  {t:'💬 WhatsApp', s:"Broker'ın numarası"},
+  AI:  {t:'🤖 Roca AI', s:'7/24 çalışır', c:'ai', big:1},
+  CRM: {t:'🗂️ CRM', s:'Okur + yazar', c:'crm'},
+  BRO: {t:'🧑‍💼 Broker', s:'Kendi telefonu', c:'bro'},
+  YON: {t:'👔 Yönetici', s:'Özet + alarm', c:'yon'},
+};
+const LAYOUT = {
+  desk:{vb:[1000,590], w:210, h:84, bw:250, bh:104, fl:21, fs:14.5, pos:{IG:[130,95],META:[130,295],MUS:[130,495],WA:[470,495],AI:[470,285],CRM:[845,285],BRO:[845,495],YON:[845,95]}},
+  mob: {vb:[640,1030], w:250, h:108, bw:280, bh:124, fl:30, fs:21, pos:{IG:[140,70],META:[500,70],WA:[140,300],MUS:[500,300],AI:[320,520],BRO:[140,740],CRM:[500,740],YON:[320,955]}},
+};
+const LINKS = [['IG','META'],['META','MUS'],['MUS','WA'],['WA','AI'],['AI','CRM'],['AI','BRO'],['BRO','WA'],['AI','YON']];
+const COL = {MUS:'#2563eb', WA:'#16a34a', AI:'#0f1f3d', CRM:'#059669', BRO:'#c9a24b', YON:'#7c3aed', META:'#1877f2', IG:'#e1306c'};
+const STEPS = [
+  {n:['IG','META'], e:[['IG','META']], t:'Şirket ve broker ortak gönderi paylaşır. Gönderi Meta\'da reklama çıkar.'},
+  {n:['META','MUS','WA'], e:[['META','MUS'],['MUS','WA']], t:'Müşteri reklamı görür, butona basar. Broker\'ın WhatsApp numarasına yazar.'},
+  {n:['MUS','WA','AI'], e:[['WA','AI'],['AI','WA'],['WA','AI'],['AI','WA']], t:'İlk mesajı Roca AI karşılar. Ön eleme sorularını sorar.'},
+  {n:['AI','CRM'], e:[['AI','CRM']], t:'Cevapları ve lead skorunu CRM\'e yazar.'},
+  {n:['AI','BRO','WA','MUS'], e:[['AI','BRO'],['BRO','WA']], t:'Broker\'a WhatsApp\'tan haber verir. Broker devralır, AI susar.'},
+  {n:['CRM','AI','BRO'], e:[['CRM','AI'],['AI','BRO']], t:'CRM\'i tarar. Zamanı gelen aramayı broker\'a hatırlatır.'},
+  {n:['BRO','AI','CRM'], e:[['BRO','AI'],['AI','CRM']], t:'Broker sesli not bırakır. Roca AI, CRM\'i kendisi günceller.'},
+  {n:['CRM','AI','YON'], e:[['CRM','AI'],['AI','YON']], t:'Yöneticiye özet gider. Takip edilmeyen müşteri alarm olur.'},
+];
+const NS = 'http://www.w3.org/2000/svg';
+const svg = document.getElementById('mapsvg');
+function el(tag, attrs, parent){ const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); if(parent) parent.appendChild(e); return e; }
+let gEdge, gAct, gPk, gNode, nodeEls = {}, curLayout = null;
+function buildMap(){
+  const key = innerWidth < 720 ? 'mob' : 'desk';
+  if (key === curLayout) return false;
+  curLayout = key; const L = LAYOUT[key];
+  svg.setAttribute('viewBox', `0 0 ${L.vb[0]} ${L.vb[1]}`);
+  svg.innerHTML = '<defs><filter id="glow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#c9a24b" flood-opacity=".35"/></filter><filter id="pg"><feGaussianBlur stdDeviation="3"/></filter></defs>';
+  gEdge = el('g',{},svg); gAct = el('g',{},svg); gPk = el('g',{},svg); gNode = el('g',{},svg); nodeEls = {};
+  for (const id in NODES){ const n=NODES[id]; [n.x,n.y]=L.pos[id]; n.w=n.big?L.bw:L.w; n.h=n.big?L.bh:L.h; }
+  LINKS.forEach(([a,b]) => { const A=NODES[a],B=NODES[b]; el('line',{x1:A.x,y1:A.y,x2:B.x,y2:B.y,class:'edge'},gEdge); });
+  for (const id in NODES){
+    const n=NODES[id], w=n.w, h=n.h, fl=n.big?L.fl*1.2:L.fl;
+    const g=el('g',{class:'node '+(n.c||''),transform:`translate(${n.x-w/2},${n.y-h/2})`},gNode);
+    el('rect',{width:w,height:h,rx:18},g);
+    const t1=el('text',{x:w/2,y:h/2-L.fs*0.25,'text-anchor':'middle',class:'lbl','font-size':fl},g); t1.textContent=n.t;
+    const t2=el('text',{x:w/2,y:h/2+L.fs*1.45,'text-anchor':'middle',class:'sub','font-size':L.fs},g); t2.textContent=n.s;
+    nodeEls[id]=g;
+  }
+  return true;
+}
+buildMap();
+function curve(a,b){
+  const A=NODES[a],B=NODES[b], mx=(A.x+B.x)/2, my=(A.y+B.y)/2, dx=B.x-A.x, dy=B.y-A.y, L=Math.hypot(dx,dy);
+  const s = (a<b?1:-1)*28, cx=mx - dy/L*s, cy=my + dx/L*s;
+  return `M${A.x},${A.y} Q${cx},${cy} ${B.x},${B.y}`;
+}
+function travel(a,b,tok,instant){
+  return new Promise(res=>{
+    const color=COL[b]||'#0f1f3d';
+    const p=el('path',{d:curve(a,b),class:'act',stroke:color},gAct);
+    const len=p.getTotalLength(); p.style.strokeDasharray=len; p.style.strokeDashoffset=instant?0:len;
+    if(instant){res();return;}
+    const halo=el('circle',{r:13,fill:color,opacity:.3,filter:'url(#pg)'},gPk);
+    const dot=el('circle',{r:8,fill:color,stroke:'#fff','stroke-width':3},gPk);
+    const t0=performance.now(), D=950;
+    (function fr(now){
+      if(mapTok!==tok){halo.remove();dot.remove();return res();}
+      const k=Math.min(1,(now-t0)/D), e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
+      const pt=p.getPointAtLength(len*e);
+      dot.setAttribute('cx',pt.x);dot.setAttribute('cy',pt.y);halo.setAttribute('cx',pt.x);halo.setAttribute('cy',pt.y);
+      p.style.strokeDashoffset=len*(1-e);
+      if(k<1) requestAnimationFrame(fr); else {halo.remove();dot.remove();res();}
+    })(t0);
+  });
+}
+let mapTok=0, mapI=0, paused=false;
+const chips=document.getElementById('chips');
+STEPS.forEach((s,i)=>{const c=document.createElement('button');c.className='chip';c.title=(i+1)+'';c.onclick=()=>{mapI=i;paused=false;playBtn.textContent='⏸ Durdur';runMap();};chips.appendChild(c);});
+const playBtn=document.getElementById('mapPlay');
+playBtn.onclick=()=>{paused=!paused;playBtn.textContent=paused?'▶ Oynat':'⏸ Durdur';if(!paused){runMap();}else mapTok++;};
+async function showStep(i,tok,instant){
+  const s=STEPS[i];
+  gAct.innerHTML='';
+  for(const id in nodeEls) nodeEls[id].classList.toggle('on',s.n.includes(id));
+  document.getElementById('mcN').textContent=i+1;
+  document.getElementById('mcT').textContent=s.t;
+  [...chips.children].forEach((c,j)=>c.classList.toggle('on',j<=i));
+  for(const [a,b] of s.e){ if(mapTok!==tok) return; await travel(a,b,tok,instant); }
+}
+async function runMap(){
+  const tok=++mapTok;
+  if(STATIC){ await showStep(2,tok,true); return; }
+  while(mapTok===tok){
+    await showStep(mapI,tok,false);
+    await new Promise(r=>setTimeout(r,1900));
+    if(mapTok!==tok) return;
+    mapI=(mapI+1)%STEPS.length;
+  }
+}
+
+/* ================= SAHNELER ================= */
+const ROLE={mus:'Müşteri',bro:'Broker',yon:'Yönetici'};
+const AHMET=[['Kaynak',"Instagram · Cengiz'in videosu"],['Broker','Cengiz'],['İlgi','Dubai Marina'],['Amaç','Yatırım'],['Bütçe','300.000 $'],['Ödeme','Taksitli'],['Zaman','3 ay içinde'],['Durum','Ön görüşme tamam']];
+const LEADCARD = `<b>🔔 Yeni lead · ön görüşme tamam</b>
+  <div class="lsc"><b>82</b><span>/100 lead skoru</span><em>🔥 Sıcak</em></div>
+  <div class="bars"><div><span>Bütçe</span><i style="--v:80%"></i></div><div><span>Zaman</span><i style="--v:85%"></i></div><div><span>Amaç</span><i style="--v:100%"></i></div><div><span>Ödeme</span><i style="--v:60%"></i></div></div>
+  <div class="kv"><span>Müşteri</span><b>Ahmet Kaya</b></div>
+  <div class="kv"><span>Bütçe</span><b>300.000 $ · taksit</b></div>
+  <div class="kv"><span>Amaç</span><b>Yatırım</b></div>
+  <div class="kv"><span>İlgi</span><b>Dubai Marina</b></div>
+  <div class="kv"><span>Zaman</span><b>3 ay içinde</b></div>
+  <div style="margin-top:8px">CRM'e kaydettim. Görüşmeyi devralabilirsin. 👍</div>`;
+
+const SC = {
+ s1:{ n:1, h:'Müşteri reklamdan yazar', p:"Ahmet Bey Cengiz'in numarasına yazıyor. Cevapları Roca AI veriyor.",
+  phones:[{role:'mus', owner:"Ahmet Kaya'nın telefonu", peer:'Cengiz · Roca Real Estate', sub:"Cengiz'in numarası", ini:'C', av:'p'}],
+  crm:{title:'', rows:[]}, score:0,
+  ev:[
+   {t:'msg',f:'me',h:"Merhaba, Dubai Marina'daki daire hakkında bilgi alabilir miyim?",tm:'23:14'},
+   {t:'log',i:'📥',x:"Reklamdan yeni mesaj · Cengiz'in videosu"},
+   {t:'new',title:'Ahmet Kaya'},
+   {t:'w',k:'Kaynak',v:"Instagram · Cengiz'in videosu"},
+   {t:'w',k:'Broker',v:'Cengiz'},
+   {t:'w',k:'İlgi',v:'Dubai Marina'},
+   {t:'msg',f:'peer',ai:1,h:'Merhaba Ahmet Bey, hoş geldiniz! 😊 Yatırım için mi, oturmak için mi düşünüyorsunuz?',tm:'23:14'},
+   {t:'msg',f:'me',h:'Yatırım',tm:'23:15'},
+   {t:'w',k:'Amaç',v:'Yatırım'},
+   {t:'msg',f:'peer',ai:1,h:'Yaklaşık bütçeniz nedir? Peşin mi, taksitli mi?',tm:'23:15'},
+   {t:'msg',f:'me',h:'300 bin dolar civarı, taksitli olur',tm:'23:16'},
+   {t:'w',k:'Bütçe',v:'300.000 $'},
+   {t:'w',k:'Ödeme',v:'Taksitli'},
+   {t:'msg',f:'peer',ai:1,h:'Ne zaman almayı düşünüyorsunuz?',tm:'23:16'},
+   {t:'msg',f:'me',h:'3 ay içinde',tm:'23:16'},
+   {t:'w',k:'Zaman',v:'3 ay içinde'},
+   {t:'score',v:82,x:'🔥 Sıcak'},
+   {t:'msg',f:'peer',ai:1,h:'Teşekkürler! Cengiz Bey yarın sabah size en uygun projelerle dönecek. 🙏',tm:'23:17'},
+   {t:'w',k:'Durum',v:'Ön görüşme tamam'},
+  ]},
+ s2:{ n:2, h:"Broker'a skoruyla haber verir", p:'Ön görüşme bitince lead, puanıyla birlikte broker\'ın telefonuna düşer.',
+  phones:[{role:'bro', owner:"Cengiz'in telefonu", peer:'Roca AI', sub:'asistan', ini:'R', av:'ai'}],
+  crm:{title:'Ahmet Kaya', rows:AHMET}, score:82, scoreTxt:'🔥 Sıcak',
+  ev:[
+   {t:'r',k:'Durum'},
+   {t:'log',i:'🔔',x:"Cengiz'e bildirim gönderiliyor"},
+   {t:'msg',f:'peer',cls:'card',h:LEADCARD,tm:'23:17',wait:1400},
+   {t:'w',k:'Durum',v:"Broker'da · Cengiz",upd:1},
+   {t:'msg',f:'me',h:"Tamamdır, yarın 10'da arıyorum 👍",tm:'23:40'},
+   {t:'w',k:'Sonraki arama',v:'Yarın 10:00'},
+   {t:'log',i:'🤫',x:'Cengiz devraldı · AI bu müşteride sustu',c:'q'},
+  ]},
+ s3:{ n:3, h:'Zamanı gelince hatırlatır, sesli notu işler', p:'Görüşmeden sonra broker ses kaydı bırakır. CRM\'i Roca AI doldurur.',
+  phones:[{role:'bro', owner:"Cengiz'in telefonu", peer:'Roca AI', sub:'asistan', ini:'R', av:'ai'}],
+  crm:{title:'Ahmet Kaya', rows:[['Broker','Cengiz'],['Bütçe','300.000 $'],['İlgi','Dubai Marina'],['Görülen proje','Marina Vista'],['Sonraki arama','Bugün 10:00']]}, score:82, scoreTxt:'🔥 Sıcak',
+  ev:[
+   {t:'log',i:'⏱️',x:'Sabah taraması · bugünkü aramalar'},
+   {t:'r',k:'Sonraki arama'},
+   {t:'r',k:'Bütçe'},
+   {t:'msg',f:'peer',h:"⏰ Cengiz, bugün Ahmet Kaya'yı arayacaktın. Son durum: 300.000 $ bütçe, Dubai Marina'ya bakıyor.",tm:'10:00',wait:1300},
+   {t:'msg',f:'me',h:'<div class="voice"><div class="play">▶</div><div class="wave"></div><span style="font-size:12px;color:#667781">0:24</span></div>',tm:'11:42'},
+   {t:'log',i:'🎙️',x:'Ses kaydı yazıya çevrildi'},
+   {t:'log',i:'💬',x:'"Bütçesi 400\'e çıktı. Marina Vista\'yı beğenmedi. Pazartesi tekrar konuşalım."',c:'q',wait:1400},
+   {t:'w',k:'Bütçe',v:'400.000 $',upd:1},
+   {t:'w',k:'Görülen proje',v:'Marina Vista ✕',upd:1},
+   {t:'w',k:'Sonraki arama',v:'Pazartesi 10:00',upd:1},
+   {t:'score',v:91,x:'🔥 Çok sıcak'},
+   {t:'msg',f:'peer',h:'Not aldım, CRM güncellendi ✅<br>Bütçe artık 400.000 $. Pazartesi 10:00\'da yeni bütçeyle hatırlatacağım.',tm:'11:42'},
+  ]},
+ s4:{ n:4, h:'Broker unuttuğunu sorar', p:'Cevap CRM\'den okunur, broker kayda hiç girmez.',
+  phones:[{role:'bro', owner:"Cengiz'in telefonu", peer:'Roca AI', sub:'asistan', ini:'R', av:'ai'}],
+  crm:{title:'Ahmet Kaya', rows:[['Broker','Cengiz'],['Bütçe','400.000 $'],['Görülen proje','Marina Vista, Sobha Seahaven'],['Not','Deniz manzarası istiyor'],['Sonraki arama','Pazartesi 10:00']]}, score:91, scoreTxt:'🔥 Çok sıcak',
+  ev:[
+   {t:'msg',f:'me',h:'Ahmet Bey hangi projeleri görmüştü?',tm:'14:05'},
+   {t:'r',k:'Görülen proje'},
+   {t:'r',k:'Not'},
+   {t:'msg',f:'peer',h:'İki proje gördü: Marina Vista ve Sobha Seahaven. İkisini de beğenmedi, deniz manzarası istiyor. 🌊',tm:'14:05'},
+  ]},
+ s5:{ n:5, h:'Broker yeni müşteri ekletir', p:'Broker tek mesaj yazar. Kaydı Roca AI açar, hatırlatmayı kurar.',
+  phones:[{role:'bro', owner:"Cengiz'in telefonu", peer:'Roca AI', sub:'asistan', ini:'R', av:'ai'}],
+  crm:{title:'', rows:[]},
+  ev:[
+   {t:'msg',f:'me',h:'Yeni müşteri: Selin Aydın, 0532 418 27 63. 1+1 kira getirili daire, 250 bin $',tm:'16:30'},
+   {t:'new',title:'Selin Aydın'},
+   {t:'w',k:'Telefon',v:'0532 418 27 63'},
+   {t:'w',k:'Aradığı',v:'1+1 · kira getirili'},
+   {t:'w',k:'Bütçe',v:'250.000 $'},
+   {t:'w',k:'Broker',v:'Cengiz'},
+   {t:'msg',f:'peer',h:'Ekledim ✅ Selin Aydın CRM\'de, sana atandı. Ne zaman hatırlatayım?',tm:'16:30'},
+   {t:'msg',f:'me',h:'Perşembe',tm:'16:31'},
+   {t:'w',k:'Sonraki arama',v:'Perşembe 10:00'},
+   {t:'msg',f:'peer',h:'Tamam, perşembe 10:00\'da hatırlatırım. ⏰',tm:'16:31'},
+  ]},
+ s6:{ n:6, h:'Takip edilmeyen müşteri yöneticiye çıkar', p:'Broker iki hatırlatmaya cevap vermezse Roca AI yöneticiye yazar.',
+  two:1,
+  phones:[
+   {role:'bro', owner:"Mert'in telefonu", peer:'Roca AI', sub:'asistan', ini:'R', av:'ai'},
+   {role:'yon', owner:'Yöneticinin telefonu', peer:'Roca AI', sub:'yönetici hattı', ini:'R', av:'ai'}],
+  crm:{title:'Deniz Arslan', rows:[['Broker','Mert'],['Bütçe','550.000 $'],['Sonraki arama','Pazartesi 10:00'],['Son temas','9 gün önce']]},
+  ev:[
+   {t:'r',k:'Sonraki arama'},
+   {t:'msg',p:0,f:'peer',h:"⏰ Mert, bugün Deniz Arslan'ı arayacaktın. Bütçe 550.000 $.",tm:'Pzt 10:00'},
+   {t:'sys',p:0,x:'Cevap yok'},
+   {t:'log',i:'⌛',x:'1. hatırlatmaya cevap yok',c:'a'},
+   {t:'msg',p:0,f:'peer',h:"🔁 Mert, Deniz Arslan'ı henüz aramadın. Bugün arayabilir misin?",tm:'Çar 10:00'},
+   {t:'sys',p:0,x:'Cevap yok'},
+   {t:'log',i:'⌛',x:'2. hatırlatmaya da cevap yok',c:'a'},
+   {t:'r',k:'Son temas'},
+   {t:'log',i:'🚨',x:'Yöneticiye bildiriliyor',c:'a'},
+   {t:'msg',p:1,f:'peer',cls:'alert',h:'<b style="color:#dc2626">🚨 Takip edilmeyen müşteri</b><br><br>Mert, Deniz Arslan\'ı aramadı. 2 hatırlatmaya cevap vermedi.<br><br>Bütçe 550.000 $ · Son temas 9 gün önce',tm:'Çar 14:00'},
+   {t:'w',k:'Uyarı',v:'Yöneticiye bildirildi'},
+  ]},
+ s7:{ n:7, h:'Yöneticiye düzenli özet', p:'Sıklığı yönetici seçer: her sabah, haftada bir ya da ayda bir.',
+  phones:[{role:'yon', owner:'Yöneticinin telefonu', peer:'Roca AI', sub:'yönetici hattı', ini:'R', av:'ai'}],
+  crm:{title:'Bu hafta · tüm ekip', rows:[['Yeni lead','42'],["Broker'a devredilen",'38'],['Zamanında arama','27 / 31'],['Takip edilmeyen','2'],['En aktif broker','Cengiz']]},
+  ev:[
+   {t:'log',i:'⏱️',x:'Pazartesi 09:00 · özet zamanı'},
+   {t:'r',k:'Yeni lead'},{t:'r',k:"Broker'a devredilen"},{t:'r',k:'Zamanında arama'},{t:'r',k:'Takip edilmeyen'},
+   {t:'msg',f:'peer',cls:'card',h:'<b>📊 Haftalık özet</b><br><br><div class="kv"><span>Yeni lead</span><b>42</b></div><div class="kv"><span>Broker\'a devredilen</span><b>38</b></div><div class="kv"><span>Zamanında arama</span><b>27 / 31</b></div><div class="kv"><span>Takip edilmeyen</span><b style="color:#dc2626">2 ⚠️</b></div><div class="kv"><span>En aktif broker</span><b>Cengiz 🏆</b></div>',tm:'Pzt 09:00',wait:1200},
+   {t:'msg',f:'me',h:'Takip edilmeyen ikisi kim?',tm:'09:12'},
+   {t:'r',k:'Takip edilmeyen'},
+   {t:'msg',f:'peer',h:'Deniz Arslan (Mert, 9 gün) ve Kerem Yıldız (Mert, 6 gün). İkisi de 500.000 $ üstü.',tm:'09:12'},
+  ]},
+};
+
+function phoneHTML(ph){
+  return `<div class="pcol ${ph.role}">
+    <div class="owner"><span class="od">📱</span>${ph.owner}<em>${ROLE[ph.role]}</em></div>
+    <div class="phone"><div class="screen">
+      <div class="wa-top"><div class="av ${ph.av}">${ph.ini}</div><div><b>${ph.peer}</b><small>${ph.sub}</small></div></div>
+      <div class="msgs"></div></div></div></div>`;
+}
+function build(root, sc){
+  root.innerHTML = `<div class="sc-h"><div class="num">${sc.n}</div><div><h3>${sc.h}</h3></div><button class="ctl" title="Tekrar oynat">↻</button></div>
+   <div class="sc-body ${sc.two?'two':''}">${sc.phones.map(phoneHTML).join('')}
+    <div class="bg"><div class="bg-h"><span class="pulse"></span>Arka planda · CRM</div>
+     <div class="crm"><div class="crm-h"><span>🗂️</span><b class="crm-t"></b></div><div class="crm-rows"></div></div>
+     ${'score' in sc ? `<div class="score"><div class="ring"><svg width="62" height="62"><circle class="rb" cx="31" cy="31" r="26"/><circle class="rf" cx="31" cy="31" r="26" stroke-dasharray="163.4" stroke-dashoffset="163.4"/></svg><b class="sv">–</b></div><div><span class="sl">Lead skoru</span><span class="st">Hesaplanıyor</span></div></div>`:''}
+     <div class="log"></div></div></div>`;
+  root.querySelector('.ctl').onclick = () => play(root, sc);
+}
+function setScore(root, v, txt){
+  const sv=root.querySelector('.sv'); if(!sv) return;
+  const rf=root.querySelector('.rf'); rf.style.strokeDashoffset = 163.4*(1-v/100);
+  root.querySelector('.st').textContent = txt || 'Hesaplanıyor';
+  const from=parseInt(sv.textContent)||0, t0=performance.now();
+  if(STATIC||!v){ sv.textContent=v||'–'; return; }
+  (function f(now){ const k=Math.min(1,(now-t0)/1100); sv.textContent=Math.round(from+(v-from)*k); if(k<1) requestAnimationFrame(f); })(t0);
+}
+function row(rows,k,v){ const d=document.createElement('div'); d.className='r2'; d.dataset.k=k; d.innerHTML=`<span>${k}</span><b>${v}</b>`; rows.appendChild(d); return d; }
+function flash(d,cls,label){ d.classList.remove('fw','fr'); void d.offsetWidth; d.classList.add(cls); const b=document.createElement('span'); b.className='badge '+(cls==='fw'?'w':'r'); b.textContent=label; d.querySelector('span').appendChild(b); setTimeout(()=>b.remove(),1700); }
+function logLine(log,i,x,c){ const d=document.createElement('div'); d.className='ll '+(c||''); d.innerHTML=`<span>${i}</span><span>${x}</span>`; log.appendChild(d); while(log.children.length>6) log.firstChild.remove(); }
+
+async function play(root, sc){
+  const tok = root._tok = (root._tok||0)+1;
+  const alive = () => root._tok===tok;
+  const msgsAll = root.querySelectorAll('.msgs'), rows=root.querySelector('.crm-rows'), log=root.querySelector('.log'), title=root.querySelector('.crm-t');
+  msgsAll.forEach(m=>m.innerHTML=''); rows.innerHTML=''; log.innerHTML='';
+  title.textContent = sc.crm.title || '';
+  if(!sc.crm.rows.length){ rows.innerHTML='<div class="crm-empty">Kayıt bekleniyor…</div>'; }
+  sc.crm.rows.forEach(([k,v])=>row(rows,k,v).style.animation='none');
+  if('score' in sc) setScore(root, sc.score, sc.scoreTxt);
+  await wait(500);
+  for(const ev of sc.ev){
+    if(!alive()) return;
+    const msgs = msgsAll[ev.p||0];
+    if(ev.t==='msg'){
+      if(ev.f==='peer' && !STATIC){ const ty=document.createElement('div'); ty.className='typing'; ty.innerHTML='<i></i><i></i><i></i>'; msgs.appendChild(ty); msgs.scrollTop=msgs.scrollHeight; await wait(950); ty.remove(); if(!alive()) return; }
+      else await wait(450);
+      const m=document.createElement('div');
+      m.className='m '+(ev.f==='me'?'out':'in')+' '+(ev.cls||'');
+      m.innerHTML=(ev.ai?'<span class="aitag">🤖 Roca AI yazdı</span>':'')+ev.h+`<span class="t">${ev.tm||''}</span>`;
+      msgs.appendChild(m); msgs.scrollTop=msgs.scrollHeight;
+      await wait(ev.wait||800);
+    } else if(ev.t==='sys'){
+      const s=document.createElement('div'); s.className='sys'; s.textContent=ev.x; msgs.appendChild(s); msgs.scrollTop=msgs.scrollHeight; await wait(700);
+    } else if(ev.t==='new'){
+      rows.innerHTML=''; title.textContent=ev.title;
+      logLine(log,'➕',`CRM'de yeni kayıt açıldı · ${ev.title}`,'w'); await wait(600);
+    } else if(ev.t==='w'){
+      let d=rows.querySelector(`[data-k="${ev.k}"]`);
+      const old = d ? d.querySelector('b').textContent : null;
+      if(!d) d=row(rows,ev.k,ev.v);
+      else d.querySelector('b').innerHTML = (ev.upd && old ? `<s>${old}</s>` : '') + ev.v;
+      flash(d,'fw','YAZILDI');
+      logLine(log,'✍️',`CRM'e yazıldı · ${ev.k}: ${ev.v}`,'w');
+      await wait(650);
+    } else if(ev.t==='r'){
+      const d=rows.querySelector(`[data-k="${ev.k}"]`); if(d) flash(d,'fr','OKUNDU');
+      logLine(log,'🔎',`CRM'den okundu · ${ev.k}`,'r'); await wait(700);
+    } else if(ev.t==='log'){
+      logLine(log,ev.i,ev.x,ev.c); await wait(ev.wait||700);
+    } else if(ev.t==='score'){
+      setScore(root, ev.v, ev.x); logLine(log,'📈',`Lead skoru hesaplandı · ${ev.v}/100`,'w');
+      const d=rows.querySelector('[data-k="Lead skoru"]'); if(d){ d.querySelector('b').textContent=ev.v; } else row(rows,'Lead skoru',ev.v+'/100');
+      await wait(1200);
+    }
+  }
+}
+
+document.querySelectorAll('.scene').forEach(root=>{
+  const sc=SC[root.dataset.sc]; build(root, sc);
+  if(STATIC){ play(root, sc); return; }
+  const io=new IntersectionObserver(es=>{ es.forEach(e=>{ if(e.isIntersecting){ io.disconnect(); play(root, sc); } }); },{threshold:.35});
+  io.observe(root);
+});
+runMap();
+addEventListener('resize',()=>{ if(buildMap()){ mapTok++; if(!paused) runMap(); } });
+</script>
+</body>
+</html>
