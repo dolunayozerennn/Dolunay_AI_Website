@@ -61,20 +61,36 @@ export function TurkishOnlyNotice() {
   )
 }
 
-export function PostCta() {
+// Organik yazilar (frontmatter cta: "ai-factory") okuru AI Factory'ye (Skool) gonderir.
+// hedef verilmeyen eski yazilarda buton aynen kurumsal hizmet sayfasina gider.
+const AI_FACTORY_URL = 'https://www.skool.com/yapay-zeka-factory/about?ref=044f39496d4f45fab11775bcefe4b7f4'
+
+export function PostCta({ hedef }: { hedef?: string } = {}) {
   const { t } = useTranslation()
+  const aiFactory = hedef === 'ai-factory'
   return (
     <div className="bg-gradient-to-br from-white/5 to-transparent border border-white/10 rounded-3xl p-8 md:p-12 text-center relative overflow-hidden">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[100px] bg-[#4F8BFF]/10 blur-[50px] pointer-events-none" />
-      <h4 className="text-2xl font-bold text-white mb-4 relative z-10">{t('blog.ctaTitle')}</h4>
+      <h4 className="text-2xl font-bold text-white mb-4 relative z-10">{t(aiFactory ? 'blog.ctaAiFactoryTitle' : 'blog.ctaTitle')}</h4>
       {/* Eskiden bu buton ana sayfaya donuyordu: satis sorusu sorulup cevap
           olarak ziyaretci basa gonderiliyordu. Artik hizmet sayfasina gidiyor. */}
-      <Link
-        href="/cozumler/hizmetler"
-        className="relative z-10 inline-flex items-center justify-center px-8 py-4 text-sm font-bold text-white bg-white/10 hover:bg-white/20 border border-white/20 rounded-2xl transition-all hover:scale-105 active:scale-95"
-      >
-        {t('blog.ctaBtn')}
-      </Link>
+      {aiFactory ? (
+        <a
+          href={AI_FACTORY_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="relative z-10 inline-flex items-center justify-center px-8 py-4 text-sm font-bold text-white bg-white/10 hover:bg-white/20 border border-white/20 rounded-2xl transition-all hover:scale-105 active:scale-95"
+        >
+          {t('blog.ctaAiFactoryBtn')}
+        </a>
+      ) : (
+        <Link
+          href="/cozumler/hizmetler"
+          className="relative z-10 inline-flex items-center justify-center px-8 py-4 text-sm font-bold text-white bg-white/10 hover:bg-white/20 border border-white/20 rounded-2xl transition-all hover:scale-105 active:scale-95"
+        >
+          {t('blog.ctaBtn')}
+        </Link>
+      )}
     </div>
   )
 }

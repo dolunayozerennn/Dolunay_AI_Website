@@ -31,6 +31,8 @@ export interface Post {
   /** Ham dakika. Ekranda "5 dk okuma" / "5 min read" olarak ziyaretcinin dilinde yazilir. */
   readingMinutes: number
   tags?: string[]
+  /** Sayfa sonu butonunun hedefi. Yoksa eski davranis (kurumsal hizmet). "ai-factory" = organik yazi. */
+  cta?: string
 }
 
 /** Liste kartlari icin: yazinin tam govdesi tasinmadan basliklar. */
@@ -68,6 +70,7 @@ export function getPosts(): Post[] {
         coverImage: matterResult.data.coverImage,
         excerpt: truncateExcerpt(matterResult.data.excerpt || ''),
         tags: matterResult.data.tags || [],
+        cta: typeof matterResult.data.cta === 'string' ? matterResult.data.cta : undefined,
         content: matterResult.content,
         readingMinutes: Math.ceil(stats.minutes),
       } as Post
@@ -106,6 +109,7 @@ export function getPostBySlug(slug: string): Post | null {
       coverImage: matterResult.data.coverImage,
       excerpt: truncateExcerpt(matterResult.data.excerpt || ''),
       tags: matterResult.data.tags || [],
+      cta: typeof matterResult.data.cta === 'string' ? matterResult.data.cta : undefined,
       content: matterResult.content,
       readingMinutes: Math.ceil(stats.minutes),
     } as Post

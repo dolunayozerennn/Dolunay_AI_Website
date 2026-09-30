@@ -310,6 +310,8 @@
     "backToBlog": "Back to blog",
     "ctaTitle": "Ready to build your own AI system?",
     "ctaBtn": "Explore services",
+    "ctaAiFactoryTitle": "Build your own automations with Claude Code",
+    "ctaAiFactoryBtn": "Join AI Factory",
     "turkishOnly": "Blog posts are published in Turkish only."
   }
 }

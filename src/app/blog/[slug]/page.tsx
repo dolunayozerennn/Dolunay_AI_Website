@@ -226,7 +226,7 @@ export default async function BlogPost(
 
         {/* Bottom Call to Action */}
         <div className="mt-20 pt-10 border-t border-white/10">
-          <PostCta />
+          <PostCta hedef={post.cta} />
         </div>
       </div>
     </article>

@@ -310,6 +310,8 @@
     "backToBlog": "返回博客",
     "ctaTitle": "准备好搭建你自己的人工智能系统了吗？",
     "ctaBtn": "查看服务",
+    "ctaAiFactoryTitle": "用 Claude Code 搭建你自己的自动化",
+    "ctaAiFactoryBtn": "加入 AI Factory",
     "turkishOnly": "博客文章仅以土耳其语发布。"
   }
 }
