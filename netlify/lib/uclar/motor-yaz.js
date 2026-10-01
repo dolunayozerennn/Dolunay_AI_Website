@@ -12,6 +12,7 @@ const crypto = require('crypto')
 const veri = require('../veri')
 const { hesapOku, hesapGuncelle } = require('../hesap')
 const { json, govdeCoz } = require('../oturum')
+const { durumTemizle } = require('../tanisma')
 
 // Tavanlar: tanimadigimiz bir govde fonksiyonu mesgul etmesin, depo da
 // sinirsiz buyumesin.
@@ -114,6 +115,11 @@ exports.handler = async (event) => {
     // bos gormesin diye. Panelde numara yazilmissa birlestirmede panelinki
     // kazanir, buradaki onu ezmez (veri.js/birlestir).
     telefon: metin(g.telefon, 40),
+    // Yonetim ekraninin durum listesi: aktif mi, havuz onayi, acik uyarilar.
+    // Musteriye GITMEZ (panel-veri birlestirmesi bu alani okumaz). Her
+    // yazista tamamen yenilenir; gelmezse null, ekran bos gosterir.
+    // Sozlesme: Blog-Motoru/_kopru/panel-sozlesme.md, bolum 4.
+    durum: durumTemizle(g.durum),
     yazilar,
     konular,
   }

@@ -99,6 +99,38 @@ td .alt { color: var(--soluk); font-size: 13px; word-break: break-all; }
 .olay dd { margin: 0; word-break: break-word; }
 .olay .not { grid-column: 1 / -1; color: var(--ikincil); margin-top: 6px; }
 
+/* durum listesi ve musteri ayrintisi */
+input[type=text], input[type=email], select, textarea {
+  width: 100%; background: var(--cam); border: 1px solid rgba(255,255,255,.12); border-radius: 10px;
+  padding: 10px 12px; outline: none; font: inherit; color: inherit;
+}
+select { color-scheme: dark; }
+select option { background: #1B1D24; color: var(--metin); }
+textarea { resize: vertical; min-height: 120px; line-height: 1.45; }
+textarea:focus, select:focus, input[type=text]:focus, input[type=email]:focus { border-color: var(--vurgu); box-shadow: 0 0 0 3px rgba(79,139,255,.2); }
+#durumListesi .alt { word-break: normal; overflow-wrap: anywhere; }
+.tikla { cursor: pointer; }
+.tikla:hover td { background: rgba(255,255,255,.025); }
+.bosh { color: var(--soluk); }
+.btn-kucuk { padding: 7px 12px; font-size: 13px; }
+.btn-dolu { background: linear-gradient(135deg, var(--vurgu), var(--vurgu-acik)); color: var(--zemin); }
+
+.ortu { position: fixed; inset: 0; z-index: 20; background: rgba(4,5,8,.72); display: flex; justify-content: flex-end; }
+.cekmece { width: 100%; max-width: 680px; height: 100%; overflow-y: auto; background: var(--zemin2); border-left: 1px solid var(--cizgi); padding: 22px 24px 48px; }
+.cekmece-ust { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 4px; }
+.cekmece-ust h3 { margin: 0; font-size: 22px; letter-spacing: -.6px; flex: 1; }
+.cekmece h4 { font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--vurgu-acik); margin: 26px 0 10px; }
+.kunye { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; font-size: 14px; margin: 0; }
+.kunye dt { color: var(--soluk); }
+.kunye dd { margin: 0; word-break: break-word; white-space: pre-wrap; }
+.not-kart { background: var(--kart); border: 1px solid var(--cizgi); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; }
+.not-kart .ust-satir { display: flex; gap: 8px; align-items: center; color: var(--soluk); font-size: 13px; margin-bottom: 6px; }
+.not-kart .metin { white-space: pre-wrap; word-break: break-word; font-size: 14px; }
+.form-satir { margin-bottom: 12px; }
+.ikili-alan { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.alan-hata { color: var(--kirmizi); font-size: 12.5px; margin-top: 4px; min-height: 0; }
+.yardim { color: var(--soluk); font-size: 12.5px; margin-top: 4px; }
+
 /* Dar ekranda tablo satiri karta doner; yatay kaydirma yok. */
 @media (max-width: 760px) {
   .sayilar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -108,6 +140,8 @@ td .alt { color: var(--soluk); font-size: 13px; word-break: break-all; }
   td { border: 0; padding: 4px 14px; }
   td[data-ad]::before { content: attr(data-ad); display: block; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--soluk); }
   .ust-ic, main { padding-left: 16px; padding-right: 16px; }
+  .cekmece { padding: 18px 16px 40px; }
+  .ikili-alan { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -132,6 +166,7 @@ td .alt { color: var(--soluk); font-size: 13px; word-break: break-all; }
       <span class="etiket">Yönetim</span>
       <span class="bosluk"></span>
       <span class="zaman" id="zaman"></span>
+      <button class="btn btn-dolu" id="musteriEkle" type="button">Müşteri ekle</button>
       <button class="btn btn-ikincil" id="testPosta" type="button" title="savas@dolunay.ai adresine tek bir test e-postası gönderir">Test e-postası</button>
       <button class="btn btn-ikincil" id="yenile" type="button">Yenile</button>
       <button class="btn btn-ikincil" id="cikis" type="button">Kapat</button>
@@ -145,7 +180,17 @@ td .alt { color: var(--soluk); font-size: 13px; word-break: break-all; }
 
     <div id="dikkatBolumu"></div>
 
-    <h2>Müşteriler <small id="musteriSayisi"></small></h2>
+    <h2>Durum <small id="durumAlt">motorun köprüye yazdığı veriden; yazılmayan alan boş</small></h2>
+    <div class="kart">
+      <table>
+        <thead>
+          <tr><th>Müşteri</th><th>Aktif</th><th>Havuz onayı</th><th>Son yazı</th><th>Onayda bekleyen</th><th>Açık uyarı</th><th>Tanışma / not</th></tr>
+        </thead>
+        <tbody id="durumListesi"></tbody>
+      </table>
+    </div>
+
+    <h2>Müşteriler ve ödeme <small id="musteriSayisi"></small></h2>
     <div class="arac">
       <input type="search" id="ara" placeholder="Marka, e-posta ya da telefon ara" aria-label="Müşteri ara">
       <button class="hap secili" type="button" data-suzgec="hepsi">Tümü</button>
@@ -165,6 +210,10 @@ td .alt { color: var(--soluk); font-size: 13px; word-break: break-all; }
     <h2>Son olaylar <small>bildirimler ve e-posta durumu</small></h2>
     <div class="kart" id="olaylar"></div>
   </main>
+</div>
+
+<div class="ortu gizli" id="ortu" role="dialog" aria-modal="true" aria-labelledby="cekmeceBaslik">
+  <div class="cekmece" id="cekmece"></div>
 </div>
 
 <script>
@@ -258,9 +307,306 @@ td .alt { color: var(--soluk); font-size: 13px; word-break: break-all; }
     });
 
     dikkatCiz(v);
+    durumCiz();
     musterileriCiz();
     olaylariCiz(v.olaylar || []);
+    /* Acik cekmece varsa taze veriyle yeniden cizilir. */
+    if (durum.acikAnahtar) detayAc(durum.acikAnahtar, true);
   }
+
+  /* ---------------------------------------------------------------------
+     Durum listesi. Sutunlar motorun kopruye yazdigindan gelir; motor
+     yazmadiysa hucre bos ("-"). Burada hicbir deger tahmin edilmez.
+     Sozlesme: Blog-Motoru/_kopru/panel-sozlesme.md
+     --------------------------------------------------------------------- */
+  var YAZ_UC = "/.netlify/functions/yonetim-yaz";
+  var KANALLAR = [["whatsapp", "WhatsApp"], ["eposta", "E-posta"], ["telefon", "Telefon"], ["yuz-yuze", "Yüz yüze"], ["diger", "Diğer"]];
+  var SITE_YONETIMI = { wordpress: "WordPress", wix: "Wix", shopify: "Shopify", ikas: "ikas", ticimax: "Ticimax",
+    ideasoft: "IdeaSoft", ozel: "Özel yazılım", "site-yok": "Henüz sitesi yok", bilmiyorum: "Bilmiyor", diger: "Diğer" };
+
+  function kanalAdi(k) { for (var i = 0; i < KANALLAR.length; i++) if (KANALLAR[i][0] === k) return KANALLAR[i][1]; return k || ""; }
+  function gunTarih(t) { if (!t) return ""; var p = String(t).split("-"); return p.length === 3 ? p[2] + "." + p[1] + "." + p[0] : String(t); }
+  function evetHayir(b, evet, hayir, tonEvet, tonHayir) {
+    if (b === true) return el("span", "rozet " + tonEvet, evet);
+    if (b === false) return el("span", "rozet " + tonHayir, hayir);
+    return el("span", "bosh", "-");
+  }
+
+  function durumCiz() {
+    var v = durum.veri;
+    var tb = $("durumListesi"); tb.textContent = "";
+    if (v.durumOkundu === false) {
+      var r0 = el("tr"); var t0 = el("td", "bos", "Durum listesi okunamadı. Yenileyin."); t0.colSpan = 7; r0.appendChild(t0); tb.appendChild(r0); return;
+    }
+    var liste = v.durumListesi || [];
+    if (!liste.length) {
+      var r1 = el("tr"); var t1 = el("td", "bos", "Henüz müşteri yok. Sağ üstten ekleyebilirsiniz."); t1.colSpan = 7; r1.appendChild(t1); tb.appendChild(r1); return;
+    }
+    liste.forEach(function (s) {
+      var r = el("tr", "tikla"); r.tabIndex = 0;
+      r.addEventListener("click", function () { detayAc(s.anahtar); });
+      r.addEventListener("keydown", function (e) { if (e.key === "Enter") detayAc(s.anahtar); });
+      function hucre(ad, icerik) { var td = el("td"); td.setAttribute("data-ad", ad); td.appendChild(icerik); r.appendChild(td); }
+      var d = s.durum;
+
+      var alt = [s.slug ? s.slug : "", s.tur === "elle" ? "panel hesabı yok" : s.tur === "motor" ? "yalnız motorda" : s.eposta].filter(Boolean).join(" · ");
+      hucre("Müşteri", ikiSatir(s.markaAdi || s.eposta || s.slug, alt));
+
+      hucre("Aktif", d ? evetHayir(d.aktif, "Aktif", "Pasif", "iyi", "notr") : el("span", "bosh", "-"));
+
+      var h = el("div");
+      h.appendChild(d ? evetHayir(d.havuzOnayBekliyor, "Bekliyor", "Yok", "dikkat", "notr") : el("span", "bosh", "-"));
+      if (d && d.havuzOnayBekliyor && d.havuzBekleyenSayisi !== null && d.havuzBekleyenSayisi !== undefined) h.appendChild(el("div", "alt", d.havuzBekleyenSayisi + " öneri"));
+      hucre("Havuz onayı", h);
+
+      hucre("Son yazı", d && d.sonYazi ? ikiSatir(gunTarih(d.sonYazi.tarih), d.sonYazi.baslik) : el("span", "bosh", "-"));
+
+      var ob = el("div");
+      if (d && d.onayBekleyen) {
+        ob.appendChild(el("span", "rozet " + (d.onayBekleyen.sayi ? "dikkat" : "notr"), String(d.onayBekleyen.sayi)));
+        if (d.onayBekleyen.ilk) ob.appendChild(el("div", "alt", (d.onayBekleyen.ilk.tarih ? gunTarih(d.onayBekleyen.ilk.tarih) + " · " : "") + d.onayBekleyen.ilk.baslik));
+      } else ob.appendChild(el("span", "bosh", "-"));
+      hucre("Onayda bekleyen", ob);
+
+      var uy = el("div");
+      var uyarilar = (d && d.uyarilar) || [];
+      if (uyarilar.length) {
+        uy.appendChild(el("span", "rozet kotu", uyarilar.length + " açık"));
+        uy.appendChild(el("div", "alt", uyarilar[0].metin));
+      }
+      if (d && d.programUyarisi) uy.appendChild(el("div", "alt", "Program: " + d.programUyarisi));
+      if (!uy.childNodes.length) uy.appendChild(el("span", "bosh", d && d.uyarilar ? "Yok" : "-"));
+      hucre("Açık uyarı", uy);
+
+      var notSayisi = s.yonetim && s.yonetim.notlar ? s.yonetim.notlar.length : 0;
+      var tn = el("div");
+      if (s.hesapVar) tn.appendChild(el("span", "rozet " + (s.tanisma ? "iyi" : "dikkat"), s.tanisma ? "Form dolu" : "Form yok"));
+      tn.appendChild(el("div", "alt", notSayisi ? notSayisi + " not, son " + saatli(s.yonetim.notlar[0].zaman) : "not yok"));
+      hucre("Tanışma / not", tn);
+
+      tb.appendChild(r);
+    });
+  }
+
+  /* --- cekmece --------------------------------------------------------- */
+
+  function cekmeceAc() { $("ortu").classList.remove("gizli"); document.body.style.overflow = "hidden"; }
+  function cekmeceKapat() { $("ortu").classList.add("gizli"); document.body.style.overflow = ""; durum.acikAnahtar = null; }
+  $("ortu").addEventListener("click", function (e) { if (e.target === this) cekmeceKapat(); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("ortu").classList.contains("gizli")) cekmeceKapat(); });
+
+  function cekmeceBasi(baslik, alt) {
+    var c = $("cekmece"); c.textContent = "";
+    var u = el("div", "cekmece-ust");
+    var h = el("h3", "", baslik); h.id = "cekmeceBaslik"; u.appendChild(h);
+    var k = el("button", "btn btn-ikincil btn-kucuk", "Kapat"); k.type = "button"; k.addEventListener("click", cekmeceKapat);
+    u.appendChild(k); c.appendChild(u);
+    if (alt) c.appendChild(el("div", "alt", alt));
+    return c;
+  }
+
+  function kunye(satirlar) {
+    var dl = el("dl", "kunye");
+    satirlar.forEach(function (x) {
+      dl.appendChild(el("dt", "", x[0]));
+      var dd = el("dd", x[1] ? "" : "bosh", x[1] || "-"); dl.appendChild(dd);
+    });
+    return dl;
+  }
+
+  function alanKur(etiket, girdi, ad, yardim) {
+    var d = el("div", "form-satir");
+    var l = el("label", "", etiket); if (girdi.id) l.htmlFor = girdi.id; d.appendChild(l);
+    d.appendChild(girdi);
+    if (yardim) d.appendChild(el("div", "yardim", yardim));
+    var h = el("div", "alan-hata"); h.setAttribute("data-hata", ad); d.appendChild(h);
+    return d;
+  }
+  function girdi(tur, id, deger, ek) {
+    var g = el(tur === "textarea" ? "textarea" : "input");
+    if (tur !== "textarea") g.type = tur;
+    g.id = id; g.value = deger || ""; g.spellcheck = false; g.autocomplete = "off";
+    if (ek) Object.keys(ek).forEach(function (k) { g.setAttribute(k, ek[k]); });
+    return g;
+  }
+  function kanalSecici(id) {
+    var s = el("select"); s.id = id;
+    KANALLAR.forEach(function (k) { var o = el("option", "", k[1]); o.value = k[0]; s.appendChild(o); });
+    return s;
+  }
+  function hatalariYaz(kok, hatalar) {
+    Array.prototype.forEach.call(kok.querySelectorAll("[data-hata]"), function (h) {
+      h.textContent = (hatalar && hatalar[h.getAttribute("data-hata")]) || "";
+    });
+  }
+
+  /* Turkce karakterleri sadelestirip motorun slug kalibina sokar. Yalniz
+     oneri: Savas degistirebilir, sunucu kalibi yine denetler. */
+  function kisaAdOner(ad) {
+    var harita = { "ç": "c", "ğ": "g", "ı": "i", "i̇": "i", "ö": "o", "ş": "s", "ü": "u", "â": "a", "î": "i", "û": "u" };
+    return String(ad || "").toLocaleLowerCase("tr-TR").replace(/[çğıöşüâîû]|i̇/g, function (c) { return harita[c] || c; })
+      .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 61);
+  }
+
+  function yaz(govde, dugme, kok) {
+    if (dugme) dugme.disabled = true;
+    return fetch(YAZ_UC, { method: "POST", headers: { "X-Yonetim-Sirri": sirOku(), "Content-Type": "application/json", "Accept": "application/json" }, body: JSON.stringify(govde), cache: "no-store" })
+      .then(function (c) { return c.json().catch(function () { return {}; }).then(function (v) { return { kod: c.status, veri: v }; }); })
+      .then(function (s) {
+        if (dugme) dugme.disabled = false;
+        if (s.kod === 401) { sirYaz(""); cekmeceKapat(); kapiGoster("Anahtar geçersiz."); return null; }
+        if (s.kod !== 200) {
+          if (kok) hatalariYaz(kok, s.veri.hatalar || {});
+          var genel = kok && kok.querySelector("[data-hata=genel]");
+          if (genel) genel.textContent = (s.veri && s.veri.hata) || ("Kaydedilemedi (" + s.kod + ").");
+          return null;
+        }
+        return s.veri;
+      })
+      .catch(function () {
+        if (dugme) dugme.disabled = false;
+        var genel = kok && kok.querySelector("[data-hata=genel]");
+        if (genel) genel.textContent = "Sunucuya ulaşılamadı.";
+        return null;
+      });
+  }
+
+  function satirBul(anahtar) {
+    var l = (durum.veri && durum.veri.durumListesi) || [];
+    for (var i = 0; i < l.length; i++) if (l[i].anahtar === anahtar) return l[i];
+    return null;
+  }
+
+  function detayAc(anahtar, yenidenCiz) {
+    var s = satirBul(anahtar);
+    if (!s) { if (yenidenCiz) cekmeceKapat(); return; }
+    durum.acikAnahtar = anahtar;
+    var y = s.yonetim;
+    var c = cekmeceBasi(s.markaAdi || s.eposta || s.slug,
+      [s.tur === "hesap" ? "Panel hesabı var" : s.tur === "elle" ? "Elle eklendi, panel hesabı yok" : "Yalnız motorda, kayıt yok",
+       s.slug ? "kısa ad: " + s.slug : "kısa ad yok"].join(" · "));
+
+    c.appendChild(el("h4", "", "Bilgiler"));
+    c.appendChild(kunye([
+      ["E-posta", s.eposta], ["Telefon", (y && y.telefon) || s.telefon], ["Site", y && y.siteAdresi],
+      ["Motor slug'ı", s.motorSlug], ["Kayıt", tarih(s.kayitTarihi)]
+    ]));
+
+    /* Tanisma formu: musterinin kendi yazdigi, yalniz okunur. */
+    c.appendChild(el("h4", "", "Tanışma formu"));
+    var t = s.tanisma;
+    if (!s.hesapVar) c.appendChild(el("div", "bosh", "Panel hesabı olmadığı için müşteri formu dolduramıyor. Bilgileri not olarak ekleyin."));
+    else if (!t) c.appendChild(el("div", "bosh", "Müşteri formu henüz doldurmadı."));
+    else {
+      var i = t.iletisim || {};
+      c.appendChild(kunye([
+        ["Firma ve hizmetler", t.firmaHizmetler], ["Hedef okuyucu", t.hedefOkuyucu],
+        ["Öne çıkacak konular", t.oneCikanKonular], ["İstenmeyen konular", t.istenmeyenKonular],
+        ["Site", t.siteAdresi],
+        ["Site yönetimi", t.siteYonetimi ? (SITE_YONETIMI[t.siteYonetimi] || t.siteYonetimi) + (t.siteYonetimiDiger ? ": " + t.siteYonetimiDiger : "") : ""],
+        ["İletişim", [i.adSoyad, i.gorev].filter(Boolean).join(", ")],
+        ["İletişim telefon / e-posta", [i.telefon, i.eposta].filter(Boolean).join(" · ")],
+        ["Doldurma", "ilk " + saatli(t.ilkKayit) + ", son " + saatli(t.guncellendi) + " (" + (t.guncellemeSayisi || 1) + ". kayıt)"]
+      ]));
+    }
+
+    /* Not ekleme. Yonetim kaydi yoksa ilk not kaydi da acar; o zaman kisa
+       ad sorulur (motorun slug'i). */
+    c.appendChild(el("h4", "", "Yönetici notu ekle"));
+    var f = el("form"); f.noValidate = true;
+    var kisaAd = null;
+    if (!y) {
+      kisaAd = girdi("text", "nKisaAd", s.slug || kisaAdOner(s.markaAdi || (s.eposta || "").split("@")[0]), { maxlength: "61" });
+      if (s.slug) kisaAd.readOnly = true;
+      f.appendChild(alanKur("Kısa ad (motor slug'ı)", kisaAd, "slug", s.slug ? "Motorun bu müşteri için kullandığı ad." : "İlk notla birlikte yönetim kaydı açılır. Motorun bu müşteriye vereceği slug ile aynı olmalı; sonra değişmez."));
+    }
+    var kanal = kanalSecici("nKanal");
+    var metin = girdi("textarea", "nMetin", "", { rows: "7", placeholder: "WhatsApp ya da e-postadan gelen metni buraya yapıştırın" });
+    f.appendChild(alanKur("Kanal", kanal, "kanal"));
+    f.appendChild(alanKur("Not", metin, "metin", "Kaydedildiği an tarih olarak yazılır. Düzenleme ve silme yok."));
+    var genel = el("div", "alan-hata"); genel.setAttribute("data-hata", "genel"); f.appendChild(genel);
+    var kaydet = el("button", "btn btn-dolu", "Notu kaydet"); kaydet.type = "submit"; f.appendChild(kaydet);
+    f.addEventListener("submit", function (e) {
+      e.preventDefault();
+      hatalariYaz(f, {});
+      if (!metin.value.trim()) { hatalariYaz(f, { metin: "Not boş." }); metin.focus(); return; }
+      var govde = y
+        ? { tur: "not-ekle", slug: y.slug, kanal: kanal.value, metin: metin.value }
+        : { tur: "musteri-ekle", slug: kisaAd.value.trim(), markaAdi: s.markaAdi || s.slug, eposta: s.eposta || "", kanal: kanal.value, metin: metin.value };
+      yaz(govde, kaydet, f).then(function (v) {
+        if (!v) return;
+        /* Yeni kayit acildiysa satirin anahtari degisebilir (elle eklenen
+           s:<slug>); hesap satiri h:<eposta> olarak kalir. */
+        if (!y && !s.hesapVar) durum.acikAnahtar = "s:" + govde.slug;
+        seritCiz([["iyi", "Not kaydedildi."]]);
+        yukle(sirOku());
+      });
+    });
+    c.appendChild(f);
+
+    var notlar = (y && y.notlar) || [];
+    c.appendChild(el("h4", "", "Notlar (" + notlar.length + ")"));
+    if (!notlar.length) c.appendChild(el("div", "bosh", "Henüz not yok."));
+    notlar.forEach(function (n) {
+      var k = el("div", "not-kart");
+      var u = el("div", "ust-satir");
+      u.appendChild(el("span", "rozet notr", kanalAdi(n.kanal)));
+      u.appendChild(el("span", "", saatli(n.zaman)));
+      k.appendChild(u);
+      k.appendChild(el("div", "metin", n.metin));
+      c.appendChild(k);
+    });
+
+    if (!yenidenCiz) { cekmeceAc(); metin.focus(); }
+  }
+
+  function musteriEkleAc() {
+    durum.acikAnahtar = null;
+    var c = cekmeceBasi("Müşteri ekle", "Panel hesabı açılmaz; yalnız yönetim kaydı. Panel hesabı gerekirse hesap-ac ile ayrıca açılır.");
+    var f = el("form"); f.noValidate = true; f.style.marginTop = "18px";
+    var marka = girdi("text", "eMarka", "", { maxlength: "200" });
+    var kisa = girdi("text", "eKisa", "", { maxlength: "61" });
+    var elle = false;
+    marka.addEventListener("input", function () { if (!elle) kisa.value = kisaAdOner(marka.value); });
+    kisa.addEventListener("input", function () { elle = true; });
+    var eposta = girdi("email", "eEposta", "", { maxlength: "200" });
+    var tel = girdi("text", "eTel", "", { maxlength: "40" });
+    var site = girdi("text", "eSite", "", { maxlength: "300", placeholder: "ornek.com" });
+    var kanal = kanalSecici("eKanal");
+    var metin = girdi("textarea", "eMetin", "", { rows: "6", placeholder: "İsteğe bağlı: WhatsApp ya da e-postadan gelen ilk bilgi" });
+
+    f.appendChild(alanKur("Marka adı *", marka, "markaAdi"));
+    f.appendChild(alanKur("Kısa ad (motor slug'ı) *", kisa, "slug", "Küçük harf, rakam ve tire. Motorda bu müşteriye verilecek slug ile aynı olmalı; sonra değişmez."));
+    var iki = el("div", "ikili-alan");
+    iki.appendChild(alanKur("E-posta", eposta, "eposta", "Müşteri sonradan panel hesabı açarsa bu e-postayla eşleşir."));
+    iki.appendChild(alanKur("Telefon", tel, "telefon"));
+    f.appendChild(iki);
+    f.appendChild(alanKur("Site adresi", site, "siteAdresi"));
+    f.appendChild(alanKur("İlk not kanalı", kanal, "kanal"));
+    f.appendChild(alanKur("İlk not", metin, "metin"));
+    var genel = el("div", "alan-hata"); genel.setAttribute("data-hata", "genel"); f.appendChild(genel);
+    var kaydet = el("button", "btn btn-dolu", "Kaydet"); kaydet.type = "submit"; f.appendChild(kaydet);
+    f.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var h = {};
+      if (!marka.value.trim()) h.markaAdi = "Marka adı gerekli.";
+      if (!/^[a-z0-9][a-z0-9-]{1,60}$/.test(kisa.value.trim())) h.slug = "Küçük harf, rakam ve tire; 2-61 karakter.";
+      hatalariYaz(f, h);
+      if (Object.keys(h).length) return;
+      var govde = { tur: "musteri-ekle", slug: kisa.value.trim(), markaAdi: marka.value.trim(), eposta: eposta.value.trim(),
+        telefon: tel.value.trim(), siteAdresi: site.value.trim(), kanal: kanal.value, metin: metin.value };
+      yaz(govde, kaydet, f).then(function (v) {
+        if (!v) return;
+        seritCiz([["iyi", "\"" + v.kayit.markaAdi + "\" eklendi."]]);
+        durum.acikAnahtar = v.kayit.kaynak === "hesap" ? "h:" + v.kayit.eposta : "s:" + v.kayit.slug;
+        yukle(sirOku());
+      });
+    });
+    c.appendChild(f);
+    cekmeceAc();
+    marka.focus();
+  }
+  $("musteriEkle").addEventListener("click", musteriEkleAc);
 
   function tablo(basliklar, satirlar) {
     var k = el("div", "kart");

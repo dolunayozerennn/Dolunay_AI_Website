@@ -15,7 +15,23 @@ const crypto = require('crypto')
 const veri = require('../veri')
 const { json, govdeCoz } = require('../oturum')
 
+const tanisma = require('../tanisma')
+const { depoAc } = require('../hesap')
+
 const EN_COK_ISARET = 1000
+
+// Yonetim kaydi yoksa formu bulmanin ikinci yolu: motorSlug'i bu slug olan
+// hesap. Hesap sayisi az, tarama yeterli; e-posta MOTORDAN alinmaz ki sir
+// sizarsa e-posta tahminiyle form okunamasin.
+async function motorSlugHesabi (slug) {
+  const d = depoAc()
+  const liste = await d.list({ prefix: 'hesap/' })
+  for (const b of (liste && Array.isArray(liste.blobs) ? liste.blobs : []).slice(0, 2000)) {
+    const h = await d.get(b.key, { type: 'json' })
+    if (h && h.motorSlug === slug && h.eposta) return h.eposta
+  }
+  return null
+}
 
 function sirDogru (gelen) {
   const beklenen = process.env.MOTOR_SIRRI || ''
@@ -33,11 +49,17 @@ exports.handler = async (event) => {
     const slug = (event.queryStringParameters || {}).slug
     if (!veri.slugGecerli(slug)) return json(400, { hata: 'Geçersiz slug.' })
 
-    let kararlar, islenen, ayarlar
+    let kararlar, islenen, ayarlar, yonetim, tanismaKaydi, tanismaEposta
     try {
       kararlar = await veri.kararlarOku(slug)
       islenen = await veri.islenenOku(slug)
       ayarlar = await veri.ayarlarOku(slug)
+      // Tanisma formu ve Savas'in notlari (sozlesme bolum 3). Yalniz bu
+      // slug'in kaydi okunur; MOTOR_SIRRI musteri listesini acmaz.
+      yonetim = await tanisma.yonetimOku(slug)
+      tanismaEposta = (yonetim && yonetim.eposta) || await motorSlugHesabi(slug)
+      tanismaKaydi = tanismaEposta ? await tanisma.tanismaOku(tanismaEposta) : null
+      if (!tanismaKaydi) tanismaEposta = null
     } catch (e) {
       console.error('kararlar okunamadi', e && e.message)
       return json(503, { hata: 'Şu an okunamıyor.' })
@@ -54,6 +76,15 @@ exports.handler = async (event) => {
         marka: ayarlar.marka || null,
         whatsapp: ayarlar.whatsapp || null,
       },
+      tanisma: tanismaKaydi || null,
+      tanismaEposta: tanismaEposta || null,
+      yonetim: yonetim
+        ? {
+            slug: yonetim.slug, markaAdi: yonetim.markaAdi || '', eposta: yonetim.eposta || '',
+            telefon: yonetim.telefon || '', siteAdresi: yonetim.siteAdresi || '', kaynak: yonetim.kaynak || '',
+            guncellendi: yonetim.guncellendi || null, notlar: Array.isArray(yonetim.notlar) ? yonetim.notlar : [],
+          }
+        : null,
     })
   }
 
