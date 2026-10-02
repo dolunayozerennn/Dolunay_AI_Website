@@ -813,6 +813,13 @@ body.dogrulaniyor { visibility: hidden; }
 }
 .bilgi-serit.sari svg { color: var(--amber); }
 
+/* tanışma formu: ana sayfadaki davet şeridi düğmeli, düğme sağa yaslı */
+.tanisma-daveti { align-items: center; flex-wrap: wrap; }
+.tanisma-daveti > span { flex: 1; min-width: 220px; }
+.tanisma-daveti .btn { padding: 10px 16px; font-size: 13.5px; }
+.gizli-alan { display: none !important; }
+.yardim-metni.uyari-satiri { color: var(--amber); }
+
 /* --- takvim --- */
 
 .takvim {

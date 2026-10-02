@@ -7,6 +7,7 @@
 // Panelin geri kalani degismiyor: Asama 1'de "tek veri nesnesinden okusun"
 // diye kurulmustu, karsiligini burada veriyor.
 const veri = require('../veri')
+const tanisma = require('../tanisma')
 const { oturumOku, hesapOku, depoAc } = require('../hesap')
 const { cerezOku, cerezSil, json } = require('../oturum')
 
@@ -76,6 +77,7 @@ exports.handler = async (event) => {
   let kararlar = { yazilar: {}, konular: {} }
   let ayarlar = {}
   let odemeGecmisi = []
+  let tanismaKaydi = null
   try {
     if (slug) {
       motor = await veri.motorListeOku(slug)
@@ -83,6 +85,8 @@ exports.handler = async (event) => {
       ayarlar = await veri.ayarlarOku(slug)
     }
     odemeGecmisi = await odemeleriTopla(oturum.eposta)
+    // Tanisma formu hesaba bagli, slug'a degil: motor baglanmadan da gelir.
+    tanismaKaydi = await tanisma.tanismaOku(oturum.eposta)
   } catch (e) {
     console.error('panel verisi okunamadi', e && e.message)
     return json(503, { hata: 'Veriler şu an okunamıyor.' })
@@ -108,6 +112,8 @@ exports.handler = async (event) => {
   // yazilarim silinmis" sanir.
   govde.motorBagli = Boolean(slug)
   govde.motorYazdiMi = Boolean(motor)
+  // Doldurulmadiysa null: panel Ana Sayfa'da formu davet eder.
+  govde.tanisma = tanismaKaydi || null
 
   return json(200, govde)
 }

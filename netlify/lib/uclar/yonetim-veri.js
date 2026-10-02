@@ -18,6 +18,7 @@ const { sirDogru, sirBasligi } = require('../yonetim')
 const { abonelikleriTara } = require('../iyzico')
 const { paketAdi, paketBul, OLAY_ONEK } = require('../bildirim')
 const veri = require('../veri')
+const tanisma = require('../tanisma')
 
 const TAVAN = 2000
 const OLAY_SAYISI = 60
@@ -91,6 +92,30 @@ function odemeDurumu (iyz, iyzicoOkundu, odemeKaydi) {
   return odemeKaydi
     ? { etiket: 'iyzico\'da bulunamadı', ton: 'dikkat' }
     : { etiket: 'Ödeme kaydı yok', ton: 'dikkat' }
+}
+
+// Durum listesi: musteri basina bir satir (satirlarin kurulusu
+// tanisma.musteriSatirlari'nda, motor-musteriler de ayni listeyi kullanir).
+// Durum sutunlari YALNIZ motorun yazdigindan gelir; yoksa null, ekran bos gosterir.
+async function durumListesiKur (d, hesapKayitlari) {
+  const satirlar = await tanisma.musteriSatirlari(d, hesapKayitlari)
+  const sonuc = await Promise.all(satirlar.map(async (s) => {
+    let motor = null
+    let kararlar = null
+    if (s.slug) {
+      motor = await veri.motorListeOku(s.slug)
+      if (motor) kararlar = await veri.kararlarOku(s.slug)
+    }
+    const t = s.eposta ? await tanisma.tanismaOku(s.eposta) : null
+    return Object.assign({}, s, {
+      anahtar: s.tur === 'hesap' ? `h:${s.eposta}` : `s:${s.slug}`,
+      hesapVar: s.tur === 'hesap',
+      tanisma: t || null,
+      durum: tanisma.durumOzeti(motor, kararlar),
+    })
+  }))
+  // En yeni kayit ustte; tarihsiz (yalniz motorda olan) en altta.
+  return sonuc.sort((a, b) => String(b.kayitTarihi || '').localeCompare(String(a.kayitTarihi || '')))
 }
 
 exports.handler = async (event) => {
@@ -179,6 +204,17 @@ exports.handler = async (event) => {
   // En yeni kayit en ustte. Tarihi olmayan en alta.
   musteriler.sort((a, b) => String(b.kayitTarihi || '').localeCompare(String(a.kayitTarihi || '')))
 
+  // Durum listesi, tanisma formu ve yonetici notlari. Ayri try: bu kisim
+  // okunamazsa odeme listesi yine gorunsun.
+  let durumListesi = []
+  let durumOkundu = true
+  try {
+    durumListesi = await durumListesiKur(d, hesaplar.map((x) => x.kayit))
+  } catch (e) {
+    durumOkundu = false
+    console.error('yonetim: durum listesi okunamadi', e && e.message)
+  }
+
   // iyzico'da aktif ama bizde hesabi olmayan abonelikler.
   const hesapsizAbonelikler = iyzicoKayitlari
     .filter((k) => k.durum === 'ACTIVE' && k.eposta && !bizimEpostalar.has(k.eposta))
@@ -229,6 +265,8 @@ exports.handler = async (event) => {
       dikkat: hesapsizAbonelikler.length + yetimListesi.filter((y) => !y.cozuldu).length + yarimKalanlar.length,
     },
     musteriler,
+    durumOkundu,
+    durumListesi,
     hesapsizAbonelikler,
     yetimler: yetimListesi,
     yarimKalanlar,

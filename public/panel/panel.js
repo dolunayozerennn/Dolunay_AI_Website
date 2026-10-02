@@ -268,7 +268,16 @@
     var kota = (M.abonelik && M.abonelik.aylikYazi) || 0;
     var oran = kota ? Math.min(100, Math.round((buAy / kota) * 100)) : 0;
 
-    var html = '' +
+    /* Tanışma formu doldurulmadıysa en üstte davet. Doldurulunca kaybolur;
+       form Tanışma menüsünden her zaman açılabilir. */
+    var html = (tanismaDolu() ? "" :
+      '<div class="bilgi-serit sari tanisma-daveti">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" ' +
+          'stroke-linecap="round"><path d="M12 8v5M12 16.5h.01"/><circle cx="12" cy="12" r="8.5"/></svg>' +
+        "<span><strong>Tanışma formunuzu doldurun.</strong> Firmanızı ve okuyucunuzu tanımadan " +
+          "yazı hazırlamıyoruz. Yalnız iki alan zorunlu.</span>" +
+        '<button class="btn btn-birincil" data-git="tanisma">Formu aç</button>' +
+      "</div>") +
       '<section class="kart karsilama">' +
         "<h2>Hoş geldiniz, " + esc(M.hesap ? M.hesap.markaAdi : "") + "</h2>" +
         "<p>Bu ay <strong>" + buAyTeslim + "</strong> yazı " +
@@ -1142,6 +1151,217 @@
   }
 
   /* =======================================================================
+     TANIŞMA FORMU
+     Ödeme sonrası müşterinin bir kez doldurduğu, sonradan güncelleyebildiği
+     form. Hesaba bağlı, motor bağlanmadan da çalışır (panel-tanisma ucu).
+     Alanlar motorla sözleşmeli: Blog-Motoru/_kopru/panel-sozlesme.md.
+     Şifre ya da giriş bilgisi bu formda İSTENMEZ.
+     ======================================================================= */
+
+  var TANISMA_UCU = "/.netlify/functions/panel-tanisma";
+
+  var SITE_YONETIMI = [
+    ["", "Seçin (isteğe bağlı)"],
+    ["wordpress", "WordPress"],
+    ["wix", "Wix"],
+    ["shopify", "Shopify"],
+    ["ikas", "ikas"],
+    ["ticimax", "Ticimax"],
+    ["ideasoft", "IdeaSoft"],
+    ["ozel", "Özel yazılım (ajans ya da kendi ekibimiz)"],
+    ["site-yok", "Henüz sitemiz yok"],
+    ["bilmiyorum", "Bilmiyorum"],
+    ["diger", "Diğer"]
+  ];
+
+  /* Serbest metne giriş bilgisi yazılmasın diye uyarı. Engellemez, yalnız
+     hatırlatır: "şifre" kelimesi meşru bir cümlede de geçebilir. */
+  var GIRIS_BILGISI = /(şifre|sifre|parola|password|passwd|kullanıcı adı|kullanici adi)/i;
+
+  function tanismaDolu() {
+    return Boolean(M.tanisma && M.tanisma.guncellendi);
+  }
+
+  function tanismaCiz() {
+    var kutu = document.getElementById("b-tanisma");
+    if (!kutu) return;
+    var t = M.tanisma || {};
+    var h = M.hesap || {};
+    var i = t.iletisim || {};
+    var dolu = tanismaDolu();
+    /* İlk açılışta müşterinin ödeme sırasında verdiği bilgiler öneri olarak
+       konur; kendi verisi, uydurma değil. Kayıt varsa yalnız kayıt okunur. */
+    var site = dolu ? t.siteAdresi : (M.blogAdresi || "");
+    var iEposta = dolu ? i.eposta : (h.eposta || "");
+    var iTelefon = dolu ? i.telefon : (h.telefon || "");
+
+    kutu.innerHTML =
+      '<div class="bilgi-serit' + (dolu ? " yesil" : "") + '">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" ' +
+          'stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/></svg>' +
+        "<span>" +
+        (dolu
+          ? "<strong>Formunuz alındı.</strong> Son güncelleme: " + esc(trTarihSaat(t.guncellendi)) +
+            ". Bir şey değiştiyse düzeltip yeniden kaydedebilirsiniz; sonraki yazılar yeni bilgiye göre hazırlanır."
+          : "<strong>Sizi tanıyalım.</strong> Yazılarınızı hazırlamadan önce birkaç bilgiye ihtiyacımız var. " +
+            "Yalnız iki alan zorunlu, gerisini bildiğiniz kadar doldurun; sonradan güncelleyebilirsiniz.") +
+        "</span>" +
+      "</div>" +
+
+      '<div class="bilgi-serit sari">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" ' +
+          'stroke-linecap="round"><path d="M12 8v5M12 16.5h.01"/><circle cx="12" cy="12" r="8.5"/></svg>' +
+        "<span><strong>Bu forma şifre ya da giriş bilgisi yazmayın.</strong> " +
+          "Sitenize erişim gerekirse bunu sizinle ayrıca konuşuyoruz.</span>" +
+      "</div>" +
+
+      '<div class="kart-bolum"><h3>Firmanız</h3>' +
+        tanismaAlani("tFirma", "Firmanız ve hizmetleriniz *", t.firmaHizmetler, 5,
+          "Ne iş yapıyorsunuz, hangi hizmetleri veriyorsunuz, nerede hizmet veriyorsunuz.") +
+        tanismaAlani("tOkuyucu", "Hedef okuyucu", t.hedefOkuyucu, 3,
+          "Yazıları kim okusun? Örneğin: işyeri açmak isteyen girişimciler, ilk kez implant düşünen hastalar.") +
+      "</div>" +
+
+      '<div class="kart-bolum"><h3>Konular</h3>' +
+        tanismaAlani("tOne", "Öne çıkmak istediğiniz konular", t.oneCikanKonular, 3,
+          "Daha çok yazılmasını istediğiniz hizmet ya da konular. Virgülle ya da satır satır.") +
+        tanismaAlani("tIstenmeyen", "Yazılmasını istemediğiniz konular", t.istenmeyenKonular, 3,
+          "Hiç değinilmesin istediğiniz konular, kelimeler, rakip adları.") +
+      "</div>" +
+
+      '<div class="kart-bolum"><h3>Siteniz</h3>' +
+        '<div class="ikili">' +
+          '<div class="alan" id="alan-siteAdresi"><label for="tSite">Site adresi</label>' +
+            '<input type="text" id="tSite" value="' + esc(site) + '" placeholder="ornek.com" ' +
+              'spellcheck="false" autocomplete="url">' +
+            '<p class="hata"></p></div>' +
+          '<div class="alan" id="alan-siteYonetimi"><label for="tYonetim">Site yönetimi</label>' +
+            '<select id="tYonetim">' + SITE_YONETIMI.map(function (s) {
+              return '<option value="' + s[0] + '"' + (s[0] === (t.siteYonetimi || "") ? " selected" : "") + ">" +
+                esc(s[1]) + "</option>";
+            }).join("") + "</select>" +
+            '<p class="yardim-metni">Sitenizi hangi sistemle yönetiyorsunuz?</p>' +
+            '<p class="hata"></p></div>' +
+        "</div>" +
+        '<div class="alan' + (t.siteYonetimi === "diger" ? "" : " gizli-alan") + '" id="alanYonetimDiger">' +
+          '<label for="tYonetimDiger">Hangi sistem?</label>' +
+          '<input type="text" id="tYonetimDiger" value="' + esc(t.siteYonetimiDiger) + '">' +
+          '<p class="hata"></p></div>' +
+      "</div>" +
+
+      '<div class="kart-bolum"><h3>İletişim kişisi</h3>' +
+        '<p class="bolum-alt">Yazılar ve onaylar konusunda kiminle konuşalım?</p>' +
+        '<div class="ikili">' +
+          tanismaGirdi("tAd", "iletisim.adSoyad", "Ad soyad *", i.adSoyad, "name") +
+          tanismaGirdi("tGorev", "iletisim.gorev", "Görevi", i.gorev, "organization-title") +
+        "</div>" +
+        '<div class="ikili">' +
+          tanismaGirdi("tTel", "iletisim.telefon", "Telefon", iTelefon, "tel") +
+          tanismaGirdi("tPosta", "iletisim.eposta", "E-posta", iEposta, "email") +
+        "</div>" +
+      "</div>" +
+
+      '<div class="buton-satir">' +
+        '<button class="btn btn-birincil btn-tam" data-eylem="tanisma-kaydet">' +
+          (dolu ? "Değişiklikleri Kaydet" : "Formu Gönder") + "</button>" +
+      "</div>";
+  }
+
+  /* Çok satırlı alan. Kimlik `alan-<sözleşmedeki ad>`: sunucudan dönen
+     hata adı doğrudan alanı bulur. */
+  function tanismaAlani(id, etiket, deger, satir, yardim) {
+    var ad = { tFirma: "firmaHizmetler", tOkuyucu: "hedefOkuyucu", tOne: "oneCikanKonular",
+      tIstenmeyen: "istenmeyenKonular" }[id];
+    return '<div class="alan" id="alan-' + ad + '"><label for="' + id + '">' + esc(etiket) + "</label>" +
+      '<textarea id="' + id + '" rows="' + satir + '" data-giris-uyarisi>' + esc(deger) + "</textarea>" +
+      '<p class="yardim-metni">' + esc(yardim) + "</p>" +
+      '<p class="yardim-metni uyari-satiri gizli-alan">Şifre ya da giriş bilgisi yazdıysanız lütfen silin; ' +
+        "bu bilgiyi formda saklamıyoruz, ayrıca konuşuyoruz.</p>" +
+      '<p class="hata"></p></div>';
+  }
+
+  function tanismaGirdi(id, ad, etiket, deger, otomatik) {
+    return '<div class="alan" id="alan-' + ad.replace(".", "-") + '"><label for="' + id + '">' + esc(etiket) + "</label>" +
+      '<input type="text" id="' + id + '" value="' + esc(deger) + '" autocomplete="' + otomatik + '">' +
+      '<p class="hata"></p></div>';
+  }
+
+  function tanismaHataYaz(ad, mesaj) {
+    var alan = document.getElementById("alan-" + ad.replace(".", "-"));
+    if (!alan) return false;
+    alan.classList.toggle("hatali", Boolean(mesaj));
+    alan.querySelector(".hata").textContent = mesaj || "";
+    return true;
+  }
+
+  function tanismaKaydet(dugme) {
+    var d = function (id) { return document.getElementById(id).value.trim(); };
+    var govde = {
+      firmaHizmetler: d("tFirma"),
+      hedefOkuyucu: d("tOkuyucu"),
+      oneCikanKonular: d("tOne"),
+      istenmeyenKonular: d("tIstenmeyen"),
+      siteAdresi: d("tSite"),
+      siteYonetimi: d("tYonetim"),
+      siteYonetimiDiger: d("tYonetimDiger"),
+      iletisim: { adSoyad: d("tAd"), gorev: d("tGorev"), telefon: d("tTel"), eposta: d("tPosta") }
+    };
+
+    /* Sunucu da aynı denetimi yapıyor; burada olması müşteriyi bir gidiş
+       dönüş beklemeden alanın altında uyarmak için. */
+    var hatalar = {};
+    if (!govde.firmaHizmetler) hatalar.firmaHizmetler = "Firmanızı ve hizmetlerinizi kısaca yazın.";
+    if (!govde.iletisim.adSoyad) hatalar["iletisim.adSoyad"] = "İletişim kişisinin adını yazın.";
+    if (govde.iletisim.eposta && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(govde.iletisim.eposta)) {
+      hatalar["iletisim.eposta"] = "E-posta adresi geçerli görünmüyor.";
+    }
+    ["firmaHizmetler", "iletisim.adSoyad", "iletisim.eposta", "siteAdresi", "siteYonetimi"].forEach(function (a) {
+      tanismaHataYaz(a, hatalar[a]);
+    });
+    var ilk = Object.keys(hatalar)[0];
+    if (ilk) {
+      var alan = document.getElementById("alan-" + ilk.replace(".", "-"));
+      var g = alan && alan.querySelector("input, textarea, select");
+      if (g) g.focus();
+      return;
+    }
+
+    dugme.disabled = true;
+    var eskiMetin = dugme.textContent;
+    dugme.textContent = "Kaydediliyor…";
+
+    fetch(TANISMA_UCU, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify(govde)
+    }).then(function (cevap) {
+      if (cevap.status === 401) { girisEkranina(); return null; }
+      return cevap.json().catch(function () { return {}; }).then(function (v) {
+        if (cevap.status === 400 && v.hatalar) {
+          Object.keys(v.hatalar).forEach(function (a) { tanismaHataYaz(a, v.hatalar[a]); });
+          throw new Error(v.hata || "Eksik ya da hatalı alan var");
+        }
+        if (!cevap.ok) throw new Error(v.hata || ("kod " + cevap.status));
+        return v;
+      });
+    }).then(function (v) {
+      dugme.disabled = false;
+      dugme.textContent = eskiMetin;
+      if (!v) return;
+      var ilkKez = !tanismaDolu();
+      M.tanisma = v.tanisma;
+      tanismaCiz();
+      anaSayfayiCiz();
+      toast(ilkKez ? "Formunuz alındı, teşekkürler." : "Bilgileriniz güncellendi.");
+    }).catch(function (hata) {
+      dugme.disabled = false;
+      dugme.textContent = eskiMetin;
+      toast("Kaydedilemedi: " + (hata && hata.message ? hata.message : "bağlantı sorunu") + ".");
+    });
+  }
+
+  /* =======================================================================
      DESTEK
      ======================================================================= */
 
@@ -1624,6 +1844,7 @@
     { id: "posts",    ad: "Yazılarım", ikon: "i-yazi" },
     { id: "topics",   ad: "Konular",   ikon: "i-konu" },
     { id: "brand",    ad: "Markam",    ikon: "i-marka" },
+    { id: "tanisma",  ad: "Tanışma",   ikon: "i-tanisma" },
     { id: "support",  ad: "Destek",    ikon: "i-destek" },
     { id: "hesap",    ad: "Hesabım",   ikon: "i-hesap" }
   ];
@@ -1636,14 +1857,14 @@
   /* menüdeki "hesap" bölümünün adresi #account */
   var HASH = {
     anasayfa: "", posts: "posts", topics: "topics",
-    brand: "brand", support: "support", hesap: "account", help: "help"
+    brand: "brand", tanisma: "tanisma", support: "support", hesap: "account", help: "help"
   };
   var BOLUM = {
     anasayfa: "b-anasayfa", posts: "b-posts", topics: "b-topics",
-    brand: "b-brand", support: "b-support", hesap: "b-account", help: "b-help"
+    brand: "b-brand", tanisma: "b-tanisma", support: "b-support", hesap: "b-account", help: "b-help"
   };
   var HASHTAN_ID = { "": "anasayfa", "posts": "posts", "topics": "topics",
-    "brand": "brand", "support": "support", "account": "hesap", "help": "help" };
+    "brand": "brand", "tanisma": "tanisma", "support": "support", "account": "hesap", "help": "help" };
 
   function dugmeCiz(kayit) {
     var a = document.createElement("a");
@@ -1759,6 +1980,7 @@
       if (eylem === "konu-ekle")     { e.preventDefault(); konuEkle(); return; }
       if (eylem === "konu-sil")      { e.preventDefault(); konuSil(eylemDugmesi.dataset.konu); return; }
       if (eylem === "marka-kaydet")  { e.preventDefault(); markaKaydet(); return; }
+      if (eylem === "tanisma-kaydet"){ e.preventDefault(); tanismaKaydet(eylemDugmesi); return; }
       if (eylem === "destek-gonder") { e.preventDefault(); destekGonder(); return; }
       if (eylem === "telefon-kaydet"){ e.preventDefault(); telefonKaydet(); return; }
       if (eylem === "sifre-kaydet")  { e.preventDefault(); sifreKaydet(); return; }
@@ -1813,6 +2035,22 @@
   document.addEventListener("input", function (e) {
     var hedef = e.target;
 
+    /* Tanışma: serbest metinde giriş bilgisi görünürse alanın altında
+       hatırlatma. Kaydı engellemez. */
+    if (hedef.hasAttribute && hedef.hasAttribute("data-giris-uyarisi")) {
+      var satir = hedef.closest(".alan").querySelector(".uyari-satiri");
+      if (satir) satir.classList.toggle("gizli-alan", !GIRIS_BILGISI.test(hedef.value));
+    }
+
+    /* Tanışma: düzeltilen alanın hatası yazarken silinir. */
+    var tanismaAlan = hedef.closest && hedef.closest('#b-tanisma .alan.hatali');
+    if (tanismaAlan) {
+      tanismaAlan.classList.remove("hatali");
+      tanismaAlan.querySelector(".hata").textContent = "";
+      return;
+    }
+    if (hedef.hasAttribute && hedef.hasAttribute("data-giris-uyarisi")) return;
+
     if (hedef.id === "mRenk1" || hedef.id === "mRenk2") {
       var kutu = document.getElementById(hedef.id + "Kutu");
       if (kutu && HEX_KALIP.test(hedef.value.trim())) {
@@ -1839,10 +2077,18 @@
      Tek istek hem oturumu doğruluyor hem veriyi getiriyor: uç girişli
      değilse 401 veriyor, o zaman giriş ekranına dönülüyor. Ayrı bir oturum
      sorgusu fazladan gidiş dönüş olurdu. */
+  /* Site yönetimi "Diğer" seçilince serbest alan açılır. */
+  document.addEventListener("change", function (e) {
+    if (e.target.id !== "tYonetim") return;
+    var diger = document.getElementById("alanYonetimDiger");
+    if (diger) diger.classList.toggle("gizli-alan", e.target.value !== "diger");
+  });
+
   function ekranlariCiz() {
     cizHepsi();
     konularCiz();
     markamCiz();
+    tanismaCiz();
     destekCiz();
     hesabimCiz();
     window.addEventListener("hashchange", hashtanAc);
