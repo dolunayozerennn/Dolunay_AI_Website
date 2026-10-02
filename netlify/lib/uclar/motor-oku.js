@@ -54,8 +54,8 @@ exports.handler = async (event) => {
       kararlar = await veri.kararlarOku(slug)
       islenen = await veri.islenenOku(slug)
       ayarlar = await veri.ayarlarOku(slug)
-      // Tanisma formu ve Savas'in notlari (sozlesme bolum 3). Yalniz bu
-      // slug'in kaydi okunur; MOTOR_SIRRI musteri listesini acmaz.
+      // Tanisma formu ve Savas'in notlari (sozlesme bolum 3). Burada yalniz
+      // bu slug'in kaydi; liste motor-musteriler ucunda (karar 2026-10-02).
       yonetim = await tanisma.yonetimOku(slug)
       tanismaEposta = (yonetim && yonetim.eposta) || await motorSlugHesabi(slug)
       tanismaKaydi = tanismaEposta ? await tanisma.tanismaOku(tanismaEposta) : null
@@ -83,6 +83,9 @@ exports.handler = async (event) => {
             slug: yonetim.slug, markaAdi: yonetim.markaAdi || '', eposta: yonetim.eposta || '',
             telefon: yonetim.telefon || '', siteAdresi: yonetim.siteAdresi || '', kaynak: yonetim.kaynak || '',
             guncellendi: yonetim.guncellendi || null, notlar: Array.isArray(yonetim.notlar) ? yonetim.notlar : [],
+            // Silinen notlarin yalniz kimligi ve ani; metin yok. Motor
+            // onceden okudugu notun izini buna gore kaldirir.
+            silinenNotlar: Array.isArray(yonetim.silinenNotlar) ? yonetim.silinenNotlar : [],
           }
         : null,
     })

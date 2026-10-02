@@ -101,7 +101,7 @@ function govdeKur (baslik, satirlar, not) {
   for (const [etiket, deger] of dolu) govde.push(`${(etiket + ':').padEnd(en + 2)}${deger}`)
   if (not) govde.push('', not)
   govde.push('', `Yönetim ekranı: ${kok()}/yonetim/`,
-    'Bu e-posta dolunay.ai ödeme akışı tarafından otomatik gönderildi.')
+    'Bu e-posta dolunay.ai paneli tarafından otomatik gönderildi.')
   return govde.join('\n')
 }
 

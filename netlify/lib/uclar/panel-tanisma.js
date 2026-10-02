@@ -10,6 +10,7 @@
 const tanisma = require('../tanisma')
 const { oturumOku, hesapOku } = require('../hesap')
 const { cerezOku, cerezSil, json, govdeCoz } = require('../oturum')
+const { bildir } = require('../bildirim')
 
 exports.handler = async (event) => {
   if (!['GET', 'HEAD', 'POST'].includes(event.httpMethod)) {
@@ -42,11 +43,33 @@ exports.handler = async (event) => {
   const { kayit, hatalar } = tanisma.tanismaTemizle(govdeCoz(event))
   if (Object.keys(hatalar).length) return json(400, { hata: 'Eksik ya da hatalı alan var.', hatalar })
 
+  let yazilan
   try {
-    const yazilan = await tanisma.tanismaYaz(oturum.eposta, kayit)
-    return json(200, { kaydedildi: true, tanisma: yazilan })
+    yazilan = await tanisma.tanismaYaz(oturum.eposta, kayit)
   } catch (e) {
     console.error('tanisma yazilamadi', e && e.message)
     return json(503, { hata: 'Kaydedilemedi. Birazdan tekrar deneyin.' })
   }
+
+  // Karar 2026-10-02: form ILK doldurulunca Savas'a tek kisa e-posta.
+  // Guncellemeler e-posta uretmez. Tekil anahtar ayni hesap icin ikinci
+  // e-postayi da keser. Musteriye e-posta GITMEZ. bildir() firlatmaz; e-posta
+  // gitmese de musterinin kaydi basarili sayilir.
+  if (yazilan.guncellemeSayisi === 1) {
+    const i = yazilan.iletisim || {}
+    await bildir({
+      tur: 'tanisma',
+      baslik: `Tanışma formu dolduruldu: ${hesap.markaAdi || oturum.eposta}`,
+      satirlar: [
+        ['Marka', hesap.markaAdi || ''],
+        ['Hesap', oturum.eposta],
+        ['İletişim', [i.adSoyad, i.telefon].filter(Boolean).join(', ')],
+        ['Site', yazilan.siteAdresi],
+      ],
+      not: 'Formun tamamı yönetim ekranında, müşterinin satırında.',
+      eposta: oturum.eposta,
+      tekil: `tanisma:${String(oturum.eposta).toLowerCase()}`,
+    })
+  }
+  return json(200, { kaydedildi: true, tanisma: yazilan })
 }

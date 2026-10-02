@@ -7,7 +7,8 @@
 //
 // Turler:
 //   musteri-ekle    yeni yonetim kaydi (istege bagli ilk notla)
-//   not-ekle        mevcut kayda not; notlar yalniz EKLENIR
+//   not-ekle        mevcut kayda not
+//   not-sil         notu siler (karar 2026-10-02); duzenleme yok
 //   kayit-guncelle  marka adi, e-posta, telefon, site adresi
 //
 // Elle eklenen musteriye PANEL HESABI ACILMAZ. O is hesap-ac ucunda ve
@@ -18,7 +19,7 @@ const { hesapOku, epostaAnahtari } = require('../hesap')
 const { json, govdeCoz } = require('../oturum')
 const { sirDogru, sirBasligi } = require('../yonetim')
 
-const TURLER = ['musteri-ekle', 'not-ekle', 'kayit-guncelle']
+const TURLER = ['musteri-ekle', 'not-ekle', 'not-sil', 'kayit-guncelle']
 const { kirp } = tanisma
 
 function notKur (g, zaman) {
@@ -113,6 +114,25 @@ exports.handler = async (event) => {
       })
       await tanisma.yonetimYaz(slug, kayit)
       return json(200, { kaydedildi: true, tur, not: n.not, notSayisi: kayit.notlar.length })
+    }
+
+    if (tur === 'not-sil') {
+      // Karar 2026-10-02: silme yalniz buradan (yonetim). Not metni kayittan
+      // tamamen cikar, motor-oku da artik vermez. Motor notu onceden okuyup
+      // profile islemis olabilir: geriye yalniz KIMLIK ve silinme ani kalir
+      // (`silinenNotlar`), metin kalmaz. Motor bu listeye bakip kendi
+      // tarafindaki izi kaldirir.
+      const notId = String(g.notId || '')
+      const notlar = Array.isArray(mevcut.notlar) ? mevcut.notlar : []
+      if (!notId || !notlar.some((n) => n.id === notId)) return json(404, { hata: 'Not bulunamadı.' })
+      const silinen = Array.isArray(mevcut.silinenNotlar) ? mevcut.silinenNotlar : []
+      const kayit = Object.assign({}, mevcut, {
+        notlar: notlar.filter((n) => n.id !== notId),
+        silinenNotlar: [{ id: notId, zaman }].concat(silinen).slice(0, tanisma.EN_COK_NOT),
+        guncellendi: zaman,
+      })
+      await tanisma.yonetimYaz(slug, kayit)
+      return json(200, { kaydedildi: true, tur, notId, notSayisi: kayit.notlar.length })
     }
 
     // kayit-guncelle

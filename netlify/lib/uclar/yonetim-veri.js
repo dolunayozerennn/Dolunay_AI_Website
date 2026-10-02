@@ -94,45 +94,11 @@ function odemeDurumu (iyz, iyzicoOkundu, odemeKaydi) {
     : { etiket: 'Ödeme kaydı yok', ton: 'dikkat' }
 }
 
-// Durum listesi: musteri basina bir satir. Uc kaynak birlesir:
-//   1. panel hesaplari (hesap/)
-//   2. yonetimden elle eklenen kayitlar (yonetim/musteri/)
-//   3. motorun yazdigi ama ikisinde de olmayan slug'lar (motor/<slug>/liste)
-// Esleme: kayit once e-postayla, sonra slug'la hesaba baglanir. Durum
-// sutunlari YALNIZ motorun yazdigindan gelir; yoksa null, ekran bos gosterir.
+// Durum listesi: musteri basina bir satir (satirlarin kurulusu
+// tanisma.musteriSatirlari'nda, motor-musteriler de ayni listeyi kullanir).
+// Durum sutunlari YALNIZ motorun yazdigindan gelir; yoksa null, ekran bos gosterir.
 async function durumListesiKur (d, hesapKayitlari) {
-  const kayitlar = await tanisma.yonetimHepsi()
-  const kullanilan = new Set()
-  const satirlar = []
-
-  for (const h of hesapKayitlari) {
-    const eposta = String(h.eposta || '').toLowerCase()
-    const y = kayitlar.find((k) => k.eposta && k.eposta === eposta) ||
-      (h.motorSlug ? kayitlar.find((k) => k.slug === h.motorSlug) : null) || null
-    if (y) kullanilan.add(y.slug)
-    satirlar.push({
-      tur: 'hesap', markaAdi: h.markaAdi || (y && y.markaAdi) || '', eposta,
-      telefon: (y && y.telefon) || '', motorSlug: h.motorSlug || '',
-      slug: h.motorSlug || (y && y.slug) || '', kayitTarihi: h.acildi || null, yonetim: y,
-    })
-  }
-  for (const y of kayitlar) {
-    if (kullanilan.has(y.slug)) continue
-    kullanilan.add(y.slug)
-    satirlar.push({
-      tur: 'elle', markaAdi: y.markaAdi || '', eposta: y.eposta || '', telefon: y.telefon || '',
-      motorSlug: '', slug: y.slug, kayitTarihi: y.olusturuldu || null, yonetim: y,
-    })
-  }
-  const ml = await d.list({ prefix: 'motor/' })
-  const motorSluglari = (ml && Array.isArray(ml.blobs) ? ml.blobs : [])
-    .map((b) => /^motor\/([^/]+)\/liste$/.exec(b.key)).filter(Boolean).map((m) => decodeURIComponent(m[1]))
-  const bilinen = new Set(satirlar.map((s) => s.slug).filter(Boolean))
-  for (const s of motorSluglari) {
-    if (bilinen.has(s)) continue
-    satirlar.push({ tur: 'motor', markaAdi: '', eposta: '', telefon: '', motorSlug: s, slug: s, kayitTarihi: null, yonetim: null })
-  }
-
+  const satirlar = await tanisma.musteriSatirlari(d, hesapKayitlari)
   const sonuc = await Promise.all(satirlar.map(async (s) => {
     let motor = null
     let kararlar = null

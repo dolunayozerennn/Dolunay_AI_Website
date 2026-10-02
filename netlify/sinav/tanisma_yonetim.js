@@ -19,7 +19,7 @@ const EPOSTA = 'ayse@ornek.com';
 const NOT_METNI = '  Merhaba Savaş Bey,\n  bayramda yayın olmasın.  ';
 
 const L = (d) => path.resolve(__dirname, '../lib', d);
-const DOSYALAR = ['uclar/panel-tanisma.js', 'uclar/yonetim-yaz.js', 'uclar/yonetim-veri.js', 'uclar/motor-oku.js',
+const DOSYALAR = ['uclar/panel-tanisma.js', 'uclar/motor-musteriler.js','uclar/yonetim-yaz.js', 'uclar/yonetim-veri.js', 'uclar/motor-oku.js',
   'uclar/motor-yaz.js', 'uclar/panel-veri.js', 'tanisma.js', 'veri.js', 'hesap.js', 'yonetim.js', 'oturum.js',
   'iyzico.js', 'bildirim.js'].map(L);
 
@@ -45,8 +45,18 @@ globalThis.fetch = async (url) => {
   throw new Error(`beklenmeyen ag cagrisi: ${u}`);
 };
 
+// Sahte e-posta gondericisi: gercek Resend'e hic gidilmez.
+let postalar = [];
+let gondericiDavranisi = null;
 function taze() {
   for (const d of DOSYALAR) { try { delete require.cache[require.resolve(d)]; } catch { /* ilk kosu */ } }
+  postalar = [];
+  gondericiDavranisi = null;
+  require(L('bildirim.js')).gondericiAyarla(async (p) => {
+    if (gondericiDavranisi) return gondericiDavranisi(p);
+    postalar.push(p);
+    return { durum: 'gonderildi', id: `sahte-${postalar.length}` };
+  });
 }
 const uc = (ad) => require(L(`uclar/${ad}.js`)).handler;
 const oku = (a) => { const d = kutu.get(a); return d === undefined ? null : JSON.parse(d); };
@@ -284,6 +294,85 @@ vaka('T16_kayit_guncelle_slugi_degistirmez_epostayi_tekil_tutar', async () => {
   if (cakisan.statusCode !== 409 || ok.statusCode !== 200) return `${cakisan.statusCode} ${ok.statusCode}`;
   const k = oku('yonetim/musteri/iki');
   if (k.telefon !== '0530' || k.slug !== 'iki' || k.eposta !== '' || k.markaAdi !== 'İki') return JSON.stringify(k);
+});
+
+vaka('T17_ilk_doldurmada_savasa_tek_kisa_eposta_guncellemede_yok', async () => {
+  const id = await hesapKur();
+  const p = uc('panel-tanisma');
+  await p(olay('POST', { cerez: id, body: GECERLI_FORM }));
+  await p(olay('POST', { cerez: id, body: { ...GECERLI_FORM, hedefOkuyucu: 'degisti' } }));
+  if (postalar.length !== 1) return `${postalar.length} e-posta`;
+  const m = postalar[0];
+  if (!/Tanışma formu dolduruldu/.test(m.konu) || !m.metin.includes('Örnek Marka')) return m.konu;
+  if (m.metin.includes(GECERLI_FORM.firmaHizmetler) || m.metin.includes('gizli123')) return 'e-posta uzun / sifre';
+  if (!anahtarlar('olay/').map(oku).some((o) => o.tur === 'tanisma')) return 'olay kaydi yok';
+});
+
+// Iki koruma ayri ayri: (a) yalniz ilk kayit e-posta uretir, isaret hic
+// konmamis olsa bile; (b) kayit silinip yeniden "ilk" olsa bile tekil isaret
+// ikinci e-postayi keser.
+vaka('T17b_guncelleme_ve_yeniden_ilk_kayit_ikinci_eposta_uretmez', async () => {
+  const id = await hesapKur();
+  const p = uc('panel-tanisma');
+  gondericiDavranisi = async () => ({ durum: 'hata', kod: 500 });
+  await p(olay('POST', { cerez: id, body: GECERLI_FORM }));
+  gondericiDavranisi = null;
+  await p(olay('POST', { cerez: id, body: { ...GECERLI_FORM, hedefOkuyucu: 'degisti' } }));
+  if (postalar.length !== 0) return `(a) guncelleme ${postalar.length} e-posta`;
+
+  kutu.clear();
+  const id2 = await hesapKur();
+  await p(olay('POST', { cerez: id2, body: GECERLI_FORM }));
+  kutu.delete(`tanisma/${encodeURIComponent(EPOSTA)}`);
+  await p(olay('POST', { cerez: id2, body: GECERLI_FORM }));
+  if (postalar.length !== 1) return `(b) ${postalar.length} e-posta`;
+});
+
+vaka('T18_eposta_coker_ise_musterinin_kaydi_yine_basarili', async () => {
+  const id = await hesapKur();
+  gondericiDavranisi = async () => { throw new Error('resend kapali'); };
+  const c = await uc('panel-tanisma')(olay('POST', { cerez: id, body: GECERLI_FORM }));
+  if (c.statusCode !== 200 || !govde(c).kaydedildi) return `kod ${c.statusCode}`;
+  if (!oku(`tanisma/${encodeURIComponent(EPOSTA)}`)) return 'kayit yok';
+});
+
+vaka('T19_not_sil_yalniz_yonetimden_kopruden_de_kalkar_metin_kalmaz', async () => {
+  const y = uc('yonetim-yaz');
+  await y(olay('POST', { yonetim: SIR, body: { tur: 'musteri-ekle', slug: 'firma', markaAdi: 'Firma', metin: 'kalsin' } }));
+  await y(olay('POST', { yonetim: SIR, body: { tur: 'not-ekle', slug: 'firma', metin: 'SIFRE-YANLISLIKLA-123' } }));
+  const hedef = oku('yonetim/musteri/firma').notlar[0];
+  const motorla = await y(olay('POST', { yonetim: MOTOR, body: { tur: 'not-sil', slug: 'firma', notId: hedef.id } }));
+  const yok = await y(olay('POST', { yonetim: SIR, body: { tur: 'not-sil', slug: 'firma', notId: 'n-yok' } }));
+  const c = await y(olay('POST', { yonetim: SIR, body: { tur: 'not-sil', slug: 'firma', notId: hedef.id } }));
+  if (motorla.statusCode !== 401 || yok.statusCode !== 404 || c.statusCode !== 200) return [motorla, yok, c].map((x) => x.statusCode).join(',');
+  const k = oku('yonetim/musteri/firma');
+  if (JSON.stringify(k).includes('SIFRE-YANLISLIKLA')) return 'metin kayitta kaldi';
+  if (k.notlar.length !== 1 || k.notlar[0].metin !== 'kalsin') return 'yanlis not silindi';
+  if (!k.silinenNotlar || k.silinenNotlar[0].id !== hedef.id) return 'silinen izi yok';
+  const m = await uc('motor-oku')(olay('GET', { motor: MOTOR, qs: { slug: 'firma' } }));
+  const mg = govde(m);
+  if (m.body.includes('SIFRE-YANLISLIKLA') || mg.yonetim.notlar.length !== 1) return 'motor-oku notu veriyor';
+  if (!mg.yonetim.silinenNotlar.some((s) => s.id === hedef.id)) return 'motor silineni bilmiyor';
+});
+
+vaka('T20_motor_musteriler_listeyi_acar_odeme_ve_gizli_alan_tasimaz', async () => {
+  const id = await hesapKur();
+  await uc('panel-tanisma')(olay('POST', { cerez: id, body: GECERLI_FORM }));
+  await require(L('hesap.js')).odemeYaz('REF-1', { eposta: EPOSTA, fatura: { tckn: '12345678950', adres: 'Ornek Mah' }, tutar: 9980 });
+  await uc('yonetim-yaz')(olay('POST', { yonetim: SIR, body: { tur: 'musteri-ekle', slug: 'elle-firma', markaAdi: 'Elle', metin: 'NOT-METNI-XYZ' } }));
+  await uc('motor-yaz')(olay('POST', { motor: MOTOR, body: { slug: 'yalniz-motor', yazilar: [] } }));
+  const m = uc('motor-musteriler');
+  const sirsiz = await m(olay('GET'));
+  const yonetimSirri = await m(olay('GET', { motor: SIR }));
+  const c = await m(olay('GET', { motor: MOTOR }));
+  if (sirsiz.statusCode !== 401 || yonetimSirri.statusCode !== 401 || c.statusCode !== 200) return [sirsiz, yonetimSirri, c].map((x) => x.statusCode).join(',');
+  const l = govde(c).musteriler || [];
+  const h = l.find((s) => s.tur === 'hesap');
+  if (l.length !== 3 || !h || h.slug !== '' || !h.tanisma || h.tanisma.iletisim.adSoyad !== 'Ayşe Yılmaz') return JSON.stringify(l);
+  if (!l.find((s) => s.tur === 'elle' && s.yonetim && s.yonetim.notSayisi === 1) || !l.find((s) => s.tur === 'motor' && s.slug === 'yalniz-motor')) return 'elle / motor satiri';
+  for (const yasak of ['12345678950', 'Ornek Mah', '9980', 'sifreOzeti', 'scrypt', 'NOT-METNI-XYZ', 'oturum']) {
+    if (c.body.includes(yasak)) return `liste "${yasak}" tasiyor`;
+  }
 });
 
 (async () => {

@@ -117,6 +117,53 @@ async function yonetimHepsi () {
   return kayitlar.filter(Boolean)
 }
 
+// Musteri basina bir satir. Uc kaynak birlesir:
+//   1. panel hesaplari (hesap/)
+//   2. yonetimden elle eklenen kayitlar (yonetim/musteri/)
+//   3. motorun yazdigi ama ikisinde de olmayan slug'lar (motor/<slug>/liste)
+// Esleme: kayit once e-postayla, sonra slug'la hesaba baglanir. Yonetim
+// ekrani ve motor-musteriler ayni listeyi kullanir ki ikisi ayrismasin.
+// hesapKayitlari verilmezse depodan okunur.
+async function musteriSatirlari (d, hesapKayitlari) {
+  if (!hesapKayitlari) {
+    const hl = await d.list({ prefix: 'hesap/' })
+    hesapKayitlari = (await Promise.all((hl && Array.isArray(hl.blobs) ? hl.blobs : []).slice(0, 2000)
+      .map((b) => d.get(b.key, { type: 'json' }).catch(() => null)))).filter(Boolean)
+  }
+  const kayitlar = await yonetimHepsi()
+  const kullanilan = new Set()
+  const satirlar = []
+
+  for (const h of hesapKayitlari) {
+    const eposta = String(h.eposta || '').toLowerCase()
+    const y = kayitlar.find((k) => k.eposta && k.eposta === eposta) ||
+      (h.motorSlug ? kayitlar.find((k) => k.slug === h.motorSlug) : null) || null
+    if (y) kullanilan.add(y.slug)
+    satirlar.push({
+      tur: 'hesap', markaAdi: h.markaAdi || (y && y.markaAdi) || '', eposta,
+      telefon: (y && y.telefon) || '', motorSlug: h.motorSlug || '',
+      slug: h.motorSlug || (y && y.slug) || '', kayitTarihi: h.acildi || null, yonetim: y,
+    })
+  }
+  for (const y of kayitlar) {
+    if (kullanilan.has(y.slug)) continue
+    kullanilan.add(y.slug)
+    satirlar.push({
+      tur: 'elle', markaAdi: y.markaAdi || '', eposta: y.eposta || '', telefon: y.telefon || '',
+      motorSlug: '', slug: y.slug, kayitTarihi: y.olusturuldu || null, yonetim: y,
+    })
+  }
+  const ml = await d.list({ prefix: 'motor/' })
+  const motorSluglari = (ml && Array.isArray(ml.blobs) ? ml.blobs : [])
+    .map((b) => /^motor\/([^/]+)\/liste$/.exec(b.key)).filter(Boolean).map((m) => decodeURIComponent(m[1]))
+  const bilinen = new Set(satirlar.map((s) => s.slug).filter(Boolean))
+  for (const s of motorSluglari) {
+    if (bilinen.has(s)) continue
+    satirlar.push({ tur: 'motor', markaAdi: '', eposta: '', telefon: '', motorSlug: s, slug: s, kayitTarihi: null, yonetim: null })
+  }
+  return satirlar
+}
+
 function notKimligi (zaman) {
   const z = zaman.replace(/\D/g, '').slice(0, 14)
   return `n-${z}-${require('crypto').randomBytes(2).toString('hex')}`
@@ -172,6 +219,6 @@ function durumOzeti (motor, kararlar) {
 module.exports = {
   TANISMA, YONETIM, YONETIM_ONEK, SEMA_SURUMU, SITE_YONETIMI, NOT_KANALLARI, EN_COK_NOT, NOT_TAVANI,
   kirp, adresDuzelt, tanismaTemizle, tanismaOku, tanismaYaz,
-  yonetimOku, yonetimYaz, yonetimHepsi, notKimligi,
+  yonetimOku, yonetimYaz, yonetimHepsi, musteriSatirlari, notKimligi,
   durumTemizle, durumOzeti,
 }
