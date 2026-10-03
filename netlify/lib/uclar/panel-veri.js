@@ -101,7 +101,9 @@ exports.handler = async (event) => {
     abonelik: {
       paket: paket.ad || '',
       aylikYazi: Number(paket.aylikYazi) || 0,
-      durum: 'aktif',
+      // Iptal yalniz abonelik-iptal ucundan yazilir, iyzico CANCELED gosterdikten sonra.
+      durum: hesap.abonelikDurumu === 'iptal' ? 'iptal edildi' : 'aktif',
+      iptalZamani: hesap.abonelikDurumu === 'iptal' ? (hesap.iptalZamani || null) : null,
     },
     odemeGecmisi,
     bugun: bugunIstanbul(),
