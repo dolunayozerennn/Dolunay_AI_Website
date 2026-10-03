@@ -125,6 +125,31 @@ async function abonelikleriTara(bak, sayfaTavani = 20) {
   return null
 }
 
+// Tek aboneligin detayi. Iptalden once durum ve sahibi buradan okunur.
+// Cevabin govdesi iki bicimde gelebiliyor (dogrudan kayit ya da `items`
+// dizisi); cagiran `abonelikKaydi` ile ikisini de tek kayda indirir.
+function abonelikGetir (referans) {
+  return istek('GET', `/v2/subscription/subscriptions/${encodeURIComponent(referans)}`, undefined)
+}
+
+function abonelikKaydi (cevap, referans) {
+  const govde = cevap && cevap.data && typeof cevap.data === 'object' ? cevap.data : null
+  if (!govde) return null
+  if (Array.isArray(govde.items)) {
+    return govde.items.find((k) => k && k.referenceCode === referans) || null
+  }
+  return govde.referenceCode ? govde : null
+}
+
+// Aboneligi iptal eder: iyzico bundan sonra yeni cekim yapmaz.
+function abonelikIptal (referans, konusmaKimligi) {
+  return istek('POST', `/v2/subscription/subscriptions/${encodeURIComponent(referans)}/cancel`, {
+    locale: 'tr',
+    conversationId: konusmaKimligi,
+    subscriptionReferenceCode: referans,
+  })
+}
+
 function tekSeferBaslat (veri) {
   return istek('POST', '/payment/iyzipos/checkoutform/initialize/auth/ecom', veri)
 }
@@ -133,4 +158,7 @@ function tekSeferSonuc (token) {
   return istek('POST', '/payment/iyzipos/checkoutform/auth/ecom/detail', { locale: 'tr', token })
 }
 
-module.exports = { formBaslat, formSonuc, paketBul, abonelikleriTara, tekSeferBaslat, tekSeferSonuc }
+module.exports = {
+  formBaslat, formSonuc, paketBul, abonelikleriTara, tekSeferBaslat, tekSeferSonuc,
+  abonelikGetir, abonelikKaydi, abonelikIptal,
+}

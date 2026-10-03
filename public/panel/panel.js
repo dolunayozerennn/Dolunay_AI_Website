@@ -1522,6 +1522,8 @@
         '<button class="btn btn-birincil btn-tam" data-eylem="program-kaydet">Yayın Programını Kaydet</button>' +
       "</div>" +
 
+      aboneligimHtml() +
+
       '<div class="kart-bolum"><h3>Ödeme geçmişi</h3>' +
         (odemeler.length
           ? '<div class="tablo-sar"><table class="tablo"><thead><tr><th>Tarih</th><th>Paket</th>' +
@@ -1679,6 +1681,91 @@
     setTimeout(function () { URL.revokeObjectURL(bag); }, 1000);
 
     toast("Verileriniz JSON dosyası olarak indirildi.");
+  }
+
+  /* ---- abonelik iptali ----
+     Taahhüt yok: müşteri istediği zaman iptal eder ve iyzico'daki abonelik
+     gerçekten durur. Ekrana "iptal edildi" ancak uç iyzico'da CANCELED
+     gördükten sonra yazılır; iyimser güncelleme burada YOK, çünkü yanlış
+     "iptal edildi" müşterinin kartından çekim sürerken durduğunu sanması olur. */
+  function aboneligimHtml() {
+    var ab = M.abonelik || {};
+    var iptal = ab.durum === "iptal edildi";
+    return '<div class="kart-bolum" id="bolumAbonelik"><h3 class="ayrik">Abonelik</h3>' +
+      (iptal
+        ? '<p class="bolum-alt">Aboneliğiniz ' +
+            (ab.iptalZamani ? esc(trTarih(String(ab.iptalZamani).slice(0, 10))) + " tarihinde " : "") +
+            "iptal edildi. Kartınızdan yeni çekim yapılmaz.</p>"
+        : '<p class="bolum-alt">Taahhüt yok. Aboneliğinizi istediğiniz zaman buradan iptal ' +
+            "edebilirsiniz; iptalden sonra kartınızdan yeni çekim yapılmaz.</p>" +
+          '<button class="btn btn-ret" data-eylem="abonelik-iptal">Aboneliği iptal et</button>') +
+      "</div>";
+  }
+
+  function abonelikIptalAc() {
+    modalAc(
+      modalBasiHtml("Aboneliği iptal et", "Onaylamak için mevcut şifrenizi yazın.") +
+      '<div class="modal-govde">' +
+        '<p class="bolum-alt" style="margin-top:0">İptalden sonra kartınızdan yeni çekim yapılmaz ' +
+          "ve yeni yazı hazırlanmaz. Yayınlanmış yazılarınız sitenizde kalır.</p>" +
+        '<div class="alan" id="alanIptalSifre"><label for="iptalSifre">Mevcut şifre</label>' +
+          '<input type="password" id="iptalSifre" autocomplete="current-password">' +
+          '<p class="hata"></p></div>' +
+      "</div>" +
+      '<div class="modal-alti">' +
+        '<button class="btn btn-ikincil" data-eylem="modal-kapat">Vazgeç</button>' +
+        '<button class="btn btn-ret" data-eylem="abonelik-iptal-onayla">Aboneliği iptal et</button>' +
+      "</div>",
+      { dar: true, ad: "Aboneliği iptal et", odakla: "#iptalSifre" }
+    );
+  }
+
+  function abonelikIptalEt(dugme) {
+    var girdi = document.getElementById("iptalSifre");
+    if (!girdi) return;
+    var alan = girdi.closest(".alan");
+    function isaret(mesaj) {
+      alan.classList.toggle("hatali", !!mesaj);
+      alan.querySelector(".hata").textContent = mesaj || "";
+    }
+    if (!girdi.value) { isaret("Mevcut şifrenizi yazın."); girdi.focus(); return; }
+    isaret(null);
+    dugme.disabled = true;
+    dugme.textContent = "İptal ediliyor…";
+
+    fetch("/.netlify/functions/abonelik-iptal", {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify({ mevcut: girdi.value })
+    }).then(function (cevap) {
+      return cevap.json().catch(function () { return {}; }).then(function (v) {
+        return { kod: cevap.status, veri: v };
+      });
+    }).then(function (s) {
+      if (s.kod === 200 && s.veri.iptal) {
+        M.abonelik = M.abonelik || {};
+        M.abonelik.durum = "iptal edildi";
+        M.abonelik.iptalZamani = s.veri.iptalZamani || null;
+        modalKapat();
+        hesabimCiz();
+        var tepe = document.querySelector("#tepeSag .rozet-yesil");
+        if (tepe) { tepe.className = "rozet rozet-kirmizi"; tepe.textContent = "iptal edildi"; }
+        toast("Aboneliğiniz iptal edildi. Kartınızdan yeni çekim yapılmayacak.");
+        return;
+      }
+      if (s.kod === 401 && s.veri.girisli === false) { girisEkranina(); return; }
+      dugme.disabled = false;
+      dugme.textContent = "Aboneliği iptal et";
+      if (s.kod === 401) { isaret(s.veri.hata || "Mevcut şifreniz hatalı."); girdi.focus(); return; }
+      /* 202: kendiliğinden iptal edilemedi, talep bize düştü. 502/503: iyzico
+         iptali tamamlanmadı. İkisinde de müşteriye "iptal edildi" denmiyor. */
+      isaret(s.veri.mesaj || s.veri.hata || "İptal şu an tamamlanamadı, aboneliğiniz devam ediyor.");
+    }).catch(function () {
+      dugme.disabled = false;
+      dugme.textContent = "Aboneliği iptal et";
+      isaret("Sunucuya ulaşılamadı. Aboneliğiniz devam ediyor.");
+    });
   }
 
   /* Silme TALEBİ, silmenin kendisi değil.
@@ -1890,7 +1977,8 @@
     if (!kutu || !ab) return;
     kutu.innerHTML =
       '<span class="rozet rozet-mavi">' + esc(ab.paket) + " · " + esc(ab.aylikYazi) + " yazı/ay</span>" +
-      '<span class="rozet rozet-yesil">' + esc(ab.durum) + "</span>";
+      '<span class="rozet ' + (ab.durum === "iptal edildi" ? "rozet-kirmizi" : "rozet-yesil") + '">' +
+        esc(ab.durum) + "</span>";
   })();
 
   /* ---- bölüm açma ---- */
@@ -1987,6 +2075,12 @@
       if (eylem === "program-kaydet"){ e.preventDefault(); programKaydet(); return; }
       if (eylem === "veri-indir")    { e.preventDefault(); verileriIndir(); return; }
       if (eylem === "hesap-sil")     { e.preventDefault(); hesapSilOnayi(); return; }
+      if (eylem === "abonelik-iptal") { e.preventDefault(); abonelikIptalAc(); return; }
+      if (eylem === "abonelik-iptal-onayla") {
+        e.preventDefault();
+        abonelikIptalEt(eylemDugmesi);
+        return;
+      }
       if (eylem === "hesap-sil-onayla") {
         e.preventDefault();
         modalKapat();
